@@ -13,76 +13,79 @@ def main():
     dt = 60.0  # time step [s]
     runtime = 12 * 3600.0  # total run time [s]
 
-    # 1. define mixed layer model
-    # mixed-layer model switch
-    sw_ml = True
-    # shear growth mixed-layer switch
-    sw_shearwe = False
-    # fix the free-troposphere switch
-    sw_fixft = False
-    # 1.2. large scale parameters
-    # initial ABL height [m]
-    abl_height = 200.0
-    # surface pressure [Pa]
-    surf_pressure = 101300.0
-    # horizontal large-scale divergence of wind [s-1]
-    divU = 0.0
-    # Coriolis parameter [m s-1]
-    coriolis_param = 1.0e-4
-    # 1.3 temperature parameters
-    # initial mixed-layer potential temperature [K]
-    theta = 288.0
-    # initial temperature jump at h [K]
-    dtheta = 1.0
-    # free atmosphere potential temperature lapse rate [K m-1]
-    gammatheta = 0.006
-    # advection of heat [K s-1]
-    advtheta = 0.0
-    # entrainment ratio for virtual heat [-]
-    beta = 0.2
-    # surface kinematic heat flux [K m s-1]
-    wtheta = 0.1
-    # 1.4 moisture parameters
-    # initial mixed-layer specific humidity [kg kg-1]
-    q = 0.008
-    # initial specific humidity jump at h [kg kg-1]
-    dq = -0.001
-    # free atmosphere specific humidity lapse rate [kg kg-1 m-1]
-    gammaq = 0.0
-    # advection of moisture [kg kg-1 s-1]
-    advq = 0.0
-    # surface kinematic moisture flux [kg kg-1 m s-1]
-    wq = 1e-4
-    # 1.5. CO2 parameters
-    # initial mixed-layer CO2 [ppm]
-    co2 = 422.0
-    # initial CO2 jump at h [ppm]
-    dCO2 = -44.0
-    # free atmosphere CO2 lapse rate [ppm m-1]
-    gammaCO2 = 0.0
-    # advection of CO2 [ppm s-1]
-    advCO2 = 0.0
-    # surface kinematic CO2 flux [ppm m s-1]
-    wCO2 = 0.0
-    # 1.6. wind parameters
-    # prognostic wind switch
-    sw_wind = True
-    # initial mixed-layer u-wind speed [m s-1]
-    u = 6.0
-    # initial u-wind jump at h [m s-1]
-    du = 4.0
-    # free atmosphere u-wind speed lapse rate [s-1]
-    gammau = 0.0
-    # advection of u-wind [m s-2]
-    advu = 0.0
-    # initial mixed-layer v-wind speed [m s-1]
-    v = -4.0
-    # initial v-wind jump at h [m s-1]
-    dv = 4.0
-    # free atmosphere v-wind speed lapse rate [s-1]
-    gammav = 0.0
-    # advection of v-wind [m s-2]
-    advv = 0.0
+    # define mixed layer model
+    mixed_layer_model = MixedLayerModel(
+        # 1.1. switchs
+        # mixed-layer model switch
+        sw_ml=True,
+        # shear growth mixed-layer switch
+        sw_shearwe=False,
+        # fix the free-troposphere switch
+        sw_fixft=False,
+        # 1.2. large scale parameters
+        # initial ABL height [m]
+        abl_height=200.0,
+        # surface pressure [Pa]
+        surf_pressure=101300.0,
+        # horizontal large-scale divergence of wind [s-1]
+        divU=0.0,
+        # Coriolis parameter [m s-1]
+        coriolis_param=1.0e-4,
+        # 1.3 temperature parameters
+        # initial mixed-layer potential temperature [K]
+        theta=288.0,
+        # initial temperature jump at h [K]
+        dtheta=1.0,
+        # free atmosphere potential temperature lapse rate [K m-1]
+        gammatheta=0.006,
+        # advection of heat [K s-1]
+        advtheta=0.0,
+        # entrainment ratio for virtual heat [-]
+        beta=0.2,
+        # surface kinematic heat flux [K m s-1]
+        wtheta=0.1,
+        # 1.4 moisture parameters
+        # initial mixed-layer specific humidity [kg kg-1]
+        q=0.008,
+        # initial specific humidity jump at h [kg kg-1]
+        dq=-0.001,
+        # free atmosphere specific humidity lapse rate [kg kg-1 m-1]
+        gammaq=0.0,
+        # advection of moisture [kg kg-1 s-1]
+        advq=0.0,
+        # surface kinematic moisture flux [kg kg-1 m s-1]
+        wq=1e-4,
+        # 1.5. CO2 parameters
+        # initial mixed-layer CO2 [ppm]
+        co2=422.0,
+        # initial CO2 jump at h [ppm]
+        dCO2=-44.0,
+        # free atmosphere CO2 lapse rate [ppm m-1]
+        gammaCO2=0.0,
+        # advection of CO2 [ppm s-1]
+        advCO2=0.0,
+        # surface kinematic CO2 flux [ppm m s-1]
+        wCO2=0.0,
+        # 1.6. wind parameters
+        # prognostic wind switch
+        sw_wind=True,
+        # initial mixed-layer u-wind speed [m s-1]
+        u=6.0,
+        # initial u-wind jump at h [m s-1]
+        du=4.0,
+        # free atmosphere u-wind speed lapse rate [s-1]
+        gammau=0.0,
+        # advection of u-wind [m s-2]
+        advu=0.0,
+        # initial mixed-layer v-wind speed [m s-1]
+        v=-4.0,
+        # initial v-wind jump at h [m s-1]
+        dv=4.0,
+        # free atmosphere v-wind speed lapse rate [s-1]
+        gammav=0.0,
+        # advection of v-wind [m s-2]
+        advv=0.0,
+    )
 
     # 2. define surface layer model
     surface_layer_model = InertSurfaceLayerModel(
@@ -176,39 +179,7 @@ def main():
         # 0. running configuration
         dt=dt,
         runtime=runtime,
-        # 1. mixed layer
-        sw_ml=sw_ml,
-        sw_shearwe=sw_shearwe,
-        sw_fixft=sw_fixft,
-        abl_height=abl_height,
-        surf_pressure=surf_pressure,
-        divU=divU,
-        coriolis_param=coriolis_param,
-        theta=theta,
-        dtheta=dtheta,
-        gammatheta=gammatheta,
-        advtheta=advtheta,
-        beta=beta,
-        wtheta=wtheta,
-        q=q,
-        dq=dq,
-        gammaq=gammaq,
-        advq=advq,
-        wq=wq,
-        co2=co2,
-        dCO2=dCO2,
-        gammaCO2=gammaCO2,
-        advCO2=advCO2,
-        wCO2=wCO2,
-        sw_wind=sw_wind,
-        u=u,
-        du=du,
-        gammau=gammau,
-        advu=advu,
-        v=v,
-        dv=dv,
-        gammav=gammav,
-        advv=advv,
+        mixed_layer=mixed_layer_model,
         surface_layer=surface_layer_model,
         sw_rad=sw_rad,
         lat=lat,

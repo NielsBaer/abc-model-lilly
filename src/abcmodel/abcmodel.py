@@ -2,6 +2,7 @@ import copy as cp
 
 import numpy as np
 
+from .mixed_layer import MixedLayerModel
 from .surface_layer import AbstractSurfaceLayerModel
 from .utils import PhysicalConstants, get_esat, get_qsat
 
@@ -61,38 +62,7 @@ class Model:
         dt: float,
         runtime: float,
         # 1. mixed layer
-        sw_ml: bool,
-        sw_shearwe: bool,
-        sw_fixft: bool,
-        abl_height: float,
-        surf_pressure: float,
-        divU: float,
-        coriolis_param: float,
-        theta: float,
-        dtheta: float,
-        gammatheta: float,
-        advtheta: float,
-        beta: float,
-        wtheta: float,
-        q: float,
-        dq: float,
-        gammaq: float,
-        advq: float,
-        wq: float,
-        co2: float,
-        dCO2: float,
-        gammaCO2: float,
-        advCO2: float,
-        wCO2: float,
-        sw_wind: bool,
-        u: float,
-        du: float,
-        gammau: float,
-        advu: float,
-        v: float,
-        dv: float,
-        gammav: float,
-        advv: float,
+        mixed_layer: MixedLayerModel,
         # 2. surface layer
         surface_layer: AbstractSurfaceLayerModel,
         # 3. radiation
@@ -120,179 +90,8 @@ class Model:
         self.tsteps = int(np.floor(self.runtime / self.dt))
         self.t = 0
 
-        # 1. mixed-layer input:
-        # 1.1. mixed layer switches
-        # mixed-layer model switch
-        self.sw_ml = sw_ml
-        # shear growth mixed-layer switch
-        self.sw_shearwe = sw_shearwe
-        # fix the free-troposphere switch
-        self.sw_fixft = sw_fixft
-        # 1.2. large scale parameters
-        # initial ABL height [m]
-        self.abl_height = abl_height
-        # surface pressure [Pa]
-        self.surf_pressure = surf_pressure
-        # horizontal large-scale divergence of wind [s-1]
-        self.divU = divU
-        # Coriolis parameter [m s-1]
-        self.coriolis_param = coriolis_param
-        # 1.3 temperature parameters
-        # initial mixed-layer potential temperature [K]
-        self.theta = theta
-        # initial temperature jump at h [K]
-        self.dtheta = dtheta
-        # free atmosphere potential temperature lapse rate [K m-1]
-        self.gammatheta = gammatheta
-        # advection of heat [K s-1]
-        self.advtheta = advtheta
-        # entrainment ratio for virtual heat [-]
-        self.beta = beta
-        # surface kinematic heat flux [K m s-1]
-        self.wtheta = wtheta
-        # 1.5 entrainment parameters
-        # convective velocity scale [m s-1]
-        self.wstar = 0.0
-        # large-scale vertical velocity [m s-1]
-        self.ws = None
-        # mixed-layer growth due to radiative divergence [m s-1]
-        self.wf = None
-        # entrainment velocity [m s-1]
-        self.we = -1.0
-        # 1.6. moisture parameters
-        # initial mixed-layer specific humidity [kg kg-1]
-        self.q = q
-        # initial specific humidity jump at h [kg kg-1]
-        self.dq = dq
-        # free atmosphere specific humidity lapse rate [kg kg-1 m-1]
-        self.gammaq = gammaq
-        # advection of moisture [kg kg-1 s-1]
-        self.advq = advq
-        # surface kinematic moisture flux [kg kg-1 m s-1]
-        self.wq = wq
-        # entrainment moisture flux [kg kg-1 m s-1]
-        self.wqe = None
-        # moisture cumulus mass flux [kg kg-1 m s-1]
-        self.cc_qf = None
-        # mixed-layer saturated specific humidity [kg kg-1]
-        self.qsat = None
-        # mixed-layer saturated vapor pressure [Pa]
-        self.esat = None
-        # mixed-layer vapor pressure [Pa]
-        self.e = None
-        # surface saturated specific humidity [g kg-1]
-        self.qsatsurf = None
-        # slope saturated specific humidity curve [g kg-1 K-1]
-        self.dqsatdT = None
-        # 1.7. 2m diagnostic variables
-        # 2m temperature [K]
-        self.temp_2m = None
-        # 2m specific humidity [kg kg-1]
-        self.q2m = None
-        # 2m vapor pressure [Pa]
-        self.e2m = None
-        # 2m saturated vapor pressure [Pa]
-        self.esat2m = None
-        # 2m u-wind [m s-1]
-        self.u2m = None
-        # 2m v-wind [m s-1]
-        self.v2m = None
-        # 1.8. surface variables
-        # surface potential temperature [K]
-        self.thetasurf = theta
-        # surface virtual potential temperature [K]
-        self.thetavsurf = None
-        # surface specific humidity [g kg-1]
-        self.qsurf = None
-        # 1.9. mixed-layer top variables
-        # mixed-layer top pressure [pa]
-        self.top_p = None
-        # mixed-layer top absolute temperature [K]
-        self.top_T = None
-        # mixed-layer top specific humidity variance [kg2 kg-2]
-        self.q2_h = None
-        # mixed-layer top CO2 variance [ppm2]
-        self.top_CO22 = None
-        # mixed-layer top relavtive humidity [-]
-        self.top_rh = None
-        # transition layer thickness [-]
-        self.dz_h = None
-        # lifting condensation level [m]
-        self.lcl = None
-        # 1.10. virtual temperatures and fluxes
-        # initial mixed-layer potential temperature [K]
-        self.thetav = None
-        # initial virtual temperature jump at h [K]
-        self.dthetav = None
-        # surface kinematic virtual heat flux [K m s-1]
-        self.wthetav = None
-        # entrainment kinematic virtual heat flux [K m s-1]
-        self.wthetave = None
-        # 1.11. CO2
-        # conversion factor mgC m-2 s-1 to ppm m s-1
-        fac = self.const.mair / (self.const.rho * self.const.mco2)
-        # initial mixed-layer CO2 [ppm]
-        self.co2 = co2
-        # initial CO2 jump at h [ppm]
-        self.dCO2 = dCO2
-        # free atmosphere CO2 lapse rate [ppm m-1]
-        self.gammaco2 = gammaCO2
-        # advection of CO2 [ppm s-1]
-        self.advCO2 = advCO2
-        # surface kinematic CO2 flux [ppm m s-1]
-        self.wCO2 = wCO2 * fac
-        # surface assimulation CO2 flux [ppm m s-1]
-        self.wCO2A = 0.0
-        # surface respiration CO2 flux [ppm m s-1]
-        self.wCO2R = 0.0
-        # entrainment CO2 flux [ppm m s-1]
-        self.wCO2e = None
-        # CO2 mass flux [ppm m s-1]
-        self.wCO2M = 0.0
-        # 1.12. wind parameters
-        # prognostic wind switch
-        self.sw_wind = sw_wind
-        # initial mixed-layer u-wind speed [m s-1]
-        self.u = u
-        # initial u-wind jump at h [m s-1]
-        self.du = du
-        # free atmosphere u-wind speed lapse rate [s-1]
-        self.gammau = gammau
-        # advection of u-wind [m s-2]
-        self.advu = advu
-        # initial mixed-layer v-wind speed [m s-1]
-        self.v = v
-        # initial v-wind jump at h [m s-1]
-        self.dv = dv
-        # free atmosphere v-wind speed lapse rate [s-1]
-        self.gammav = gammav
-        # advection of v-wind [m s-2]
-        self.advv = advv
-        # 1.13. tendencies
-        # tendency of CBL [m s-1]
-        self.htend = None
-        # tendency of mixed-layer potential temperature [K s-1]
-        self.thetatend = None
-        # tendency of potential temperature jump at h [K s-1]
-        self.dthetatend = None
-        # tendency of mixed-layer specific humidity [kg kg-1 s-1]
-        self.qtend = None
-        # tendency of specific humidity jump at h [kg kg-1 s-1]
-        self.dqtend = None
-        # tendency of CO2 humidity [ppm]
-        self.co2tend = None
-        # tendency of CO2 jump at h [ppm s-1]
-        self.dCO2tend = None
-        # tendency of u-wind [m s-1 s-1]
-        self.utend = None
-        # tendency of u-wind jump at h [m s-1 s-1]
-        self.dutend = None
-        # tendency of v-wind [m s-1 s-1]
-        self.vtend = None
-        # tendency of v-wind jump at h [m s-1 s-1]
-        self.dvtend = None
-        # tendency of transition layer thickness [m s-1]
-        self.dztend = None
+        # 1. define mixed layer model
+        self.mixed_layer = mixed_layer
 
         # 2. surface layer
         self.surface_layer = surface_layer
@@ -330,13 +129,13 @@ class Model:
         # cumulus parameterization switch
         self.sw_cu = sw_cu
         # transition layer thickness [m]
-        self.dz_h = dz_h
+        self.mixed_layer.dz_h = dz_h
         # cloud core fraction [-]
         self.cc_frac = 0.0
         # cloud core mass flux [m s-1]
         self.cc_mf = 0.0
         # cloud core moisture flux [kg kg-1 m s-1]
-        self.cc_qf = 0.0
+        self.mixed_layer.cc_qf = 0.0
 
     def run(self):
         # initialize model variables
@@ -472,30 +271,46 @@ class Model:
             self.run_radiation()
 
         for _ in range(10):
-            assert isinstance(self.thetav, float)
+            assert isinstance(self.mixed_layer.thetav, float)
             self.surface_layer.run(
-                self.u,
-                self.v,
-                self.theta,
-                self.thetav,
-                self.wstar,
-                self.wtheta,
-                self.wq,
-                self.surf_pressure,
+                self.mixed_layer.u,
+                self.mixed_layer.v,
+                self.mixed_layer.theta,
+                self.mixed_layer.thetav,
+                self.mixed_layer.wstar,
+                self.mixed_layer.wtheta,
+                self.mixed_layer.wq,
+                self.mixed_layer.surf_pressure,
                 self.rs,
-                self.q,
-                self.abl_height,
+                self.mixed_layer.q,
+                self.mixed_layer.abl_height,
             )
 
         if self.sw_ls:
             self.run_land_surface()
 
+        assert isinstance(self.surface_layer.uw, float)
+        assert isinstance(self.surface_layer.vw, float)
         if self.sw_cu:
-            self.run_mixed_layer()
+            self.mixed_layer.run(
+                self.dFz,
+                self.cc_mf,
+                self.cc_frac,
+                self.surface_layer.ustar,
+                self.surface_layer.uw,
+                self.surface_layer.vw,
+            )
             self.run_cumulus()
 
-        if self.sw_ml:
-            self.run_mixed_layer()
+        if self.mixed_layer.sw_ml:
+            self.mixed_layer.run(
+                self.dFz,
+                self.cc_mf,
+                self.cc_frac,
+                self.surface_layer.ustar,
+                self.surface_layer.uw,
+                self.surface_layer.vw,
+            )
 
     def timestep(self):
         self.statistics()
@@ -505,19 +320,19 @@ class Model:
             self.run_radiation()
 
         # run surface layer model
-        assert isinstance(self.thetav, float)
+        assert isinstance(self.mixed_layer.thetav, float)
         self.surface_layer.run(
-            self.u,
-            self.v,
-            self.theta,
-            self.thetav,
-            self.wstar,
-            self.wtheta,
-            self.wq,
-            self.surf_pressure,
+            self.mixed_layer.u,
+            self.mixed_layer.v,
+            self.mixed_layer.theta,
+            self.mixed_layer.thetav,
+            self.mixed_layer.wstar,
+            self.mixed_layer.wtheta,
+            self.mixed_layer.wq,
+            self.mixed_layer.surf_pressure,
             self.rs,
-            self.q,
-            self.abl_height,
+            self.mixed_layer.q,
+            self.mixed_layer.abl_height,
         )
 
         # run land surface model
@@ -529,8 +344,15 @@ class Model:
             self.run_cumulus()
 
         # run mixed-layer model
-        if self.sw_ml:
-            self.run_mixed_layer()
+        if self.mixed_layer.sw_ml:
+            self.mixed_layer.run(
+                self.dFz,
+                self.cc_mf,
+                self.cc_frac,
+                self.surface_layer.ustar,
+                self.surface_layer.uw,
+                self.surface_layer.vw,
+            )
 
         # store output before time integration
         self.store()
@@ -540,27 +362,40 @@ class Model:
             self.integrate_land_surface()
 
         # time integrate mixed-layer model
-        if self.sw_ml:
-            self.integrate_mixed_layer()
+        if self.mixed_layer.sw_ml:
+            self.mixed_layer.integrate(self.dt)
 
     def statistics(self):
         # Calculate virtual temperatures
-        self.thetav = self.theta + 0.61 * self.theta * self.q
-        self.wthetav = self.wtheta + 0.61 * self.theta * self.wq
-        self.dthetav = (self.theta + self.dtheta) * (
-            1.0 + 0.61 * (self.q + self.dq)
-        ) - self.theta * (1.0 + 0.61 * self.q)
+        self.mixed_layer.thetav = (
+            self.mixed_layer.theta + 0.61 * self.mixed_layer.theta * self.mixed_layer.q
+        )
+        self.mixed_layer.wthetav = (
+            self.mixed_layer.wtheta
+            + 0.61 * self.mixed_layer.theta * self.mixed_layer.wq
+        )
+        self.mixed_layer.dthetav = (
+            self.mixed_layer.theta + self.mixed_layer.dtheta
+        ) * (
+            1.0 + 0.61 * (self.mixed_layer.q + self.mixed_layer.dq)
+        ) - self.mixed_layer.theta * (1.0 + 0.61 * self.mixed_layer.q)
 
         # Mixed-layer top properties
-        self.top_p = (
-            self.surf_pressure - self.const.rho * self.const.g * self.abl_height
+        self.mixed_layer.top_p = (
+            self.mixed_layer.surf_pressure
+            - self.const.rho * self.const.g * self.mixed_layer.abl_height
         )
-        self.top_T = self.theta - self.const.g / self.const.cp * self.abl_height
-        self.top_rh = self.q / get_qsat(self.top_T, self.top_p)
+        self.mixed_layer.top_T = (
+            self.mixed_layer.theta
+            - self.const.g / self.const.cp * self.mixed_layer.abl_height
+        )
+        self.mixed_layer.top_rh = self.mixed_layer.q / get_qsat(
+            self.mixed_layer.top_T, self.mixed_layer.top_p
+        )
 
         # Find lifting condensation level iteratively
         if self.t == 0:
-            self.lcl = self.abl_height
+            self.mixed_layer.lcl = self.mixed_layer.abl_height
             RHlcl = 0.5
         else:
             RHlcl = 0.9998
@@ -568,34 +403,40 @@ class Model:
         itmax = 30
         it = 0
         while ((RHlcl <= 0.9999) or (RHlcl >= 1.0001)) and it < itmax:
-            self.lcl += (1.0 - RHlcl) * 1000.0
-            p_lcl = self.surf_pressure - self.const.rho * self.const.g * self.lcl
-            T_lcl = self.theta - self.const.g / self.const.cp * self.lcl
-            RHlcl = self.q / get_qsat(T_lcl, p_lcl)
+            self.mixed_layer.lcl += (1.0 - RHlcl) * 1000.0
+            p_lcl = (
+                self.mixed_layer.surf_pressure
+                - self.const.rho * self.const.g * self.mixed_layer.lcl
+            )
+            T_lcl = (
+                self.mixed_layer.theta
+                - self.const.g / self.const.cp * self.mixed_layer.lcl
+            )
+            RHlcl = self.mixed_layer.q / get_qsat(T_lcl, p_lcl)
             it += 1
 
         if it == itmax:
             print("LCL calculation not converged!!")
-            print("RHlcl = %f, zlcl=%f" % (RHlcl, self.lcl))
+            print("RHlcl = %f, zlcl=%f" % (RHlcl, self.mixed_layer.lcl))
 
     def run_cumulus(self):
         # Calculate mixed-layer top relative humidity variance (Neggers et. al 2006/7)
-        if self.wthetav > 0:
-            self.q2_h = (
-                -(self.wqe + self.cc_qf)
-                * self.dq
-                * self.abl_height
-                / (self.dz_h * self.wstar)
+        if self.mixed_layer.wthetav > 0:
+            self.mixed_layer.q2_h = (
+                -(self.mixed_layer.wqe + self.mixed_layer.cc_qf)
+                * self.mixed_layer.dq
+                * self.mixed_layer.abl_height
+                / (self.mixed_layer.dz_h * self.mixed_layer.wstar)
             )
-            self.top_CO22 = (
-                -(self.wCO2e + self.wCO2M)
-                * self.dCO2
-                * self.abl_height
-                / (self.dz_h * self.wstar)
+            self.mixed_layer.top_CO22 = (
+                -(self.mixed_layer.wCO2e + self.mixed_layer.wCO2M)
+                * self.mixed_layer.dCO2
+                * self.mixed_layer.abl_height
+                / (self.mixed_layer.dz_h * self.mixed_layer.wstar)
             )
         else:
-            self.q2_h = 0.0
-            self.top_CO22 = 0.0
+            self.mixed_layer.q2_h = 0.0
+            self.mixed_layer.top_CO22 = 0.0
 
         # calculate cloud core fraction (ac), mass flux (M) and moisture flux (wqM)
         self.cc_frac = max(
@@ -605,148 +446,24 @@ class Model:
                 0.36
                 * np.arctan(
                     1.55
-                    * ((self.q - get_qsat(self.top_T, self.top_p)) / self.q2_h**0.5)
+                    * (
+                        (
+                            self.mixed_layer.q
+                            - get_qsat(self.mixed_layer.top_T, self.mixed_layer.top_p)
+                        )
+                        / self.mixed_layer.q2_h**0.5
+                    )
                 )
             ),
         )
-        self.cc_mf = self.cc_frac * self.wstar
-        self.cc_qf = self.cc_mf * self.q2_h**0.5
+        self.cc_mf = self.cc_frac * self.mixed_layer.wstar
+        self.mixed_layer.cc_qf = self.cc_mf * self.mixed_layer.q2_h**0.5
 
         # Only calculate CO2 mass-flux if mixed-layer top jump is negative
-        if self.dCO2 < 0:
-            self.wCO2M = self.cc_mf * self.top_CO22**0.5
+        if self.mixed_layer.dCO2 < 0:
+            self.mixed_layer.wCO2M = self.cc_mf * self.mixed_layer.top_CO22**0.5
         else:
-            self.wCO2M = 0.0
-
-    def run_mixed_layer(self):
-        # calculate large-scale vertical velocity (subsidence)
-        self.ws = -self.divU * self.abl_height
-
-        # calculate compensation to fix the free troposphere in case of subsidence
-        if self.sw_fixft:
-            w_th_ft = self.gammatheta * self.ws
-            w_q_ft = self.gammaq * self.ws
-            w_CO2_ft = self.gammaco2 * self.ws
-        else:
-            w_th_ft = 0.0
-            w_q_ft = 0.0
-            w_CO2_ft = 0.0
-
-        # calculate mixed-layer growth due to cloud top radiative divergence
-        self.wf = self.dFz / (self.const.rho * self.const.cp * self.dtheta)
-
-        # calculate convective velocity scale w*
-        if self.wthetav > 0.0:
-            self.wstar = (
-                (self.const.g * self.abl_height * self.wthetav) / self.thetav
-            ) ** (1.0 / 3.0)
-        else:
-            self.wstar = 1e-6
-
-        # Virtual heat entrainment flux
-        self.wthetave = -self.beta * self.wthetav
-
-        # compute mixed-layer tendencies
-        if self.sw_shearwe:
-            self.we = (
-                -self.wthetave
-                + 5.0
-                * self.surface_layer.ustar**3.0
-                * self.thetav
-                / (self.const.g * self.abl_height)
-            ) / self.dthetav
-        else:
-            self.we = -self.wthetave / self.dthetav
-
-        # Don't allow boundary layer shrinking if wtheta < 0
-        if self.we < 0:
-            self.we = 0.0
-
-        # Calculate entrainment fluxes
-        self.wthetae = -self.we * self.dtheta
-        self.wqe = -self.we * self.dq
-        self.wCO2e = -self.we * self.dCO2
-
-        self.htend = self.we + self.ws + self.wf - self.cc_mf
-
-        self.thetatend = (self.wtheta - self.wthetae) / self.abl_height + self.advtheta
-        self.qtend = (self.wq - self.wqe - self.cc_qf) / self.abl_height + self.advq
-        self.co2tend = (
-            self.wCO2 - self.wCO2e - self.wCO2M
-        ) / self.abl_height + self.advCO2
-
-        self.dthetatend = (
-            self.gammatheta * (self.we + self.wf - self.cc_mf)
-            - self.thetatend
-            + w_th_ft
-        )
-        self.dqtend = (
-            self.gammaq * (self.we + self.wf - self.cc_mf) - self.qtend + w_q_ft
-        )
-        self.dCO2tend = (
-            self.gammaco2 * (self.we + self.wf - self.cc_mf) - self.co2tend + w_CO2_ft
-        )
-
-        # assume u + du = ug, so ug - u = du
-        if self.sw_wind:
-            self.utend = (
-                -self.coriolis_param * self.dv
-                + (self.surface_layer.uw + self.we * self.du) / self.abl_height
-                + self.advu
-            )
-            self.vtend = (
-                self.coriolis_param * self.du
-                + (self.surface_layer.vw + self.we * self.dv) / self.abl_height
-                + self.advv
-            )
-
-            self.dutend = self.gammau * (self.we + self.wf - self.cc_mf) - self.utend
-            self.dvtend = self.gammav * (self.we + self.wf - self.cc_mf) - self.vtend
-
-        # tendency of the transition layer thickness
-        if self.cc_frac > 0 or self.lcl - self.abl_height < 300:
-            self.dztend = ((self.lcl - self.abl_height) - self.dz_h) / 7200.0
-        else:
-            self.dztend = 0.0
-
-    def integrate_mixed_layer(self):
-        # set values previous time step
-        h0 = self.abl_height
-
-        theta0 = self.theta
-        dtheta0 = self.dtheta
-        q0 = self.q
-        dq0 = self.dq
-        CO20 = self.co2
-        dCO20 = self.dCO2
-
-        u0 = self.u
-        du0 = self.du
-        v0 = self.v
-        dv0 = self.dv
-
-        dz0 = self.dz_h
-
-        # integrate mixed-layer equations
-        self.abl_height = h0 + self.dt * self.htend
-        self.theta = theta0 + self.dt * self.thetatend
-        self.dtheta = dtheta0 + self.dt * self.dthetatend
-        self.q = q0 + self.dt * self.qtend
-        self.dq = dq0 + self.dt * self.dqtend
-        self.co2 = CO20 + self.dt * self.co2tend
-        self.dCO2 = dCO20 + self.dt * self.dCO2tend
-        self.dz_h = dz0 + self.dt * self.dztend
-
-        # Limit dz to minimal value
-        dz0 = 50
-        if self.dz_h < dz0:
-            self.dz_h = dz0
-
-        if self.sw_wind:
-            self.u = u0 + self.dt * self.utend
-            self.du = du0 + self.dt * self.dutend
-            self.v = v0 + self.dt * self.vtend
-            self.dv = dv0 + self.dt * self.dvtend
+            self.mixed_layer.wCO2M = 0.0
 
     def run_radiation(self):
         sda = 0.409 * np.cos(2.0 * np.pi * (self.doy - 173.0) / 365.0)
@@ -758,9 +475,12 @@ class Model:
         )
         sinlea = max(sinlea, 0.0001)
 
-        Ta = self.theta * (
-            (self.surf_pressure - 0.1 * self.abl_height * self.const.rho * self.const.g)
-            / self.surf_pressure
+        Ta = self.mixed_layer.theta * (
+            (
+                self.mixed_layer.surf_pressure
+                - 0.1 * self.mixed_layer.abl_height * self.const.rho * self.const.g
+            )
+            / self.mixed_layer.surf_pressure
         ) ** (self.const.rd / self.const.cp)
 
         Tr = (0.6 + 0.2 * sinlea) * (1.0 - 0.4 * self.cc)
@@ -789,8 +509,10 @@ class Model:
 
         # Limit f2 in case w2 > wfc, where f2 < 1
         f2 = max(f2, 1.0)
-        f3 = 1.0 / np.exp(-self.gD * (self.esat - self.e) / 100.0)
-        f4 = 1.0 / (1.0 - 0.0016 * (298.0 - self.theta) ** 2.0)
+        f3 = 1.0 / np.exp(
+            -self.gD * (self.mixed_layer.esat - self.mixed_layer.e) / 100.0
+        )
+        f4 = 1.0 / (1.0 - 0.0016 * (298.0 - self.mixed_layer.theta) ** 2.0)
 
         self.rs = self.rsmin / self.LAI * f1 * f2 * f3 * f4
 
@@ -823,16 +545,16 @@ class Model:
         CO2comp = (
             self.CO2comp298[c]
             * self.const.rho
-            * pow(self.net_rad10CO2[c], (0.1 * (self.thetasurf - 298.0)))
+            * pow(self.net_rad10CO2[c], (0.1 * (self.mixed_layer.thetasurf - 298.0)))
         )
 
         # calculate mesophyll conductance
         gm = (
             self.gm298[c]
-            * pow(self.net_rad10gm[c], (0.1 * (self.thetasurf - 298.0)))
+            * pow(self.net_rad10gm[c], (0.1 * (self.mixed_layer.thetasurf - 298.0)))
             / (
-                (1.0 + np.exp(0.3 * (self.T1gm[c] - self.thetasurf)))
-                * (1.0 + np.exp(0.3 * (self.thetasurf - self.T2gm[c])))
+                (1.0 + np.exp(0.3 * (self.T1gm[c] - self.mixed_layer.thetasurf)))
+                * (1.0 + np.exp(0.3 * (self.mixed_layer.thetasurf - self.T2gm[c])))
             )
         )
         gm = gm / 1000.0  # conversion from mm s-1 to m s-1
@@ -843,22 +565,22 @@ class Model:
             (pow(fmin0, 2.0) + 4 * self.gmin[c] / self.nuco2q * gm), 0.5
         ) / (2.0 * gm)
 
-        Ds = (get_esat(self.Ts) - self.e) / 1000.0  # kPa
+        Ds = (get_esat(self.Ts) - self.mixed_layer.e) / 1000.0  # kPa
         D0 = (self.f0[c] - fmin) / self.ad[c]
 
         cfrac = self.f0[c] * (1.0 - (Ds / D0)) + fmin * (Ds / D0)
         co2abs = (
-            self.co2 * (self.const.mco2 / self.const.mair) * self.const.rho
+            self.mixed_layer.co2 * (self.const.mco2 / self.const.mair) * self.const.rho
         )  # conversion mumol mol-1 (ppm) to mgCO2 m3
         ci = cfrac * (co2abs - CO2comp) + CO2comp
 
         # calculate maximal gross primary production in high light conditions (Ag)
         Ammax = (
             self.Ammax298[c]
-            * pow(self.net_rad10Am[c], (0.1 * (self.thetasurf - 298.0)))
+            * pow(self.net_rad10Am[c], (0.1 * (self.mixed_layer.thetasurf - 298.0)))
             / (
-                (1.0 + np.exp(0.3 * (self.T1Am[c] - self.thetasurf)))
-                * (1.0 + np.exp(0.3 * (self.thetasurf - self.T2Am[c])))
+                (1.0 + np.exp(0.3 * (self.T1Am[c] - self.mixed_layer.thetasurf)))
+                * (1.0 + np.exp(0.3 * (self.mixed_layer.thetasurf - self.T2Am[c])))
             )
         )
 
@@ -923,22 +645,32 @@ class Model:
         )
 
         # CO2 flux
-        self.wCO2A = An * (self.const.mair / (self.const.rho * self.const.mco2))
-        self.wCO2R = Resp * (self.const.mair / (self.const.rho * self.const.mco2))
-        self.wCO2 = self.wCO2A + self.wCO2R
+        self.mixed_layer.wCO2A = An * (
+            self.const.mair / (self.const.rho * self.const.mco2)
+        )
+        self.mixed_layer.wCO2R = Resp * (
+            self.const.mair / (self.const.rho * self.const.mco2)
+        )
+        self.mixed_layer.wCO2 = self.mixed_layer.wCO2A + self.mixed_layer.wCO2R
 
     def run_land_surface(self):
-        self.surface_layer.compute_ra(self.u, self.v, self.wstar)
+        self.surface_layer.compute_ra(
+            self.mixed_layer.u, self.mixed_layer.v, self.mixed_layer.wstar
+        )
 
         # first calculate essential thermodynamic variables
-        self.esat = get_esat(self.theta)
-        self.qsat = get_qsat(self.theta, self.surf_pressure)
-        desatdT = self.esat * (
-            17.2694 / (self.theta - 35.86)
-            - 17.2694 * (self.theta - 273.16) / (self.theta - 35.86) ** 2.0
+        self.mixed_layer.esat = get_esat(self.mixed_layer.theta)
+        self.mixed_layer.qsat = get_qsat(
+            self.mixed_layer.theta, self.mixed_layer.surf_pressure
         )
-        self.dqsatdT = 0.622 * desatdT / self.surf_pressure
-        self.e = self.q * self.surf_pressure / 0.622
+        desatdT = self.mixed_layer.esat * (
+            17.2694 / (self.mixed_layer.theta - 35.86)
+            - 17.2694
+            * (self.mixed_layer.theta - 273.16)
+            / (self.mixed_layer.theta - 35.86) ** 2.0
+        )
+        self.mixed_layer.dqsatdT = 0.622 * desatdT / self.mixed_layer.surf_pressure
+        self.mixed_layer.e = self.mixed_layer.q * self.mixed_layer.surf_pressure / 0.622
 
         if self.ls_type == "js":
             self.jarvis_stewart()
@@ -960,24 +692,39 @@ class Model:
         # calculate skin temperature implictly
         self.Ts = (
             self.net_rad
-            + self.const.rho * self.const.cp / self.surface_layer.ra * self.theta
+            + self.const.rho
+            * self.const.cp
+            / self.surface_layer.ra
+            * self.mixed_layer.theta
             + self.cveg
             * (1.0 - self.cliq)
             * self.const.rho
             * self.const.lv
             / (self.surface_layer.ra + self.rs)
-            * (self.dqsatdT * self.theta - self.qsat + self.q)
+            * (
+                self.mixed_layer.dqsatdT * self.mixed_layer.theta
+                - self.mixed_layer.qsat
+                + self.mixed_layer.q
+            )
             + (1.0 - self.cveg)
             * self.const.rho
             * self.const.lv
             / (self.surface_layer.ra + self.rssoil)
-            * (self.dqsatdT * self.theta - self.qsat + self.q)
+            * (
+                self.mixed_layer.dqsatdT * self.mixed_layer.theta
+                - self.mixed_layer.qsat
+                + self.mixed_layer.q
+            )
             + self.cveg
             * self.cliq
             * self.const.rho
             * self.const.lv
             / self.surface_layer.ra
-            * (self.dqsatdT * self.theta - self.qsat + self.q)
+            * (
+                self.mixed_layer.dqsatdT * self.mixed_layer.theta
+                - self.mixed_layer.qsat
+                + self.mixed_layer.q
+            )
             + self.Lambda * self.Tsoil
         ) / (
             self.const.rho * self.const.cp / self.surface_layer.ra
@@ -986,23 +733,23 @@ class Model:
             * self.const.rho
             * self.const.lv
             / (self.surface_layer.ra + self.rs)
-            * self.dqsatdT
+            * self.mixed_layer.dqsatdT
             + (1.0 - self.cveg)
             * self.const.rho
             * self.const.lv
             / (self.surface_layer.ra + self.rssoil)
-            * self.dqsatdT
+            * self.mixed_layer.dqsatdT
             + self.cveg
             * self.cliq
             * self.const.rho
             * self.const.lv
             / self.surface_layer.ra
-            * self.dqsatdT
+            * self.mixed_layer.dqsatdT
             + self.Lambda
         )
 
         esatsurf = get_esat(self.Ts)
-        self.qsatsurf = get_qsat(self.Ts, self.surf_pressure)
+        self.mixed_layer.qsatsurf = get_qsat(self.Ts, self.mixed_layer.surf_pressure)
 
         self.LEveg = (
             (1.0 - self.cliq)
@@ -1010,7 +757,11 @@ class Model:
             * self.const.rho
             * self.const.lv
             / (self.surface_layer.ra + self.rs)
-            * (self.dqsatdT * (self.Ts - self.theta) + self.qsat - self.q)
+            * (
+                self.mixed_layer.dqsatdT * (self.Ts - self.mixed_layer.theta)
+                + self.mixed_layer.qsat
+                - self.mixed_layer.q
+            )
         )
         self.LEliq = (
             self.cliq
@@ -1018,14 +769,22 @@ class Model:
             * self.const.rho
             * self.const.lv
             / self.surface_layer.ra
-            * (self.dqsatdT * (self.Ts - self.theta) + self.qsat - self.q)
+            * (
+                self.mixed_layer.dqsatdT * (self.Ts - self.mixed_layer.theta)
+                + self.mixed_layer.qsat
+                - self.mixed_layer.q
+            )
         )
         self.LEsoil = (
             (1.0 - self.cveg)
             * self.const.rho
             * self.const.lv
             / (self.surface_layer.ra + self.rssoil)
-            * (self.dqsatdT * (self.Ts - self.theta) + self.qsat - self.q)
+            * (
+                self.mixed_layer.dqsatdT * (self.Ts - self.mixed_layer.theta)
+                + self.mixed_layer.qsat
+                - self.mixed_layer.q
+            )
         )
 
         self.Wltend = -self.LEliq / (self.const.rhow * self.const.lv)
@@ -1035,24 +794,24 @@ class Model:
             self.const.rho
             * self.const.cp
             / self.surface_layer.ra
-            * (self.Ts - self.theta)
+            * (self.Ts - self.mixed_layer.theta)
         )
         self.G = self.Lambda * (self.Ts - self.Tsoil)
         self.LEpot = (
-            self.dqsatdT * (self.net_rad - self.G)
+            self.mixed_layer.dqsatdT * (self.net_rad - self.G)
             + self.const.rho
             * self.const.cp
             / self.surface_layer.ra
-            * (self.qsat - self.q)
-        ) / (self.dqsatdT + self.const.cp / self.const.lv)
+            * (self.mixed_layer.qsat - self.mixed_layer.q)
+        ) / (self.mixed_layer.dqsatdT + self.const.cp / self.const.lv)
         self.LEref = (
-            self.dqsatdT * (self.net_rad - self.G)
+            self.mixed_layer.dqsatdT * (self.net_rad - self.G)
             + self.const.rho
             * self.const.cp
             / self.surface_layer.ra
-            * (self.qsat - self.q)
+            * (self.mixed_layer.qsat - self.mixed_layer.q)
         ) / (
-            self.dqsatdT
+            self.mixed_layer.dqsatdT
             + self.const.cp
             / self.const.lv
             * (1.0 + self.rsmin / self.LAI / self.surface_layer.ra)
@@ -1074,8 +833,8 @@ class Model:
         ) * self.LEsoil / self.const.lv - C2 / 86400.0 * (self.wg - wgeq)
 
         # calculate kinematic heat fluxes
-        self.wtheta = self.H / (self.const.rho * self.const.cp)
-        self.wq = self.LE / (self.const.rho * self.const.lv)
+        self.mixed_layer.wtheta = self.H / (self.const.rho * self.const.cp)
+        self.mixed_layer.wq = self.LE / (self.const.rho * self.const.lv)
 
     def integrate_land_surface(self):
         # integrate soil equations
@@ -1091,53 +850,53 @@ class Model:
     def store(self):
         t = self.t
         self.out.t[t] = t * self.dt / 3600.0 + self.tstart
-        self.out.h[t] = self.abl_height
+        self.out.h[t] = self.mixed_layer.abl_height
 
-        self.out.theta[t] = self.theta
-        self.out.thetav[t] = self.thetav
-        self.out.dtheta[t] = self.dtheta
-        self.out.dthetav[t] = self.dthetav
-        self.out.wtheta[t] = self.wtheta
-        self.out.wthetav[t] = self.wthetav
-        self.out.wthetae[t] = self.wthetae
-        self.out.wthetave[t] = self.wthetave
+        self.out.theta[t] = self.mixed_layer.theta
+        self.out.thetav[t] = self.mixed_layer.thetav
+        self.out.dtheta[t] = self.mixed_layer.dtheta
+        self.out.dthetav[t] = self.mixed_layer.dthetav
+        self.out.wtheta[t] = self.mixed_layer.wtheta
+        self.out.wthetav[t] = self.mixed_layer.wthetav
+        self.out.wthetae[t] = self.mixed_layer.wthetae
+        self.out.wthetave[t] = self.mixed_layer.wthetave
 
-        self.out.q[t] = self.q
-        self.out.dq[t] = self.dq
-        self.out.wq[t] = self.wq
-        self.out.wqe[t] = self.wqe
-        self.out.wqM[t] = self.cc_qf
+        self.out.q[t] = self.mixed_layer.q
+        self.out.dq[t] = self.mixed_layer.dq
+        self.out.wq[t] = self.mixed_layer.wq
+        self.out.wqe[t] = self.mixed_layer.wqe
+        self.out.wqM[t] = self.mixed_layer.cc_qf
 
-        self.out.qsat[t] = self.qsat
-        self.out.e[t] = self.e
-        self.out.esat[t] = self.esat
+        self.out.qsat[t] = self.mixed_layer.qsat
+        self.out.e[t] = self.mixed_layer.e
+        self.out.esat[t] = self.mixed_layer.esat
 
         fac = (self.const.rho * self.const.mco2) / self.const.mair
-        self.out.CO2[t] = self.co2
-        self.out.dCO2[t] = self.dCO2
-        self.out.wCO2[t] = self.wCO2 * fac
-        self.out.wCO2e[t] = self.wCO2e * fac
-        self.out.wCO2R[t] = self.wCO2R * fac
-        self.out.wCO2A[t] = self.wCO2A * fac
+        self.out.CO2[t] = self.mixed_layer.co2
+        self.out.dCO2[t] = self.mixed_layer.dCO2
+        self.out.wCO2[t] = self.mixed_layer.wCO2 * fac
+        self.out.wCO2e[t] = self.mixed_layer.wCO2e * fac
+        self.out.wCO2R[t] = self.mixed_layer.wCO2R * fac
+        self.out.wCO2A[t] = self.mixed_layer.wCO2A * fac
 
-        self.out.u[t] = self.u
-        self.out.du[t] = self.du
+        self.out.u[t] = self.mixed_layer.u
+        self.out.du[t] = self.mixed_layer.du
         self.out.uw[t] = self.surface_layer.uw
 
-        self.out.v[t] = self.v
-        self.out.dv[t] = self.dv
+        self.out.v[t] = self.mixed_layer.v
+        self.out.dv[t] = self.mixed_layer.dv
         self.out.vw[t] = self.surface_layer.vw
 
-        self.out.T2m[t] = self.temp_2m
-        self.out.q2m[t] = self.q2m
-        self.out.u2m[t] = self.u2m
-        self.out.v2m[t] = self.v2m
-        self.out.e2m[t] = self.e2m
-        self.out.esat2m[t] = self.esat2m
+        self.out.T2m[t] = self.mixed_layer.temp_2m
+        self.out.q2m[t] = self.mixed_layer.q2m
+        self.out.u2m[t] = self.mixed_layer.u2m
+        self.out.v2m[t] = self.mixed_layer.v2m
+        self.out.e2m[t] = self.mixed_layer.e2m
+        self.out.esat2m[t] = self.mixed_layer.esat2m
 
-        self.out.thetasurf[t] = self.thetasurf
-        self.out.thetavsurf[t] = self.thetavsurf
-        self.out.qsurf[t] = self.qsurf
+        self.out.thetasurf[t] = self.mixed_layer.thetasurf
+        self.out.thetavsurf[t] = self.mixed_layer.thetavsurf
+        self.out.qsurf[t] = self.mixed_layer.qsurf
         self.out.ustar[t] = self.surface_layer.ustar
         self.out.Cm[t] = self.surface_layer.drag_m
         self.out.Cs[t] = self.surface_layer.drag_s
@@ -1161,12 +920,12 @@ class Model:
         self.out.LEref[t] = self.LEref
         self.out.G[t] = self.G
 
-        self.out.zlcl[t] = self.lcl
-        self.out.RH_h[t] = self.top_rh
+        self.out.zlcl[t] = self.mixed_layer.lcl
+        self.out.RH_h[t] = self.mixed_layer.top_rh
 
         self.out.ac[t] = self.cc_frac
         self.out.M[t] = self.cc_mf
-        self.out.dz[t] = self.dz_h
+        self.out.dz[t] = self.mixed_layer.dz_h
 
 
 # class for storing mixed-layer model output data
