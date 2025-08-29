@@ -27,6 +27,21 @@ class NoLandSurfaceModel(AbstractLandSurfaceModel):
         pass
 
 
+class StandardLandSurfaceModel(AbstractLandSurfaceModel):
+    def __init__(self):
+        super().__init__()
+
+    def run(
+        self,
+    ) -> None:
+        pass
+
+    def integrate(
+        self,
+    ) -> None:
+        pass
+
+
 class JarvisStewartModel(AbstractLandSurfaceModel):
     def __init__(self):
         super().__init__()

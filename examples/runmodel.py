@@ -135,16 +135,16 @@ def main():
     # vegetation fraction [-]
     land_surface_input.cveg = 0.85
     # temperature top soil layer [K]
-    land_surface_input.Tsoil = 285.0
+    land_surface_input.temp_soil = 285.0
     # temperature deeper soil layer [K]
-    land_surface_input.T2 = 286.0
+    land_surface_input.temp2 = 286.0
     # Clapp and Hornberger retention curve parameter a
     land_surface_input.a = 0.219
     # Clapp and Hornberger retention curve parameter b
     land_surface_input.b = 4.90
     # Clapp and Hornberger retention curve parameter c
     land_surface_input.p = 4.0
-    land_surface_input.CGsat = 3.56e-6  # saturated soil conductivity for heat
+    land_surface_input.cgsat = 3.56e-6  # saturated soil conductivity for heat
     # saturated volumetric water content ECMWF config [-]
     land_surface_input.wsat = 0.472
     # volumetric water content field capacity [-]
@@ -152,11 +152,11 @@ def main():
     # volumetric water content wilting point [-]
     land_surface_input.wwilt = 0.171
     # C1 sat?
-    land_surface_input.C1sat = 0.132
+    land_surface_input.c1sat = 0.132
     # C2 sat?
-    land_surface_input.C2ref = 1.8
+    land_surface_input.c2ref = 1.8
     # leaf area index [-]
-    land_surface_input.LAI = 2.0
+    land_surface_input.lai = 2.0
     # correction factor transpiration for VPD [-]
     land_surface_input.gD = 0.0
     # minimum resistance transpiration [s m-1]
@@ -166,13 +166,13 @@ def main():
     # surface albedo [-]
     land_surface_input.alpha = 0.25
     # initial surface temperature [K]
-    land_surface_input.Ts = 290.0
+    land_surface_input.surf_temp = 290.0
     # thickness of water layer on wet vegetation [m]
-    land_surface_input.Wmax = 0.0002
+    land_surface_input.wmax = 0.0002
     # equivalent water layer depth for wet vegetation [m]
-    land_surface_input.Wl = 0.0000
+    land_surface_input.wl = 0.0000
     # thermal diffusivity skin layer [-]
-    land_surface_input.Lambda = 5.9
+    land_surface_input.lam = 5.9
     # plant type ('c3' or 'c4')
     land_surface_input.c3c4 = "c3"
 
@@ -211,17 +211,17 @@ def main():
     plt.ylabel("q [g kg-1]")
 
     plt.subplot(235)
-    plt.plot(r1.out.t, r1.out.ac)
+    plt.plot(r1.out.t, r1.out.cc_frac)
     plt.xlabel("time [h]")
     plt.ylabel("cloud fraction [-]")
 
     plt.subplot(233)
-    plt.plot(r1.out.t, r1.out.G)
+    plt.plot(r1.out.t, r1.out.gf)
     plt.xlabel("time [h]")
     plt.ylabel("ground heat flux [W m-2]")
 
     plt.subplot(236)
-    plt.plot(r1.out.t, r1.out.LEveg)
+    plt.plot(r1.out.t, r1.out.le_veg)
     plt.xlabel("time [h]")
     plt.ylabel("transpiration [W m-2]")
 

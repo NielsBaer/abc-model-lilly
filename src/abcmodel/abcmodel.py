@@ -18,36 +18,36 @@ class LandSurfaceInput:
         self.ls_type = None  # land-surface parameterization ('js' for Jarvis-Stewart or 'ags' for A-Gs)
         self.wg = None  # volumetric water content top soil layer [m3 m-3]
         self.w2 = None  # volumetric water content deeper soil layer [m3 m-3]
-        self.Tsoil = None  # temperature top soil layer [K]
-        self.T2 = None  # temperature deeper soil layer [K]
+        self.temp_soil = None  # temperature top soil layer [K]
+        self.temp2 = None  # temperature deeper soil layer [K]
 
         self.a = None  # Clapp and Hornberger retention curve parameter a
         self.b = None  # Clapp and Hornberger retention curve parameter b
         self.p = None  # Clapp and Hornberger retention curve parameter p
-        self.CGsat = None  # saturated soil conductivity for heat
+        self.cgsat = None  # saturated soil conductivity for heat
 
         self.wsat = None  # saturated volumetric water content ECMWF config [-]
         self.wfc = None  # volumetric water content field capacity [-]
         self.wwilt = None  # volumetric water content wilting point [-]
 
-        self.C1sat = None
-        self.C2ref = None
+        self.c1sat = None
+        self.c2ref = None
 
         self.c_beta = None  # Curvatur plant water-stress factor (0..1) [-]
 
-        self.LAI = None  # leaf area index [-]
+        self.lai = None  # leaf area index [-]
         self.gD = None  # correction factor transpiration for VPD [-]
         self.rsmin = None  # minimum resistance transpiration [s m-1]
         self.rssoilmin = None  # minimum resistance soil evaporation [s m-1]
         self.alpha = None  # surface albedo [-]
 
-        self.Ts = None  # initial surface temperature [K]
+        self.surf_temp = None  # initial surface temperature [K]
 
         self.cveg = None  # vegetation fraction [-]
-        self.Wmax = None  # thickness of water layer on wet vegetation [m]
-        self.Wl = None  # equivalent water layer depth for wet vegetation [m]
+        self.wmax = None  # thickness of water layer on wet vegetation [m]
+        self.wl = None  # equivalent water layer depth for wet vegetation [m]
 
-        self.Lambda = None  # thermal diffusivity skin layer [-]
+        self.lam = None  # thermal diffusivity skin layer [-]
 
         # A-Gs parameters
         self.c3c4 = None  # Plant type ('c3' or 'c4')
@@ -112,25 +112,25 @@ class Model:
         # A-Gs constants and settings
         # plant type: [C3, C4]
         # CO2 compensation concentration [mg m-3]
-        self.CO2comp298 = [68.5, 4.3]
+        self.co2comp298 = [68.5, 4.3]
         # function parameter to calculate CO2 compensation concentration [-]
         self.net_rad10CO2 = [1.5, 1.5]
         # mesophyill conductance at 298 K [mm s-1]
         self.gm298 = [7.0, 17.5]
         # CO2 maximal primary productivity [mg m-2 s-1]
-        self.Ammax298 = [2.2, 1.7]
+        self.ammax298 = [2.2, 1.7]
         # function parameter to calculate mesophyll conductance [-]
         self.net_rad10gm = [2.0, 2.0]
         # reference temperature to calculate mesophyll conductance gm [K]
-        self.T1gm = [278.0, 286.0]
+        self.temp1gm = [278.0, 286.0]
         # reference temperature to calculate mesophyll conductance gm [K]
-        self.T2gm = [301.0, 309.0]
+        self.temp2gm = [301.0, 309.0]
         # function parameter to calculate maximal primary profuctivity Ammax
         self.net_rad10Am = [2.0, 2.0]
         # reference temperature to calculate maximal primary profuctivity Ammax [K]
-        self.T1Am = [281.0, 286.0]
+        self.temp1Am = [281.0, 286.0]
         # reference temperature to calculate maximal primary profuctivity Ammax [K]
-        self.T2Am = [311.0, 311.0]
+        self.temp2Am = [311.0, 311.0]
         # maximum value Cfrac [-]
         self.f0 = [0.89, 0.85]
         # regression coefficient to calculate Cfrac [kPa-1]
@@ -138,21 +138,21 @@ class Model:
         # initial low light conditions [mg J-1]
         self.alpha0 = [0.017, 0.014]
         # extinction coefficient PAR [-]
-        self.Kx = [0.7, 0.7]
+        self.kx = [0.7, 0.7]
         # cuticular (minimum) conductance [mm s-1]
         self.gmin = [0.25e-3, 0.25e-3]
         # ratio molecular viscosity water to carbon dioxide
         self.nuco2q = 1.6
         # constant water stress correction (eq. 13 Jacobs et al. 2007) [-]
-        self.Cw = 0.0016
+        self.cw = 0.0016
         # upper reference value soil water [-]
         self.wmax = 0.55
         # lower reference value soil water [-]
         self.wmin = 0.005
         # respiration at 10 C [mg CO2 m-2 s-1]
-        self.R10 = 0.23
+        self.r10 = 0.23
         # activation energy [53.3 kJ kmol-1]
-        self.E0 = 53.3e3
+        self.e0 = 53.3e3
 
         # Read switches
         self.sw_ls = self.input.sw_ls  # land surface switch
@@ -161,13 +161,13 @@ class Model:
         # initialize land surface
         self.wg = self.input.wg  # volumetric water content top soil layer [m3 m-3]
         self.w2 = self.input.w2  # volumetric water content deeper soil layer [m3 m-3]
-        self.Tsoil = self.input.Tsoil  # temperature top soil layer [K]
-        self.T2 = self.input.T2  # temperature deeper soil layer [K]
+        self.temp_soil = self.input.temp_soil  # temperature top soil layer [K]
+        self.temp2 = self.input.temp2  # temperature deeper soil layer [K]
 
         self.a = self.input.a  # Clapp and Hornberger retention curve parameter a [-]
         self.b = self.input.b  # Clapp and Hornberger retention curve parameter b [-]
         self.p = self.input.p  # Clapp and Hornberger retention curve parameter p [-]
-        self.CGsat = self.input.CGsat  # saturated soil conductivity for heat
+        self.cgsat = self.input.cgsat  # saturated soil conductivity for heat
 
         self.wsat = (
             self.input.wsat
@@ -175,14 +175,14 @@ class Model:
         self.wfc = self.input.wfc  # volumetric water content field capacity [-]
         self.wwilt = self.input.wwilt  # volumetric water content wilting point [-]
 
-        self.C1sat = self.input.C1sat
-        self.C2ref = self.input.C2ref
+        self.c1sat = self.input.c1sat
+        self.c2ref = self.input.c2ref
 
         self.c_beta = (
             self.input.c_beta
         )  # Curvature plant water-stress factor (0..1) [-]
 
-        self.LAI = self.input.LAI  # leaf area index [-]
+        self.lai = self.input.lai  # leaf area index [-]
         self.gD = self.input.gD  # correction factor transpiration for VPD [-]
         self.rsmin = self.input.rsmin  # minimum resistance transpiration [s m-1]
         self.rssoilmin = (
@@ -193,35 +193,35 @@ class Model:
         self.rs = 1.0e6  # resistance transpiration [s m-1]
         self.rssoil = 1.0e6  # resistance soil [s m-1]
 
-        self.Ts = self.input.Ts  # surface temperature [K]
+        self.surf_temp = self.input.surf_temp  # surface temperature [K]
 
         self.cveg = self.input.cveg  # vegetation fraction [-]
-        self.Wmax = self.input.Wmax  # thickness of water layer on wet vegetation [m]
-        self.Wl = self.input.Wl  # equivalent water layer depth for wet vegetation [m]
+        self.wmax = self.input.wmax  # thickness of water layer on wet vegetation [m]
+        self.wl = self.input.wl  # equivalent water layer depth for wet vegetation [m]
         self.cliq = None  # wet fraction [-]
 
-        self.Lambda = self.input.Lambda  # thermal diffusivity skin layer [-]
+        self.lamb = self.input.lam  # thermal diffusivity skin layer [-]
 
-        self.Tsoiltend = None  # soil temperature tendency [K s-1]
+        self.temp_soil_tend = None  # soil temperature tendency [K s-1]
         self.wgtend = None  # soil moisture tendency [m3 m-3 s-1]
-        self.Wltend = None  # equivalent liquid water tendency [m s-1]
+        self.wltend = None  # equivalent liquid water tendency [m s-1]
 
-        self.H = None  # sensible heat flux [W m-2]
-        self.LE = None  # evapotranspiration [W m-2]
-        self.LEliq = None  # open water evaporation [W m-2]
-        self.LEveg = None  # transpiration [W m-2]
-        self.LEsoil = None  # soil evaporation [W m-2]
-        self.LEpot = None  # potential evaporation [W m-2]
-        self.LEref = None  # reference evaporation using rs = rsmin / LAI [W m-2]
-        self.G = None  # ground heat flux [W m-2]
+        self.hf = None  # sensible heat flux [W m-2]
+        self.le = None  # evapotranspiration [W m-2]
+        self.le_liq = None  # open water evaporation [W m-2]
+        self.le_veg = None  # transpiration [W m-2]
+        self.le_soil = None  # soil evaporation [W m-2]
+        self.le_pot = None  # potential evaporation [W m-2]
+        self.le_ref = None  # reference evaporation using rs = rsmin / LAI [W m-2]
+        self.gf = None  # ground heat flux [W m-2]
 
         # initialize A-Gs surface scheme
         self.c3c4 = self.input.c3c4  # plant type ('c3' or 'c4')
 
-        # Some sanity checks for valid input
+        # some sanity checks for valid input
         if self.c_beta is None:
-            self.c_beta = 0  # Zero curvature; linear response
-        assert self.c_beta >= 0 or self.c_beta <= 1
+            self.c_beta = 0.0  # Zero curvature; linear response
+        assert self.c_beta >= 0.0 or self.c_beta <= 1.0
 
         # initialize output
         self.out = ModelOutput(self.tsteps)
@@ -236,7 +236,7 @@ class Model:
             self.mixed_layer.surf_pressure,
             self.mixed_layer.abl_height,
             self.alpha,
-            self.Ts,
+            self.surf_temp,
         )
 
         for _ in range(10):
@@ -308,7 +308,7 @@ class Model:
             self.mixed_layer.surf_pressure,
             self.mixed_layer.abl_height,
             self.alpha,
-            self.Ts,
+            self.surf_temp,
         )
 
         # run surface layer model
@@ -386,7 +386,7 @@ class Model:
         )
         f4 = 1.0 / (1.0 - 0.0016 * (298.0 - self.mixed_layer.theta) ** 2.0)
 
-        self.rs = self.rsmin / self.LAI * f1 * f2 * f3 * f4
+        self.rs = self.rsmin / self.lai * f1 * f2 * f3 * f4
 
     def factorial(self, k):
         factorial = 1
@@ -415,7 +415,7 @@ class Model:
 
         # calculate CO2 compensation concentration
         CO2comp = (
-            self.CO2comp298[c]
+            self.co2comp298[c]
             * self.const.rho
             * pow(self.net_rad10CO2[c], (0.1 * (self.surface_layer.thetasurf - 298.0)))
         )
@@ -425,8 +425,8 @@ class Model:
             self.gm298[c]
             * pow(self.net_rad10gm[c], (0.1 * (self.surface_layer.thetasurf - 298.0)))
             / (
-                (1.0 + np.exp(0.3 * (self.T1gm[c] - self.surface_layer.thetasurf)))
-                * (1.0 + np.exp(0.3 * (self.surface_layer.thetasurf - self.T2gm[c])))
+                (1.0 + np.exp(0.3 * (self.temp1gm[c] - self.surface_layer.thetasurf)))
+                * (1.0 + np.exp(0.3 * (self.surface_layer.thetasurf - self.temp2gm[c])))
             )
         )
         gm = gm / 1000.0  # conversion from mm s-1 to m s-1
@@ -437,7 +437,7 @@ class Model:
             (pow(fmin0, 2.0) + 4 * self.gmin[c] / self.nuco2q * gm), 0.5
         ) / (2.0 * gm)
 
-        Ds = (get_esat(self.Ts) - self.mixed_layer.e) / 1000.0  # kPa
+        Ds = (get_esat(self.surf_temp) - self.mixed_layer.e) / 1000.0  # kPa
         D0 = (self.f0[c] - fmin) / self.ad[c]
 
         cfrac = self.f0[c] * (1.0 - (Ds / D0)) + fmin * (Ds / D0)
@@ -448,11 +448,11 @@ class Model:
 
         # calculate maximal gross primary production in high light conditions (Ag)
         Ammax = (
-            self.Ammax298[c]
+            self.ammax298[c]
             * pow(self.net_rad10Am[c], (0.1 * (self.surface_layer.thetasurf - 298.0)))
             / (
-                (1.0 + np.exp(0.3 * (self.T1Am[c] - self.surface_layer.thetasurf)))
-                * (1.0 + np.exp(0.3 * (self.surface_layer.thetasurf - self.T2Am[c])))
+                (1.0 + np.exp(0.3 * (self.temp1Am[c] - self.surface_layer.thetasurf)))
+                * (1.0 + np.exp(0.3 * (self.surface_layer.thetasurf - self.temp2Am[c])))
             )
         )
 
@@ -484,19 +484,19 @@ class Model:
         Ag = (Am + Rdark) * (1 - np.exp(alphac * PAR / (Am + Rdark)))
 
         # 1.- calculate upscaling from leaf to canopy: net flow CO2 into the plant (An)
-        y = alphac * self.Kx[c] * PAR / (Am + Rdark)
+        y = alphac * self.kx[c] * PAR / (Am + Rdark)
         An = (Am + Rdark) * (
             1.0
             - 1.0
-            / (self.Kx[c] * self.LAI)
-            * (self.E1(y * np.exp(-self.Kx[c] * self.LAI)) - self.E1(y))
+            / (self.kx[c] * self.lai)
+            * (self.E1(y * np.exp(-self.kx[c] * self.lai)) - self.E1(y))
         )
 
         # 2.- calculate upscaling from leaf to canopy: CO2 conductance at canopy level
         a1 = 1.0 / (1.0 - self.f0[c])
         Dstar = D0 / (a1 * (self.f0[c] - fmin))
 
-        gcco2 = self.LAI * (
+        gcco2 = self.lai * (
             self.gmin[c] / self.nuco2q
             + a1 * fstr * An / ((co2abs - CO2comp) * (1.0 + Ds / Dstar))
         )
@@ -509,11 +509,11 @@ class Model:
         An = -(co2abs - ci) / (self.surface_layer.ra + rsCO2)
 
         # CO2 soil surface flux
-        fw = self.Cw * self.wmax / (self.wg + self.wmin)
+        fw = self.cw * self.wmax / (self.wg + self.wmin)
         Resp = (
-            self.R10
+            self.r10
             * (1.0 - fw)
-            * np.exp(self.E0 / (283.15 * 8.314) * (1.0 - 283.15 / (self.Tsoil)))
+            * np.exp(self.e0 / (283.15 * 8.314) * (1.0 - 283.15 / (self.temp_soil)))
         )
 
         # CO2 flux
@@ -558,11 +558,11 @@ class Model:
             f2 = 1.0e8
         self.rssoil = self.rssoilmin * f2
 
-        Wlmx = self.LAI * self.Wmax
-        self.cliq = min(1.0, self.Wl / Wlmx)
+        Wlmx = self.lai * self.wmax
+        self.cliq = min(1.0, self.wl / Wlmx)
 
         # calculate skin temperature implictly
-        self.Ts = (
+        self.surf_temp = (
             self.radiation.net_rad
             + self.const.rho
             * self.const.cp
@@ -597,7 +597,7 @@ class Model:
                 - self.mixed_layer.qsat
                 + self.mixed_layer.q
             )
-            + self.Lambda * self.Tsoil
+            + self.lamb * self.temp_soil
         ) / (
             self.const.rho * self.const.cp / self.surface_layer.ra
             + self.cveg
@@ -617,67 +617,69 @@ class Model:
             * self.const.lv
             / self.surface_layer.ra
             * self.mixed_layer.dqsatdT
-            + self.Lambda
+            + self.lamb
         )
 
-        esatsurf = get_esat(self.Ts)
-        self.mixed_layer.qsatsurf = get_qsat(self.Ts, self.mixed_layer.surf_pressure)
+        esatsurf = get_esat(self.surf_temp)
+        self.mixed_layer.qsatsurf = get_qsat(
+            self.surf_temp, self.mixed_layer.surf_pressure
+        )
 
-        self.LEveg = (
+        self.le_veg = (
             (1.0 - self.cliq)
             * self.cveg
             * self.const.rho
             * self.const.lv
             / (self.surface_layer.ra + self.rs)
             * (
-                self.mixed_layer.dqsatdT * (self.Ts - self.mixed_layer.theta)
+                self.mixed_layer.dqsatdT * (self.surf_temp - self.mixed_layer.theta)
                 + self.mixed_layer.qsat
                 - self.mixed_layer.q
             )
         )
-        self.LEliq = (
+        self.le_liq = (
             self.cliq
             * self.cveg
             * self.const.rho
             * self.const.lv
             / self.surface_layer.ra
             * (
-                self.mixed_layer.dqsatdT * (self.Ts - self.mixed_layer.theta)
+                self.mixed_layer.dqsatdT * (self.surf_temp - self.mixed_layer.theta)
                 + self.mixed_layer.qsat
                 - self.mixed_layer.q
             )
         )
-        self.LEsoil = (
+        self.le_soil = (
             (1.0 - self.cveg)
             * self.const.rho
             * self.const.lv
             / (self.surface_layer.ra + self.rssoil)
             * (
-                self.mixed_layer.dqsatdT * (self.Ts - self.mixed_layer.theta)
+                self.mixed_layer.dqsatdT * (self.surf_temp - self.mixed_layer.theta)
                 + self.mixed_layer.qsat
                 - self.mixed_layer.q
             )
         )
 
-        self.Wltend = -self.LEliq / (self.const.rhow * self.const.lv)
+        self.wltend = -self.le_liq / (self.const.rhow * self.const.lv)
 
-        self.LE = self.LEsoil + self.LEveg + self.LEliq
-        self.H = (
+        self.le = self.le_soil + self.le_veg + self.le_liq
+        self.hf = (
             self.const.rho
             * self.const.cp
             / self.surface_layer.ra
-            * (self.Ts - self.mixed_layer.theta)
+            * (self.surf_temp - self.mixed_layer.theta)
         )
-        self.G = self.Lambda * (self.Ts - self.Tsoil)
-        self.LEpot = (
-            self.mixed_layer.dqsatdT * (self.radiation.net_rad - self.G)
+        self.gf = self.lamb * (self.surf_temp - self.temp_soil)
+        self.le_pot = (
+            self.mixed_layer.dqsatdT * (self.radiation.net_rad - self.gf)
             + self.const.rho
             * self.const.cp
             / self.surface_layer.ra
             * (self.mixed_layer.qsat - self.mixed_layer.q)
         ) / (self.mixed_layer.dqsatdT + self.const.cp / self.const.lv)
-        self.LEref = (
-            self.mixed_layer.dqsatdT * (self.radiation.net_rad - self.G)
+        self.le_ref = (
+            self.mixed_layer.dqsatdT * (self.radiation.net_rad - self.gf)
             + self.const.rho
             * self.const.cp
             / self.surface_layer.ra
@@ -686,37 +688,39 @@ class Model:
             self.mixed_layer.dqsatdT
             + self.const.cp
             / self.const.lv
-            * (1.0 + self.rsmin / self.LAI / self.surface_layer.ra)
+            * (1.0 + self.rsmin / self.lai / self.surface_layer.ra)
         )
 
-        CG = self.CGsat * (self.wsat / self.w2) ** (self.b / (2.0 * np.log(10.0)))
+        CG = self.cgsat * (self.wsat / self.w2) ** (self.b / (2.0 * np.log(10.0)))
 
-        self.Tsoiltend = CG * self.G - 2.0 * np.pi / 86400.0 * (self.Tsoil - self.T2)
+        self.temp_soil_tend = CG * self.gf - 2.0 * np.pi / 86400.0 * (
+            self.temp_soil - self.temp2
+        )
 
         d1 = 0.1
-        C1 = self.C1sat * (self.wsat / self.wg) ** (self.b / 2.0 + 1.0)
-        C2 = self.C2ref * (self.w2 / (self.wsat - self.w2))
+        C1 = self.c1sat * (self.wsat / self.wg) ** (self.b / 2.0 + 1.0)
+        C2 = self.c2ref * (self.w2 / (self.wsat - self.w2))
         wgeq = self.w2 - self.wsat * self.a * (
             (self.w2 / self.wsat) ** self.p
             * (1.0 - (self.w2 / self.wsat) ** (8.0 * self.p))
         )
         self.wgtend = -C1 / (
             self.const.rhow * d1
-        ) * self.LEsoil / self.const.lv - C2 / 86400.0 * (self.wg - wgeq)
+        ) * self.le_soil / self.const.lv - C2 / 86400.0 * (self.wg - wgeq)
 
         # calculate kinematic heat fluxes
-        self.mixed_layer.wtheta = self.H / (self.const.rho * self.const.cp)
-        self.mixed_layer.wq = self.LE / (self.const.rho * self.const.lv)
+        self.mixed_layer.wtheta = self.hf / (self.const.rho * self.const.cp)
+        self.mixed_layer.wq = self.le / (self.const.rho * self.const.lv)
 
     def integrate_land_surface(self):
         # integrate soil equations
-        Tsoil0 = self.Tsoil
+        Tsoil0 = self.temp_soil
         wg0 = self.wg
-        Wl0 = self.Wl
+        Wl0 = self.wl
 
-        self.Tsoil = Tsoil0 + self.dt * self.Tsoiltend
+        self.temp_soil = Tsoil0 + self.dt * self.temp_soil_tend
         self.wg = wg0 + self.dt * self.wgtend
-        self.Wl = Wl0 + self.dt * self.Wltend
+        self.wl = Wl0 + self.dt * self.wltend
 
     # store model output
     def store(self):
@@ -744,7 +748,7 @@ class Model:
         self.out.esat[t] = self.mixed_layer.esat
 
         fac = (self.const.rho * self.const.mco2) / self.const.mair
-        self.out.CO2[t] = self.mixed_layer.co2
+        self.out.co2[t] = self.mixed_layer.co2
         self.out.dCO2[t] = self.mixed_layer.dCO2
         self.out.wCO2[t] = self.mixed_layer.wCO2 * fac
         # limamau: this was failing when no mixed layer model is defined
@@ -761,7 +765,7 @@ class Model:
         self.out.dv[t] = self.mixed_layer.dv
         self.out.vw[t] = self.surface_layer.vw
 
-        self.out.T2m[t] = self.surface_layer.temp_2m
+        self.out.temp_2m[t] = self.surface_layer.temp_2m
         self.out.q2m[t] = self.surface_layer.q2m
         self.out.u2m[t] = self.surface_layer.u2m
         self.out.v2m[t] = self.surface_layer.v2m
@@ -772,34 +776,34 @@ class Model:
         self.out.thetavsurf[t] = self.surface_layer.thetavsurf
         self.out.qsurf[t] = self.surface_layer.qsurf
         self.out.ustar[t] = self.surface_layer.ustar
-        self.out.Cm[t] = self.surface_layer.drag_m
-        self.out.Cs[t] = self.surface_layer.drag_s
-        self.out.L[t] = self.surface_layer.obukhov_length
-        self.out.Rib[t] = self.surface_layer.rib_number
+        self.out.drag_m[t] = self.surface_layer.drag_m
+        self.out.drag_s[t] = self.surface_layer.drag_s
+        self.out.obukhov_length[t] = self.surface_layer.obukhov_length
+        self.out.rib_number[t] = self.surface_layer.rib_number
 
-        self.out.Swin[t] = self.radiation.in_srad
-        self.out.Swout[t] = self.radiation.out_srad
-        self.out.Lwin[t] = self.radiation.in_lrad
-        self.out.Lwout[t] = self.radiation.out_lrad
+        self.out.in_srad[t] = self.radiation.in_srad
+        self.out.out_srad[t] = self.radiation.out_srad
+        self.out.in_lrad[t] = self.radiation.in_lrad
+        self.out.out_lrad[t] = self.radiation.out_lrad
         self.out.net_rad[t] = self.radiation.net_rad
 
         self.out.ra[t] = self.surface_layer.ra
         self.out.rs[t] = self.rs
-        self.out.H[t] = self.H
-        self.out.LE[t] = self.LE
-        self.out.LEliq[t] = self.LEliq
-        self.out.LEveg[t] = self.LEveg
-        self.out.LEsoil[t] = self.LEsoil
-        self.out.LEpot[t] = self.LEpot
-        self.out.LEref[t] = self.LEref
-        self.out.G[t] = self.G
+        self.out.hf[t] = self.hf
+        self.out.le[t] = self.le
+        self.out.le_liq[t] = self.le_liq
+        self.out.le_veg[t] = self.le_veg
+        self.out.le_soil[t] = self.le_soil
+        self.out.le_pot[t] = self.le_pot
+        self.out.le_ref[t] = self.le_ref
+        self.out.gf[t] = self.gf
 
         self.out.zlcl[t] = self.mixed_layer.lcl
-        self.out.RH_h[t] = self.mixed_layer.top_rh
+        self.out.top_rh[t] = self.mixed_layer.top_rh
 
-        self.out.ac[t] = self.clouds.cc_frac
-        self.out.M[t] = self.clouds.cc_mf
-        self.out.dz[t] = self.mixed_layer.dz_h
+        self.out.cc_frac[t] = self.clouds.cc_frac
+        self.out.cc_mf[t] = self.clouds.cc_mf
+        self.out.dz_h[t] = self.mixed_layer.dz_h
 
 
 # class for storing mixed-layer model output data
@@ -841,7 +845,7 @@ class ModelOutput:
         self.e = np.zeros(tsteps)  # mixed-layer vapor pressure [Pa]
         self.esat = np.zeros(tsteps)  # mixed-layer saturated vapor pressure [Pa]
 
-        self.CO2 = np.zeros(tsteps)  # mixed-layer CO2 [ppm]
+        self.co2 = np.zeros(tsteps)  # mixed-layer CO2 [ppm]
         self.dCO2 = np.zeros(tsteps)  # initial CO2 jump at h [ppm]
         self.wCO2 = np.zeros(tsteps)  # surface total CO2 flux [mgC m-2 s-1]
         self.wCO2A = np.zeros(tsteps)  # surface assimilation CO2 flux [mgC m-2 s-1]
@@ -858,7 +862,7 @@ class ModelOutput:
         self.vw = np.zeros(tsteps)  # surface momentum flux v [m2 s-2]
 
         # diagnostic meteorological variables
-        self.T2m = np.zeros(tsteps)  # 2m temperature [K]
+        self.temp_2m = np.zeros(tsteps)  # 2m temperature [K]
         self.q2m = np.zeros(tsteps)  # 2m specific humidity [kg kg-1]
         self.u2m = np.zeros(tsteps)  # 2m u-wind [m s-1]
         self.v2m = np.zeros(tsteps)  # 2m v-wind [m s-1]
@@ -872,37 +876,37 @@ class ModelOutput:
         self.ustar = np.zeros(tsteps)  # surface friction velocity [m s-1]
         self.z0m = np.zeros(tsteps)  # roughness length for momentum [m]
         self.z0h = np.zeros(tsteps)  # roughness length for scalars [m]
-        self.Cm = np.zeros(tsteps)  # drag coefficient for momentum []
-        self.Cs = np.zeros(tsteps)  # drag coefficient for scalars []
-        self.L = np.zeros(tsteps)  # Obukhov length [m]
-        self.Rib = np.zeros(tsteps)  # bulk Richardson number [-]
+        self.drag_m = np.zeros(tsteps)  # drag coefficient for momentum []
+        self.drag_s = np.zeros(tsteps)  # drag coefficient for scalars []
+        self.obukhov_length = np.zeros(tsteps)  # Obukhov length [m]
+        self.rib_number = np.zeros(tsteps)  # bulk Richardson number [-]
 
         # radiation variables
-        self.Swin = np.zeros(tsteps)  # incoming short wave radiation [W m-2]
-        self.Swout = np.zeros(tsteps)  # outgoing short wave radiation [W m-2]
-        self.Lwin = np.zeros(tsteps)  # incoming long wave radiation [W m-2]
-        self.Lwout = np.zeros(tsteps)  # outgoing long wave radiation [W m-2]
+        self.in_srad = np.zeros(tsteps)  # incoming short wave radiation [W m-2]
+        self.out_srad = np.zeros(tsteps)  # outgoing short wave radiation [W m-2]
+        self.in_lrad = np.zeros(tsteps)  # incoming long wave radiation [W m-2]
+        self.out_lrad = np.zeros(tsteps)  # outgoing long wave radiation [W m-2]
         self.net_rad = np.zeros(tsteps)  # net radiation [W m-2]
 
         # land surface variables
         self.ra = np.zeros(tsteps)  # aerodynamic resistance [s m-1]
         self.rs = np.zeros(tsteps)  # surface resistance [s m-1]
-        self.H = np.zeros(tsteps)  # sensible heat flux [W m-2]
-        self.LE = np.zeros(tsteps)  # evapotranspiration [W m-2]
-        self.LEliq = np.zeros(tsteps)  # open water evaporation [W m-2]
-        self.LEveg = np.zeros(tsteps)  # transpiration [W m-2]
-        self.LEsoil = np.zeros(tsteps)  # soil evaporation [W m-2]
-        self.LEpot = np.zeros(tsteps)  # potential evaporation [W m-2]
-        self.LEref = np.zeros(
+        self.hf = np.zeros(tsteps)  # sensible heat flux [W m-2]
+        self.le = np.zeros(tsteps)  # evapotranspiration [W m-2]
+        self.le_liq = np.zeros(tsteps)  # open water evaporation [W m-2]
+        self.le_veg = np.zeros(tsteps)  # transpiration [W m-2]
+        self.le_soil = np.zeros(tsteps)  # soil evaporation [W m-2]
+        self.le_pot = np.zeros(tsteps)  # potential evaporation [W m-2]
+        self.le_ref = np.zeros(
             tsteps
         )  # reference evaporation at rs = rsmin / LAI [W m-2]
-        self.G = np.zeros(tsteps)  # ground heat flux [W m-2]
+        self.gf = np.zeros(tsteps)  # ground heat flux [W m-2]
 
         # Mixed-layer top variables
         self.zlcl = np.zeros(tsteps)  # lifting condensation level [m]
-        self.RH_h = np.zeros(tsteps)  # mixed-layer top relative humidity [-]
+        self.top_rh = np.zeros(tsteps)  # mixed-layer top relative humidity [-]
 
         # cumulus variables
-        self.ac = np.zeros(tsteps)  # cloud core fraction [-]
-        self.M = np.zeros(tsteps)  # cloud core mass flux [m s-1]
-        self.dz = np.zeros(tsteps)  # transition layer thickness [m]
+        self.cc_frac = np.zeros(tsteps)  # cloud core fraction [-]
+        self.cc_mf = np.zeros(tsteps)  # cloud core mass flux [m s-1]
+        self.dz_h = np.zeros(tsteps)  # transition layer thickness [m]
