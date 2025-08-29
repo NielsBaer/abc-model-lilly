@@ -1,7 +1,9 @@
+from abc import abstractmethod
+
 from .utils import PhysicalConstants, get_qsat
 
 
-class MixedLayerModel:
+class AbstractMixedLayerModel:
     def __init__(
         self,
         sw_ml: bool,
@@ -124,6 +126,8 @@ class MixedLayerModel:
         self.dthetav = None
         # surface kinematic virtual heat flux [K m s-1]
         self.wthetav = None
+        # entrainment kinematic heat flux [K m s-1]
+        self.wthetae = None
         # entrainment kinematic virtual heat flux [K m s-1]
         self.wthetave = None
         # 10. CO2
@@ -191,6 +195,211 @@ class MixedLayerModel:
         self.dvtend = None
         # tendency of transition layer thickness [m s-1]
         self.dztend = None
+
+    @abstractmethod
+    def run(
+        self,
+        dFz: float,
+        cc_mf: float,
+        cc_frac: float,
+        cc_qf: float,
+        ustar: float,
+        uw: float,
+        vw: float,
+    ):
+        pass
+
+    @abstractmethod
+    def integrate(self, dt: float) -> None:
+        raise NotImplementedError
+
+    def statistics(self, t: float):
+        # calculate virtual temperatures
+        self.thetav = self.theta + 0.61 * self.theta * self.q
+        self.wthetav = self.wtheta + 0.61 * self.theta * self.wq
+        self.dthetav = (self.theta + self.dtheta) * (
+            1.0 + 0.61 * (self.q + self.dq)
+        ) - self.theta * (1.0 + 0.61 * self.q)
+
+        # mixed-layer top properties
+        self.top_p = (
+            self.surf_pressure - self.const.rho * self.const.g * self.abl_height
+        )
+        self.top_T = self.theta - self.const.g / self.const.cp * self.abl_height
+        self.top_rh = self.q / get_qsat(self.top_T, self.top_p)
+
+        # find lifting condensation level iteratively
+        if t == 0:
+            self.lcl = self.abl_height
+            RHlcl = 0.5
+        else:
+            RHlcl = 0.9998
+
+        itmax = 30
+        it = 0
+        while ((RHlcl <= 0.9999) or (RHlcl >= 1.0001)) and it < itmax:
+            self.lcl += (1.0 - RHlcl) * 1000.0
+            p_lcl = self.surf_pressure - self.const.rho * self.const.g * self.lcl
+            T_lcl = self.theta - self.const.g / self.const.cp * self.lcl
+            RHlcl = self.q / get_qsat(T_lcl, p_lcl)
+            it += 1
+
+        if it == itmax:
+            print("LCL calculation not converged!!")
+            print("RHlcl = %f, zlcl=%f" % (RHlcl, self.lcl))
+
+
+class NoMixedLayerModel(AbstractMixedLayerModel):
+    # limamau: this shouldn't need all this arguments
+    # to be cleaned up in the future
+    def __init__(
+        self,
+        sw_ml: bool,
+        sw_shearwe: bool,
+        sw_fixft: bool,
+        abl_height: float,
+        surf_pressure: float,
+        divU: float,
+        coriolis_param: float,
+        theta: float,
+        dtheta: float,
+        gammatheta: float,
+        advtheta: float,
+        beta: float,
+        wtheta: float,
+        q: float,
+        dq: float,
+        gammaq: float,
+        advq: float,
+        wq: float,
+        co2: float,
+        dCO2: float,
+        gammaCO2: float,
+        advCO2: float,
+        wCO2: float,
+        sw_wind: bool,
+        u: float,
+        du: float,
+        gammau: float,
+        advu: float,
+        v: float,
+        dv: float,
+        gammav: float,
+        advv: float,
+        dz_h: float,
+    ):
+        super().__init__(
+            sw_ml,
+            sw_shearwe,
+            sw_fixft,
+            abl_height,
+            surf_pressure,
+            divU,
+            coriolis_param,
+            theta,
+            dtheta,
+            gammatheta,
+            advtheta,
+            beta,
+            wtheta,
+            q,
+            dq,
+            gammaq,
+            advq,
+            wq,
+            co2,
+            dCO2,
+            gammaCO2,
+            advCO2,
+            wCO2,
+            sw_wind,
+            u,
+            du,
+            gammau,
+            advu,
+            v,
+            dv,
+            gammav,
+            advv,
+            dz_h,
+        )
+
+    def integrate(self, dt: float):
+        pass
+
+
+class StandardMixedLayerModel(AbstractMixedLayerModel):
+    def __init__(
+        self,
+        sw_ml: bool,
+        sw_shearwe: bool,
+        sw_fixft: bool,
+        abl_height: float,
+        surf_pressure: float,
+        divU: float,
+        coriolis_param: float,
+        theta: float,
+        dtheta: float,
+        gammatheta: float,
+        advtheta: float,
+        beta: float,
+        wtheta: float,
+        q: float,
+        dq: float,
+        gammaq: float,
+        advq: float,
+        wq: float,
+        co2: float,
+        dCO2: float,
+        gammaCO2: float,
+        advCO2: float,
+        wCO2: float,
+        sw_wind: bool,
+        u: float,
+        du: float,
+        gammau: float,
+        advu: float,
+        v: float,
+        dv: float,
+        gammav: float,
+        advv: float,
+        dz_h: float,
+    ):
+        super().__init__(
+            sw_ml,
+            sw_shearwe,
+            sw_fixft,
+            abl_height,
+            surf_pressure,
+            divU,
+            coriolis_param,
+            theta,
+            dtheta,
+            gammatheta,
+            advtheta,
+            beta,
+            wtheta,
+            q,
+            dq,
+            gammaq,
+            advq,
+            wq,
+            co2,
+            dCO2,
+            gammaCO2,
+            advCO2,
+            wCO2,
+            sw_wind,
+            u,
+            du,
+            gammau,
+            advu,
+            v,
+            dv,
+            gammav,
+            advv,
+            dz_h,
+        )
 
     def run(
         self,
@@ -323,38 +532,3 @@ class MixedLayerModel:
             self.du = du0 + dt * self.dutend
             self.v = v0 + dt * self.vtend
             self.dv = dv0 + dt * self.dvtend
-
-    def statistics(self, t: float):
-        # Calculate virtual temperatures
-        self.thetav = self.theta + 0.61 * self.theta * self.q
-        self.wthetav = self.wtheta + 0.61 * self.theta * self.wq
-        self.dthetav = (self.theta + self.dtheta) * (
-            1.0 + 0.61 * (self.q + self.dq)
-        ) - self.theta * (1.0 + 0.61 * self.q)
-
-        # Mixed-layer top properties
-        self.top_p = (
-            self.surf_pressure - self.const.rho * self.const.g * self.abl_height
-        )
-        self.top_T = self.theta - self.const.g / self.const.cp * self.abl_height
-        self.top_rh = self.q / get_qsat(self.top_T, self.top_p)
-
-        # Find lifting condensation level iteratively
-        if t == 0:
-            self.lcl = self.abl_height
-            RHlcl = 0.5
-        else:
-            RHlcl = 0.9998
-
-        itmax = 30
-        it = 0
-        while ((RHlcl <= 0.9999) or (RHlcl >= 1.0001)) and it < itmax:
-            self.lcl += (1.0 - RHlcl) * 1000.0
-            p_lcl = self.surf_pressure - self.const.rho * self.const.g * self.lcl
-            T_lcl = self.theta - self.const.g / self.const.cp * self.lcl
-            RHlcl = self.q / get_qsat(T_lcl, p_lcl)
-            it += 1
-
-        if it == itmax:
-            print("LCL calculation not converged!!")
-            print("RHlcl = %f, zlcl=%f" % (RHlcl, self.lcl))

@@ -1,32 +1,29 @@
 import matplotlib.pyplot as plt
 
 from abcmodel.abcmodel import LandSurfaceInput, Model
-from abcmodel.clouds import StandardCumulusModel
-from abcmodel.mixed_layer import MixedLayerModel
+from abcmodel.clouds import NoCloudModel, StandardCumulusModel
+from abcmodel.mixed_layer import NoMixedLayerModel, StandardMixedLayerModel
 from abcmodel.radiation import StandardRadiationModel
 from abcmodel.surface_layer import InertSurfaceLayerModel
 
 
 def main():
-    # create empty model_input and set up case
-    land_surface_input = LandSurfaceInput()
-
     # 0. running configurations:
     dt = 60.0  # time step [s]
-    runtime = 12 * 3600.0  # total run time [s]
+    runtime = 96 * 3600.0  # total run time [s]
 
     # theta is currently assigned in two classes
     theta = 288.0
 
     # define mixed layer model
-    mixed_layer_model = MixedLayerModel(
+    mixed_layer_model = StandardMixedLayerModel(
         # 1.1. switchs
         # mixed-layer model switch
         sw_ml=True,
         # shear growth mixed-layer switch
-        sw_shearwe=False,
+        sw_shearwe=True,
         # fix the free-troposphere switch
-        sw_fixft=False,
+        sw_fixft=True,
         # 1.2. large scale parameters
         # initial ABL height [m]
         abl_height=200.0,
@@ -125,6 +122,8 @@ def main():
     )
 
     # 4. land surface switch
+    # create empty model_input and set up case
+    land_surface_input = LandSurfaceInput()
     # land surface switch
     land_surface_input.sw_ls = True
     # land-surface parameterization ('js' for Jarvis-Stewart or 'ags' for A-Gs)
@@ -174,7 +173,7 @@ def main():
     land_surface_input.Wl = 0.0000
     # thermal diffusivity skin layer [-]
     land_surface_input.Lambda = 5.9
-    # Plant type ('c3' or 'c4')
+    # plant type ('c3' or 'c4')
     land_surface_input.c3c4 = "c3"
 
     # 5. clouds
@@ -194,27 +193,37 @@ def main():
     r1.run()
 
     # plot output
-    plt.figure(figsize=(6, 8))
+    plt.figure(figsize=(12, 8))
 
-    plt.subplot(221)
+    plt.subplot(231)
     plt.plot(r1.out.t, r1.out.h)
     plt.xlabel("time [h]")
     plt.ylabel("h [m]")
 
-    plt.subplot(222)
+    plt.subplot(234)
     plt.plot(r1.out.t, r1.out.theta)
     plt.xlabel("time [h]")
     plt.ylabel("theta [K]")
 
-    plt.subplot(223)
+    plt.subplot(232)
     plt.plot(r1.out.t, r1.out.q * 1000.0)
     plt.xlabel("time [h]")
     plt.ylabel("q [g kg-1]")
 
-    plt.subplot(224)
+    plt.subplot(235)
     plt.plot(r1.out.t, r1.out.ac)
     plt.xlabel("time [h]")
-    plt.ylabel("cloud core fraction [-]")
+    plt.ylabel("cloud fraction [-]")
+
+    plt.subplot(233)
+    plt.plot(r1.out.t, r1.out.G)
+    plt.xlabel("time [h]")
+    plt.ylabel("ground heat flux [W m-2]")
+
+    plt.subplot(236)
+    plt.plot(r1.out.t, r1.out.LEveg)
+    plt.xlabel("time [h]")
+    plt.ylabel("transpiration [W m-2]")
 
     plt.tight_layout()
     plt.show()

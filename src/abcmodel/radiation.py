@@ -60,8 +60,8 @@ class AbstractRadiationModel:
 
 
 class NoRadiationModel(AbstractRadiationModel):
-    # the no radiation model shouldn't have to
-    # carry all these variables for initialization
+    # limamau: this shouldn't need all this arguments
+    # to be cleaned up in the future
     def __init__(
         self,
         lat: float,

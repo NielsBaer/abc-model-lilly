@@ -3,7 +3,7 @@ import copy as cp
 import numpy as np
 
 from .clouds import AbstractCloudModel, NoCloudModel
-from .mixed_layer import MixedLayerModel
+from .mixed_layer import AbstractMixedLayerModel
 from .radiation import AbstractRadiationModel
 from .surface_layer import AbstractSurfaceLayerModel
 from .utils import PhysicalConstants, get_esat, get_qsat
@@ -55,25 +55,21 @@ class LandSurfaceInput:
 
 
 class Model:
-    # entrainment kinematic heat flux [K m s-1]
-    wthetae: float
-
     def __init__(
         self,
         # 0. running configuration
         dt: float,
         runtime: float,
         # 1. mixed layer
-        mixed_layer: MixedLayerModel,
+        mixed_layer: AbstractMixedLayerModel,
         # 2. surface layer
         surface_layer: AbstractSurfaceLayerModel,
         # 3. radiation
         radiation: AbstractRadiationModel,
-        # 4. land surface is left as it is
+        # 4. land surface as in old input class
+        land_surface_input: LandSurfaceInput,
         # 5. clouds
         clouds: AbstractCloudModel,
-        # old input class
-        land_surface_input: LandSurfaceInput,
     ):
         # constants
         self.const = PhysicalConstants()
@@ -287,16 +283,15 @@ class Model:
                 self.mixed_layer.top_CO22,
             )
 
-        if self.mixed_layer.sw_ml:
-            self.mixed_layer.run(
-                self.radiation.dFz,
-                self.clouds.cc_mf,
-                self.clouds.cc_frac,
-                self.clouds.cc_qf,
-                self.surface_layer.ustar,
-                self.surface_layer.uw,
-                self.surface_layer.vw,
-            )
+        self.mixed_layer.run(
+            self.radiation.dFz,
+            self.clouds.cc_mf,
+            self.clouds.cc_frac,
+            self.clouds.cc_qf,
+            self.surface_layer.ustar,
+            self.surface_layer.uw,
+            self.surface_layer.vw,
+        )
 
     def timestep(self):
         self.mixed_layer.statistics(self.t)
@@ -351,16 +346,15 @@ class Model:
         )
 
         # run mixed-layer model
-        if self.mixed_layer.sw_ml:
-            self.mixed_layer.run(
-                self.radiation.dFz,
-                self.clouds.cc_mf,
-                self.clouds.cc_frac,
-                self.clouds.cc_qf,
-                self.surface_layer.ustar,
-                self.surface_layer.uw,
-                self.surface_layer.vw,
-            )
+        self.mixed_layer.run(
+            self.radiation.dFz,
+            self.clouds.cc_mf,
+            self.clouds.cc_frac,
+            self.clouds.cc_qf,
+            self.surface_layer.ustar,
+            self.surface_layer.uw,
+            self.surface_layer.vw,
+        )
 
         # store output before time integration
         self.store()
@@ -370,8 +364,7 @@ class Model:
             self.integrate_land_surface()
 
         # time integrate mixed-layer model
-        if self.mixed_layer.sw_ml:
-            self.mixed_layer.integrate(self.dt)
+        self.mixed_layer.integrate(self.dt)
 
     def jarvis_stewart(self):
         # calculate surface resistances using Jarvis-Stewart model
@@ -420,16 +413,16 @@ class Model:
         CO2comp = (
             self.CO2comp298[c]
             * self.const.rho
-            * pow(self.net_rad10CO2[c], (0.1 * (self.mixed_layer.thetasurf - 298.0)))
+            * pow(self.net_rad10CO2[c], (0.1 * (self.surface_layer.thetasurf - 298.0)))
         )
 
         # calculate mesophyll conductance
         gm = (
             self.gm298[c]
-            * pow(self.net_rad10gm[c], (0.1 * (self.mixed_layer.thetasurf - 298.0)))
+            * pow(self.net_rad10gm[c], (0.1 * (self.surface_layer.thetasurf - 298.0)))
             / (
-                (1.0 + np.exp(0.3 * (self.T1gm[c] - self.mixed_layer.thetasurf)))
-                * (1.0 + np.exp(0.3 * (self.mixed_layer.thetasurf - self.T2gm[c])))
+                (1.0 + np.exp(0.3 * (self.T1gm[c] - self.surface_layer.thetasurf)))
+                * (1.0 + np.exp(0.3 * (self.surface_layer.thetasurf - self.T2gm[c])))
             )
         )
         gm = gm / 1000.0  # conversion from mm s-1 to m s-1
@@ -452,10 +445,10 @@ class Model:
         # calculate maximal gross primary production in high light conditions (Ag)
         Ammax = (
             self.Ammax298[c]
-            * pow(self.net_rad10Am[c], (0.1 * (self.mixed_layer.thetasurf - 298.0)))
+            * pow(self.net_rad10Am[c], (0.1 * (self.surface_layer.thetasurf - 298.0)))
             / (
-                (1.0 + np.exp(0.3 * (self.T1Am[c] - self.mixed_layer.thetasurf)))
-                * (1.0 + np.exp(0.3 * (self.mixed_layer.thetasurf - self.T2Am[c])))
+                (1.0 + np.exp(0.3 * (self.T1Am[c] - self.surface_layer.thetasurf)))
+                * (1.0 + np.exp(0.3 * (self.surface_layer.thetasurf - self.T2Am[c])))
             )
         )
 
@@ -750,7 +743,9 @@ class Model:
         self.out.CO2[t] = self.mixed_layer.co2
         self.out.dCO2[t] = self.mixed_layer.dCO2
         self.out.wCO2[t] = self.mixed_layer.wCO2 * fac
-        self.out.wCO2e[t] = self.mixed_layer.wCO2e * fac
+        # limamau: this was failing when no mixed layer model is defined
+        # and I don't feel like adding an if else clause here... let's see
+        # self.out.wCO2e[t] = self.mixed_layer.wCO2e * fac
         self.out.wCO2R[t] = self.mixed_layer.wCO2R * fac
         self.out.wCO2A[t] = self.mixed_layer.wCO2A * fac
 
