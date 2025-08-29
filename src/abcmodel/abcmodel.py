@@ -2,6 +2,7 @@ import copy as cp
 
 import numpy as np
 
+from .clouds import AbstractCloudModel, NoCloudModel
 from .mixed_layer import MixedLayerModel
 from .surface_layer import AbstractSurfaceLayerModel
 from .utils import PhysicalConstants, get_esat, get_qsat
@@ -75,9 +76,8 @@ class Model:
         net_rad: float,
         dFz: float,
         # 4. land surface is left as it is
-        # 5. cumulus parameterization
-        sw_cu: bool,
-        dz_h: float,
+        # 5. clouds
+        clouds: AbstractCloudModel,
         # old input class
         model_input: LandSurfaceInput,
     ):
@@ -125,17 +125,8 @@ class Model:
         # 4. land surface is initialized like before
         self.input = cp.deepcopy(model_input)
 
-        # 5. cumulus parameterization
-        # cumulus parameterization switch
-        self.sw_cu = sw_cu
-        # transition layer thickness [m]
-        self.mixed_layer.dz_h = dz_h
-        # cloud core fraction [-]
-        self.cc_frac = 0.0
-        # cloud core mass flux [m s-1]
-        self.cc_mf = 0.0
-        # cloud core moisture flux [kg kg-1 m s-1]
-        self.mixed_layer.cc_qf = 0.0
+        # 5. clouds
+        self.clouds = clouds
 
     def run(self):
         # initialize model variables
@@ -291,22 +282,39 @@ class Model:
 
         assert isinstance(self.surface_layer.uw, float)
         assert isinstance(self.surface_layer.vw, float)
-        if self.sw_cu:
+        if not isinstance(self.clouds, NoCloudModel):
             self.mixed_layer.run(
                 self.dFz,
-                self.cc_mf,
-                self.cc_frac,
+                self.clouds.cc_mf,
+                self.clouds.cc_frac,
+                self.clouds.cc_qf,
                 self.surface_layer.ustar,
                 self.surface_layer.uw,
                 self.surface_layer.vw,
             )
-            self.run_cumulus()
+            self.clouds.run(
+                self.mixed_layer.wthetav,
+                self.mixed_layer.wqe,
+                self.mixed_layer.dq,
+                self.mixed_layer.abl_height,
+                self.mixed_layer.dz_h,
+                self.mixed_layer.wstar,
+                self.mixed_layer.wCO2e,
+                self.mixed_layer.wCO2M,
+                self.mixed_layer.dCO2,
+                self.mixed_layer.q,
+                self.mixed_layer.top_T,
+                self.mixed_layer.top_p,
+                self.mixed_layer.q2_h,
+                self.mixed_layer.top_CO22,
+            )
 
         if self.mixed_layer.sw_ml:
             self.mixed_layer.run(
                 self.dFz,
-                self.cc_mf,
-                self.cc_frac,
+                self.clouds.cc_mf,
+                self.clouds.cc_frac,
+                self.clouds.cc_qf,
                 self.surface_layer.ustar,
                 self.surface_layer.uw,
                 self.surface_layer.vw,
@@ -340,15 +348,30 @@ class Model:
             self.run_land_surface()
 
         # run cumulus parameterization
-        if self.sw_cu:
-            self.run_cumulus()
+        self.clouds.run(
+            self.mixed_layer.wthetav,
+            self.mixed_layer.wqe,
+            self.mixed_layer.dq,
+            self.mixed_layer.abl_height,
+            self.mixed_layer.dz_h,
+            self.mixed_layer.wstar,
+            self.mixed_layer.wCO2e,
+            self.mixed_layer.wCO2M,
+            self.mixed_layer.dCO2,
+            self.mixed_layer.q,
+            self.mixed_layer.top_T,
+            self.mixed_layer.top_p,
+            self.mixed_layer.q2_h,
+            self.mixed_layer.top_CO22,
+        )
 
         # run mixed-layer model
         if self.mixed_layer.sw_ml:
             self.mixed_layer.run(
                 self.dFz,
-                self.cc_mf,
-                self.cc_frac,
+                self.clouds.cc_mf,
+                self.clouds.cc_frac,
+                self.clouds.cc_qf,
                 self.surface_layer.ustar,
                 self.surface_layer.uw,
                 self.surface_layer.vw,
@@ -418,52 +441,6 @@ class Model:
         if it == itmax:
             print("LCL calculation not converged!!")
             print("RHlcl = %f, zlcl=%f" % (RHlcl, self.mixed_layer.lcl))
-
-    def run_cumulus(self):
-        # Calculate mixed-layer top relative humidity variance (Neggers et. al 2006/7)
-        if self.mixed_layer.wthetav > 0:
-            self.mixed_layer.q2_h = (
-                -(self.mixed_layer.wqe + self.mixed_layer.cc_qf)
-                * self.mixed_layer.dq
-                * self.mixed_layer.abl_height
-                / (self.mixed_layer.dz_h * self.mixed_layer.wstar)
-            )
-            self.mixed_layer.top_CO22 = (
-                -(self.mixed_layer.wCO2e + self.mixed_layer.wCO2M)
-                * self.mixed_layer.dCO2
-                * self.mixed_layer.abl_height
-                / (self.mixed_layer.dz_h * self.mixed_layer.wstar)
-            )
-        else:
-            self.mixed_layer.q2_h = 0.0
-            self.mixed_layer.top_CO22 = 0.0
-
-        # calculate cloud core fraction (ac), mass flux (M) and moisture flux (wqM)
-        self.cc_frac = max(
-            0.0,
-            0.5
-            + (
-                0.36
-                * np.arctan(
-                    1.55
-                    * (
-                        (
-                            self.mixed_layer.q
-                            - get_qsat(self.mixed_layer.top_T, self.mixed_layer.top_p)
-                        )
-                        / self.mixed_layer.q2_h**0.5
-                    )
-                )
-            ),
-        )
-        self.cc_mf = self.cc_frac * self.mixed_layer.wstar
-        self.mixed_layer.cc_qf = self.cc_mf * self.mixed_layer.q2_h**0.5
-
-        # Only calculate CO2 mass-flux if mixed-layer top jump is negative
-        if self.mixed_layer.dCO2 < 0:
-            self.mixed_layer.wCO2M = self.cc_mf * self.mixed_layer.top_CO22**0.5
-        else:
-            self.mixed_layer.wCO2M = 0.0
 
     def run_radiation(self):
         sda = 0.409 * np.cos(2.0 * np.pi * (self.doy - 173.0) / 365.0)
@@ -865,7 +842,7 @@ class Model:
         self.out.dq[t] = self.mixed_layer.dq
         self.out.wq[t] = self.mixed_layer.wq
         self.out.wqe[t] = self.mixed_layer.wqe
-        self.out.wqM[t] = self.mixed_layer.cc_qf
+        self.out.wqM[t] = self.clouds.cc_qf
 
         self.out.qsat[t] = self.mixed_layer.qsat
         self.out.e[t] = self.mixed_layer.e
@@ -923,8 +900,8 @@ class Model:
         self.out.zlcl[t] = self.mixed_layer.lcl
         self.out.RH_h[t] = self.mixed_layer.top_rh
 
-        self.out.ac[t] = self.cc_frac
-        self.out.M[t] = self.cc_mf
+        self.out.ac[t] = self.clouds.cc_frac
+        self.out.M[t] = self.clouds.cc_mf
         self.out.dz[t] = self.mixed_layer.dz_h
 
 

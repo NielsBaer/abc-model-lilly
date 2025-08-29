@@ -36,6 +36,7 @@ class MixedLayerModel:
         dv: float,
         gammav: float,
         advv: float,
+        dz_h: float,
     ):
         # constants
         self.const = PhysicalConstants()
@@ -91,8 +92,6 @@ class MixedLayerModel:
         self.wq = wq
         # entrainment moisture flux [kg kg-1 m s-1]
         self.wqe = None
-        # moisture cumulus mass flux [kg kg-1 m s-1]
-        self.cc_qf = None
         # mixed-layer saturated specific humidity [kg kg-1]
         self.qsat = None
         # mixed-layer saturated vapor pressure [Pa]
@@ -135,7 +134,7 @@ class MixedLayerModel:
         # mixed-layer top relavtive humidity [-]
         self.top_rh = None
         # transition layer thickness [-]
-        self.dz_h = None
+        self.dz_h = dz_h
         # lifting condensation level [m]
         self.lcl = None
         # 9. virtual temperatures and fluxes
@@ -218,6 +217,7 @@ class MixedLayerModel:
         dFz: float,
         cc_mf: float,
         cc_frac: float,
+        cc_qf: float,
         ustar: float,
         uw: float,
         vw: float,
@@ -270,7 +270,7 @@ class MixedLayerModel:
         self.htend = self.we + self.ws + self.wf - cc_mf
 
         self.thetatend = (self.wtheta - self.wthetae) / self.abl_height + self.advtheta
-        self.qtend = (self.wq - self.wqe - self.cc_qf) / self.abl_height + self.advq
+        self.qtend = (self.wq - self.wqe - cc_qf) / self.abl_height + self.advq
         self.co2tend = (
             self.wCO2 - self.wCO2e - self.wCO2M
         ) / self.abl_height + self.advCO2

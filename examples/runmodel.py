@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 
 from abcmodel.abcmodel import LandSurfaceInput, Model
+from abcmodel.clouds import NoCloudModel, StandardCumulusModel
 from abcmodel.mixed_layer import MixedLayerModel
 from abcmodel.surface_layer import InertSurfaceLayerModel, StandardSurfaceLayerModel
 
@@ -85,6 +86,8 @@ def main():
         gammav=0.0,
         # advection of v-wind [m s-2]
         advv=0.0,
+        # transition layer thickness [m]
+        dz_h=150.0,
     )
 
     # 2. define surface layer model
@@ -168,11 +171,8 @@ def main():
     # Plant type ('c3' or 'c4')
     run1input.c3c4 = "c3"
 
-    # 5. cumulus parameterization
-    # cumulus parameterization switch
-    sw_cu = False
-    # Transition layer thickness [m]
-    dz_h = 150.0
+    # 5. clouds
+    cloud_model = StandardCumulusModel()
 
     # init and run the model
     r1 = Model(
@@ -189,8 +189,7 @@ def main():
         cc=cc,
         net_rad=net_rad,
         dFz=dFz,
-        sw_cu=sw_cu,
-        dz_h=dz_h,
+        clouds=cloud_model,
         model_input=run1input,
     )
     r1.run()
