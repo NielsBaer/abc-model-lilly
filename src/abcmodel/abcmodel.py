@@ -8,7 +8,7 @@ from .surface_layer import AbstractSurfaceLayerModel
 from .utils import PhysicalConstants
 
 
-class Model:
+class ABCModel:
     def __init__(
         self,
         dt: float,
@@ -47,19 +47,15 @@ class Model:
                 raise ValueError("Cloud models requires a mixed layer model.")
             self.clouds = clouds
 
-    def run(self):
-        # initialize model variables
-        self.init()
+        # initialize output
+        self.out = ABCOutput(self.tsteps)
 
-        # time integrate model
+    def run(self):
+        self.warmup()
         for self.t in range(self.tsteps):
-            # time integrate components
             self.timestep()
 
-    def init(self):
-        # initialize output
-        self.out = ModelOutput(self.tsteps)
-
+    def warmup(self):
         self.mixed_layer.statistics(self.t)
 
         # calculate initial diagnostic variables
@@ -293,107 +289,158 @@ class Model:
         self.out.dz_h[t] = self.mixed_layer.dz_h
 
 
-# class for storing mixed-layer model output data
-class ModelOutput:
+class ABCOutput:
     def __init__(self, tsteps):
-        self.t = np.zeros(tsteps)  # time [s]
+        # time [s]
+        self.t = np.zeros(tsteps)
 
         # mixed-layer variables
-        self.h = np.zeros(tsteps)  # ABL height [m]
+        # ABL height [m]
+        self.h = np.zeros(tsteps)
 
-        self.theta = np.zeros(tsteps)  # initial mixed-layer potential temperature [K]
-        self.thetav = np.zeros(
-            tsteps
-        )  # initial mixed-layer virtual potential temperature [K]
-        self.dtheta = np.zeros(tsteps)  # initial potential temperature jump at h [K]
-        self.dthetav = np.zeros(
-            tsteps
-        )  # initial virtual potential temperature jump at h [K]
-        self.wtheta = np.zeros(tsteps)  # surface kinematic heat flux [K m s-1]
-        self.wthetav = np.zeros(tsteps)  # surface kinematic virtual heat flux [K m s-1]
-        self.wthetae = np.zeros(tsteps)  # entrainment kinematic heat flux [K m s-1]
-        self.wthetave = np.zeros(
-            tsteps
-        )  # entrainment kinematic virtual heat flux [K m s-1]
+        # initial mixed-layer potential temperature [K]
+        self.theta = np.zeros(tsteps)
+        # initial mixed-layer virtual potential temperature [K]
+        self.thetav = np.zeros(tsteps)
+        # initial potential temperature jump at h [K]
+        self.dtheta = np.zeros(tsteps)
+        # initial virtual potential temperature jump at h [K]
+        self.dthetav = np.zeros(tsteps)
+        # surface kinematic heat flux [K m s-1]s
+        self.wtheta = np.zeros(tsteps)
+        # surface kinematic virtual heat flux [K m s-1]s
+        self.wthetav = np.zeros(tsteps)
+        # entrainment kinematic heat flux [K m s-1]s
+        self.wthetae = np.zeros(tsteps)
+        # entrainment kinematic virtual heat flux [K m s-1]
+        self.wthetave = np.zeros(tsteps)
 
-        self.q = np.zeros(tsteps)  # mixed-layer specific humidity [kg kg-1]
-        self.dq = np.zeros(tsteps)  # initial specific humidity jump at h [kg kg-1]
-        self.wq = np.zeros(tsteps)  # surface kinematic moisture flux [kg kg-1 m s-1]
-        self.wqe = np.zeros(
-            tsteps
-        )  # entrainment kinematic moisture flux [kg kg-1 m s-1]
-        self.wqM = np.zeros(
-            tsteps
-        )  # cumulus mass-flux kinematic moisture flux [kg kg-1 m s-1]
+        # mixed-layer specific humidity [kg kg-1]
+        self.q = np.zeros(tsteps)
+        # initial specific humidity jump at h [kg kg-1]
+        self.dq = np.zeros(tsteps)
+        # surface kinematic moisture flux [kg kg-1 m s-1]
+        self.wq = np.zeros(tsteps)
+        # entrainment kinematic moisture flux [kg kg-1 m s-1]
+        self.wqe = np.zeros(tsteps)
+        # cumulus mass-flux kinematic moisture flux [kg kg-1 m s-1]
+        self.wqM = np.zeros(tsteps)
 
-        self.qsat = np.zeros(
-            tsteps
-        )  # mixed-layer saturated specific humidity [kg kg-1]
-        self.e = np.zeros(tsteps)  # mixed-layer vapor pressure [Pa]
-        self.esat = np.zeros(tsteps)  # mixed-layer saturated vapor pressure [Pa]
+        # mixed-layer saturated specific humidity [kg kg-1]
+        self.qsat = np.zeros(tsteps)
+        # mixed-layer vapor pressure [Pa]
+        self.e = np.zeros(tsteps)
+        # mixed-layer saturated vapor pressure [Pa]
+        self.esat = np.zeros(tsteps)
 
-        self.co2 = np.zeros(tsteps)  # mixed-layer CO2 [ppm]
-        self.dCO2 = np.zeros(tsteps)  # initial CO2 jump at h [ppm]
-        self.wCO2 = np.zeros(tsteps)  # surface total CO2 flux [mgC m-2 s-1]
-        self.wCO2A = np.zeros(tsteps)  # surface assimilation CO2 flux [mgC m-2 s-1]
-        self.wCO2R = np.zeros(tsteps)  # surface respiration CO2 flux [mgC m-2 s-1]
-        self.wCO2e = np.zeros(tsteps)  # entrainment CO2 flux [mgC m-2 s-1]
-        self.wCO2M = np.zeros(tsteps)  # CO2 mass flux [mgC m-2 s-1]
+        # mixed-layer CO2 [ppm]
+        self.co2 = np.zeros(tsteps)
+        # initial CO2 jump at h [ppm]
+        self.dCO2 = np.zeros(tsteps)
+        # surface total CO2 flux [mgC m-2 s-1]
+        self.wCO2 = np.zeros(tsteps)
+        # surface assimilation CO2 flux [mgC m-2 s-1]
+        self.wCO2A = np.zeros(tsteps)
+        # surface respiration CO2 flux [mgC m-2 s-1]
+        self.wCO2R = np.zeros(tsteps)
+        # entrainment CO2 flux [mgC m-2 s-1]
+        self.wCO2e = np.zeros(tsteps)
+        # CO2 mass flux [mgC m-2 s-1]
+        self.wCO2M = np.zeros(tsteps)
 
-        self.u = np.zeros(tsteps)  # initial mixed-layer u-wind speed [m s-1]
-        self.du = np.zeros(tsteps)  # initial u-wind jump at h [m s-1]
-        self.uw = np.zeros(tsteps)  # surface momentum flux u [m2 s-2]
-
-        self.v = np.zeros(tsteps)  # initial mixed-layer u-wind speed [m s-1]
-        self.dv = np.zeros(tsteps)  # initial u-wind jump at h [m s-1]
-        self.vw = np.zeros(tsteps)  # surface momentum flux v [m2 s-2]
+        # initial mixed-layer u-wind speed [m s-1]
+        self.u = np.zeros(tsteps)
+        # initial u-wind jump at h [m s-1]
+        self.du = np.zeros(tsteps)
+        # surface momentum flux u [m2 s-2]
+        self.uw = np.zeros(tsteps)
+        # initial mixed-layer u-wind speed [m s-1]
+        self.v = np.zeros(tsteps)
+        # initial u-wind jump at h [m s-1]
+        self.dv = np.zeros(tsteps)
+        # surface momentum flux v [m2 s-2]
+        self.vw = np.zeros(tsteps)
 
         # diagnostic meteorological variables
-        self.temp_2m = np.zeros(tsteps)  # 2m temperature [K]
-        self.q2m = np.zeros(tsteps)  # 2m specific humidity [kg kg-1]
-        self.u2m = np.zeros(tsteps)  # 2m u-wind [m s-1]
-        self.v2m = np.zeros(tsteps)  # 2m v-wind [m s-1]
-        self.e2m = np.zeros(tsteps)  # 2m vapor pressure [Pa]
-        self.esat2m = np.zeros(tsteps)  # 2m saturated vapor pressure [Pa]
+        # 2m temperature [K]
+        self.temp_2m = np.zeros(tsteps)
+        # 2m specific humidity [kg kg-1]
+        self.q2m = np.zeros(tsteps)
+        # 2m u-wind [m s-1]
+        self.u2m = np.zeros(tsteps)
+        # 2m v-wind [m s-1]
+        self.v2m = np.zeros(tsteps)
+        # 2m vapor pressure [Pa]
+        self.e2m = np.zeros(tsteps)
+        # 2m saturated vapor pressure [Pa]
+        self.esat2m = np.zeros(tsteps)
 
         # surface-layer variables
-        self.thetasurf = np.zeros(tsteps)  # surface potential temperature [K]
-        self.thetavsurf = np.zeros(tsteps)  # surface virtual potential temperature [K]
-        self.qsurf = np.zeros(tsteps)  # surface specific humidity [kg kg-1]
-        self.ustar = np.zeros(tsteps)  # surface friction velocity [m s-1]
-        self.z0m = np.zeros(tsteps)  # roughness length for momentum [m]
-        self.z0h = np.zeros(tsteps)  # roughness length for scalars [m]
-        self.drag_m = np.zeros(tsteps)  # drag coefficient for momentum []
-        self.drag_s = np.zeros(tsteps)  # drag coefficient for scalars []
-        self.obukhov_length = np.zeros(tsteps)  # Obukhov length [m]
-        self.rib_number = np.zeros(tsteps)  # bulk Richardson number [-]
+        # surface potential temperature [K]
+        self.thetasurf = np.zeros(tsteps)
+        # surface virtual potential temperature [K]
+        self.thetavsurf = np.zeros(tsteps)
+        # surface specific humidity [kg kg-1]
+        self.qsurf = np.zeros(tsteps)
+        # surface friction velocity [m s-1]
+        self.ustar = np.zeros(tsteps)
+        # roughness length for momentum [m]
+        self.z0m = np.zeros(tsteps)
+        # roughness length for scalars [m]
+        self.z0h = np.zeros(tsteps)
+        # drag coefficient for momentum []
+        self.drag_m = np.zeros(tsteps)
+        # drag coefficient for scalars []
+        self.drag_s = np.zeros(tsteps)
+        # Obukhov length [m]
+        self.obukhov_length = np.zeros(tsteps)
+        # bulk Richardson number [-]
+        self.rib_number = np.zeros(tsteps)
 
         # radiation variables
-        self.in_srad = np.zeros(tsteps)  # incoming short wave radiation [W m-2]
-        self.out_srad = np.zeros(tsteps)  # outgoing short wave radiation [W m-2]
-        self.in_lrad = np.zeros(tsteps)  # incoming long wave radiation [W m-2]
-        self.out_lrad = np.zeros(tsteps)  # outgoing long wave radiation [W m-2]
-        self.net_rad = np.zeros(tsteps)  # net radiation [W m-2]
+        # incoming short wave radiation [W m-2]
+        self.in_srad = np.zeros(tsteps)
+        # outgoing short wave radiation [W m-2]
+        self.out_srad = np.zeros(tsteps)
+        # incoming long wave radiation [W m-2]
+        self.in_lrad = np.zeros(tsteps)
+        # outgoing long wave radiation [W m-2]
+        self.out_lrad = np.zeros(tsteps)
+        # net radiation [W m-2]
+        self.net_rad = np.zeros(tsteps)
 
         # land surface variables
-        self.ra = np.zeros(tsteps)  # aerodynamic resistance [s m-1]
-        self.rs = np.zeros(tsteps)  # surface resistance [s m-1]
-        self.hf = np.zeros(tsteps)  # sensible heat flux [W m-2]
-        self.le = np.zeros(tsteps)  # evapotranspiration [W m-2]
-        self.le_liq = np.zeros(tsteps)  # open water evaporation [W m-2]
-        self.le_veg = np.zeros(tsteps)  # transpiration [W m-2]
-        self.le_soil = np.zeros(tsteps)  # soil evaporation [W m-2]
-        self.le_pot = np.zeros(tsteps)  # potential evaporation [W m-2]
-        self.le_ref = np.zeros(
-            tsteps
-        )  # reference evaporation at rs = rsmin / LAI [W m-2]
-        self.gf = np.zeros(tsteps)  # ground heat flux [W m-2]
+        # aerodynamic resistance [s m-1]
+        self.ra = np.zeros(tsteps)
+        # surface resistance [s m-1]
+        self.rs = np.zeros(tsteps)
+        # sensible heat flux [W m-2]
+        self.hf = np.zeros(tsteps)
+        # evapotranspiration [W m-2]
+        self.le = np.zeros(tsteps)
+        # open water evaporation [W m-2]
+        self.le_liq = np.zeros(tsteps)
+        # transpiration [W m-2]
+        self.le_veg = np.zeros(tsteps)
+        # soil evaporation [W m-2]
+        self.le_soil = np.zeros(tsteps)
+        # potential evaporation [W m-2]
+        self.le_pot = np.zeros(tsteps)
+        # reference evaporation at rs = rsmin / LAI [W m-2]
+        self.le_ref = np.zeros(tsteps)
+        # ground heat flux [W m-2]
+        self.gf = np.zeros(tsteps)
 
-        # Mixed-layer top variables
-        self.zlcl = np.zeros(tsteps)  # lifting condensation level [m]
-        self.top_rh = np.zeros(tsteps)  # mixed-layer top relative humidity [-]
+        # mixed-layer top variables
+        # lifting condensation level [m]
+        self.zlcl = np.zeros(tsteps)
+        # mixed-layer top relative humidity [-]
+        self.top_rh = np.zeros(tsteps)
 
         # cumulus variables
-        self.cc_frac = np.zeros(tsteps)  # cloud core fraction [-]
-        self.cc_mf = np.zeros(tsteps)  # cloud core mass flux [m s-1]
-        self.dz_h = np.zeros(tsteps)  # transition layer thickness [m]
+        # cloud core fraction [-]
+        self.cc_frac = np.zeros(tsteps)
+        # cloud core mass flux [m s-1]
+        self.cc_mf = np.zeros(tsteps)
+        # transition layer thickness [m]
+        self.dz_h = np.zeros(tsteps)

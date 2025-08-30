@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-from abcmodel.abcmodel import Model
+from abcmodel.abcmodel import ABCModel
 from abcmodel.clouds import StandardCumulusModel
 from abcmodel.land_surface import StandardLandSurfaceModel
 from abcmodel.mixed_layer import StandardMixedLayerModel
@@ -180,7 +180,7 @@ def main():
     cloud_model = StandardCumulusModel()
 
     # init and run the model
-    r1 = Model(
+    r1 = ABCModel(
         dt=dt,
         runtime=runtime,
         mixed_layer=mixed_layer_model,
