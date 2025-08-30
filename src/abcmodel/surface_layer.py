@@ -2,7 +2,7 @@ from abc import abstractmethod
 
 import numpy as np
 
-from .utils import PhysicalConstants, get_psih, get_psim, get_qsat, get_ribtol
+from .utils import PhysicalConstants, get_psih, get_psim, get_qsat
 
 
 class AbstractSurfaceLayerModel:
@@ -102,6 +102,73 @@ class InertSurfaceLayerModel(AbstractSurfaceLayerModel):
 
 
 class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
+    def get_ribtol(self, zsl: float):
+        if self.rib_number > 0.0:
+            oblen = 1.0
+            oblen0 = 2.0
+        else:
+            oblen = -1.0
+            oblen0 = -2.0
+
+        while abs(oblen - oblen0) > 0.001:
+            oblen0 = oblen
+            fx = (
+                self.rib_number
+                - zsl
+                / oblen
+                * (
+                    np.log(zsl / self.z0h)
+                    - get_psih(zsl / oblen)
+                    + get_psih(self.z0h / oblen)
+                )
+                / (
+                    np.log(zsl / self.z0m)
+                    - get_psim(zsl / oblen)
+                    + get_psim(self.z0m / oblen)
+                )
+                ** 2.0
+            )
+            oblen_start = oblen - 0.001 * oblen
+            oblen_end = oblen + 0.001 * oblen
+            fxdif = (
+                (
+                    -zsl
+                    / oblen_start
+                    * (
+                        np.log(zsl / self.z0h)
+                        - get_psih(zsl / oblen_start)
+                        + get_psih(self.z0h / oblen_start)
+                    )
+                    / (
+                        np.log(zsl / self.z0m)
+                        - get_psim(zsl / oblen_start)
+                        + get_psim(self.z0m / oblen_start)
+                    )
+                    ** 2.0
+                )
+                - (
+                    -zsl
+                    / oblen_end
+                    * (
+                        np.log(zsl / self.z0h)
+                        - get_psih(zsl / oblen_end)
+                        + get_psih(self.z0h / oblen_end)
+                    )
+                    / (
+                        np.log(zsl / self.z0m)
+                        - get_psim(zsl / oblen_end)
+                        + get_psim(self.z0m / oblen_end)
+                    )
+                    ** 2.0
+                )
+            ) / (oblen_start - oblen_end)
+            oblen = oblen - fx / fxdif
+
+            if abs(oblen) > 1e15:
+                break
+
+        return oblen
+
     def run(
         self,
         u: float,
@@ -130,13 +197,11 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
         )
         self.rib_number = min(self.rib_number, 0.2)
 
-        self.obukhov_length = get_ribtol(
-            self.rib_number,
-            zsl,
-            self.z0m,
-            self.z0h,
-        )  # Slow python iteration
+        # limamau: the following is rather slow
+        # before they had the option:
         # self.L    = ribtol.ribtol(self.Rib, zsl, self.z0m, self.z0h) # Fast C++ iteration
+        # we could make this faster with a scan or something using jax
+        self.obukhov_length = self.get_ribtol(zsl)
 
         self.drag_m = (
             self.const.k**2.0

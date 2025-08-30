@@ -5,7 +5,7 @@ from .land_surface import AbstractLandSurfaceModel
 from .mixed_layer import AbstractMixedLayerModel, NoMixedLayerModel
 from .radiation import AbstractRadiationModel
 from .surface_layer import AbstractSurfaceLayerModel
-from .utils import PhysicalConstants, get_esat, get_qsat
+from .utils import PhysicalConstants
 
 
 class Model:
