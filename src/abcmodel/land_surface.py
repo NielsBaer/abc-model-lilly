@@ -10,6 +10,36 @@ from .utils import PhysicalConstants, get_esat, get_qsat
 
 
 class AbstractLandSurfaceModel:
+    alpha: float
+    surf_temp: float
+
+    @abstractmethod
+    def run(
+        self,
+        radiation: AbstractRadiationModel,
+        surface_layer: AbstractSurfaceLayerModel,
+        mixed_layer: AbstractMixedLayerModel,
+    ) -> None:
+        raise NotImplementedError
+
+    def integrate(self, dt: float) -> None:
+        pass
+
+
+class NoLandSurfaceModel(AbstractLandSurfaceModel):
+    def __init__(self):
+        pass
+
+    def run(
+        self,
+        radiation: AbstractRadiationModel,
+        surface_layer: AbstractSurfaceLayerModel,
+        mixed_layer: AbstractMixedLayerModel,
+    ):
+        pass
+
+
+class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
     def __init__(
         self,
         ls_type: str,
@@ -186,144 +216,6 @@ class AbstractLandSurfaceModel:
         if self.c_beta is None:
             self.c_beta = 0.0  # zero curvature; linear response
         assert self.c_beta >= 0.0 or self.c_beta <= 1.0
-
-    @abstractmethod
-    def run(
-        self,
-        radiation: AbstractRadiationModel,
-        surface_layer: AbstractSurfaceLayerModel,
-        mixed_layer: AbstractMixedLayerModel,
-    ) -> None:
-        raise NotImplementedError
-
-    def integrate(self, dt: float) -> None:
-        pass
-
-
-class NoLandSurfaceModel(AbstractLandSurfaceModel):
-    # limamau: this shouldn't need all this arguments
-    # to be cleaned up in the future
-    def __init__(
-        self,
-        ls_type: str,
-        wg: float,
-        w2: float,
-        temp_soil: float,
-        temp2: float,
-        a: float,
-        b: float,
-        p: float,
-        cgsat: float,
-        wsat: float,
-        wfc: float,
-        wwilt: float,
-        c1sat: float,
-        c2sat: float,
-        lai: float,
-        gD: float,
-        rsmin: float,
-        rssoilmin: float,
-        alpha: float,
-        surf_temp: float,
-        cveg: float,
-        wmax: float,
-        wl: float,
-        lam: float,
-        c3c4: str,
-    ):
-        super().__init__(
-            ls_type,
-            wg,
-            w2,
-            temp_soil,
-            temp2,
-            a,
-            b,
-            p,
-            cgsat,
-            wsat,
-            wfc,
-            wwilt,
-            c1sat,
-            c2sat,
-            lai,
-            gD,
-            rsmin,
-            rssoilmin,
-            alpha,
-            surf_temp,
-            cveg,
-            wmax,
-            wl,
-            lam,
-            c3c4,
-        )
-
-    def run(
-        self,
-        radiation: AbstractRadiationModel,
-        surface_layer: AbstractSurfaceLayerModel,
-        mixed_layer: AbstractMixedLayerModel,
-    ):
-        pass
-
-
-class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
-    def __init__(
-        self,
-        ls_type: str,
-        wg: float,
-        w2: float,
-        temp_soil: float,
-        temp2: float,
-        a: float,
-        b: float,
-        p: float,
-        cgsat: float,
-        wsat: float,
-        wfc: float,
-        wwilt: float,
-        c1sat: float,
-        c2sat: float,
-        lai: float,
-        gD: float,
-        rsmin: float,
-        rssoilmin: float,
-        alpha: float,
-        surf_temp: float,
-        cveg: float,
-        wmax: float,
-        wl: float,
-        lam: float,
-        c3c4: str,
-    ):
-        super().__init__(
-            ls_type,
-            wg,
-            w2,
-            temp_soil,
-            temp2,
-            a,
-            b,
-            p,
-            cgsat,
-            wsat,
-            wfc,
-            wwilt,
-            c1sat,
-            c2sat,
-            lai,
-            gD,
-            rsmin,
-            rssoilmin,
-            alpha,
-            surf_temp,
-            cveg,
-            wmax,
-            wl,
-            lam,
-            c3c4,
-        )
 
     @abstractmethod
     def compute_surface_resistance(

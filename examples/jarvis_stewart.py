@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 
 from abcmodel.abcmodel import ABCModel
 from abcmodel.clouds import StandardCumulusModel
-from abcmodel.land_surface import AquaCropModel, JarvisStewartModel  # noqa: F401
+from abcmodel.land_surface import JarvisStewartModel
 from abcmodel.mixed_layer import StandardMixedLayerModel
 from abcmodel.radiation import StandardRadiationModel
 from abcmodel.surface_layer import InertSurfaceLayerModel
@@ -123,7 +123,7 @@ def main():
     )
 
     # 4. define land surface model
-    land_surface_model = AquaCropModel(
+    land_surface_model = JarvisStewartModel(
         # land-surface parameterization ('js' for Jarvis-Stewart or 'ags' for A-Gs)
         ls_type="js",
         # volumetric water content top soil layer [m3 m-3]
