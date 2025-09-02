@@ -1,8 +1,18 @@
+# limamau: this module contains the abstract classes for all main components of the ABC
+# model. Another architecture possibility is to define each abstract class in their own
+# files and extract kwargs from each run method - the coupler would manage integration...
+# I'm leaving this idea for the furure in case we need/decide to go for it.
+# limamau: in the future, it will be good to define parameter and initial conditions classes
+# to simplifiy initializations. We should also somehow check whether all parameters of a component
+# are being computed from one of the other components, otherwise throw a coupling error. I think
+# bringing initalization out of the abstract classes is a good step in this direction.
+
 from abc import abstractmethod
 
 from .utils import PhysicalConstants, get_qsat
 
 
+# limamau: redefine init outside abstract
 class AbstractRadiationModel:
     def __init__(
         self,
@@ -44,11 +54,8 @@ class AbstractRadiationModel:
         self,
         t: float,
         dt: float,
-        theta: float,
-        surf_pressure: float,
-        abl_height: float,
-        alpha: float,
-        surf_temp: float,
+        land_surface: "AbstractLandSurfaceModel",
+        mixed_layer: "AbstractMixedLayerModel",
     ) -> None:
         raise NotImplementedError
 
@@ -58,9 +65,6 @@ class AbstractRadiationModel:
 
 
 class AbstractLandSurfaceModel:
-    alpha: float
-    surf_temp: float
-
     @abstractmethod
     def run(
         self,
@@ -74,6 +78,7 @@ class AbstractLandSurfaceModel:
         pass
 
 
+# limamau: redefine init outside abstract
 class AbstractSurfaceLayerModel:
     def __init__(
         self,
@@ -128,17 +133,8 @@ class AbstractSurfaceLayerModel:
     @abstractmethod
     def run(
         self,
-        u: float,
-        v: float,
-        theta: float,
-        thetav: float,
-        wstar: float,
-        wtheta: float,
-        wq: float,
-        surf_pressure: float,
-        rs: float,
-        q: float,
-        abl_height: float,
+        land_surface: "AbstractLandSurfaceModel",
+        mixed_layer: "AbstractMixedLayerModel",
     ) -> None:
         raise NotImplementedError
 
@@ -147,6 +143,7 @@ class AbstractSurfaceLayerModel:
         raise NotImplementedError
 
 
+# limamau: redefine init outside abstract
 class AbstractMixedLayerModel:
     def __init__(
         self,
@@ -343,13 +340,9 @@ class AbstractMixedLayerModel:
     @abstractmethod
     def run(
         self,
-        dFz: float,
-        cc_mf: float,
-        cc_frac: float,
-        cc_qf: float,
-        ustar: float,
-        uw: float,
-        vw: float,
+        radiation: "AbstractRadiationModel",
+        surface_layer: "AbstractSurfaceLayerModel",
+        clouds: "AbstractCloudModel",
     ):
         pass
 
@@ -393,6 +386,7 @@ class AbstractMixedLayerModel:
             print("RHlcl = %f, zlcl=%f" % (RHlcl, self.lcl))
 
 
+# limamau: redefine init outside abstract
 class AbstractCloudModel:
     def __init__(self):
         # cloud core fraction [-]
@@ -403,21 +397,5 @@ class AbstractCloudModel:
         self.cc_qf = 0.0
 
     @abstractmethod
-    def run(
-        self,
-        wthetav: float,
-        wqe: float,
-        dq: float,
-        abl_height: float,
-        dz_h: float,
-        wstar: float,
-        wCO2e: float,
-        wCO2M: float,
-        dCO2: float,
-        q: float,
-        top_T: float,
-        top_p: float,
-        q2_h: float,
-        top_CO22: float,
-    ) -> tuple[float, float, float]:
+    def run(self, mixed_layer: "AbstractMixedLayerModel") -> None:
         raise NotImplementedError

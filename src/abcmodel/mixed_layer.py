@@ -1,4 +1,9 @@
-from .components import AbstractMixedLayerModel
+from .components import (
+    AbstractCloudModel,
+    AbstractMixedLayerModel,
+    AbstractRadiationModel,
+    AbstractSurfaceLayerModel,
+)
 
 
 class NoMixedLayerModel(AbstractMixedLayerModel):
@@ -155,13 +160,9 @@ class StandardMixedLayerModel(AbstractMixedLayerModel):
 
     def run(
         self,
-        dFz: float,
-        cc_mf: float,
-        cc_frac: float,
-        cc_qf: float,
-        ustar: float,
-        uw: float,
-        vw: float,
+        radiation: AbstractRadiationModel,
+        surface_layer: AbstractSurfaceLayerModel,
+        clouds: AbstractCloudModel,
     ):
         # calculate large-scale vertical velocity (subsidence)
         self.ws = -self.divU * self.abl_height
@@ -177,7 +178,7 @@ class StandardMixedLayerModel(AbstractMixedLayerModel):
             w_CO2_ft = 0.0
 
         # calculate mixed-layer growth due to cloud top radiative divergence
-        self.wf = dFz / (self.const.rho * self.const.cp * self.dtheta)
+        self.wf = radiation.dFz / (self.const.rho * self.const.cp * self.dtheta)
 
         # calculate convective velocity scale w*
         if self.wthetav > 0.0:
@@ -194,7 +195,10 @@ class StandardMixedLayerModel(AbstractMixedLayerModel):
         if self.sw_shearwe:
             self.we = (
                 -self.wthetave
-                + 5.0 * ustar**3.0 * self.thetav / (self.const.g * self.abl_height)
+                + 5.0
+                * surface_layer.ustar**3.0
+                * self.thetav
+                / (self.const.g * self.abl_height)
             ) / self.dthetav
         else:
             self.we = -self.wthetave / self.dthetav
@@ -208,40 +212,44 @@ class StandardMixedLayerModel(AbstractMixedLayerModel):
         self.wqe = -self.we * self.dq
         self.wCO2e = -self.we * self.dCO2
 
-        self.htend = self.we + self.ws + self.wf - cc_mf
+        self.htend = self.we + self.ws + self.wf - clouds.cc_mf
 
         self.thetatend = (self.wtheta - self.wthetae) / self.abl_height + self.advtheta
-        self.qtend = (self.wq - self.wqe - cc_qf) / self.abl_height + self.advq
+        self.qtend = (self.wq - self.wqe - clouds.cc_qf) / self.abl_height + self.advq
         self.co2tend = (
             self.wCO2 - self.wCO2e - self.wCO2M
         ) / self.abl_height + self.advCO2
 
         self.dthetatend = (
-            self.gammatheta * (self.we + self.wf - cc_mf) - self.thetatend + w_th_ft
+            self.gammatheta * (self.we + self.wf - clouds.cc_mf)
+            - self.thetatend
+            + w_th_ft
         )
-        self.dqtend = self.gammaq * (self.we + self.wf - cc_mf) - self.qtend + w_q_ft
+        self.dqtend = (
+            self.gammaq * (self.we + self.wf - clouds.cc_mf) - self.qtend + w_q_ft
+        )
         self.dCO2tend = (
-            self.gammaco2 * (self.we + self.wf - cc_mf) - self.co2tend + w_CO2_ft
+            self.gammaco2 * (self.we + self.wf - clouds.cc_mf) - self.co2tend + w_CO2_ft
         )
 
         # assume u + du = ug, so ug - u = du
         if self.sw_wind:
             self.utend = (
                 -self.coriolis_param * self.dv
-                + (uw + self.we * self.du) / self.abl_height
+                + (surface_layer.uw + self.we * self.du) / self.abl_height
                 + self.advu
             )
             self.vtend = (
                 self.coriolis_param * self.du
-                + (vw + self.we * self.dv) / self.abl_height
+                + (surface_layer.vw + self.we * self.dv) / self.abl_height
                 + self.advv
             )
 
-            self.dutend = self.gammau * (self.we + self.wf - cc_mf) - self.utend
-            self.dvtend = self.gammav * (self.we + self.wf - cc_mf) - self.vtend
+            self.dutend = self.gammau * (self.we + self.wf - clouds.cc_mf) - self.utend
+            self.dvtend = self.gammav * (self.we + self.wf - clouds.cc_mf) - self.vtend
 
         # tendency of the transition layer thickness
-        if cc_frac > 0 or self.lcl - self.abl_height < 300:
+        if clouds.cc_frac > 0 or self.lcl - self.abl_height < 300:
             self.dztend = ((self.lcl - self.abl_height) - self.dz_h) / 7200.0
         else:
             self.dztend = 0.0

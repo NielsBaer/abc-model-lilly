@@ -1,6 +1,10 @@
 import numpy as np
 
-from .components import AbstractRadiationModel
+from .components import (
+    AbstractLandSurfaceModel,
+    AbstractMixedLayerModel,
+    AbstractRadiationModel,
+)
 
 
 class NoRadiationModel(AbstractRadiationModel):
@@ -30,11 +34,8 @@ class NoRadiationModel(AbstractRadiationModel):
         self,
         t: float,
         dt: float,
-        theta: float,
-        surf_pressure: float,
-        abl_height: float,
-        alpha: float,
-        surf_temp: float,
+        land_surface: AbstractLandSurfaceModel,
+        mixed_layer: AbstractMixedLayerModel,
     ):
         pass
 
@@ -67,11 +68,8 @@ class StandardRadiationModel(AbstractRadiationModel):
         self,
         t: float,
         dt: float,
-        theta: float,
-        surf_pressure: float,
-        abl_height: float,
-        alpha: float,
-        surf_temp: float,
+        land_surface: AbstractLandSurfaceModel,
+        mixed_layer: AbstractMixedLayerModel,
     ):
         sda = 0.409 * np.cos(2.0 * np.pi * (self.doy - 173.0) / 365.0)
         sinlea = np.sin(2.0 * np.pi * self.lat / 360.0) * np.sin(sda) - np.cos(
@@ -82,17 +80,20 @@ class StandardRadiationModel(AbstractRadiationModel):
         )
         sinlea = max(sinlea, 0.0001)
 
-        Ta = theta * (
-            (surf_pressure - 0.1 * abl_height * self.const.rho * self.const.g)
-            / surf_pressure
+        Ta = mixed_layer.theta * (
+            (
+                mixed_layer.surf_pressure
+                - 0.1 * mixed_layer.abl_height * self.const.rho * self.const.g
+            )
+            / mixed_layer.surf_pressure
         ) ** (self.const.rd / self.const.cp)
 
         Tr = (0.6 + 0.2 * sinlea) * (1.0 - 0.4 * self.cc)
 
         self.in_srad = self.const.solar_in * Tr * sinlea
-        self.out_srad = alpha * self.const.solar_in * Tr * sinlea
+        self.out_srad = land_surface.alpha * self.const.solar_in * Tr * sinlea
         self.in_lrad = 0.8 * self.const.bolz * Ta**4.0
-        self.out_lrad = self.const.bolz * surf_temp**4.0
+        self.out_lrad = self.const.bolz * land_surface.surf_temp**4.0
 
         self.net_rad = self.in_srad - self.out_srad + self.in_lrad - self.out_lrad
 

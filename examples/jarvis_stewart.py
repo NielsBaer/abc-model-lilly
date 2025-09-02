@@ -5,7 +5,7 @@ from abcmodel.clouds import StandardCumulusModel
 from abcmodel.land_surface import JarvisStewartModel
 from abcmodel.mixed_layer import StandardMixedLayerModel
 from abcmodel.radiation import StandardRadiationModel
-from abcmodel.surface_layer import InertSurfaceLayerModel
+from abcmodel.surface_layer import StandardSurfaceLayerModel
 
 
 def main():
@@ -93,7 +93,7 @@ def main():
     )
 
     # 2. define surface layer model
-    surface_layer_model = InertSurfaceLayerModel(
+    surface_layer_model = StandardSurfaceLayerModel(
         # surface friction velocity [m s-1]
         ustar=0.3,
         # roughness length for momentum [m]

@@ -1,25 +1,25 @@
 import numpy as np
 
-from .components import AbstractSurfaceLayerModel
+from .components import (
+    AbstractLandSurfaceModel,
+    AbstractMixedLayerModel,
+    AbstractSurfaceLayerModel,
+)
+from .utils import get_psih, get_psim, get_qsat
 
 
 class InertSurfaceLayerModel(AbstractSurfaceLayerModel):
     def run(
         self,
-        u: float,
-        v: float,
-        theta: float,
-        thetav: float,
-        wstar: float,
-        wtheta: float,
-        wq: float,
-        surf_pressure: float,
-        rs: float,
-        q: float,
-        abl_height: float,
-    ) -> None:
-        self.uw = -np.sign(u) * (self.ustar**4.0 / (v**2.0 / u**2.0 + 1.0)) ** (0.5)
-        self.vw = -np.sign(v) * (self.ustar**4.0 / (u**2.0 / v**2.0 + 1.0)) ** (0.5)
+        land_surface: AbstractLandSurfaceModel,
+        mixed_layer: AbstractMixedLayerModel,
+    ):
+        self.uw = -np.sign(mixed_layer.u) * (
+            self.ustar**4.0 / (mixed_layer.v**2.0 / mixed_layer.u**2.0 + 1.0)
+        ) ** (0.5)
+        self.vw = -np.sign(mixed_layer.v) * (
+            self.ustar**4.0 / (mixed_layer.u**2.0 / mixed_layer.v**2.0 + 1.0)
+        ) ** (0.5)
 
     def compute_ra(self, u: float, v: float, wstar: float):
         ueff = np.sqrt(u**2.0 + v**2.0 + wstar**2.0)
@@ -96,29 +96,27 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
 
     def run(
         self,
-        u: float,
-        v: float,
-        theta: float,
-        thetav: float,
-        wstar: float,
-        wtheta: float,
-        wq: float,
-        surf_pressure: float,
-        rs: float,
-        q: float,
-        abl_height: float,
+        land_surface: AbstractLandSurfaceModel,
+        mixed_layer: AbstractMixedLayerModel,
     ):
-        ueff = max(0.01, np.sqrt(u**2.0 + v**2.0 + wstar**2.0))
-        self.thetasurf = theta + wtheta / (self.drag_s * ueff)
-        qsatsurf = get_qsat(self.thetasurf, surf_pressure)
-        cq = (1.0 + self.drag_s * ueff * rs) ** -1.0
-        self.qsurf = (1.0 - cq) * q + cq * qsatsurf
+        ueff = max(
+            0.01,
+            np.sqrt(mixed_layer.u**2.0 + mixed_layer.v**2.0 + mixed_layer.wstar**2.0),
+        )
+        self.thetasurf = mixed_layer.theta + mixed_layer.wtheta / (self.drag_s * ueff)
+        qsatsurf = get_qsat(self.thetasurf, mixed_layer.surf_pressure)
+        cq = (1.0 + self.drag_s * ueff * land_surface.rs) ** -1.0
+        self.qsurf = (1.0 - cq) * mixed_layer.q + cq * qsatsurf
 
         self.thetavsurf = self.thetasurf * (1.0 + 0.61 * self.qsurf)
 
-        zsl = 0.1 * abl_height
+        zsl = 0.1 * mixed_layer.abl_height
         self.rib_number = (
-            self.const.g / thetav * zsl * (thetav - self.thetavsurf) / ueff**2.0
+            self.const.g
+            / mixed_layer.thetav
+            * zsl
+            * (mixed_layer.thetav - self.thetavsurf)
+            / ueff**2.0
         )
         self.rib_number = min(self.rib_number, 0.2)
 
@@ -152,16 +150,22 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
         )
 
         self.ustar = np.sqrt(self.drag_m) * ueff
-        self.uw = -self.drag_m * ueff * u
-        self.vw = -self.drag_m * ueff * v
+        self.uw = -self.drag_m * ueff * mixed_layer.u
+        self.vw = -self.drag_m * ueff * mixed_layer.v
 
         # diagnostic meteorological variables
-        self.temp_2m = self.thetasurf - wtheta / self.ustar / self.const.k * (
-            np.log(2.0 / self.z0h)
-            - get_psih(2.0 / self.obukhov_length)
-            + get_psih(self.z0h / self.obukhov_length)
+        self.temp_2m = (
+            self.thetasurf
+            - mixed_layer.wtheta
+            / self.ustar
+            / self.const.k
+            * (
+                np.log(2.0 / self.z0h)
+                - get_psih(2.0 / self.obukhov_length)
+                + get_psih(self.z0h / self.obukhov_length)
+            )
         )
-        self.q2m = self.qsurf - wq / self.ustar / self.const.k * (
+        self.q2m = self.qsurf - mixed_layer.wq / self.ustar / self.const.k * (
             np.log(2.0 / self.z0h)
             - get_psih(2.0 / self.obukhov_length)
             + get_psih(self.z0h / self.obukhov_length)
@@ -189,7 +193,7 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
         self.esat2m = 0.611e3 * np.exp(
             17.2694 * (self.temp_2m - 273.16) / (self.temp_2m - 35.86)
         )
-        self.e2m = self.q2m * surf_pressure / 0.622
+        self.e2m = self.q2m * mixed_layer.surf_pressure / 0.622
 
     def compute_ra(self, u: float, v: float, wstar: float):
         ueff = np.sqrt(u**2.0 + v**2.0 + wstar**2.0)

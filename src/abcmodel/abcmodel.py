@@ -59,142 +59,48 @@ class ABCModel:
         self.mixed_layer.statistics(self.t)
 
         # calculate initial diagnostic variables
-        self.radiation.run(
-            self.t,
-            self.dt,
-            self.mixed_layer.theta,
-            self.mixed_layer.surf_pressure,
-            self.mixed_layer.abl_height,
-            self.land_surface.alpha,
-            self.land_surface.surf_temp,
-        )
+        self.radiation.run(self.t, self.dt, self.land_surface, self.mixed_layer)
 
         for _ in range(10):
             assert isinstance(self.mixed_layer.thetav, float)
-            self.surface_layer.run(
-                self.mixed_layer.u,
-                self.mixed_layer.v,
-                self.mixed_layer.theta,
-                self.mixed_layer.thetav,
-                self.mixed_layer.wstar,
-                self.mixed_layer.wtheta,
-                self.mixed_layer.wq,
-                self.mixed_layer.surf_pressure,
-                self.land_surface.rs,
-                self.mixed_layer.q,
-                self.mixed_layer.abl_height,
-            )
+            self.surface_layer.run(self.land_surface, self.mixed_layer)
 
-        self.land_surface.run(
-            self.radiation,
-            self.surface_layer,
-            self.mixed_layer,
-        )
+        self.land_surface.run(self.radiation, self.surface_layer, self.mixed_layer)
 
         assert isinstance(self.surface_layer.uw, float)
         assert isinstance(self.surface_layer.vw, float)
         if not isinstance(self.clouds, NoCloudModel):
             self.mixed_layer.run(
-                self.radiation.dFz,
-                self.clouds.cc_mf,
-                self.clouds.cc_frac,
-                self.clouds.cc_qf,
-                self.surface_layer.ustar,
-                self.surface_layer.uw,
-                self.surface_layer.vw,
+                self.radiation,
+                self.surface_layer,
+                self.clouds,
             )
-            self.clouds.run(
-                self.mixed_layer.wthetav,
-                self.mixed_layer.wqe,
-                self.mixed_layer.dq,
-                self.mixed_layer.abl_height,
-                self.mixed_layer.dz_h,
-                self.mixed_layer.wstar,
-                self.mixed_layer.wCO2e,
-                self.mixed_layer.wCO2M,
-                self.mixed_layer.dCO2,
-                self.mixed_layer.q,
-                self.mixed_layer.top_T,
-                self.mixed_layer.top_p,
-                self.mixed_layer.q2_h,
-                self.mixed_layer.top_CO22,
-            )
+            self.clouds.run(self.mixed_layer)
 
         self.mixed_layer.run(
-            self.radiation.dFz,
-            self.clouds.cc_mf,
-            self.clouds.cc_frac,
-            self.clouds.cc_qf,
-            self.surface_layer.ustar,
-            self.surface_layer.uw,
-            self.surface_layer.vw,
+            self.radiation,
+            self.surface_layer,
+            self.clouds,
         )
 
     def timestep(self):
         self.mixed_layer.statistics(self.t)
 
         # run radiation model
-        self.radiation.run(
-            self.t,
-            self.dt,
-            self.mixed_layer.theta,
-            self.mixed_layer.surf_pressure,
-            self.mixed_layer.abl_height,
-            self.land_surface.alpha,
-            self.land_surface.surf_temp,
-        )
+        self.radiation.run(self.t, self.dt, self.land_surface, self.mixed_layer)
 
         # run surface layer model
         assert isinstance(self.mixed_layer.thetav, float)
-        self.surface_layer.run(
-            self.mixed_layer.u,
-            self.mixed_layer.v,
-            self.mixed_layer.theta,
-            self.mixed_layer.thetav,
-            self.mixed_layer.wstar,
-            self.mixed_layer.wtheta,
-            self.mixed_layer.wq,
-            self.mixed_layer.surf_pressure,
-            self.land_surface.rs,
-            self.mixed_layer.q,
-            self.mixed_layer.abl_height,
-        )
+        self.surface_layer.run(self.land_surface, self.mixed_layer)
 
         # run land surface model
-        self.land_surface.run(
-            self.radiation,
-            self.surface_layer,
-            self.mixed_layer,
-        )
+        self.land_surface.run(self.radiation, self.surface_layer, self.mixed_layer)
 
         # run cumulus parameterization
-        self.clouds.run(
-            self.mixed_layer.wthetav,
-            self.mixed_layer.wqe,
-            self.mixed_layer.dq,
-            self.mixed_layer.abl_height,
-            self.mixed_layer.dz_h,
-            self.mixed_layer.wstar,
-            self.mixed_layer.wCO2e,
-            self.mixed_layer.wCO2M,
-            self.mixed_layer.dCO2,
-            self.mixed_layer.q,
-            self.mixed_layer.top_T,
-            self.mixed_layer.top_p,
-            self.mixed_layer.q2_h,
-            self.mixed_layer.top_CO22,
-        )
+        self.clouds.run(self.mixed_layer)
 
         # run mixed-layer model
-        self.mixed_layer.run(
-            self.radiation.dFz,
-            self.clouds.cc_mf,
-            self.clouds.cc_frac,
-            self.clouds.cc_qf,
-            self.surface_layer.ustar,
-            self.surface_layer.uw,
-            self.surface_layer.vw,
-        )
+        self.mixed_layer.run(self.radiation, self.surface_layer, self.clouds)
 
         # store output before time integration
         self.store()

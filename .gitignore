@@ -2,4 +2,4 @@ figs/
 src/abcmodel.egg-info/
 __pycache__/
 .venv
-aux.txt
+notes.txt
