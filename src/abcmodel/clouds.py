@@ -1,38 +1,7 @@
-from abc import abstractmethod
-
 import numpy as np
 
+from .components import AbstractCloudModel
 from .utils import get_qsat
-
-
-class AbstractCloudModel:
-    def __init__(self):
-        # cloud core fraction [-]
-        self.cc_frac = 0.0
-        # cloud core mass flux [m s-1]
-        self.cc_mf = 0.0
-        # cloud core moisture flux [kg kg-1 m s-1]
-        self.cc_qf = 0.0
-
-    @abstractmethod
-    def run(
-        self,
-        wthetav: float,
-        wqe: float,
-        dq: float,
-        abl_height: float,
-        dz_h: float,
-        wstar: float,
-        wCO2e: float,
-        wCO2M: float,
-        dCO2: float,
-        q: float,
-        top_T: float,
-        top_p: float,
-        q2_h: float,
-        top_CO22: float,
-    ) -> tuple[float, float, float]:
-        raise NotImplementedError
 
 
 class NoCloudModel(AbstractCloudModel):

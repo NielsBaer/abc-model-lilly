@@ -3,27 +3,11 @@ from abc import abstractmethod
 import numpy as np
 from scipy.special import exp1
 
+from .components import AbstractLandSurfaceModel
 from .mixed_layer import AbstractMixedLayerModel
 from .radiation import AbstractRadiationModel
 from .surface_layer import AbstractSurfaceLayerModel
 from .utils import PhysicalConstants, get_esat, get_qsat
-
-
-class AbstractLandSurfaceModel:
-    alpha: float
-    surf_temp: float
-
-    @abstractmethod
-    def run(
-        self,
-        radiation: AbstractRadiationModel,
-        surface_layer: AbstractSurfaceLayerModel,
-        mixed_layer: AbstractMixedLayerModel,
-    ) -> None:
-        raise NotImplementedError
-
-    def integrate(self, dt: float) -> None:
-        pass
 
 
 class NoLandSurfaceModel(AbstractLandSurfaceModel):

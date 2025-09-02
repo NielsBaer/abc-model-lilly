@@ -1,62 +1,6 @@
-from abc import abstractmethod
-
 import numpy as np
 
-from .utils import PhysicalConstants
-
-
-class AbstractRadiationModel:
-    def __init__(
-        self,
-        lat: float,
-        lon: float,
-        doy: float,
-        tstart: float,
-        cc: float,
-        net_rad: float,
-        dFz: float,
-    ):
-        # constants
-        self.const = PhysicalConstants()
-        # latitude [deg]
-        self.lat = lat
-        # longitude [deg]
-        self.lon = lon
-        # day of the year [-]
-        self.doy = doy
-        # time of the day [h UTC]
-        self.tstart = tstart
-        # cloud cover fraction [-]
-        self.cc = cc
-        # net radiation [W m-2]
-        self.net_rad = net_rad
-        # cloud top radiative divergence [W m-2]
-        self.dFz = dFz
-        # incoming short wave radiation [W m-2]
-        self.in_srad = None
-        # outgoing short wave radiation [W m-2]
-        self.out_srad = None
-        # incoming long wave radiation [W m-2]
-        self.in_lrad = None
-        # outgoing long wave radiation [W m-2]
-        self.out_lrad = None
-
-    @abstractmethod
-    def run(
-        self,
-        t: float,
-        dt: float,
-        theta: float,
-        surf_pressure: float,
-        abl_height: float,
-        alpha: float,
-        surf_temp: float,
-    ) -> None:
-        raise NotImplementedError
-
-    @abstractmethod
-    def get_f1(self) -> float:
-        pass
+from .components import AbstractRadiationModel
 
 
 class NoRadiationModel(AbstractRadiationModel):
