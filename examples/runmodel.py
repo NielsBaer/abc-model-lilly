@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 
 from abcmodel.abcmodel import ABCModel
 from abcmodel.clouds import StandardCumulusModel
-from abcmodel.land_surface import StandardLandSurfaceModel
+from abcmodel.land_surface import AquaCropModel, JarvisStewartModel  # noqa: F401
 from abcmodel.mixed_layer import StandardMixedLayerModel
 from abcmodel.radiation import StandardRadiationModel
 from abcmodel.surface_layer import InertSurfaceLayerModel
@@ -123,9 +123,9 @@ def main():
     )
 
     # 4. define land surface model
-    land_surface_model = StandardLandSurfaceModel(
+    land_surface_model = AquaCropModel(
         # land-surface parameterization ('js' for Jarvis-Stewart or 'ags' for A-Gs)
-        ls_type="ags",
+        ls_type="js",
         # volumetric water content top soil layer [m3 m-3]
         wg=0.21,
         # volumetric water content deeper soil layer [m3 m-3]
@@ -215,9 +215,9 @@ def main():
     plt.ylabel("cloud fraction [-]")
 
     plt.subplot(233)
-    plt.plot(r1.out.t, r1.out.gf)
+    plt.plot(r1.out.t, r1.out.wCO2)
     plt.xlabel("time [h]")
-    plt.ylabel("ground heat flux [W m-2]")
+    plt.ylabel("surface kinematic CO2 flux [ppm m s-1]")
 
     plt.subplot(236)
     plt.plot(r1.out.t, r1.out.le_veg)

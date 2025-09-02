@@ -1,6 +1,7 @@
 from abc import abstractmethod
 
 import numpy as np
+from scipy.special import exp1
 
 from .mixed_layer import AbstractMixedLayerModel
 from .radiation import AbstractRadiationModel
@@ -267,7 +268,7 @@ class NoLandSurfaceModel(AbstractLandSurfaceModel):
         pass
 
 
-class StandardLandSurfaceModel(AbstractLandSurfaceModel):
+class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
     def __init__(
         self,
         ls_type: str,
@@ -324,165 +325,22 @@ class StandardLandSurfaceModel(AbstractLandSurfaceModel):
             c3c4,
         )
 
-    def jarvis_stewart(
-        self,
-        radiation: AbstractRadiationModel,
-        mixed_layer: AbstractMixedLayerModel,
-    ):
-        # calculate surface resistances using Jarvis-Stewart model
-        f1 = radiation.get_f1()
-
-        if self.w2 > self.wwilt:  # and self.w2 <= self.wfc):
-            f2 = (self.wfc - self.wwilt) / (self.w2 - self.wwilt)
-        else:
-            f2 = 1.0e8
-
-        # Limit f2 in case w2 > wfc, where f2 < 1
-        f2 = max(f2, 1.0)
-        f3 = 1.0 / np.exp(-self.gD * (mixed_layer.esat - mixed_layer.e) / 100.0)
-        f4 = 1.0 / (1.0 - 0.0016 * (298.0 - mixed_layer.theta) ** 2.0)
-
-        self.rs = self.rsmin / self.lai * f1 * f2 * f3 * f4
-
-    def factorial(self, k):
-        factorial = 1
-        for n in range(2, k + 1):
-            factorial = factorial * float(n)
-        return factorial
-
-    def E1(self, x):
-        E1sum = 0
-        for k in range(1, 100):
-            E1sum += (
-                pow((-1.0), (k + 0.0))
-                * pow(x, (k + 0.0))
-                / ((k + 0.0) * self.factorial(k))
-            )
-        return -0.57721566490153286060 - np.log(x) - E1sum
-
-    def ags(
+    @abstractmethod
+    def compute_surface_resistance(
         self,
         radiation: AbstractRadiationModel,
         surface_layer: AbstractSurfaceLayerModel,
         mixed_layer: AbstractMixedLayerModel,
+    ) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def compute_co2_flux(
+        self,
+        surface_layer: AbstractSurfaceLayerModel,
+        mixed_layer: AbstractMixedLayerModel,
     ):
-        # Select index for plant type
-        if self.c3c4 == "c3":
-            c = 0
-        elif self.c3c4 == "c4":
-            c = 1
-        else:
-            raise ValueError(f'Invalid option "{self.c3c4}" for "c3c4".')
-
-        # calculate CO2 compensation concentration
-        CO2comp = (
-            self.co2comp298[c]
-            * self.const.rho
-            * pow(self.net_rad10CO2[c], (0.1 * (surface_layer.thetasurf - 298.0)))
-        )
-
-        # calculate mesophyll conductance
-        gm = (
-            self.gm298[c]
-            * pow(self.net_rad10gm[c], (0.1 * (surface_layer.thetasurf - 298.0)))
-            / (
-                (1.0 + np.exp(0.3 * (self.temp1gm[c] - surface_layer.thetasurf)))
-                * (1.0 + np.exp(0.3 * (surface_layer.thetasurf - self.temp2gm[c])))
-            )
-        )
-        gm = gm / 1000.0  # conversion from mm s-1 to m s-1
-
-        # calculate CO2 concentration inside the leaf (ci)
-        fmin0 = self.gmin[c] / self.nuco2q - 1.0 / 9.0 * gm
-        fmin = -fmin0 + pow(
-            (pow(fmin0, 2.0) + 4 * self.gmin[c] / self.nuco2q * gm), 0.5
-        ) / (2.0 * gm)
-
-        Ds = (get_esat(self.surf_temp) - mixed_layer.e) / 1000.0  # kPa
-        D0 = (self.f0[c] - fmin) / self.ad[c]
-
-        cfrac = self.f0[c] * (1.0 - (Ds / D0)) + fmin * (Ds / D0)
-        co2abs = (
-            mixed_layer.co2 * (self.const.mco2 / self.const.mair) * self.const.rho
-        )  # conversion mumol mol-1 (ppm) to mgCO2 m3
-        ci = cfrac * (co2abs - CO2comp) + CO2comp
-
-        # calculate maximal gross primary production in high light conditions (Ag)
-        Ammax = (
-            self.ammax298[c]
-            * pow(self.net_rad10Am[c], (0.1 * (surface_layer.thetasurf - 298.0)))
-            / (
-                (1.0 + np.exp(0.3 * (self.temp1Am[c] - surface_layer.thetasurf)))
-                * (1.0 + np.exp(0.3 * (surface_layer.thetasurf - self.temp2Am[c])))
-            )
-        )
-
-        # calculate effect of soil moisture stress on gross assimilation rate
-        betaw = max(1e-3, min(1.0, (self.w2 - self.wwilt) / (self.wfc - self.wwilt)))
-
-        # calculate stress function
-        if self.c_beta == 0:
-            fstr = betaw
-        else:
-            # Following Combe et al (2016)
-            if self.c_beta < 0.25:
-                P = 6.4 * self.c_beta
-            elif self.c_beta < 0.50:
-                P = 7.6 * self.c_beta - 0.3
-            else:
-                P = 2 ** (3.66 * self.c_beta + 0.34) - 1
-            fstr = (1.0 - np.exp(-P * betaw)) / (1 - np.exp(-P))
-
-        # calculate gross assimilation rate (Am)
-        Am = Ammax * (1.0 - np.exp(-(gm * (ci - CO2comp) / Ammax)))
-        Rdark = (1.0 / 9.0) * Am
-        PAR = 0.5 * max(1e-1, radiation.in_srad * self.cveg)
-
-        # calculate  light use efficiency
-        alphac = self.alpha0[c] * (co2abs - CO2comp) / (co2abs + 2.0 * CO2comp)
-
-        # calculate gross primary productivity
-        Ag = (Am + Rdark) * (1 - np.exp(alphac * PAR / (Am + Rdark)))
-
-        # 1.- calculate upscaling from leaf to canopy: net flow CO2 into the plant (An)
-        y = alphac * self.kx[c] * PAR / (Am + Rdark)
-        An = (Am + Rdark) * (
-            1.0
-            - 1.0
-            / (self.kx[c] * self.lai)
-            * (self.E1(y * np.exp(-self.kx[c] * self.lai)) - self.E1(y))
-        )
-
-        # 2.- calculate upscaling from leaf to canopy: CO2 conductance at canopy level
-        a1 = 1.0 / (1.0 - self.f0[c])
-        Dstar = D0 / (a1 * (self.f0[c] - fmin))
-
-        gcco2 = self.lai * (
-            self.gmin[c] / self.nuco2q
-            + a1 * fstr * An / ((co2abs - CO2comp) * (1.0 + Ds / Dstar))
-        )
-
-        # calculate surface resistance for moisture and carbon dioxide
-        self.rs = 1.0 / (1.6 * gcco2)
-        rsCO2 = 1.0 / gcco2
-
-        # calculate net flux of CO2 into the plant (An)
-        An = -(co2abs - ci) / (surface_layer.ra + rsCO2)
-
-        # CO2 soil surface flux
-        fw = self.cw * self.wmax / (self.wg + self.wmin)
-        Resp = (
-            self.r10
-            * (1.0 - fw)
-            * np.exp(self.e0 / (283.15 * 8.314) * (1.0 - 283.15 / (self.temp_soil)))
-        )
-
-        # CO2 flux
-        mixed_layer.wCO2A = An * (self.const.mair / (self.const.rho * self.const.mco2))
-        mixed_layer.wCO2R = Resp * (
-            self.const.mair / (self.const.rho * self.const.mco2)
-        )
-        mixed_layer.wCO2 = mixed_layer.wCO2A + mixed_layer.wCO2R
+        raise NotImplementedError
 
     def run(
         self,
@@ -490,6 +348,7 @@ class StandardLandSurfaceModel(AbstractLandSurfaceModel):
         surface_layer: AbstractSurfaceLayerModel,
         mixed_layer: AbstractMixedLayerModel,
     ):
+        # compute aerodynamic resistance
         surface_layer.compute_ra(mixed_layer.u, mixed_layer.v, mixed_layer.wstar)
 
         # first calculate essential thermodynamic variables
@@ -504,12 +363,9 @@ class StandardLandSurfaceModel(AbstractLandSurfaceModel):
         mixed_layer.dqsatdT = 0.622 * desatdT / mixed_layer.surf_pressure
         mixed_layer.e = mixed_layer.q * mixed_layer.surf_pressure / 0.622
 
-        if self.ls_type == "js":
-            self.jarvis_stewart(radiation, mixed_layer)
-        elif self.ls_type == "ags":
-            self.ags(radiation, surface_layer, mixed_layer)
-        else:
-            raise ValueError(f'Inavalid option "{self.ls_type}" for "ls_type".')
+        # sub-model part
+        self.compute_surface_resistance(radiation, surface_layer, mixed_layer)
+        self.compute_co2_flux(surface_layer, mixed_layer)
 
         # recompute f2 using wg instead of w2
         if self.wg > self.wwilt:  # and self.w2 <= self.wfc):
@@ -518,8 +374,8 @@ class StandardLandSurfaceModel(AbstractLandSurfaceModel):
             f2 = 1.0e8
         self.rssoil = self.rssoilmin * f2
 
-        Wlmx = self.lai * self.wmax
-        self.cliq = min(1.0, self.wl / Wlmx)
+        wlmx = self.lai * self.wmax
+        self.cliq = min(1.0, self.wl / wlmx)
 
         # calculate skin temperature implicitly
         self.surf_temp = (
@@ -577,6 +433,7 @@ class StandardLandSurfaceModel(AbstractLandSurfaceModel):
             + self.lamb
         )
 
+        # limamau: should eastsurf just be deleted here?
         esatsurf = get_esat(self.surf_temp)
         mixed_layer.qsatsurf = get_qsat(self.surf_temp, mixed_layer.surf_pressure)
 
@@ -646,53 +503,311 @@ class StandardLandSurfaceModel(AbstractLandSurfaceModel):
             * (1.0 + self.rsmin / self.lai / surface_layer.ra)
         )
 
-        CG = self.cgsat * (self.wsat / self.w2) ** (self.b / (2.0 * np.log(10.0)))
+        cg = self.cgsat * (self.wsat / self.w2) ** (self.b / (2.0 * np.log(10.0)))
 
-        self.temp_soil_tend = CG * self.gf - 2.0 * np.pi / 86400.0 * (
+        self.temp_soil_tend = cg * self.gf - 2.0 * np.pi / 86400.0 * (
             self.temp_soil - self.temp2
         )
 
         d1 = 0.1
-        C1 = self.c1sat * (self.wsat / self.wg) ** (self.b / 2.0 + 1.0)
-        C2 = self.c2ref * (self.w2 / (self.wsat - self.w2))
+        c1 = self.c1sat * (self.wsat / self.wg) ** (self.b / 2.0 + 1.0)
+        c2 = self.c2ref * (self.w2 / (self.wsat - self.w2))
         wgeq = self.w2 - self.wsat * self.a * (
             (self.w2 / self.wsat) ** self.p
             * (1.0 - (self.w2 / self.wsat) ** (8.0 * self.p))
         )
-        self.wgtend = -C1 / (
+        self.wgtend = -c1 / (
             self.const.rhow * d1
-        ) * self.le_soil / self.const.lv - C2 / 86400.0 * (self.wg - wgeq)
+        ) * self.le_soil / self.const.lv - c2 / 86400.0 * (self.wg - wgeq)
 
         # calculate kinematic heat fluxes
         mixed_layer.wtheta = self.hf / (self.const.rho * self.const.cp)
         mixed_layer.wq = self.le / (self.const.rho * self.const.lv)
 
     def integrate(self, dt: float):
-        # integrate soil equations
-        temp_soil0 = self.temp_soil
-        wg0 = self.wg
-        wl0 = self.wl
-
-        self.temp_soil = temp_soil0 + dt * self.temp_soil_tend
-        self.wg = wg0 + dt * self.wgtend
-        self.wl = wl0 + dt * self.wltend
+        self.temp_soil = self.temp_soil + dt * self.temp_soil_tend
+        self.wg = self.wg + dt * self.wgtend
+        self.wl = self.wl + dt * self.wltend
 
 
-# class JarvisStewartModel(AbstractLandSurfaceModel):
-#     def __init__(self):
-#         super().__init__()
+class JarvisStewartModel(AbstractStandardLandSurfaceModel):
+    def __init__(
+        self,
+        ls_type: str,
+        wg: float,
+        w2: float,
+        temp_soil: float,
+        temp2: float,
+        a: float,
+        b: float,
+        p: float,
+        cgsat: float,
+        wsat: float,
+        wfc: float,
+        wwilt: float,
+        c1sat: float,
+        c2sat: float,
+        lai: float,
+        gD: float,
+        rsmin: float,
+        rssoilmin: float,
+        alpha: float,
+        surf_temp: float,
+        cveg: float,
+        wmax: float,
+        wl: float,
+        lam: float,
+        c3c4: str,
+    ):
+        super().__init__(
+            ls_type,
+            wg,
+            w2,
+            temp_soil,
+            temp2,
+            a,
+            b,
+            p,
+            cgsat,
+            wsat,
+            wfc,
+            wwilt,
+            c1sat,
+            c2sat,
+            lai,
+            gD,
+            rsmin,
+            rssoilmin,
+            alpha,
+            surf_temp,
+            cveg,
+            wmax,
+            wl,
+            lam,
+            c3c4,
+        )
 
-#     def run(
-#         self,
-#     ) -> None:
-#         pass
+    def compute_surface_resistance(
+        self,
+        radiation: AbstractRadiationModel,
+        surface_layer: AbstractSurfaceLayerModel,
+        mixed_layer: AbstractMixedLayerModel,
+    ):
+        # calculate surface resistances using Jarvis-Stewart model
+        f1 = radiation.get_f1()
+
+        if self.w2 > self.wwilt:  # and self.w2 <= self.wfc):
+            f2 = (self.wfc - self.wwilt) / (self.w2 - self.wwilt)
+        else:
+            f2 = 1.0e8
+
+        # limit f2 in case w2 > wfc, where f2 < 1
+        f2 = max(f2, 1.0)
+        f3 = 1.0 / np.exp(-self.gD * (mixed_layer.esat - mixed_layer.e) / 100.0)
+        f4 = 1.0 / (1.0 - 0.0016 * (298.0 - mixed_layer.theta) ** 2.0)
+
+        self.rs = self.rsmin / self.lai * f1 * f2 * f3 * f4
+
+    def compute_co2_flux(
+        self,
+        surface_layer: AbstractSurfaceLayerModel,
+        mixed_layer: AbstractMixedLayerModel,
+    ):
+        pass
 
 
-# class AGSModel(AbstractLandSurfaceModel):
-#     def __init__(self):
-#         super().__init__()
+class AquaCropModel(AbstractStandardLandSurfaceModel):
+    def __init__(
+        self,
+        ls_type: str,
+        wg: float,
+        w2: float,
+        temp_soil: float,
+        temp2: float,
+        a: float,
+        b: float,
+        p: float,
+        cgsat: float,
+        wsat: float,
+        wfc: float,
+        wwilt: float,
+        c1sat: float,
+        c2sat: float,
+        lai: float,
+        gD: float,
+        rsmin: float,
+        rssoilmin: float,
+        alpha: float,
+        surf_temp: float,
+        cveg: float,
+        wmax: float,
+        wl: float,
+        lam: float,
+        c3c4: str,
+    ):
+        super().__init__(
+            ls_type,
+            wg,
+            w2,
+            temp_soil,
+            temp2,
+            a,
+            b,
+            p,
+            cgsat,
+            wsat,
+            wfc,
+            wwilt,
+            c1sat,
+            c2sat,
+            lai,
+            gD,
+            rsmin,
+            rssoilmin,
+            alpha,
+            surf_temp,
+            cveg,
+            wmax,
+            wl,
+            lam,
+            c3c4,
+        )
+        self.rsCO2 = None
+        self.gcco2 = None
+        self.ci = None
 
-#     def run(
-#         self,
-#     ) -> None:
-#         pass
+    def compute_surface_resistance(
+        self,
+        radiation: AbstractRadiationModel,
+        surface_layer: AbstractSurfaceLayerModel,
+        mixed_layer: AbstractMixedLayerModel,
+    ):
+        # Select index for plant type
+        if self.c3c4 == "c3":
+            c = 0
+        elif self.c3c4 == "c4":
+            c = 1
+        else:
+            raise ValueError(f'Invalid option "{self.c3c4}" for "c3c4".')
+
+        # calculate CO2 compensation concentration
+        co2comp = (
+            self.co2comp298[c]
+            * self.const.rho
+            * pow(self.net_rad10CO2[c], (0.1 * (surface_layer.thetasurf - 298.0)))
+        )
+
+        # calculate mesophyll conductance
+        gm = (
+            self.gm298[c]
+            * pow(self.net_rad10gm[c], (0.1 * (surface_layer.thetasurf - 298.0)))
+            / (
+                (1.0 + np.exp(0.3 * (self.temp1gm[c] - surface_layer.thetasurf)))
+                * (1.0 + np.exp(0.3 * (surface_layer.thetasurf - self.temp2gm[c])))
+            )
+        )
+        # conversion from mm s-1 to m s-1
+        gm = gm / 1000.0
+
+        # calculate CO2 concentration inside the leaf (ci)
+        fmin0 = self.gmin[c] / self.nuco2q - 1.0 / 9.0 * gm
+        fmin = -fmin0 + pow(
+            (pow(fmin0, 2.0) + 4 * self.gmin[c] / self.nuco2q * gm), 0.5
+        ) / (2.0 * gm)
+
+        ds = (get_esat(self.surf_temp) - mixed_layer.e) / 1000.0  # kPa
+        d0 = (self.f0[c] - fmin) / self.ad[c]
+
+        cfrac = self.f0[c] * (1.0 - (ds / d0)) + fmin * (ds / d0)
+        self.co2abs = (
+            mixed_layer.co2 * (self.const.mco2 / self.const.mair) * self.const.rho
+        )
+        # conversion mumol mol-1 (ppm) to mgCO2 m3
+        self.ci = cfrac * (self.co2abs - co2comp) + co2comp
+
+        # calculate maximal gross primary production in high light conditions (Ag)
+        ammax = (
+            self.ammax298[c]
+            * pow(self.net_rad10Am[c], (0.1 * (surface_layer.thetasurf - 298.0)))
+            / (
+                (1.0 + np.exp(0.3 * (self.temp1Am[c] - surface_layer.thetasurf)))
+                * (1.0 + np.exp(0.3 * (surface_layer.thetasurf - self.temp2Am[c])))
+            )
+        )
+
+        # calculate effect of soil moisture stress on gross assimilation rate
+        betaw = max(1e-3, min(1.0, (self.w2 - self.wwilt) / (self.wfc - self.wwilt)))
+
+        # calculate stress function
+        if self.c_beta == 0:
+            fstr = betaw
+        else:
+            # following Combe et al. (2016)
+            if self.c_beta < 0.25:
+                p = 6.4 * self.c_beta
+            elif self.c_beta < 0.50:
+                p = 7.6 * self.c_beta - 0.3
+            else:
+                p = 2 ** (3.66 * self.c_beta + 0.34) - 1
+            fstr = (1.0 - np.exp(-p * betaw)) / (1 - np.exp(-p))
+
+        # calculate gross assimilation rate (Am)
+        am = ammax * (1.0 - np.exp(-(gm * (self.ci - co2comp) / ammax)))
+        rdark = (1.0 / 9.0) * am
+        par = 0.5 * max(1e-1, radiation.in_srad * self.cveg)
+
+        # calculate  light use efficiency
+        alphac = (
+            self.alpha0[c] * (self.co2abs - co2comp) / (self.co2abs + 2.0 * co2comp)
+        )
+
+        # calculate gross primary productivity
+        # limamau: this is just not being used?
+        ag = (am + rdark) * (1 - np.exp(alphac * par / (am + rdark)))
+
+        # 1.- calculate upscaling from leaf to canopy: net flow CO2 into the plant (An)
+        y = alphac * self.kx[c] * par / (am + rdark)
+        an = (am + rdark) * (
+            1.0
+            - 1.0
+            / (self.kx[c] * self.lai)
+            * (exp1(y * np.exp(-self.kx[c] * self.lai)) - exp1(y))
+        )
+
+        # 2.- calculate upscaling from leaf to canopy: CO2 conductance at canopy level
+        a1 = 1.0 / (1.0 - self.f0[c])
+        dstar = d0 / (a1 * (self.f0[c] - fmin))
+
+        self.gcco2 = self.lai * (
+            self.gmin[c] / self.nuco2q
+            + a1 * fstr * an / ((self.co2abs - co2comp) * (1.0 + ds / dstar))
+        )
+
+        # calculate surface resistance for moisture and carbon dioxide
+        self.rs = 1.0 / (1.6 * self.gcco2)
+
+    def compute_co2_flux(
+        self,
+        surface_layer: AbstractSurfaceLayerModel,
+        mixed_layer: AbstractMixedLayerModel,
+    ):
+        # CO2 soil surface flux
+        self.rsCO2 = 1.0 / self.gcco2
+
+        # calculate net flux of CO2 into the plant (An)
+        an = -(self.co2abs - self.ci) / (surface_layer.ra + self.rsCO2)
+
+        # CO2 soil surface flux
+        fw = self.cw * self.wmax / (self.wg + self.wmin)
+        resp = (
+            self.r10
+            * (1.0 - fw)
+            * np.exp(self.e0 / (283.15 * 8.314) * (1.0 - 283.15 / (self.temp_soil)))
+        )
+
+        # CO2 flux
+        mixed_layer.wCO2A = an * (self.const.mair / (self.const.rho * self.const.mco2))
+        mixed_layer.wCO2R = resp * (
+            self.const.mair / (self.const.rho * self.const.mco2)
+        )
+        mixed_layer.wCO2 = mixed_layer.wCO2A + mixed_layer.wCO2R
