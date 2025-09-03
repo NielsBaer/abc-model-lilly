@@ -14,38 +14,22 @@ from .utils import PhysicalConstants, get_qsat
 
 # limamau: redefine init outside abstract
 class AbstractRadiationModel:
-    def __init__(
-        self,
-        lat: float,
-        lon: float,
-        doy: float,
-        tstart: float,
-        cc: float,
-        net_rad: float,
-        dFz: float,
-    ):
-        # latitude [deg]
-        self.lat = lat
-        # longitude [deg]
-        self.lon = lon
-        # day of the year [-]
-        self.doy = doy
-        # time of the day [h UTC]
-        self.tstart = tstart
-        # cloud cover fraction [-]
-        self.cc = cc
-        # net radiation [W m-2]
-        self.net_rad = net_rad
-        # cloud top radiative divergence [W m-2]
-        self.dFz = dFz
-        # incoming short wave radiation [W m-2]
-        self.in_srad = None
-        # outgoing short wave radiation [W m-2]
-        self.out_srad = None
-        # incoming long wave radiation [W m-2]
-        self.in_lrad = None
-        # outgoing long wave radiation [W m-2]
-        self.out_lrad = None
+    # require by minimal:
+    # net radiation [W m-2]
+    net_rad: float
+    # cloud top radiative divergence [W m-2]
+    dFz: float
+    # used to output:
+    # time of the day [h UTC]
+    tstart: float
+    # incoming short wave radiation [W m-2]
+    in_srad: float
+    # outgoing short wave radiation [W m-2]
+    out_srad: float
+    # incoming long wave radiation [W m-2]
+    in_lrad: float
+    # outgoing long wave radiation [W m-2]
+    out_lrad: float
 
     @abstractmethod
     def run(
@@ -64,10 +48,10 @@ class AbstractRadiationModel:
 
 
 class AbstractLandSurfaceModel:
-    # required by minimal
+    # required by minimal:
     alpha: float
     surf_temp: float
-    # used to output
+    # used to output:
     rs: float
     hf: float
     le: float

@@ -8,28 +8,14 @@ from .components import (
 from .utils import PhysicalConstants
 
 
-class NoRadiationModel(AbstractRadiationModel):
-    # limamau: this shouldn't need all this arguments
-    # to be cleaned up in the future
+class MinimalRadiationModel(AbstractRadiationModel):
     def __init__(
         self,
-        lat: float,
-        lon: float,
-        doy: float,
-        tstart: float,
-        cc: float,
         net_rad: float,
         dFz: float,
     ):
-        super().__init__(
-            lat,
-            lon,
-            doy,
-            tstart,
-            cc,
-            net_rad,
-            dFz,
-        )
+        self.net_rad = net_rad
+        self.dFz = dFz
 
     def run(
         self,
@@ -56,15 +42,20 @@ class StandardRadiationModel(AbstractRadiationModel):
         net_rad: float,
         dFz: float,
     ):
-        super().__init__(
-            lat,
-            lon,
-            doy,
-            tstart,
-            cc,
-            net_rad,
-            dFz,
-        )
+        # latitude [deg]
+        self.lat = lat
+        # longitude [deg]
+        self.lon = lon
+        # day of the year [-]
+        self.doy = doy
+        # time of the day [h UTC]
+        self.tstart = tstart
+        # cloud cover fraction [-]
+        self.cc = cc
+        # net radiation [W m-2]
+        self.net_rad = net_rad
+        # cloud top radiative divergence [W m-2]
+        self.dFz = dFz
 
     def run(
         self,

@@ -33,7 +33,6 @@ class MinimalLandSurfaceModel(AbstractLandSurfaceModel):
 class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
     # wet fraction [-]
     cliq: float
-    # tendencies
     # soil temperature tendency [K s-1]
     temp_soil_tend: float
     # soil moisture tendency [m3 m-3 s-1]

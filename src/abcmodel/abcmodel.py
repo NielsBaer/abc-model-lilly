@@ -5,7 +5,7 @@ from abcmodel.land_surface import MinimalLandSurfaceModel
 from .clouds import AbstractCloudModel, NoCloudModel
 from .land_surface import AbstractLandSurfaceModel
 from .mixed_layer import AbstractMixedLayerModel, NoMixedLayerModel
-from .radiation import AbstractRadiationModel
+from .radiation import AbstractRadiationModel, MinimalRadiationModel
 from .surface_layer import AbstractSurfaceLayerModel
 from .utils import PhysicalConstants
 
@@ -145,7 +145,15 @@ class ABCModel:
     # store model output
     def store(self):
         t = self.t
-        self.out.t[t] = t * self.dt / 3600.0 + self.radiation.tstart
+
+        if not isinstance(self.radiation, MinimalRadiationModel):
+            self.out.t[t] = t * self.dt / 3600.0 + self.radiation.tstart
+            self.out.in_srad[t] = self.radiation.in_srad
+            self.out.out_srad[t] = self.radiation.out_srad
+            self.out.in_lrad[t] = self.radiation.in_lrad
+            self.out.out_lrad[t] = self.radiation.out_lrad
+            self.out.net_rad[t] = self.radiation.net_rad
+
         self.out.h[t] = self.mixed_layer.abl_height
 
         self.out.theta[t] = self.mixed_layer.theta
@@ -201,12 +209,6 @@ class ABCModel:
         self.out.obukhov_length[t] = self.surface_layer.obukhov_length
         self.out.rib_number[t] = self.surface_layer.rib_number
         self.out.ra[t] = self.surface_layer.ra
-
-        self.out.in_srad[t] = self.radiation.in_srad
-        self.out.out_srad[t] = self.radiation.out_srad
-        self.out.in_lrad[t] = self.radiation.in_lrad
-        self.out.out_lrad[t] = self.radiation.out_lrad
-        self.out.net_rad[t] = self.radiation.net_rad
 
         # limamau: this can be addressed with a land surface diagnostic class
         if not isinstance(self.land_surface, MinimalLandSurfaceModel):
