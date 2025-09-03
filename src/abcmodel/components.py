@@ -3,9 +3,7 @@
 # files and extract kwargs from each run method - the coupler would manage integration...
 # I'm leaving this idea for the furure in case we need/decide to go for it.
 # limamau: in the future, it will be good to define parameter and initial conditions classes
-# to simplifiy initializations. We should also somehow check whether all parameters of a component
-# are being computed from one of the other components, otherwise throw a coupling error. I think
-# bringing initalization out of the abstract classes is a good step in this direction.
+# to simplifiy initializations
 
 from abc import abstractmethod
 

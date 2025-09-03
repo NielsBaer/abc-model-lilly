@@ -181,6 +181,7 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
         self.rib_number = min(self.rib_number, 0.2)
 
         # limamau: the following is rather slow
+        # we can probably use a scan when JAX is on
         # before they had the option:
         # self.L    = ribtol.ribtol(self.Rib, zsl, self.z0m, self.z0h) # Fast C++ iteration
         # we could make this faster with a scan or something using jax
