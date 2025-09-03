@@ -6,7 +6,7 @@ from .clouds import AbstractCloudModel, NoCloudModel
 from .land_surface import AbstractLandSurfaceModel
 from .mixed_layer import AbstractMixedLayerModel, NoMixedLayerModel
 from .radiation import AbstractRadiationModel, MinimalRadiationModel
-from .surface_layer import AbstractSurfaceLayerModel
+from .surface_layer import AbstractSurfaceLayerModel, MinimalSurfaceLayerModel
 from .utils import PhysicalConstants
 
 
@@ -154,8 +154,37 @@ class ABCModel:
             self.out.out_lrad[t] = self.radiation.out_lrad
             self.out.net_rad[t] = self.radiation.net_rad
 
-        self.out.h[t] = self.mixed_layer.abl_height
+        if not isinstance(self.land_surface, MinimalLandSurfaceModel):
+            self.out.rs[t] = self.land_surface.rs
+            self.out.hf[t] = self.land_surface.hf
+            self.out.le[t] = self.land_surface.le
+            self.out.le_liq[t] = self.land_surface.le_liq
+            self.out.le_veg[t] = self.land_surface.le_veg
+            self.out.le_soil[t] = self.land_surface.le_soil
+            self.out.le_pot[t] = self.land_surface.le_pot
+            self.out.le_ref[t] = self.land_surface.le_ref
+            self.out.gf[t] = self.land_surface.gf
 
+        if not isinstance(self.surface_layer, MinimalSurfaceLayerModel):
+            self.out.uw[t] = self.surface_layer.uw
+            self.out.vw[t] = self.surface_layer.vw
+            self.out.temp_2m[t] = self.surface_layer.temp_2m
+            self.out.q2m[t] = self.surface_layer.q2m
+            self.out.u2m[t] = self.surface_layer.u2m
+            self.out.v2m[t] = self.surface_layer.v2m
+            self.out.e2m[t] = self.surface_layer.e2m
+            self.out.esat2m[t] = self.surface_layer.esat2m
+            self.out.thetasurf[t] = self.surface_layer.thetasurf
+            self.out.thetavsurf[t] = self.surface_layer.thetavsurf
+            self.out.qsurf[t] = self.surface_layer.qsurf
+            self.out.ustar[t] = self.surface_layer.ustar
+            self.out.drag_m[t] = self.surface_layer.drag_m
+            self.out.drag_s[t] = self.surface_layer.drag_s
+            self.out.obukhov_length[t] = self.surface_layer.obukhov_length
+            self.out.rib_number[t] = self.surface_layer.rib_number
+            self.out.ra[t] = self.surface_layer.ra
+
+        self.out.h[t] = self.mixed_layer.abl_height
         self.out.theta[t] = self.mixed_layer.theta
         self.out.thetav[t] = self.mixed_layer.thetav
         self.out.dtheta[t] = self.mixed_layer.dtheta
@@ -187,40 +216,9 @@ class ABCModel:
 
         self.out.u[t] = self.mixed_layer.u
         self.out.du[t] = self.mixed_layer.du
-        self.out.uw[t] = self.surface_layer.uw
 
         self.out.v[t] = self.mixed_layer.v
         self.out.dv[t] = self.mixed_layer.dv
-        self.out.vw[t] = self.surface_layer.vw
-
-        self.out.temp_2m[t] = self.surface_layer.temp_2m
-        self.out.q2m[t] = self.surface_layer.q2m
-        self.out.u2m[t] = self.surface_layer.u2m
-        self.out.v2m[t] = self.surface_layer.v2m
-        self.out.e2m[t] = self.surface_layer.e2m
-        self.out.esat2m[t] = self.surface_layer.esat2m
-
-        self.out.thetasurf[t] = self.surface_layer.thetasurf
-        self.out.thetavsurf[t] = self.surface_layer.thetavsurf
-        self.out.qsurf[t] = self.surface_layer.qsurf
-        self.out.ustar[t] = self.surface_layer.ustar
-        self.out.drag_m[t] = self.surface_layer.drag_m
-        self.out.drag_s[t] = self.surface_layer.drag_s
-        self.out.obukhov_length[t] = self.surface_layer.obukhov_length
-        self.out.rib_number[t] = self.surface_layer.rib_number
-        self.out.ra[t] = self.surface_layer.ra
-
-        # limamau: this can be addressed with a land surface diagnostic class
-        if not isinstance(self.land_surface, MinimalLandSurfaceModel):
-            self.out.rs[t] = self.land_surface.rs
-            self.out.hf[t] = self.land_surface.hf
-            self.out.le[t] = self.land_surface.le
-            self.out.le_liq[t] = self.land_surface.le_liq
-            self.out.le_veg[t] = self.land_surface.le_veg
-            self.out.le_soil[t] = self.land_surface.le_soil
-            self.out.le_pot[t] = self.land_surface.le_pot
-            self.out.le_ref[t] = self.land_surface.le_ref
-            self.out.gf[t] = self.land_surface.gf
 
         self.out.zlcl[t] = self.mixed_layer.lcl
         self.out.top_rh[t] = self.mixed_layer.top_rh

@@ -87,55 +87,43 @@ class AbstractLandSurfaceModel:
         raise NotImplementedError
 
 
-# limamau: redefine init outside abstract
 class AbstractSurfaceLayerModel:
-    def __init__(
-        self,
-        ustar: float,
-        z0m: float,
-        z0h: float,
-        theta: float,
-    ):
-        # surface friction velocity [m s-1]
-        self.ustar = ustar
-        # roughness length for momentum [m]
-        self.z0m = z0m
-        # roughness length for scalars [m]
-        self.z0h = z0h
-        # surface momentum flux in u-direction [m2 s-2]
-        self.uw = None
-        # surface momentum flux in v-direction [m2 s-2]
-        self.vw = None
-        # drag coefficient for momentum [-]
-        self.drag_m = 1e12
-        # drag coefficient for scalars [-]
-        self.drag_s = 1e12
-        # Obukhov length [m]
-        self.obukhov_length = None
-        # bulk Richardson number [-]
-        self.rib_number = None
-        # aerodynamic resistance [s m-1]
-        self.ra = None
-        # 2m diagnostic variables:
-        # 2m temperature [K]
-        self.temp_2m = None
-        # 2m specific humidity [kg kg-1]
-        self.q2m = None
-        # 2m vapor pressure [Pa]
-        self.e2m = None
-        # 2m saturated vapor pressure [Pa]
-        self.esat2m = None
-        # 2m u-wind [m s-1]
-        self.u2m = None
-        # 2m v-wind [m s-1]
-        self.v2m = None
-        # surface variables:
-        # surface potential temperature [K]
-        self.thetasurf = theta
-        # surface virtual potential temperature [K]
-        self.thetavsurf = None
-        # surface specific humidity [g kg-1]
-        self.qsurf = None
+    # required by minimal:
+    # surface friction velocity [m s-1]
+    ustar: float
+    # used to output:
+    # surface momentum flux u [m2 s-2]
+    uw: float
+    # surface momentum flux v [m2 s-2]
+    vw: float
+    # 2m temperature [K]
+    temp_2m: float
+    # 2m specific humidity [kg kg-1]
+    q2m: float
+    # 2m u-wind [m s-1]
+    u2m: float
+    # 2m v-wind [m s-1]
+    v2m: float
+    # 2m vapor pressure [Pa]
+    e2m: float
+    # 2m saturated vapor pressure [Pa]
+    esat2m: float
+    # surface potential temperature [K]
+    thetasurf: float
+    # surface virtual potential temperature [K]
+    thetavsurf: float
+    # surface specific humidity [g kg-1]
+    qsurf: float
+    # drag coefficient for momentum [-]
+    drag_m: float
+    # drag coefficient for scalars [-]
+    drag_s: float
+    # Obukhov length [m]
+    obukhov_length: float
+    # bulk Richardson number [-]
+    rib_number: float
+    # aerodynamic resistance [s m-1]
+    ra: float
 
     @abstractmethod
     def run(

@@ -2,10 +2,10 @@ import matplotlib.pyplot as plt
 
 from abcmodel.abcmodel import ABCModel
 from abcmodel.clouds import StandardCumulusModel
-from abcmodel.land_surface import MinimalLandSurfaceModel
+from abcmodel.land_surface import JarvisStewartModel
 from abcmodel.mixed_layer import StandardMixedLayerModel
 from abcmodel.radiation import StandardRadiationModel
-from abcmodel.surface_layer import StandardSurfaceLayerModel
+from abcmodel.surface_layer import MinimalSurfaceLayerModel
 
 
 def main():
@@ -93,15 +93,9 @@ def main():
     )
 
     # 2. define surface layer model
-    surface_layer_model = StandardSurfaceLayerModel(
+    surface_layer_model = MinimalSurfaceLayerModel(
         # surface friction velocity [m s-1]
         ustar=0.3,
-        # roughness length for momentum [m]
-        z0m=0.02,
-        # roughness length for scalars [m]
-        z0h=0.002,
-        # initial mixed-layer potential temperature [K]
-        theta=theta,
     )
 
     # 3. define radiation model
@@ -123,11 +117,53 @@ def main():
     )
 
     # 4. define land surface model
-    land_surface_model = MinimalLandSurfaceModel(
+    land_surface_model = JarvisStewartModel(
+        # volumetric water content top soil layer [m3 m-3]
+        wg=0.21,
+        # volumetric water content deeper soil layer [m3 m-3]
+        w2=0.21,
+        # vegetation fraction [-]
+        cveg=0.85,
+        # temperature top soil layer [K]
+        temp_soil=285.0,
+        # temperature deeper soil layer [K]
+        temp2=286.0,
+        # Clapp and Hornberger retention curve parameter a
+        a=0.219,
+        # Clapp and Hornberger retention curve parameter b
+        b=4.90,
+        # Clapp and Hornberger retention curve parameter c
+        p=4.0,
+        # saturated soil conductivity for heat
+        cgsat=3.56e-6,
+        # saturated volumetric water content ECMWF config [-]
+        wsat=0.472,
+        # volumetric water content field capacity [-]
+        wfc=0.323,
+        # volumetric water content wilting point [-]
+        wwilt=0.171,
+        # C1 sat?
+        c1sat=0.132,
+        # C2 sat?
+        c2sat=1.8,
+        # leaf area index [-]
+        lai=2.0,
+        # correction factor transpiration for VPD [-]
+        gD=0.0,
+        # minimum resistance transpiration [s m-1]
+        rsmin=110.0,
+        # minimun resistance soil evaporation [s m-1]
+        rssoilmin=50.0,
         # surface albedo [-]
         alpha=0.25,
-        # surface temperature [K]
-        surf_temp=theta,
+        # initial surface temperature [K]
+        surf_temp=290.0,
+        # thickness of water layer on wet vegetation [m]
+        wmax=0.0002,
+        # equivalent water layer depth for wet vegetation [m]
+        wl=0.0000,
+        # thermal diffusivity skin layer [-]
+        lam=5.9,
     )
 
     # 5. clouds

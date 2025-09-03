@@ -8,7 +8,14 @@ from .components import (
 from .utils import PhysicalConstants, get_psih, get_psim, get_qsat
 
 
-class InertSurfaceLayerModel(AbstractSurfaceLayerModel):
+class MinimalSurfaceLayerModel(AbstractSurfaceLayerModel):
+    def __init__(
+        self,
+        ustar: float,
+    ):
+        # surface friction velocity [m s-1]
+        self.ustar = ustar
+
     def run(
         self,
         const: PhysicalConstants,
@@ -28,6 +35,57 @@ class InertSurfaceLayerModel(AbstractSurfaceLayerModel):
 
 
 class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
+    # 2m diagnostic variables:
+    # 2m temperature [K]
+    temp_2m: float
+    # 2m specific humidity [kg kg-1]
+    q2m: float
+    # 2m vapor pressure [Pa]
+    e2m: float
+    # 2m saturated vapor pressure [Pa]
+    esat2m: float
+    # 2m u-wind [m s-1]
+    u2m: float
+    # 2m v-wind [m s-1]
+    v2m: float
+    # surface momentum fluxes:
+    # surface momentum flux in u-direction [m2 s-2]
+    uw: float
+    # surface momentum flux in v-direction [m2 s-2]
+    vw: float
+    # surface variables:
+    # surface virtual potential temperature [K]
+    thetavsurf: float
+    # surface specific humidity [g kg-1]
+    qsurf: float
+    # turbulence:
+    # Obukhov length [m]
+    obukhov_length: float
+    # bulk Richardson number [-]
+    rib_number: float
+    # aerodynamic resistance [s m-1]
+    ra: float
+
+    def __init__(
+        self,
+        ustar: float,
+        z0m: float,
+        z0h: float,
+        theta: float,
+    ):
+        # surface friction velocity [m s-1]
+        self.ustar = ustar
+        # roughness length for momentum [m]
+        self.z0m = z0m
+        # roughness length for scalars [m]
+        self.z0h = z0h
+        # drag coefficient for momentum [-]
+        self.drag_m = 1e12
+        # drag coefficient for scalars [-]
+        self.drag_s = 1e12
+        # surface potential temperature [K]
+        self.thetasurf = theta
+
     def get_ribtol(self, zsl: float):
         if self.rib_number > 0.0:
             oblen = 1.0
