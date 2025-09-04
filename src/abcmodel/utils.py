@@ -1,46 +1,92 @@
 import numpy as np
 
 
-def get_esat(T):
-    return 0.611e3 * np.exp(17.2694 * (T - 273.16) / (T - 35.86))
+def get_esat(temp):
+    """Calculate saturated vapor pressure using Tetens formula.
+
+    Parameters
+    ----------
+    - ``temp``: temperature [K].
+
+    Returns
+    -------
+    - Saturated vapor pressure [Pa].
+    """
+    temp_celsius = temp - 273.16
+    denominator = temp - 35.86
+    return 0.611e3 * np.exp(17.2694 * temp_celsius / denominator)
 
 
-def get_qsat(T, p):
-    return 0.622 * get_esat(T) / p
+def get_qsat(temp, pressure):
+    """Calculate saturated specific humidity.
+
+    Parameters
+    ----------
+    - ``temp``: temperature [K].
+    - ``pressure``: pressure [Pa].
+
+    Returns
+    -------
+    - Saturated specific humidity [kg/kg].
+    """
+    esat = get_esat(temp)
+    return 0.622 * esat / pressure
 
 
 def get_psim(zeta):
+    """Calculate momentum stability function from Monin-Obukhov similarity theory.
+
+    Parameters
+    ----------
+    - ``zeta``: stability parameter z/L [-].
+
+    Returns
+    -------
+    - Momentum stability correction [-].
+    """
     if zeta <= 0:
-        x = (1.0 - 16.0 * zeta) ** (0.25)
-        psim = (
-            3.14159265 / 2.0
-            - 2.0 * np.arctan(x)
-            + np.log((1.0 + x) ** 2.0 * (1.0 + x**2.0) / 8.0)
-        )
-        # x     = (1. + 3.6 * abs(zeta) ** (2./3.)) ** (-0.5)
-        # psim = 3. * np.log( (1. + 1. / x) / 2.)
+        # unstable conditions
+        x = (1.0 - 16.0 * zeta) ** 0.25
+
+        arctan_term = 2.0 * np.arctan(x)
+        log_numerator = (1.0 + x) ** 2.0 * (1.0 + x**2.0)
+        log_term = np.log(log_numerator / 8.0)
+
+        psim = 3.14159265 / 2.0 - arctan_term + log_term
     else:
-        psim = (
-            -2.0 / 3.0 * (zeta - 5.0 / 0.35) * np.exp(-0.35 * zeta)
-            - zeta
-            - (10.0 / 3.0) / 0.35
-        )
+        # stable conditions
+        exponential_term = (zeta - 5.0 / 0.35) * np.exp(-0.35 * zeta)
+        constant_term = (10.0 / 3.0) / 0.35
+
+        psim = -2.0 / 3.0 * exponential_term - zeta - constant_term
+
     return psim
 
 
 def get_psih(zeta):
+    """Calculate scalar stability function from Monin-Obukhov similarity theory.
+
+    Parameters
+    ----------
+    - ``zeta``: stability parameter z/L [-].
+
+    Returns
+    -------
+    - Scalar stability correction [-].
+    """
     if zeta <= 0:
-        x = (1.0 - 16.0 * zeta) ** (0.25)
-        psih = 2.0 * np.log((1.0 + x * x) / 2.0)
-        # x     = (1. + 7.9 * abs(zeta) ** (2./3.)) ** (-0.5)
-        # psih  = 3. * np.log( (1. + 1. / x) / 2.)
+        # unstable conditions
+        x = (1.0 - 16.0 * zeta) ** 0.25
+        log_argument = (1.0 + x * x) / 2.0
+        psih = 2.0 * np.log(log_argument)
     else:
-        psih = (
-            -2.0 / 3.0 * (zeta - 5.0 / 0.35) * np.exp(-0.35 * zeta)
-            - (1.0 + (2.0 / 3.0) * zeta) ** (1.5)
-            - (10.0 / 3.0) / 0.35
-            + 1.0
-        )
+        # stable conditions
+        exponential_term = (zeta - 5.0 / 0.35) * np.exp(-0.35 * zeta)
+        power_term = (1.0 + (2.0 / 3.0) * zeta) ** 1.5
+        constant_term = (10.0 / 3.0) / 0.35
+
+        psih = -2.0 / 3.0 * exponential_term - power_term - constant_term + 1.0
+
     return psih
 
 
