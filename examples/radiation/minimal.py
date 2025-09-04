@@ -180,35 +180,25 @@ def main():
     # plot output
     plt.figure(figsize=(12, 8))
 
-    plt.subplot(231)
+    plt.subplot(221)
     plt.plot(r1.out.t, r1.out.h)
     plt.xlabel("time [h]")
     plt.ylabel("h [m]")
 
-    plt.subplot(234)
+    plt.subplot(222)
     plt.plot(r1.out.t, r1.out.theta)
     plt.xlabel("time [h]")
     plt.ylabel("theta [K]")
 
-    plt.subplot(232)
-    plt.plot(r1.out.t, r1.out.q * 1000.0)
+    plt.subplot(223)
+    plt.plot(r1.out.t, r1.out.net_rad)
     plt.xlabel("time [h]")
-    plt.ylabel("q [g kg-1]")
+    plt.ylabel("net radiation [W m-2]")
 
-    plt.subplot(235)
+    plt.subplot(224)
     plt.plot(r1.out.t, r1.out.cc_frac)
     plt.xlabel("time [h]")
     plt.ylabel("cloud fraction [-]")
-
-    plt.subplot(233)
-    plt.plot(r1.out.t, r1.out.wCO2)
-    plt.xlabel("time [h]")
-    plt.ylabel("surface kinematic CO2 flux [ppm m s-1]")
-
-    plt.subplot(236)
-    plt.plot(r1.out.t, r1.out.le_veg)
-    plt.xlabel("time [h]")
-    plt.ylabel("transpiration [W m-2]")
 
     plt.tight_layout()
     plt.show()

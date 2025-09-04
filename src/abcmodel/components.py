@@ -41,7 +41,7 @@ class AbstractRadiationModel:
 
     @abstractmethod
     def get_f1(self) -> float:
-        pass
+        raise NotImplementedError
 
 
 class AbstractLandSurfaceModel:
