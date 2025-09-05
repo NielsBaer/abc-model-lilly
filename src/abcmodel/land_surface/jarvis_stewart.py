@@ -1,13 +1,60 @@
 import numpy as np
 
-from ..mixed_layer import AbstractMixedLayerModel
-from ..radiation import AbstractRadiationModel
-from ..surface_layer import AbstractSurfaceLayerModel
+from ..components import (
+    AbstractMixedLayerModel,
+    AbstractRadiationModel,
+    AbstractSurfaceLayerModel,
+)
 from ..utils import PhysicalConstants
 from .standard import AbstractStandardLandSurfaceModel
 
 
 class JarvisStewartModel(AbstractStandardLandSurfaceModel):
+    """Jarvis-Stewart land surface model with empirical surface resistance.
+
+    Implementation of the Jarvis-Stewart approach for calculating surface resistance
+    based on environmental stress factors. Uses multiplicative stress functions
+    for radiation, soil moisture, vapor pressure deficit, and temperature effects
+    on stomatal conductance.
+
+    **Processes:**
+    1. Inherit all standard land surface processes from parent class.
+    2. Calculate surface resistance using four environmental stress factors.
+    3. Apply Jarvis-Stewart multiplicative stress function approach.
+    4. No CO2 flux calculations (simple implementation).
+
+    Arguments
+    ----------
+    - ``wg``: volumetric water content top soil layer [m3 m-3].
+    - ``w2``: volumetric water content deeper soil layer [m3 m-3].
+    - ``temp_soil``: temperature top soil layer [K].
+    - ``temp2``: temperature deeper soil layer [K].
+    - ``a``: Clapp-Hornberger retention curve parameter [-].
+    - ``b``: Clapp-Hornberger retention curve parameter [-].
+    - ``p``: Clapp-Hornberger retention curve parameter [-].
+    - ``cgsat``: saturated soil conductivity for heat [W m-1 K-1].
+    - ``wsat``: saturated volumetric water content [-].
+    - ``wfc``: volumetric water content field capacity [-].
+    - ``wwilt``: volumetric water content wilting point [-].
+    - ``c1sat``: saturated soil conductivity parameter [-].
+    - ``c2sat``: reference soil conductivity parameter [-].
+    - ``lai``: leaf area index [-].
+    - ``gD``: correction factor transpiration for VPD [-].
+    - ``rsmin``: minimum resistance transpiration [s m-1].
+    - ``rssoilmin``: minimum resistance soil evaporation [s m-1].
+    - ``alpha``: surface albedo [-], range 0 to 1.
+    - ``surf_temp``: surface temperature [K].
+    - ``cveg``: vegetation fraction [-], range 0 to 1.
+    - ``wmax``: thickness of water layer on wet vegetation [m].
+    - ``wl``: equivalent water layer depth for wet vegetation [m].
+    - ``lam``: thermal diffusivity skin layer [-].
+
+    Updates
+    --------
+    - ``rs``: surface resistance for transpiration [s m-1].
+    - All updates from ``AbstractStandardLandSurfaceModel``.
+    """
+
     def __init__(
         self,
         wg: float,
@@ -67,6 +114,21 @@ class JarvisStewartModel(AbstractStandardLandSurfaceModel):
         surface_layer: AbstractSurfaceLayerModel,
         mixed_layer: AbstractMixedLayerModel,
     ):
+        """
+        Compute surface resistance using Jarvis-Stewart approach.
+
+        Parameters
+        ----------
+        - ``const``: physical constants (currently unused).
+        - ``radiation``: radiation model. Uses ``get_f1()`` method.
+        - ``surface_layer``: surface layer model (currently unused).
+        - ``mixed_layer``: mixed layer model. Uses ``esat``, ``e``, and ``theta``.
+
+        Updates
+        -------
+        Updates ``self.rs`` using multiplicative stress factors for radiation (f1),
+        soil moisture (f2), vapor pressure deficit (f3), and temperature (f4).
+        """
         # calculate surface resistances using Jarvis-Stewart model
         f1 = radiation.get_f1()
 
@@ -88,4 +150,17 @@ class JarvisStewartModel(AbstractStandardLandSurfaceModel):
         surface_layer: AbstractSurfaceLayerModel,
         mixed_layer: AbstractMixedLayerModel,
     ):
+        """
+        Compute CO2 flux (no-op implementation).
+
+        Parameters
+        ----------
+        - ``const``: physical constants (unused).
+        - ``surface_layer``: surface layer model (unused).
+        - ``mixed_layer``: mixed layer model (unused).
+
+        Updates
+        -------
+        No updates performed - this model does not calculate CO2 fluxes.
+        """
         pass

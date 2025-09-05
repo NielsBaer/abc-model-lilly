@@ -1,14 +1,73 @@
 import numpy as np
 from scipy.special import exp1
 
-from ..mixed_layer import AbstractMixedLayerModel
-from ..radiation import AbstractRadiationModel
-from ..surface_layer import AbstractSurfaceLayerModel
+from ..components import (
+    AbstractMixedLayerModel,
+    AbstractRadiationModel,
+    AbstractSurfaceLayerModel,
+)
 from ..utils import PhysicalConstants, get_esat
 from .standard import AbstractStandardLandSurfaceModel
 
 
 class AquaCropModel(AbstractStandardLandSurfaceModel):
+    """AquaCrop land surface model with coupled photosynthesis and stomatal conductance.
+
+    A bit more advanced land surface model implementing the AquaCrop approach with coupled
+    photosynthesis-stomatal conductance calculations. Includes detailed biochemical
+    processes for both C3 and C4 vegetation types, soil moisture stress effects,
+    and explicit CO2 flux calculations.
+
+    **Processes:**
+    1. Inherit all standard land surface processes from parent class.
+    2. Calculate CO2 compensation concentration based on temperature.
+    3. Compute mesophyll conductance with temperature response functions.
+    4. Determine internal CO2 concentration using stomatal optimization.
+    5. Calculate gross primary productivity with light and moisture limitations.
+    6. Scale from leaf-level to canopy-level fluxes using extinction functions.
+    7. Compute surface resistance from canopy conductance.
+    8. Calculate net CO2 fluxes including plant assimilation and soil respiration.
+
+    Arguments
+    ----------
+    - ``wg``: volumetric water content top soil layer [m3 m-3].
+    - ``w2``: volumetric water content deeper soil layer [m3 m-3].
+    - ``temp_soil``: temperature top soil layer [K].
+    - ``temp2``: temperature deeper soil layer [K].
+    - ``a``: Clapp-Hornberger retention curve parameter [-].
+    - ``b``: Clapp-Hornberger retention curve parameter [-].
+    - ``p``: Clapp-Hornberger retention curve parameter [-].
+    - ``cgsat``: saturated soil conductivity for heat [W m-1 K-1].
+    - ``wsat``: saturated volumetric water content [-].
+    - ``wfc``: volumetric water content field capacity [-].
+    - ``wwilt``: volumetric water content wilting point [-].
+    - ``c1sat``: saturated soil conductivity parameter [-].
+    - ``c2sat``: reference soil conductivity parameter [-].
+    - ``lai``: leaf area index [-].
+    - ``gD``: correction factor transpiration for VPD [-].
+    - ``rsmin``: minimum resistance transpiration [s m-1].
+    - ``rssoilmin``: minimum resistance soil evaporation [s m-1].
+    - ``alpha``: surface albedo [-], range 0 to 1.
+    - ``surf_temp``: surface temperature [K].
+    - ``cveg``: vegetation fraction [-], range 0 to 1.
+    - ``wmax``: thickness of water layer on wet vegetation [m].
+    - ``wl``: equivalent water layer depth for wet vegetation [m].
+    - ``lam``: thermal diffusivity skin layer [-].
+    - ``c3c4``: plant type, either "c3" or "c4".
+
+    Updates
+    --------
+    - ``rs``: surface resistance for transpiration [s m-1].
+    - ``rsCO2``: surface resistance for CO2 [s m-1].
+    - ``gcco2``: canopy conductance for CO2 [m s-1].
+    - ``ci``: internal CO2 concentration [mg m-3].
+    - ``co2abs``: absolute CO2 concentration [mg m-3].
+    - ``mixed_layer.wCO2A``: CO2 flux from plant assimilation [kg kg-1 m s-1].
+    - ``mixed_layer.wCO2R``: CO2 flux from soil respiration [kg kg-1 m s-1].
+    - ``mixed_layer.wCO2``: net CO2 flux [kg kg-1 m s-1].
+    - All updates from ``AbstractStandardLandSurfaceModel``.
+    """
+
     rsCO2: float
     gcco2: float
     ci: float
@@ -125,6 +184,22 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         surface_layer: AbstractSurfaceLayerModel,
         mixed_layer: AbstractMixedLayerModel,
     ):
+        """
+        Compute surface resistance using AquaCrop photosynthesis-conductance model.
+
+        Parameters
+        ----------
+        - ``const``: physical constants. Uses ``rho``, ``mco2``, ``mair``.
+        - ``radiation``: radiation model. Uses ``in_srad``.
+        - ``surface_layer``: surface layer model. Uses ``thetasurf`` and ``ra``.
+        - ``mixed_layer``: mixed layer model. Uses ``e``, ``co2``.
+
+        Updates
+        -------
+        Updates ``self.rs`` based on canopy-scale CO2 conductance derived from
+        coupled photosynthesis-stomatal conductance calculations. Also updates
+        ``self.gcco2``, ``self.ci``, and ``self.co2abs``.
+        """
         # calculate CO2 compensation concentration
         co2comp = (
             self.co2comp298[self.c3c4]
@@ -245,6 +320,21 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         surface_layer: AbstractSurfaceLayerModel,
         mixed_layer: AbstractMixedLayerModel,
     ):
+        """
+        Compute CO2 flux including plant assimilation and soil respiration.
+
+        Parameters
+        ----------
+        - ``const``: physical constants. Uses ``mair``, ``rho``, ``mco2``.
+        - ``surface_layer``: surface layer model. Uses ``ra``.
+        - ``mixed_layer``: mixed layer model. Updates ``wCO2A``, ``wCO2R``, ``wCO2``.
+
+        Updates
+        -------
+        Updates ``self.rsCO2`` and mixed layer CO2 flux components including
+        plant assimilation flux (``wCO2A``), soil respiration flux (``wCO2R``),
+        and net CO2 flux (``wCO2``).
+        """
         # CO2 soil surface flux
         self.rsCO2 = 1.0 / self.gcco2
 

@@ -2,14 +2,76 @@ from abc import abstractmethod
 
 import numpy as np
 
-from ..components import AbstractLandSurfaceModel
-from ..mixed_layer import AbstractMixedLayerModel
-from ..radiation import AbstractRadiationModel
-from ..surface_layer import AbstractSurfaceLayerModel
+from ..components import (
+    AbstractLandSurfaceModel,
+    AbstractMixedLayerModel,
+    AbstractRadiationModel,
+    AbstractSurfaceLayerModel,
+)
 from ..utils import PhysicalConstants, get_esat, get_qsat
 
 
 class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
+    """Abstract standard land surface model with comprehensive soil-vegetation dynamics.
+
+    Abstract class for standard land surface models that include soil moisture, soil
+    temperature, vegetation processes, and surface energy balance calculations.
+    Implements common functionality while requiring subclasses to define surface
+    resistance and CO2 flux calculations.
+
+    **Processes:**
+    1. Compute aerodynamic resistance and thermodynamic variables.
+    2. Calculate surface resistance and CO2 fluxes (abstract methods).
+    3. Determine soil resistance and wet fraction of vegetation.
+    4. Solve for surface temperature implicitly using energy balance.
+    5. Calculate all surface fluxes (sensible, latent, ground heat).
+    6. Update soil temperature and moisture tendencies.
+
+    Arguments
+    ----------
+    - ``wg``: volumetric water content top soil layer [m3 m-3].
+    - ``w2``: volumetric water content deeper soil layer [m3 m-3].
+    - ``temp_soil``: temperature top soil layer [K].
+    - ``temp2``: temperature deeper soil layer [K].
+    - ``a``: Clapp-Hornberger retention curve parameter [-].
+    - ``b``: Clapp-Hornberger retention curve parameter [-].
+    - ``p``: Clapp-Hornberger retention curve parameter [-].
+    - ``cgsat``: saturated soil conductivity for heat [W m-1 K-1].
+    - ``wsat``: saturated volumetric water content [-].
+    - ``wfc``: volumetric water content field capacity [-].
+    - ``wwilt``: volumetric water content wilting point [-].
+    - ``c1sat``: saturated soil conductivity parameter [-].
+    - ``c2ref``: reference soil conductivity parameter [-].
+    - ``lai``: leaf area index [-].
+    - ``gD``: correction factor transpiration for VPD [-].
+    - ``rsmin``: minimum resistance transpiration [s m-1].
+    - ``rssoilmin``: minimum resistance soil evaporation [s m-1].
+    - ``alpha``: surface albedo [-], range 0 to 1.
+    - ``surf_temp``: surface temperature [K].
+    - ``cveg``: vegetation fraction [-], range 0 to 1.
+    - ``wmax``: thickness of water layer on wet vegetation [m].
+    - ``wl``: equivalent water layer depth for wet vegetation [m].
+    - ``lam``: thermal diffusivity skin layer [-].
+
+    Updates
+    --------
+    - ``cliq``: wet fraction [-].
+    - ``temp_soil_tend``: soil temperature tendency [K s-1].
+    - ``wgtend``: soil moisture tendency [m3 m-3 s-1].
+    - ``wltend``: equivalent liquid water tendency [m s-1].
+    - ``surf_temp``: surface temperature [K].
+    - ``le_veg``: latent heat flux from vegetation [W m-2].
+    - ``le_liq``: latent heat flux from liquid water [W m-2].
+    - ``le_soil``: latent heat flux from soil [W m-2].
+    - ``le``: total latent heat flux [W m-2].
+    - ``hf``: sensible heat flux [W m-2].
+    - ``gf``: ground heat flux [W m-2].
+    - ``le_pot``: potential latent heat flux [W m-2].
+    - ``le_ref``: reference latent heat flux [W m-2].
+    - ``mixed_layer.wtheta``: kinematic heat flux [K m s-1].
+    - ``mixed_layer.wq``: kinematic moisture flux [kg kg-1 m s-1].
+    """
+
     # wet fraction [-]
     cliq: float
     # soil temperature tendency [K s-1]
@@ -118,6 +180,20 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
         surface_layer: AbstractSurfaceLayerModel,
         mixed_layer: AbstractMixedLayerModel,
     ) -> None:
+        """
+        Compute surface resistance for transpiration.
+
+        Parameters
+        ----------
+        - ``const``: physical constants.
+        - ``radiation``: radiation model.
+        - ``surface_layer``: surface layer model.
+        - ``mixed_layer``: mixed layer model.
+
+        Updates
+        -------
+        Must update ``self.rs`` (surface resistance for transpiration).
+        """
         raise NotImplementedError
 
     @abstractmethod
@@ -127,6 +203,19 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
         surface_layer: AbstractSurfaceLayerModel,
         mixed_layer: AbstractMixedLayerModel,
     ) -> None:
+        """
+        Compute CO2 flux between surface and atmosphere.
+
+        Parameters
+        ----------
+        - ``const``: physical constants.
+        - ``surface_layer``: surface layer model.
+        - ``mixed_layer``: mixed layer model.
+
+        Updates
+        -------
+        Must update relevant CO2 flux variables (implementation-specific).
+        """
         raise NotImplementedError
 
     def run(
@@ -136,6 +225,24 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
         surface_layer: AbstractSurfaceLayerModel,
         mixed_layer: AbstractMixedLayerModel,
     ):
+        """
+        Execute complete land surface model calculations.
+
+        Parameters
+        ----------
+        - ``const``: physical constants. Uses ``rho``, ``cp``, ``lv``, ``rhow``.
+        - ``radiation``: radiation model. Uses ``net_rad``.
+        - ``surface_layer``: surface layer model. Uses ``ra`` and ``compute_ra`` method.
+        - ``mixed_layer``: mixed layer model. Uses ``u``, ``v``, ``wstar``, ``theta``,
+          ``surf_pressure``, ``q``, and updates ``esat``, ``qsat``, ``dqsatdT``, ``e``,
+          ``qsatsurf``, ``wtheta``, ``wq``.
+
+        Updates
+        -------
+        Updates all surface fluxes, resistances, soil tendencies, and kinematic
+        fluxes. Calculates surface temperature implicitly using energy balance
+        equation including vegetation, soil, and liquid water components.
+        """
         # compute aerodynamic resistance
         surface_layer.compute_ra(mixed_layer.u, mixed_layer.v, mixed_layer.wstar)
 
@@ -312,6 +419,18 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
         mixed_layer.wq = self.le / (const.rho * const.lv)
 
     def integrate(self, dt: float):
+        """
+        Integrate model forward in time.
+
+        Parameters
+        ----------
+        - ``dt``: time step size [s].
+
+        Updates
+        -------
+        Updates soil temperature, soil moisture, and liquid water content
+        using computed tendencies and forward Euler integration.
+        """
         self.temp_soil += dt * self.temp_soil_tend
         self.wg += dt * self.wgtend
         self.wl += dt * self.wltend
