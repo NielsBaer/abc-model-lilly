@@ -128,6 +128,8 @@ def main():
         alpha=0.25,
         # surface temperature [K]
         surf_temp=theta,
+        # surface resistance [s m-1]
+        rs=1.0,
     )
 
     # 5. clouds

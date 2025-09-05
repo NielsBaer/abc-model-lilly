@@ -1,9 +1,8 @@
 import numpy as np
 
-from abcmodel.land_surface import MinimalLandSurfaceModel
-
 from .clouds import AbstractCloudModel, NoCloudModel
-from .land_surface import AbstractLandSurfaceModel
+from .components import AbstractLandSurfaceModel
+from .land_surface import MinimalLandSurfaceModel
 from .mixed_layer import AbstractMixedLayerModel, MinimalMixedLayerModel
 from .radiation import AbstractRadiationModel, ConstantRadiationModel
 from .surface_layer import AbstractSurfaceLayerModel, MinimalSurfaceLayerModel
