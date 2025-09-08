@@ -159,7 +159,10 @@ def main():
     )
 
     # 5. clouds
-    cloud_model = StandardCumulusModel()
+    cloud_model = StandardCumulusModel(
+        cm.params.clouds,
+        cm.init_conds.clouds,
+    )
 
     # init and run the model
     abc = ABCModel(
@@ -192,7 +195,7 @@ def main():
     plt.ylabel("q [g kg-1]")
 
     plt.subplot(235)
-    plt.plot(abc.out.t, abc.out.cc_frac)
+    plt.plot(abc.out.t, abc.clouds.diagnostics.get("cc_frac"))
     plt.xlabel("time [h]")
     plt.ylabel("cloud fraction [-]")
 

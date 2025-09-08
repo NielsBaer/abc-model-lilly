@@ -1,3 +1,4 @@
+from abcmodel.clouds import StandardCumulusParams
 from abcmodel.radiation import StandardRadiationParams
 from abcmodel.surface_layer import StandardSurfaceLayerParams
 
@@ -17,3 +18,5 @@ radiation = StandardRadiationParams(
 )
 
 surface_layer = StandardSurfaceLayerParams()
+
+clouds = StandardCumulusParams()

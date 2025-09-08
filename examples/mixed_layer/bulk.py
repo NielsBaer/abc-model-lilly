@@ -95,14 +95,8 @@ def main():
 
     # 2. define surface layer model
     surface_layer_model = StandardSurfaceLayerModel(
-        # surface friction velocity [m s-1]
-        ustar=0.3,
-        # roughness length for momentum [m]
-        z0m=0.02,
-        # roughness length for scalars [m]
-        z0h=0.002,
-        # initial mixed-layer potential temperature [K]
-        theta=theta,
+        cm.params.surface_layer,
+        cm.init_conds.surface_layer,
     )
 
     # 3. define radiation model
@@ -162,10 +156,13 @@ def main():
     )
 
     # 5. clouds
-    cloud_model = StandardCumulusModel()
+    cloud_model = StandardCumulusModel(
+        cm.params.clouds,
+        cm.init_conds.clouds,
+    )
 
     # init and run the model
-    r1 = ABCModel(
+    abc = ABCModel(
         dt=dt,
         runtime=runtime,
         mixed_layer=mixed_layer_model,
@@ -174,38 +171,38 @@ def main():
         land_surface=land_surface_model,
         clouds=cloud_model,
     )
-    r1.run()
+    abc.run()
 
     # plot output
     plt.figure(figsize=(12, 8))
 
     plt.subplot(231)
-    plt.plot(r1.out.t, r1.out.h)
+    plt.plot(abc.out.t, abc.out.h)
     plt.xlabel("time [h]")
     plt.ylabel("h [m]")
 
     plt.subplot(234)
-    plt.plot(r1.out.t, r1.out.theta)
+    plt.plot(abc.out.t, abc.out.theta)
     plt.xlabel("time [h]")
     plt.ylabel("theta [K]")
 
     plt.subplot(232)
-    plt.plot(r1.out.t, r1.out.q * 1000.0)
+    plt.plot(abc.out.t, abc.out.q * 1000.0)
     plt.xlabel("time [h]")
     plt.ylabel("q [g kg-1]")
 
     plt.subplot(235)
-    plt.plot(r1.out.t, r1.out.cc_frac)
+    plt.plot(abc.out.t, abc.clouds.diagnostics.get("cc_frac"))
     plt.xlabel("time [h]")
     plt.ylabel("cloud fraction [-]")
 
     plt.subplot(233)
-    plt.plot(r1.out.t, r1.out.co2)
+    plt.plot(abc.out.t, abc.out.co2)
     plt.xlabel("time [h]")
     plt.ylabel("mixed-layer CO2 [ppm]")
 
     plt.subplot(236)
-    plt.plot(r1.out.t, r1.out.u)
+    plt.plot(abc.out.t, abc.out.u)
     plt.xlabel("time [h]")
     plt.ylabel("mixed-layer u-wind speed [m s-1]")
 

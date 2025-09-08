@@ -249,7 +249,7 @@ class AbstractMixedLayerModel:
         raise NotImplementedError
 
 
-class AbstractCloudModel:
+class AbstractCloudModel(AbstractModel):
     # cloud core fraction [-]
     cc_frac: float
     # cloud core mass flux [m s-1]

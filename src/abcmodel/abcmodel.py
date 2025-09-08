@@ -43,7 +43,7 @@ class ABCModel:
         self.mixed_layer = mixed_layer
         # self.mixed_layer.diagnostics.post_init(self.tsteps) - TBD
         self.clouds = clouds
-        # self.clouds.diagnostics.post_init(self.tsteps) - TBD
+        self.clouds.diagnostics.post_init(self.tsteps)
 
         # initialize output
         self.out = ABCOutput(self.tsteps)
@@ -141,6 +141,7 @@ class ABCModel:
         self.out.t[t] = t * self.dt / 3600.0 + self.radiation.tstart
         self.radiation.store(t)
         self.surface_layer.store(t)
+        self.clouds.store(t)
 
         if not isinstance(self.land_surface, MinimalLandSurfaceModel):
             self.out.rs[t] = self.land_surface.rs
@@ -184,10 +185,6 @@ class ABCModel:
             self.out.dv[t] = self.mixed_layer.dv
             self.out.zlcl[t] = self.mixed_layer.lcl
             self.out.top_rh[t] = self.mixed_layer.top_rh
-
-        self.out.cc_frac[t] = self.clouds.cc_frac
-        self.out.wqM[t] = self.clouds.cc_qf
-        self.out.cc_mf[t] = self.clouds.cc_mf
 
 
 class ABCOutput:
@@ -287,9 +284,5 @@ class ABCOutput:
         self.top_rh = np.zeros(tsteps)
 
         # cumulus variables
-        # cloud core fraction [-]
-        self.cc_frac = np.zeros(tsteps)
-        # cloud core mass flux [m s-1]
-        self.cc_mf = np.zeros(tsteps)
         # transition layer thickness [m]
         self.dz_h = np.zeros(tsteps)

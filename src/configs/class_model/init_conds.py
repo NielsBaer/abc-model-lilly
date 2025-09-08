@@ -1,3 +1,4 @@
+from abcmodel.clouds import StandardCumulusInitConds
 from abcmodel.radiation import StandardRadiationInitConds
 from abcmodel.surface_layer import StandardSurfaceLayerInitConds
 
@@ -18,3 +19,5 @@ surface_layer = StandardSurfaceLayerInitConds(
     # initial mixed-layer potential temperature [K]
     theta=THETA,
 )
+
+clouds = StandardCumulusInitConds()
