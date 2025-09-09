@@ -16,12 +16,13 @@ pip install -e .
 To setup the coupler we will always use 5 components. Every model needs two main arguments:
 `params`, `init_conds`, which can sometimes take a lot of arguments... But worry not!
 We provide a config example (which we take from the [CLASS model](https://github.com/classmodel/modelpy)).
-This can be loaded through the `config` module:
+This can be loaded through the `abcconfigs` module:
 ```python
 import abcconfigs.class_model as cm
 ```
 
 Now we are ready to set up our models with ease...
+We will do this using the `abcmodel` module, which is the _de facto_ in this repository.
 The first one is the radiation model, and we can use the standard model:
 ```python
 from abcmodel.radiation import StandardRadiationModel
