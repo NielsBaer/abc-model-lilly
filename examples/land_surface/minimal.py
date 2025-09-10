@@ -17,7 +17,7 @@ def main():
     # time step [s]
     dt = 60.0
     # total run time [s]
-    runtime = 96 * 3600.0
+    runtime = 12 * 3600.0
 
     # define mixed layer model
     mixed_layer_model = BulkMixedLayerModel(

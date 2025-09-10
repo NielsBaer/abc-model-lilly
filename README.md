@@ -85,7 +85,7 @@ from abcmodel import ABCoupler
 # time step [s]
 dt = 60.0
 # total run time [s]
-runtime = 96 * 3600.0
+runtime = 12 * 3600.0
 
 abc = ABCoupler(
     dt=dt,
