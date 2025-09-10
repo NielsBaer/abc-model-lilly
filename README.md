@@ -16,9 +16,9 @@ pip install -e .
 To setup the coupler we will always use 5 models:
 1. Radiation model
 2. Land surface model
-3. Atmosphere surface layer model
-4. Atmosphere mixed layer model
-5. Atmosphere cloud model
+3. Surface layer model
+4. Mixed layer model
+5. Cloud model
 
 Every model needs two main arguments: `params`, `init_conds`, which can sometimes take a lot of arguments...
 But worry not! We provide a config example (which we take from the [CLASS model](https://github.com/classmodel/modelpy)).
