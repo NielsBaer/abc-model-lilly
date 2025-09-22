@@ -1,29 +1,11 @@
 import numpy as np
+from jaxtyping import PyTree
 
-from ..models import (
-    AbstractDiagnostics,
-    AbstractMixedLayerModel,
-    AbstractRadiationModel,
-    AbstractSurfaceLayerModel,
-)
 from ..utils import PhysicalConstants
 from .standard import (
     AbstractStandardLandSurfaceModel,
-    StandardLandSurfaceDiagnostics,
     StandardLandSurfaceInitConds,
-    StandardLandSurfaceParams,
 )
-
-
-class JarvisStewartParams(StandardLandSurfaceParams):
-    """Data class for Jarvis-Stewart model parameters.
-
-    Arguments
-    ---------
-    - all arguments from StandardLandSurfaceParams.
-    """
-
-    pass
 
 
 class JarvisStewartInitConds(StandardLandSurfaceInitConds):
@@ -32,17 +14,6 @@ class JarvisStewartInitConds(StandardLandSurfaceInitConds):
     Arguments
     ---------
     - all arguments from StandardLandSurfaceInitConds.
-    """
-
-    pass
-
-
-class JarvisStewartDiagnostics(StandardLandSurfaceDiagnostics["JarvisStewartModel"]):
-    """Class for Jarvis-Stewart model diagnostics.
-
-    Variables
-    ---------
-    - all variables from StandardLandSurfaceDiagnostics.
     """
 
     pass
@@ -69,20 +40,23 @@ class JarvisStewartModel(AbstractStandardLandSurfaceModel):
     - all updates from ``AbstractStandardLandSurfaceModel``.
     """
 
-    def __init__(
-        self,
-        params: JarvisStewartParams,
-        init_conds: JarvisStewartInitConds,
-        diagnostics: AbstractDiagnostics = JarvisStewartDiagnostics(),
-    ):
-        super().__init__(params, init_conds, diagnostics)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def get_f1(self, state: PyTree):
+        """Calculate radiation-dependent scaling factor for surface processes.
+
+        Returns correction factor based on incoming solar radiation that typically
+        ranges from 1.0 to higher values, used to scale surface flux calculations.
+        """
+        ratio = (0.004 * state.in_srad + 0.05) / (0.81 * (0.004 * state.in_srad + 1.0))
+        f1 = 1.0 / min(1.0, ratio)
+        return f1
 
     def compute_surface_resistance(
         self,
+        state: PyTree,
         const: PhysicalConstants,
-        radiation: AbstractRadiationModel,
-        surface_layer: AbstractSurfaceLayerModel,
-        mixed_layer: AbstractMixedLayerModel,
     ):
         """
         Compute surface resistance using Jarvis-Stewart approach.
@@ -100,27 +74,28 @@ class JarvisStewartModel(AbstractStandardLandSurfaceModel):
         soil moisture (f2), vapor pressure deficit (f3), and temperature (f4).
         """
         # calculate surface resistances using Jarvis-Stewart model
-        f1 = radiation.get_f1()
+        f1 = self.get_f1(state)
 
-        if self.w2 > self.wwilt:
-            f2 = (self.wfc - self.wwilt) / (self.w2 - self.wwilt)
+        if state.w2 > self.wwilt:
+            f2 = (self.wfc - self.wwilt) / (state.w2 - self.wwilt)
         else:
             f2 = 1.0e8
 
         # limit f2 in case w2 > wfc, where f2 < 1
         f2 = max(f2, 1.0)
-        f3 = 1.0 / np.exp(-self.gD * (mixed_layer.esat - mixed_layer.e) / 100.0)
-        f4 = 1.0 / (1.0 - 0.0016 * (298.0 - mixed_layer.theta) ** 2.0)
+        f3 = 1.0 / np.exp(-self.gD * (state.esat - state.e) / 100.0)
+        f4 = 1.0 / (1.0 - 0.0016 * (298.0 - state.theta) ** 2.0)
 
-        self.rs = self.rsmin / self.lai * f1 * f2 * f3 * f4
+        state.rs = self.rsmin / self.lai * f1 * f2 * f3 * f4
+
+        return state
 
     def compute_co2_flux(
         self,
+        state: PyTree,
         const: PhysicalConstants,
-        surface_layer: AbstractSurfaceLayerModel,
-        mixed_layer: AbstractMixedLayerModel,
     ):
         """
         Pass.
         """
-        pass
+        return state

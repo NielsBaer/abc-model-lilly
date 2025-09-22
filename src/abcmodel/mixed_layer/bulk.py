@@ -1,95 +1,19 @@
-import numpy as np
+from dataclasses import dataclass
 
-from ..models import (
-    AbstractCloudModel,
-    AbstractDiagnostics,
-    AbstractInitConds,
-    AbstractParams,
-    AbstractRadiationModel,
-    AbstractSurfaceLayerModel,
-)
+import numpy as np
+from jaxtyping import PyTree
+
 from ..utils import PhysicalConstants
 from .stats import AbstractStandardStatsModel
 
-const = PhysicalConstants()
 # conversion factor mgC m-2 s-1 to ppm m s-1
-FAC = const.mair / (const.rho * const.mco2)
+# limamau: this conversion could be done in a post-processing
+# function after jax.lax.scan just like in neuralgcm/dinosaur
+# FAC = const.mair / (const.rho * const.mco2)
 
 
-class BulkMixedLayerParams(AbstractParams["BulkMixedLayerModel"]):
-    """Data class for bulk mixed layer model parameters.
-
-    Arguments
-    ---------
-    - ``sw_ml``: mixed-layer model switch.
-    - ``sw_shearwe``: shear growth mixed-layer switch.
-    - ``sw_fixft``: fix the free-troposphere switch.
-    - ``sw_wind``: prognostic wind switch.
-    - ``surf_pressure``: surface pressure [Pa].
-    - ``divU``: horizontal large-scale divergence of wind [s⁻¹].
-    - ``coriolis_param``: Coriolis parameter [s⁻¹].
-    - ``gammatheta``: free atmosphere potential temperature lapse rate [K/m].
-    - ``advtheta``: advection of heat [K/s].
-    - ``beta``: entrainment ratio for virtual heat [-].
-    - ``gammaq``: free atmosphere specific humidity lapse rate [kg/kg/m].
-    - ``advq``: advection of moisture [kg/kg/s].
-    - ``gammaCO2``: free atmosphere CO2 lapse rate [ppm/m].
-    - ``advCO2``: advection of CO2 [ppm/s].
-    - ``gammau``: free atmosphere u-wind speed lapse rate [s⁻¹].
-    - ``advu``: advection of u-wind [m/s²].
-    - ``gammav``: free atmosphere v-wind speed lapse rate [s⁻¹].
-    - ``advv``: advection of v-wind [m/s²].
-
-    Extra
-    -----
-    - ``wstar``: convective velocity scale [m s-1]. Defaults to 0.0.
-    - ``we``: entrainment velocity [m s-1]. Defaults to -1.0.
-    """
-
-    def __init__(
-        self,
-        sw_ml: bool,
-        sw_shearwe: bool,
-        sw_fixft: bool,
-        sw_wind: bool,
-        surf_pressure: float,
-        divU: float,
-        coriolis_param: float,
-        gammatheta: float,
-        advtheta: float,
-        beta: float,
-        gammaq: float,
-        advq: float,
-        gammaCO2: float,
-        advCO2: float,
-        gammau: float,
-        advu: float,
-        gammav: float,
-        advv: float,
-    ):
-        self.sw_ml = sw_ml
-        self.sw_shearwe = sw_shearwe
-        self.sw_fixft = sw_fixft
-        self.sw_wind = sw_wind
-        self.surf_pressure = surf_pressure
-        self.divU = divU
-        self.coriolis_param = coriolis_param
-        self.gammatheta = gammatheta
-        self.advtheta = advtheta
-        self.beta = beta
-        self.gammaq = gammaq
-        self.advq = advq
-        self.gammaCO2 = gammaCO2
-        self.advCO2 = advCO2
-        self.gammau = gammau
-        self.advu = advu
-        self.gammav = gammav
-        self.advv = advv
-        self.wstar = 0.0
-        self.we = -1.0
-
-
-class BulkMixedLayerInitConds(AbstractInitConds["BulkMixedLayerModel"]):
+@dataclass
+class BulkMixedLayerInitConds:
     """Data class for bulk mixed layer model initial conditions.
 
     Arguments
@@ -109,120 +33,64 @@ class BulkMixedLayerInitConds(AbstractInitConds["BulkMixedLayerModel"]):
     - ``v``: initial mixed-layer v-wind speed [m/s].
     - ``dv``: initial v-wind jump at h [m/s].
     - ``dz_h``: transition layer thickness [m].
-
-    Extra
-    -----
-    - ``wCO2A``: surface assimulation CO2 flux [ppm m s-1]. Defaults to 0.0.
-    - ``wCO2R``: surface respiration CO2 flux [ppm m s-1]. Defaults to 0.0.
-    - ``wCO2M``: CO2 mass flux [ppm m s-1]. Defaults to 0.0.
+    - ``wstar``: convective velocity scale [m s-1]. Defaults to 0.0.
+    - ``we``: entrainment velocity [m s-1]. Defaults to -1.0.
+    - ``wCO2A``: surface assimulation CO2 flux [mgC/m²/s]. Defaults to 0.0.
+    - ``wCO2R``: surface respiration CO2 flux [mgC/m²/s]. Defaults to 0.0.
+    - ``wCO2M``: CO2 mass flux [mgC/m²/s]. Defaults to 0.0.
     """
 
-    # limamau: the variables above could all go to the clouds class
+    # initialized by the user
+    abl_height: float
+    theta: float
+    dtheta: float
+    wtheta: float
+    q: float
+    dq: float
+    wq: float
+    co2: float
+    dCO2: float
+    wCO2: float
+    u: float
+    du: float
+    v: float
+    dv: float
+    dz_h: float
+    # this is actually not updated
+    surf_pressure: float
 
-    def __init__(
-        self,
-        abl_height: float,
-        theta: float,
-        dtheta: float,
-        wtheta: float,
-        q: float,
-        dq: float,
-        wq: float,
-        co2: float,
-        dCO2: float,
-        wCO2: float,
-        u: float,
-        du: float,
-        v: float,
-        dv: float,
-        dz_h: float,
-    ):
-        self.abl_height = abl_height
-        self.theta = theta
-        self.dtheta = dtheta
-        self.wtheta = wtheta
-        self.q = q
-        self.dq = dq
-        self.wq = wq
-        self.co2 = co2
-        self.dCO2 = dCO2
-        self.wCO2 = wCO2
-        self.u = u
-        self.du = du
-        self.v = v
-        self.dv = dv
-        self.dz_h = dz_h
-        self.wCO2A = 0.0
-        self.wCO2R = 0.0
-        self.wCO2M = 0.0
+    # initialized to zero by default
+    wstar: float = 0.0
+    we: float = -1.0
+    wCO2A: float = 0.0
+    wCO2R: float = 0.0
+    wCO2M: float = 0.0
 
-
-class BulkMixedLayerDiagnostics(AbstractDiagnostics["BulkMixedLayerModel"]):
-    """Class for bulk mixed layer model diagnostics."""
-
-    def post_init(self, tsteps: int):
-        self.abl_height = np.zeros(tsteps)
-        self.theta = np.zeros(tsteps)
-        self.thetav = np.zeros(tsteps)
-        self.dtheta = np.zeros(tsteps)
-        self.wtheta = np.zeros(tsteps)
-        self.wthetav = np.zeros(tsteps)
-        self.q = np.zeros(tsteps)
-        self.dq = np.zeros(tsteps)
-        self.wq = np.zeros(tsteps)
-        self.wqe = np.zeros(tsteps)
-        self.qsat = np.zeros(tsteps)
-        self.e = np.zeros(tsteps)
-        self.esat = np.zeros(tsteps)
-        self.co2 = np.zeros(tsteps)
-        self.dCO2 = np.zeros(tsteps)
-        self.wCO2 = np.zeros(tsteps)
-        self.wCO2e = np.zeros(tsteps)
-        self.wCO2R = np.zeros(tsteps)
-        self.wCO2A = np.zeros(tsteps)
-        self.wCO2M = np.zeros(tsteps)
-        self.u = np.zeros(tsteps)
-        self.v = np.zeros(tsteps)
-        self.dz_h = np.zeros(tsteps)
-        self.wthetae = np.zeros(tsteps)
-        self.dthetav = np.zeros(tsteps)
-        self.wthetave = np.zeros(tsteps)
-        self.du = np.zeros(tsteps)
-        self.dv = np.zeros(tsteps)
-        self.lcl = np.zeros(tsteps)
-        self.top_rh = np.zeros(tsteps)
-
-    def store(self, t: int, model: "BulkMixedLayerModel"):
-        self.abl_height[t] = model.abl_height
-        self.theta[t] = model.theta
-        self.thetav[t] = model.thetav
-        self.dtheta[t] = model.dtheta
-        self.wtheta[t] = model.wtheta
-        self.wthetav[t] = model.wthetav
-        self.q[t] = model.q
-        self.dq[t] = model.dq
-        self.wq[t] = model.wq
-        self.wqe[t] = model.wqe
-        self.qsat[t] = model.qsat
-        self.e[t] = model.e
-        self.esat[t] = model.esat
-        self.co2[t] = model.co2
-        self.dCO2[t] = model.dCO2
-        self.wCO2[t] = model.wCO2 / FAC
-        self.wCO2e[t] = model.wCO2e / FAC
-        self.wCO2R[t] = model.wCO2R / FAC
-        self.wCO2A[t] = model.wCO2A / FAC
-        self.wCO2M[t] = model.wCO2M / FAC
-        self.u[t] = model.u
-        self.v[t] = model.v
-        self.dz_h[t] = model.dz_h
-        self.wthetae[t] = model.wthetae
-        self.dthetav[t] = model.dthetav
-        self.wthetave[t] = model.wthetave
-        self.du[t] = model.du
-        self.dv[t] = model.dv
-        self.lcl[t] = model.lcl
-        self.top_rh[t] = model.top_rh
+    # should be initialized during warmup
+    thetav: float = np.nan
+    wthetav: float = np.nan
+    wqe: float = np.nan
+    qsat: float = np.nan
+    e: float = np.nan
+    esat: float = np.nan
+    wCO2e: float = np.nan
+    wthetae: float = np.nan
+    dthetav: float = np.nan
+    wthetave: float = np.nan
+    lcl: float = np.nan
+    top_rh: float = np.nan
+    utend: float = np.nan
+    dutend: float = np.nan
+    vtend: float = np.nan
+    dvtend: float = np.nan
+    htend: float = np.nan
+    thetatend: float = np.nan
+    dthetatend: float = np.nan
+    qtend: float = np.nan
+    dqtend: float = np.nan
+    co2tend: float = np.nan
+    dCO2tend: float = np.nan
+    dztend: float = np.nan
 
 
 class BulkMixedLayerModel(AbstractStandardStatsModel):
@@ -231,271 +99,340 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
     Complete mixed layer model that simulates atmospheric boundary layer evolution
     including entrainment, subsidence, cloud effects, and wind dynamics.
 
-    **Processes:**
+    Arguments
+    ---------
+    - ``sw_shearwe``: shear growth mixed-layer switch.
+    - ``sw_fixft``: fix the free-troposphere switch.
+    - ``sw_wind``: prognostic wind switch.
+    - ``surf_pressure``: surface pressure [Pa].
+    - ``divU``: horizontal large-scale divergence of wind [s⁻¹].
+    - ``coriolis_param``: Coriolis parameter [s⁻¹].
+    - ``gammatheta``: free atmosphere potential temperature lapse rate [K/m].
+    - ``advtheta``: advection of heat [K/s].
+    - ``beta``: entrainment ratio for virtual heat [-].
+    - ``gammaq``: free atmosphere specific humidity lapse rate [kg/kg/m].
+    - ``advq``: advection of moisture [kg/kg/s].
+    - ``gammaCO2``: free atmosphere CO2 lapse rate [ppm/m].
+    - ``advCO2``: advection of CO2 [ppm/s].
+    - ``gammau``: free atmosphere u-wind speed lapse rate [s⁻¹].
+    - ``advu``: advection of u-wind [m/s²].
+    - ``gammav``: free atmosphere v-wind speed lapse rate [s⁻¹].
+    - ``advv``: advection of v-wind [m/s²].
+    - ``dFz``: something I forgot :).
+
+    Processes
+    ---------
     1. Calculate large-scale vertical motions and compensating effects.
     2. Determine convective velocity scale and entrainment parameters.
     3. Compute all tendency terms for mixed layer variables.
     4. Integrate prognostic equations forward in time.
     """
 
-    # entrainment parameters:
-    # large-scale vertical velocity [m s-1]
-    ws: float
-    # mixed-layer growth due to radiative divergence [m s-1]
-    wf: float
-    # mixed-layer top relavtive humidity [-]
-    top_rh: float
-    # lifting condensation level [m]
-    lcl: float
-    # virtual temperatures and fluxes:
-    # initial virtual temperature jump at h [K]
-    dthetav: float
-    # entrainment kinematic heat flux [K m s-1]
-    wthetae: float
-    # entrainment kinematic virtual heat flux [K m s-1]
-    wthetave: float
-    # tendencies:
-    # tendency of CBL [m s-1]
-    htend: float
-    # tendency of mixed-layer potential temperature [K s-1]
-    thetatend: float
-    # tendency of potential temperature jump at h [K s-1]
-    dthetatend: float
-    # tendency of mixed-layer specific humidity [kg kg-1 s-1]
-    qtend: float
-    # tendency of specific humidity jump at h [kg kg-1 s-1]
-    dqtend: float
-    # tendency of CO2 humidity [ppm]
-    co2tend: float
-    # tendency of CO2 jump at h [ppm s-1]
-    dCO2tend: float
-    # tendency of u-wind [m s-1 s-1]
-    utend: float
-    # tendency of u-wind jump at h [m s-1 s-1]
-    dutend: float
-    # tendency of v-wind [m s-1 s-1]
-    vtend: float
-    # tendency of v-wind jump at h [m s-1 s-1]
-    dvtend: float
-    # tendency of transition layer thickness [m s-1]
-    dztend: float
-
     def __init__(
         self,
-        params: BulkMixedLayerParams,
-        init_conds: BulkMixedLayerInitConds,
-        diagnostics: AbstractDiagnostics = BulkMixedLayerDiagnostics(),
+        divU: float,
+        coriolis_param: float,
+        gammatheta: float,
+        advtheta: float,
+        beta: float,
+        gammaq: float,
+        advq: float,
+        gammaCO2: float,
+        advCO2: float,
+        gammau: float,
+        advu: float,
+        gammav: float,
+        advv: float,
+        dFz: float,
+        sw_shearwe: bool = True,
+        sw_fixft: bool = True,
+        sw_wind: bool = True,
     ):
-        # mixed layer switches:
-        self.sw_ml = params.sw_ml
-        self.sw_shearwe = params.sw_shearwe
-        self.sw_fixft = params.sw_fixft
-        # large scale parameters:
-        self.abl_height = init_conds.abl_height
-        self.surf_pressure = params.surf_pressure
-        self.divU = params.divU
-        self.coriolis_param = params.coriolis_param
-        # temperature parameters:
-        self.theta = init_conds.theta
-        self.dtheta = init_conds.dtheta
-        self.gammatheta = params.gammatheta
-        self.advtheta = params.advtheta
-        self.beta = params.beta
-        self.wtheta = init_conds.wtheta
-        # entrainment parameters:
-        self.wstar = params.wstar
-        self.we = params.we
-        # 5. moisture parameters:
-        self.q = init_conds.q
-        self.dq = init_conds.dq
-        self.gammaq = params.gammaq
-        self.advq = params.advq
-        self.wq = init_conds.wq
-        # 8. mixed-layer top variables
-        self.dz_h = init_conds.dz_h
-        # CO2:
-        self.co2 = init_conds.co2
-        self.dCO2 = init_conds.dCO2
-        self.gammaco2 = params.gammaCO2
-        self.advCO2 = params.advCO2
-        self.wCO2 = init_conds.wCO2 * FAC
-        self.wCO2A = init_conds.wCO2A
-        self.wCO2R = init_conds.wCO2R
-        self.wCO2M = init_conds.wCO2M
-        # 11. wind parameters
-        self.sw_wind = params.sw_wind
-        self.u = init_conds.u
-        self.du = init_conds.du
-        self.gammau = params.gammau
-        self.advu = params.advu
-        self.v = init_conds.v
-        self.dv = init_conds.dv
-        self.gammav = params.gammav
-        self.advv = params.advv
+        self.sw_shearwe = sw_shearwe
+        self.sw_fixft = sw_fixft
+        self.sw_wind = sw_wind
+        self.divU = divU
+        self.coriolis_param = coriolis_param
+        self.gammatheta = gammatheta
+        self.advtheta = advtheta
+        self.beta = beta
+        self.gammaq = gammaq
+        self.advq = advq
+        self.gammaCO2 = gammaCO2
+        self.advCO2 = advCO2
+        self.gammau = gammau
+        self.advu = advu
+        self.gammav = gammav
+        self.advv = advv
+        self.dFz = dFz
 
-        self.diagnostics = diagnostics
-
-    def calculate_vertical_motions(self, dFz: float, rho: float, cp: float):
+    def calculate_vertical_motions(
+        self,
+        abl_height: float,
+        dtheta: float,
+        const: PhysicalConstants,
+    ) -> tuple[float, float]:
         """Calculate large-scale subsidence and radiative divergence effects."""
         # calculate large-scale vertical velocity (subsidence)
-        self.ws = -self.divU * self.abl_height
+        ws = -self.divU * abl_height
 
         # calculate mixed-layer growth due to cloud top radiative divergence
-        radiative_denominator = rho * cp * self.dtheta
-        self.wf = dFz / radiative_denominator
+        radiative_denominator = const.rho * const.cp * dtheta
+        wf = self.dFz / radiative_denominator
 
-    def calculate_free_troposphere_compensation(self):
+        return ws, wf
+
+    def calculate_free_troposphere_compensation(self, ws: float):
         """Calculate compensation terms to fix free troposphere values."""
         if self.sw_fixft:
-            w_th_ft = self.gammatheta * self.ws
-            w_q_ft = self.gammaq * self.ws
-            w_CO2_ft = self.gammaco2 * self.ws
+            w_th_ft = self.gammatheta * ws
+            w_q_ft = self.gammaq * ws
+            w_CO2_ft = self.gammaCO2 * ws
         else:
             w_th_ft = 0.0
             w_q_ft = 0.0
             w_CO2_ft = 0.0
         return w_th_ft, w_q_ft, w_CO2_ft
 
-    def calculate_convective_velocity_scale(self, g: float):
+    def calculate_convective_velocity_scale(
+        self,
+        abl_height: float,
+        wthetav: float,
+        thetav: float,
+        g: float,
+    ):
         """Calculate convective velocity scale and entrainment parameters."""
-        if self.wthetav > 0.0:
-            buoyancy_term = g * self.abl_height * self.wthetav / self.thetav
-            self.wstar = buoyancy_term ** (1.0 / 3.0)
+        if wthetav > 0.0:
+            buoyancy_term = g * abl_height * wthetav / thetav
+            wstar = buoyancy_term ** (1.0 / 3.0)
         else:
-            self.wstar = 1e-6
+            wstar = 1e-6
 
         # virtual heat entrainment flux
-        self.wthetave = -self.beta * self.wthetav
+        wthetave = -self.beta * wthetav
 
-    def calculate_entrainment_velocity(self, ustar: float, g: float):
+        return wstar, wthetave
+
+    def calculate_entrainment_velocity(
+        self,
+        abl_height: float,
+        wthetave: float,
+        dthetav: float,
+        thetav: float,
+        we: float,
+        ustar: float,
+        g: float,
+    ):
         """Calculate entrainment velocity with optional shear effects."""
         if self.sw_shearwe:
-            shear_term = 5.0 * ustar**3.0 * self.thetav / (g * self.abl_height)
-            numerator = -self.wthetave + shear_term
-            self.we = numerator / self.dthetav
+            shear_term = 5.0 * ustar**3.0 * thetav / (g * abl_height)
+            numerator = -wthetave + shear_term
+            we = numerator / dthetav
         else:
-            self.we = -self.wthetave / self.dthetav
+            we = -wthetave / dthetav
 
         # don't allow boundary layer shrinking if wtheta < 0
-        if self.we < 0:
-            self.we = 0.0
+        # limamau: we need to change that for nightime?
+        if we < 0:
+            we = 0.0
 
-    def calculate_entrainment_fluxes(self):
+        return we
+
+    @staticmethod
+    def calculate_entrainment_fluxes(we, dtheta, dq, dCO2):
         """Calculate all entrainment fluxes."""
-        self.wthetae = -self.we * self.dtheta
-        self.wqe = -self.we * self.dq
-        self.wCO2e = -self.we * self.dCO2
+        wthetae = -we * dtheta
+        wqe = -we * dq
+        wCO2e = -we * dCO2
+        return wthetae, wqe, wCO2e
 
     def calculate_mixed_layer_tendencies(
-        self, cc_mf: float, cc_qf: float, w_th_ft: float, w_q_ft: float, w_CO2_ft: float
+        self,
+        ws: float,
+        wf: float,
+        wq: float,
+        wqe: float,
+        we: float,
+        cc_mf: float,
+        cc_qf: float,
+        wtheta: float,
+        wthetae: float,
+        abl_height: float,
+        wCO2: float,
+        wCO2e: float,
+        wCO2M: float,
+        w_th_ft: float,
+        w_q_ft: float,
+        w_CO2_ft: float,
     ):
         """Calculate tendency terms for mixed layer variables."""
         # boundary layer height tendency
-        self.htend = self.we + self.ws + self.wf - cc_mf
+        htend = we + ws + wf - cc_mf
 
         # mixed layer scalar tendencies
-        surface_heat_flux = (self.wtheta - self.wthetae) / self.abl_height
-        self.thetatend = surface_heat_flux + self.advtheta
+        surface_heat_flux = (wtheta - wthetae) / abl_height
+        thetatend = surface_heat_flux + self.advtheta
 
-        surface_moisture_flux = (self.wq - self.wqe - cc_qf) / self.abl_height
-        self.qtend = surface_moisture_flux + self.advq
+        surface_moisture_flux = (wq - wqe - cc_qf) / abl_height
+        qtend = surface_moisture_flux + self.advq
 
-        surface_co2_flux_term = (self.wCO2 - self.wCO2e - self.wCO2M) / self.abl_height
-        self.co2tend = surface_co2_flux_term + self.advCO2
+        surface_co2_flux_term = (wCO2 - wCO2e - wCO2M) / abl_height
+        co2tend = surface_co2_flux_term + self.advCO2
 
         # jump tendencies at boundary layer top
         # (entrainment growth term)
-        egrowth = self.we + self.wf - cc_mf
+        egrowth = we + wf - cc_mf
 
-        self.dthetatend = self.gammatheta * egrowth - self.thetatend + w_th_ft
-        self.dqtend = self.gammaq * egrowth - self.qtend + w_q_ft
-        self.dCO2tend = self.gammaco2 * egrowth - self.co2tend + w_CO2_ft
+        dthetatend = self.gammatheta * egrowth - thetatend + w_th_ft
+        dqtend = self.gammaq * egrowth - qtend + w_q_ft
+        dCO2tend = self.gammaCO2 * egrowth - co2tend + w_CO2_ft
 
-    def calculate_wind_tendencies(self, uw: float, vw: float, cc_mf: float):
+        return htend, thetatend, dthetatend, qtend, dqtend, co2tend, dCO2tend
+
+    def calculate_wind_tendencies(
+        self,
+        we: float,
+        wf: float,
+        uw: float,
+        vw: float,
+        cc_mf: float,
+        du: float,
+        dv: float,
+        abl_height: float,
+    ) -> tuple[float, float, float, float]:
         """Calculate wind tendency terms if wind is prognostic."""
         # assume u + du = ug, so ug - u = du
         if self.sw_wind:
-            coriolis_term_u = -self.coriolis_param * self.dv
-            momentum_flux_term_u = (uw + self.we * self.du) / self.abl_height
-            self.utend = coriolis_term_u + momentum_flux_term_u + self.advu
+            coriolis_term_u = -self.coriolis_param * dv
+            momentum_flux_term_u = (uw + we * du) / abl_height
+            utend = coriolis_term_u + momentum_flux_term_u + self.advu
 
-            coriolis_term_v = self.coriolis_param * self.du
-            momentum_flux_term_v = (vw + self.we * self.dv) / self.abl_height
-            self.vtend = coriolis_term_v + momentum_flux_term_v + self.advv
+            coriolis_term_v = self.coriolis_param * du
+            momentum_flux_term_v = (vw + we * dv) / abl_height
+            vtend = coriolis_term_v + momentum_flux_term_v + self.advv
 
-            entrainment_growth_term = self.we + self.wf - cc_mf
-            self.dutend = self.gammau * entrainment_growth_term - self.utend
-            self.dvtend = self.gammav * entrainment_growth_term - self.vtend
+            entrainment_growth_term = we + wf - cc_mf
+            dutend = self.gammau * entrainment_growth_term - utend
+            dvtend = self.gammav * entrainment_growth_term - vtend
 
-    def calculate_transition_layer_tendency(self, cc_frac: float):
+            return utend, vtend, dutend, dvtend
+
+        else:
+            return 0.0, 0.0, 0.0, 0.0
+
+    def calculate_transition_layer_tendency(
+        self,
+        lcl: float,
+        abl_height: float,
+        cc_frac: float,
+        dz_h: float,
+    ):
         """Calculate transition layer thickness tendency."""
-        lcl_distance = self.lcl - self.abl_height
+        lcl_distance = lcl - abl_height
 
         if cc_frac > 0 or lcl_distance < 300:
-            target_thickness = lcl_distance - self.dz_h
-            self.dztend = target_thickness / 7200.0
+            target_thickness = lcl_distance - dz_h
+            dztend = target_thickness / 7200.0
         else:
-            self.dztend = 0.0
+            dztend = 0.0
 
-    def run(
-        self,
-        const: PhysicalConstants,
-        radiation: AbstractRadiationModel,
-        surface_layer: AbstractSurfaceLayerModel,
-        clouds: AbstractCloudModel,
-    ):
-        """
-        Calculate mixed layer tendencies and update diagnostic variables.
+        return dztend
 
-        Parameters
-        ----------
-        - ``const``: physical constants. Uses ``g``, ``rho``, and ``cp``.
-        - ``radiation``: radiation model. Uses ``dFz``.
-        - ``surface_layer``: surface layer model. Uses ``ustar``, ``uw``, and ``vw``.
-        - ``clouds``: cloud model. Uses ``cc_frac``, ``cc_mf``, and ``cc_qf``.
-
-        Updates
-        -------
-        Updates all tendency terms and diagnostic variables for the mixed layer
-        evolution including entrainment, subsidence, and cloud effects.
-        """
-        self.calculate_vertical_motions(radiation.dFz, const.rho, const.cp)
-        w_th_ft, w_q_ft, w_CO2_ft = self.calculate_free_troposphere_compensation()
-        self.calculate_convective_velocity_scale(const.g)
-        self.calculate_entrainment_velocity(surface_layer.ustar, const.g)
-        self.calculate_entrainment_fluxes()
-        self.calculate_mixed_layer_tendencies(
-            clouds.cc_mf,
-            clouds.cc_qf,
+    def run(self, state: PyTree, const: PhysicalConstants):
+        """Calculate mixed layer tendencies and update diagnostic variables."""
+        state.ws, state.wf = self.calculate_vertical_motions(
+            state.abl_height,
+            state.dtheta,
+            const,
+        )
+        w_th_ft, w_q_ft, w_CO2_ft = self.calculate_free_troposphere_compensation(
+            state.ws,
+        )
+        state.wstar, state.wthetave = self.calculate_convective_velocity_scale(
+            state.abl_height,
+            state.wthetav,
+            state.thetav,
+            const.g,
+        )
+        state.we = self.calculate_entrainment_velocity(
+            state.abl_height,
+            state.wthetave,
+            state.dthetav,
+            state.thetav,
+            state.we,
+            state.ustar,
+            const.g,
+        )
+        state.wthetae, state.wqe, state.wCO2e = self.calculate_entrainment_fluxes(
+            state.we, state.dtheta, state.dq, state.dCO2
+        )
+        (
+            state.htend,
+            state.thetatend,
+            state.dthetatend,
+            state.qtend,
+            state.dqtend,
+            state.co2tend,
+            state.dCO2tend,
+        ) = self.calculate_mixed_layer_tendencies(
+            state.ws,
+            state.wf,
+            state.wq,
+            state.wqe,
+            state.we,
+            state.cc_mf,
+            state.cc_qf,
+            state.wtheta,
+            state.wthetae,
+            state.abl_height,
+            state.wCO2,
+            state.wCO2e,
+            state.wCO2M,
             w_th_ft,
             w_q_ft,
             w_CO2_ft,
         )
-        self.calculate_wind_tendencies(
-            surface_layer.uw,
-            surface_layer.vw,
-            clouds.cc_mf,
+        state.utend, state.vtend, state.dutend, state.dvtend = (
+            self.calculate_wind_tendencies(
+                state.we,
+                state.wf,
+                state.uw,
+                state.vw,
+                state.cc_mf,
+                state.du,
+                state.dv,
+                state.abl_height,
+            )
         )
-        self.calculate_transition_layer_tendency(clouds.cc_frac)
+        state.dztend = self.calculate_transition_layer_tendency(
+            state.lcl,
+            state.abl_height,
+            state.cc_frac,
+            state.dz_h,
+        )
 
-    def integrate(self, dt: float):
+        return state
+
+    def integrate(self, state: PyTree, dt: float) -> PyTree:
         """Integrate mixed layer forward in time."""
-        self.abl_height += dt * self.htend
-        self.theta += dt * self.thetatend
-        self.dtheta += dt * self.dthetatend
-        self.q += dt * self.qtend
-        self.dq += dt * self.dqtend
-        self.co2 += dt * self.co2tend
-        self.dCO2 += dt * self.dCO2tend
-        self.dz_h += dt * self.dztend
+        state.abl_height += dt * state.htend
+        state.theta += dt * state.thetatend
+        state.dtheta += dt * state.dthetatend
+        state.q += dt * state.qtend
+        state.dq += dt * state.dqtend
+        state.co2 += dt * state.co2tend
+        state.dCO2 += dt * state.dCO2tend
+        state.dz_h += dt * state.dztend
 
         # limit dz to minimal value
         dz0 = 50
-        if self.dz_h < dz0:
-            self.dz_h = dz0
+        if state.dz_h < dz0:
+            state.dz_h = dz0
 
         if self.sw_wind:
-            self.u += dt * self.utend
-            self.du += dt * self.dutend
-            self.v += dt * self.vtend
-            self.dv += dt * self.dvtend
+            state.u += dt * state.utend
+            state.du += dt * state.dutend
+            state.v += dt * state.vtend
+            state.dv += dt * state.dvtend
+
+        return state

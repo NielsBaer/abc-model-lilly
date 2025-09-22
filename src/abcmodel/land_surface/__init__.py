@@ -1,23 +1,18 @@
-from .aquacrop import AquaCropInitConds, AquaCropModel, AquaCropParams
+from .aquacrop import AquaCropInitConds, AquaCropModel
 from .jarvis_stewart import (
     JarvisStewartInitConds,
     JarvisStewartModel,
-    JarvisStewartParams,
 )
 from .minimal import (
     MinimalLandSurfaceInitConds,
     MinimalLandSurfaceModel,
-    MinimalLandSurfaceParams,
 )
 
 __all__ = [
-    AquaCropModel,
-    AquaCropParams,
-    AquaCropInitConds,
-    JarvisStewartModel,
-    JarvisStewartParams,
-    JarvisStewartInitConds,
-    MinimalLandSurfaceModel,
-    MinimalLandSurfaceParams,
-    MinimalLandSurfaceInitConds,
+    "AquaCropModel",
+    "AquaCropInitConds",
+    "JarvisStewartModel",
+    "JarvisStewartInitConds",
+    "MinimalLandSurfaceModel",
+    "MinimalLandSurfaceInitConds",
 ]

@@ -1,27 +1,83 @@
 from abc import abstractmethod
-from typing import Generic, TypeVar
+from dataclasses import dataclass
 
 import numpy as np
+from jaxtyping import PyTree
 
 from ..models import (
-    AbstractDiagnostics,
-    AbstractInitConds,
     AbstractLandSurfaceModel,
-    AbstractMixedLayerModel,
-    AbstractParams,
-    AbstractRadiationModel,
     AbstractSurfaceLayerModel,
 )
 from ..utils import PhysicalConstants, get_esat, get_qsat
 
-ST = TypeVar("ST", bound="AbstractStandardLandSurfaceModel")
 
-
-class StandardLandSurfaceParams(AbstractParams["AbstractStandardLandSurfaceModel"]):
-    """Data class for standard land surface model parameters.
+@dataclass
+class StandardLandSurfaceInitConds:
+    """Data class for standard land surface model initial conditions.
 
     Arguments
     ---------
+    - ``alpha``: slope of the light response curve [mol J-1].
+    - ``wg``: soil moisture content in the root zone [m3 m-3].
+    - ``w2``: soil moisture content in the deep layer [m3 m-3].
+    - ``temp_soil``: soil temperature [K].
+    - ``temp2``: deep soil temperature [K].
+    - ``surf_temp``: Surface temperature [K].
+    - ``wl``: liquid water storage on the canopy [m].
+    - ``rs``: surface resistance [m s-1].
+    - ``rssoil``: soil resistance [m s-1].
+    - ``cliq``: wet fraction of the canopy [-].
+    - ``temp_soil_tend``: soil temperature tendency [K s-1].
+    - ``wgtend``: soil moisture tendency [m3 m-3 s-1].
+    - ``wltend``: canopy water storage tendency [m s-1].
+    - ``le_veg``: latent heat flux from vegetation [W m-2].
+    - ``le_liq``: latent heat flux from liquid water [W m-2].
+    - ``le_soil``: latent heat flux from soil [W m-2].
+    - ``le``: total latent heat flux [W m-2].
+    - ``hf``: sensible heat flux [W m-2].
+    - ``gf``: ground heat flux [W m-2].
+    - ``le_pot``: potential latent heat flux [W m-2].
+    - ``le_ref``: reference latent heat flux [W m-2].
+    - ``ra``: aerodynamic resistance [s m-1].
+    """
+
+    # the following variables are expected to be initialized by the user
+    # here alpha is in a fact a parameter, but it is also used in different models
+    alpha: float
+    wg: float
+    w2: float
+    temp_soil: float
+    temp2: float
+    surf_temp: float
+    wl: float
+
+    # the following variables are initialized to high values and
+    # are expected to converge during warmup
+    rs: float = 1.0e6
+    rssoil: float = 1.0e6
+
+    # the following variables are expected to be assigned during warmup
+    cliq: float = np.nan
+    temp_soil_tend: float = np.nan
+    wgtend: float = np.nan
+    wltend: float = np.nan
+    le_veg: float = np.nan
+    le_liq: float = np.nan
+    le_soil: float = np.nan
+    le: float = np.nan
+    hf: float = np.nan
+    gf: float = np.nan
+    le_pot: float = np.nan
+    le_ref: float = np.nan
+    ra: float = np.nan
+
+
+class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
+    """Abstract standard land surface model with comprehensive soil-vegetation dynamics.
+
+    Parameters
+    ----------
+    - all parameters of the parent class and...
     - ``a``: Clapp and Hornberger (1978) retention curve parameter.
     - ``b``: Clapp and Hornberger (1978) retention curve parameter.
     - ``p``: Clapp and Hornberger (1978) retention curve parameter.
@@ -35,11 +91,9 @@ class StandardLandSurfaceParams(AbstractParams["AbstractStandardLandSurfaceModel
     - ``gD``: Canopy radiation extinction coefficient [-].
     - ``rsmin``: Minimum stomatal resistance [s m-1].
     - ``rssoilmin``: Minimum soil resistance [s m-1].
-    - ``alpha``: Initial slope of the light response curve [mol J-1].
     - ``cveg``: Vegetation fraction [-].
     - ``wmax``: Maximum water storage capacity of the canopy [m].
     - ``lam``: Thermal diffusivity of the soil [W m-1 K-1].
-
     """
 
     def __init__(
@@ -57,7 +111,6 @@ class StandardLandSurfaceParams(AbstractParams["AbstractStandardLandSurfaceModel
         gD: float,
         rsmin: float,
         rssoilmin: float,
-        alpha: float,
         cveg: float,
         wmax: float,
         lam: float,
@@ -75,384 +128,175 @@ class StandardLandSurfaceParams(AbstractParams["AbstractStandardLandSurfaceModel
         self.gD = gD
         self.rsmin = rsmin
         self.rssoilmin = rssoilmin
-        self.alpha = alpha
         self.cveg = cveg
         self.wmax = wmax
         self.lam = lam
         self.c_beta = 0.0
 
-
-class StandardLandSurfaceInitConds(
-    AbstractInitConds["AbstractStandardLandSurfaceModel"]
-):
-    """Data class for standard land surface model initial conditions.
-
-    Arguments
-    ---------
-    - ``wg``: Soil moisture content in the root zone [m3 m-3].
-    - ``w2``: Soil moisture content in the deep layer [m3 m-3].
-    - ``temp_soil``: Soil temperature [K].
-    - ``temp2``: Deep soil temperature [K].
-    - ``surf_temp``: Surface temperature [K].
-    - ``wl``: Liquid water storage on the canopy [m].
-
-    """
-
-    def __init__(
-        self,
-        wg: float,
-        w2: float,
-        temp_soil: float,
-        temp2: float,
-        surf_temp: float,
-        wl: float,
-    ):
-        self.wg = wg
-        self.w2 = w2
-        self.temp_soil = temp_soil
-        self.temp2 = temp2
-        self.surf_temp = surf_temp
-        self.wl = wl
-        self.rs = 1.0e6
-        self.rssoil = 1.0e6
-
-
-class StandardLandSurfaceDiagnostics(AbstractDiagnostics[ST], Generic[ST]):
-    """Class for standard land surface model diagnostics.
-
-    Variables
-    ---------
-    - ``cliq``: wet fraction of the canopy [-].
-    - ``temp_soil_tend``: soil temperature tendency [K s-1].
-    - ``wgtend``: soil moisture tendency [m3 m-3 s-1].
-    - ``wltend``: canopy water storage tendency [m s-1].
-    - ``surf_temp``: surface temperature [K].
-    - ``le_veg``: latent heat flux from vegetation [W m-2].
-    - ``le_liq``: latent heat flux from liquid water [W m-2].
-    - ``le_soil``: latent heat flux from soil [W m-2].
-    - ``le``: total latent heat flux [W m-2].
-    - ``hf``: sensible heat flux [W m-2].
-    - ``gf``: ground heat flux [W m-2].
-    - ``le_pot``: potential latent heat flux [W m-2].
-    - ``le_ref``: reference latent heat flux [W m-2].
-    - ``ra``: Aerodynamic resistance [s m-1].
-    """
-
-    def post_init(self, tsteps: int):
-        self.cliq = np.zeros(tsteps)
-        self.temp_soil_tend = np.zeros(tsteps)
-        self.wgtend = np.zeros(tsteps)
-        self.wltend = np.zeros(tsteps)
-        self.surf_temp = np.zeros(tsteps)
-        self.le_veg = np.zeros(tsteps)
-        self.le_liq = np.zeros(tsteps)
-        self.le_soil = np.zeros(tsteps)
-        self.le = np.zeros(tsteps)
-        self.hf = np.zeros(tsteps)
-        self.gf = np.zeros(tsteps)
-        self.le_pot = np.zeros(tsteps)
-        self.le_ref = np.zeros(tsteps)
-        self.ra = np.zeros(tsteps)
-
-    def store(self, t: int, model: ST):
-        self.cliq[t] = model.cliq
-        self.temp_soil_tend[t] = model.temp_soil_tend
-        self.wgtend[t] = model.wgtend
-        self.wltend[t] = model.wltend
-        self.surf_temp[t] = model.surf_temp
-        self.le_veg[t] = model.le_veg
-        self.le_liq[t] = model.le_liq
-        self.le_soil[t] = model.le_soil
-        self.le[t] = model.le
-        self.hf[t] = model.hf
-        self.gf[t] = model.gf
-        self.le_pot[t] = model.le_pot
-        self.le_ref[t] = model.le_ref
-        self.ra[t] = model.ra
-
-
-class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
-    """Abstract standard land surface model with comprehensive soil-vegetation dynamics."""
-
-    # wet fraction [-]
-    cliq: float
-    # soil temperature tendency [K s-1]
-    temp_soil_tend: float
-    # soil moisture tendency [m3 m-3 s-1]
-    wgtend: float
-    # equivalent liquid water tendency [m s-1]
-    wltend: float
-    # aerodynamic resistance [s m-1]
-    ra: float
-
-    def __init__(
-        self,
-        params: StandardLandSurfaceParams,
-        init_conds: StandardLandSurfaceInitConds,
-        diagnostics: AbstractDiagnostics = StandardLandSurfaceDiagnostics(),
-    ):
-        # water content parameters
-        self.wg = init_conds.wg
-        self.w2 = init_conds.w2
-        self.wsat = params.wsat
-        self.wfc = params.wfc
-        self.wwilt = params.wwilt
-
-        # temperature params
-        self.temp_soil = init_conds.temp_soil
-        self.temp2 = init_conds.temp2
-        self.surf_temp = init_conds.surf_temp
-
-        # Clapp and Hornberger retention curve parameters
-        self.a = params.a
-        self.b = params.b
-        self.p = params.p
-        self.cgsat = params.cgsat
-
-        # C parameters
-        self.c1sat = params.c1sat
-        self.c2ref = params.c2ref
-
-        # vegetation parameters
-        self.lai = params.lai
-        self.gD = params.gD
-        self.rsmin = params.rsmin
-        self.rssoilmin = params.rssoilmin
-        self.alpha = params.alpha
-
-        # resistance parameters
-        self.rs = init_conds.rs
-        self.rssoil = init_conds.rssoil
-
-        # vegetation and water layer parameters
-        self.cveg = params.cveg
-        self.wmax = params.wmax
-        self.wl = init_conds.wl
-
-        # thermal diffusivity
-        self.lamb = params.lam
-
-        # old: some sanity checks for valid input
-        # limamau: I think this is supposed to be a parameter
-        self.c_beta = 0.0  # zero curvature; linear response
-        assert self.c_beta >= 0.0 or self.c_beta <= 1.0
-
-        self.diagnostics = diagnostics
-
     @abstractmethod
     def compute_surface_resistance(
         self,
+        state: PyTree,
         const: PhysicalConstants,
-        radiation: AbstractRadiationModel,
-        surface_layer: AbstractSurfaceLayerModel,
-        mixed_layer: AbstractMixedLayerModel,
-    ) -> None:
+    ) -> PyTree:
         raise NotImplementedError
 
     @abstractmethod
     def compute_co2_flux(
         self,
+        state: PyTree,
         const: PhysicalConstants,
-        surface_layer: AbstractSurfaceLayerModel,
-        mixed_layer: AbstractMixedLayerModel,
-    ) -> None:
+    ) -> PyTree:
         raise NotImplementedError
 
     def run(
         self,
+        state: PyTree,
         const: PhysicalConstants,
-        radiation: AbstractRadiationModel,
         surface_layer: AbstractSurfaceLayerModel,
-        mixed_layer: AbstractMixedLayerModel,
     ):
-        """
-        Execute complete land surface model calculations.
-
-        Parameters
-        ----------
-        - ``const``: physical constants. Uses ``rho``, ``cp``, ``lv``, ``rhow``.
-        - ``radiation``: radiation model. Uses ``net_rad``.
-        - ``surface_layer``: surface layer model. ``compute_ra`` method.
-        - ``mixed_layer``: mixed layer model. Uses ``u``, ``v``, ``wstar``, ``theta``,
-          ``surf_pressure``, ``q``, and updates ``esat``, ``qsat``, ``dqsatdT``, ``e``,
-          ``qsatsurf``, ``wtheta``, ``wq``.
-
-        Updates
-        -------
-        Updates all surface fluxes, resistances, soil tendencies, and kinematic
-        fluxes. Calculates surface temperature implicitly using energy balance
-        equation including vegetation, soil, and liquid water components.
-        """
+        """Execute complete land surface model calculations."""
         # compute aerodynamic resistance
-        self.ra = surface_layer.compute_ra(
-            mixed_layer.u, mixed_layer.v, mixed_layer.wstar
-        )
+        state.ra = surface_layer.compute_ra(state)
 
         # first calculate essential thermodynamic variables
-        mixed_layer.esat = get_esat(mixed_layer.theta)
-        mixed_layer.qsat = get_qsat(mixed_layer.theta, mixed_layer.surf_pressure)
-        desatdT = mixed_layer.esat * (
-            17.2694 / (mixed_layer.theta - 35.86)
-            - 17.2694
-            * (mixed_layer.theta - 273.16)
-            / (mixed_layer.theta - 35.86) ** 2.0
+        state.esat = get_esat(state.theta)
+        state.qsat = get_qsat(state.theta, state.surf_pressure)
+        desatdT = state.esat * (
+            17.2694 / (state.theta - 35.86)
+            - 17.2694 * (state.theta - 273.16) / (state.theta - 35.86) ** 2.0
         )
-        mixed_layer.dqsatdT = 0.622 * desatdT / mixed_layer.surf_pressure
-        mixed_layer.e = mixed_layer.q * mixed_layer.surf_pressure / 0.622
+        state.dqsatdT = 0.622 * desatdT / state.surf_pressure
+        state.e = state.q * state.surf_pressure / 0.622
 
         # sub-model part
-        self.compute_surface_resistance(const, radiation, surface_layer, mixed_layer)
-        self.compute_co2_flux(const, surface_layer, mixed_layer)
+        self.compute_surface_resistance(state, const)
+        self.compute_co2_flux(state, const)
 
         # recompute f2 using wg instead of w2
-        if self.wg > self.wwilt:  # and self.w2 <= self.wfc):
-            f2 = (self.wfc - self.wwilt) / (self.wg - self.wwilt)
+        if state.wg > self.wwilt:  # and self.w2 <= self.wfc):
+            f2 = (self.wfc - self.wwilt) / (state.wg - self.wwilt)
         else:
             f2 = 1.0e8
-        self.rssoil = self.rssoilmin * f2
+        state.rssoil = self.rssoilmin * f2
 
         wlmx = self.lai * self.wmax
-        self.cliq = min(1.0, self.wl / wlmx)
+        state.cliq = min(1.0, state.wl / wlmx)
 
         # calculate skin temperature implicitly
-        self.surf_temp = (
-            radiation.net_rad
-            + const.rho * const.cp / self.ra * mixed_layer.theta
+        state.surf_temp = (
+            state.net_rad
+            + const.rho * const.cp / state.ra * state.theta
             + self.cveg
-            * (1.0 - self.cliq)
+            * (1.0 - state.cliq)
             * const.rho
             * const.lv
-            / (self.ra + self.rs)
-            * (
-                mixed_layer.dqsatdT * mixed_layer.theta
-                - mixed_layer.qsat
-                + mixed_layer.q
-            )
+            / (state.ra + state.rs)
+            * (state.dqsatdT * state.theta - state.qsat + state.q)
             + (1.0 - self.cveg)
             * const.rho
             * const.lv
-            / (self.ra + self.rssoil)
-            * (
-                mixed_layer.dqsatdT * mixed_layer.theta
-                - mixed_layer.qsat
-                + mixed_layer.q
-            )
+            / (state.ra + state.rssoil)
+            * (state.dqsatdT * state.theta - state.qsat + state.q)
             + self.cveg
-            * self.cliq
+            * state.cliq
             * const.rho
             * const.lv
-            / self.ra
-            * (
-                mixed_layer.dqsatdT * mixed_layer.theta
-                - mixed_layer.qsat
-                + mixed_layer.q
-            )
-            + self.lamb * self.temp_soil
+            / state.ra
+            * (state.dqsatdT * state.theta - state.qsat + state.q)
+            + self.lam * state.temp_soil
         ) / (
-            const.rho * const.cp / self.ra
+            const.rho * const.cp / state.ra
             + self.cveg
-            * (1.0 - self.cliq)
+            * (1.0 - state.cliq)
             * const.rho
             * const.lv
-            / (self.ra + self.rs)
-            * mixed_layer.dqsatdT
+            / (state.ra + state.rs)
+            * state.dqsatdT
             + (1.0 - self.cveg)
             * const.rho
             * const.lv
-            / (self.ra + self.rssoil)
-            * mixed_layer.dqsatdT
-            + self.cveg
-            * self.cliq
-            * const.rho
-            * const.lv
-            / self.ra
-            * mixed_layer.dqsatdT
-            + self.lamb
+            / (state.ra + state.rssoil)
+            * state.dqsatdT
+            + self.cveg * state.cliq * const.rho * const.lv / state.ra * state.dqsatdT
+            + self.lam
         )
 
         # limamau: should eastsurf just be deleted here?
         # or should it rather be updated on mixed layer?
         # esatsurf = get_esat(self.surf_temp)
-        mixed_layer.qsatsurf = get_qsat(self.surf_temp, mixed_layer.surf_pressure)
+        state.qsatsurf = get_qsat(state.surf_temp, state.surf_pressure)
 
-        self.le_veg = (
-            (1.0 - self.cliq)
+        state.le_veg = (
+            (1.0 - state.cliq)
             * self.cveg
             * const.rho
             * const.lv
-            / (self.ra + self.rs)
-            * (
-                mixed_layer.dqsatdT * (self.surf_temp - mixed_layer.theta)
-                + mixed_layer.qsat
-                - mixed_layer.q
-            )
+            / (state.ra + state.rs)
+            * (state.dqsatdT * (state.surf_temp - state.theta) + state.qsat - state.q)
         )
-        self.le_liq = (
-            self.cliq
+        state.le_liq = (
+            state.cliq
             * self.cveg
             * const.rho
             * const.lv
-            / self.ra
-            * (
-                mixed_layer.dqsatdT * (self.surf_temp - mixed_layer.theta)
-                + mixed_layer.qsat
-                - mixed_layer.q
-            )
+            / state.ra
+            * (state.dqsatdT * (state.surf_temp - state.theta) + state.qsat - state.q)
         )
-        self.le_soil = (
+        state.le_soil = (
             (1.0 - self.cveg)
             * const.rho
             * const.lv
-            / (self.ra + self.rssoil)
-            * (
-                mixed_layer.dqsatdT * (self.surf_temp - mixed_layer.theta)
-                + mixed_layer.qsat
-                - mixed_layer.q
-            )
+            / (state.ra + state.rssoil)
+            * (state.dqsatdT * (state.surf_temp - state.theta) + state.qsat - state.q)
         )
 
-        self.wltend = -self.le_liq / (const.rhow * const.lv)
+        state.wltend = -state.le_liq / (const.rhow * const.lv)
 
-        self.le = self.le_soil + self.le_veg + self.le_liq
-        self.hf = const.rho * const.cp / self.ra * (self.surf_temp - mixed_layer.theta)
-        self.gf = self.lamb * (self.surf_temp - self.temp_soil)
-        self.le_pot = (
-            mixed_layer.dqsatdT * (radiation.net_rad - self.gf)
-            + const.rho * const.cp / self.ra * (mixed_layer.qsat - mixed_layer.q)
-        ) / (mixed_layer.dqsatdT + const.cp / const.lv)
-        self.le_ref = (
-            mixed_layer.dqsatdT * (radiation.net_rad - self.gf)
-            + const.rho * const.cp / self.ra * (mixed_layer.qsat - mixed_layer.q)
+        state.le = state.le_soil + state.le_veg + state.le_liq
+        state.hf = const.rho * const.cp / state.ra * (state.surf_temp - state.theta)
+        state.gf = self.lam * (state.surf_temp - state.temp_soil)
+        state.le_pot = (
+            state.dqsatdT * (state.net_rad - state.gf)
+            + const.rho * const.cp / state.ra * (state.qsat - state.q)
+        ) / (state.dqsatdT + const.cp / const.lv)
+        state.le_ref = (
+            state.dqsatdT * (state.net_rad - state.gf)
+            + const.rho * const.cp / state.ra * (state.qsat - state.q)
         ) / (
-            mixed_layer.dqsatdT
-            + const.cp / const.lv * (1.0 + self.rsmin / self.lai / self.ra)
+            state.dqsatdT
+            + const.cp / const.lv * (1.0 + self.rsmin / self.lai / state.ra)
         )
 
-        cg = self.cgsat * (self.wsat / self.w2) ** (self.b / (2.0 * np.log(10.0)))
+        cg = self.cgsat * (self.wsat / state.w2) ** (self.b / (2.0 * np.log(10.0)))
 
-        self.temp_soil_tend = cg * self.gf - 2.0 * np.pi / 86400.0 * (
-            self.temp_soil - self.temp2
+        state.temp_soil_tend = cg * state.gf - 2.0 * np.pi / 86400.0 * (
+            state.temp_soil - state.temp2
         )
 
         d1 = 0.1
-        c1 = self.c1sat * (self.wsat / self.wg) ** (self.b / 2.0 + 1.0)
-        c2 = self.c2ref * (self.w2 / (self.wsat - self.w2))
-        wgeq = self.w2 - self.wsat * self.a * (
-            (self.w2 / self.wsat) ** self.p
-            * (1.0 - (self.w2 / self.wsat) ** (8.0 * self.p))
+        c1 = self.c1sat * (self.wsat / state.wg) ** (self.b / 2.0 + 1.0)
+        c2 = self.c2ref * (state.w2 / (self.wsat - state.w2))
+        wgeq = state.w2 - self.wsat * self.a * (
+            (state.w2 / self.wsat) ** self.p
+            * (1.0 - (state.w2 / self.wsat) ** (8.0 * self.p))
         )
-        self.wgtend = -c1 / (
+        state.wgtend = -c1 / (
             const.rhow * d1
-        ) * self.le_soil / const.lv - c2 / 86400.0 * (self.wg - wgeq)
+        ) * state.le_soil / const.lv - c2 / 86400.0 * (state.wg - wgeq)
 
         # calculate kinematic heat fluxes
-        mixed_layer.wtheta = self.hf / (const.rho * const.cp)
-        mixed_layer.wq = self.le / (const.rho * const.lv)
+        state.wtheta = state.hf / (const.rho * const.cp)
+        state.wq = state.le / (const.rho * const.lv)
 
-    def integrate(self, dt: float):
+        return state
+
+    def integrate(self, state: PyTree, dt: float):
         """
         Integrate model forward in time.
         """
-        self.temp_soil += dt * self.temp_soil_tend
-        self.wg += dt * self.wgtend
-        self.wl += dt * self.wltend
+        state.temp_soil += dt * state.temp_soil_tend
+        state.wg += dt * state.wgtend
+        state.wl += dt * state.wltend
+
+        return state

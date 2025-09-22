@@ -1,15 +1,12 @@
 from .cumulus import (
     StandardCumulusInitConds,
     StandardCumulusModel,
-    StandardCumulusParams,
 )
-from .no_clouds import NoCloudInitConds, NoCloudModel, NoCloudParams
+from .no_clouds import NoCloudInitConds, NoCloudModel
 
 __all__ = [
-    StandardCumulusInitConds,
-    StandardCumulusModel,
-    StandardCumulusParams,
-    NoCloudInitConds,
-    NoCloudModel,
-    NoCloudParams,
+    "StandardCumulusInitConds",
+    "StandardCumulusModel",
+    "NoCloudInitConds",
+    "NoCloudModel",
 ]

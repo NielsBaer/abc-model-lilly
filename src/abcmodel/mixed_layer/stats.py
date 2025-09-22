@@ -1,3 +1,5 @@
+from jaxtyping import PyTree
+
 from ..models import (
     AbstractMixedLayerModel,
 )
@@ -11,35 +13,25 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
     properties, and lifting condensation level determination.
     """
 
-    def statistics(self, t: float, const: PhysicalConstants):
-        """Calculate standard meteorological statistics and diagnostics.
+    surf_pressure: float
 
-        Parameters
-        ----------
-        - ``t``: current time step.
-        - ``const``: physical constants. Uses ``rho``, ``g``, and ``cp``.
-
-        Updates
-        -------
-        - ``thetav``, ``wthetav``, ``dthetav``: virtual temperature variables.
-        - ``top_p``, ``top_T``, ``top_rh``: mixed-layer top properties.
-        - ``lcl``: lifting condensation level height [m].
-        """
+    def statistics(self, state: PyTree, t: int, const: PhysicalConstants):
+        """Calculate standard meteorological statistics and diagnostics."""
         # calculate virtual temperatures
-        self.thetav = self.theta + 0.61 * self.theta * self.q
-        self.wthetav = self.wtheta + 0.61 * self.theta * self.wq
-        self.dthetav = (self.theta + self.dtheta) * (
-            1.0 + 0.61 * (self.q + self.dq)
-        ) - self.theta * (1.0 + 0.61 * self.q)
+        state.thetav = state.theta + 0.61 * state.theta * state.q
+        state.wthetav = state.wtheta + 0.61 * state.theta * state.wq
+        state.dthetav = (state.theta + state.dtheta) * (
+            1.0 + 0.61 * (state.q + state.dq)
+        ) - state.theta * (1.0 + 0.61 * state.q)
 
         # mixed-layer top properties
-        self.top_p = self.surf_pressure - const.rho * const.g * self.abl_height
-        self.top_T = self.theta - const.g / const.cp * self.abl_height
-        self.top_rh = self.q / get_qsat(self.top_T, self.top_p)
+        state.top_p = state.surf_pressure - const.rho * const.g * state.abl_height
+        state.top_T = state.theta - const.g / const.cp * state.abl_height
+        state.top_rh = state.q / get_qsat(state.top_T, state.top_p)
 
         # find lifting condensation level iteratively
         if t == 0:
-            self.lcl = self.abl_height
+            state.lcl = state.abl_height
             rhlcl = 0.5
         else:
             rhlcl = 0.9998
@@ -48,12 +40,14 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
         it = 0
         # limamau: this can be replace by a jax.lax.while_loop
         while ((rhlcl <= 0.9999) or (rhlcl >= 1.0001)) and it < itmax:
-            self.lcl += (1.0 - rhlcl) * 1000.0
-            p_lcl = self.surf_pressure - const.rho * const.g * self.lcl
-            temp_lcl = self.theta - const.g / const.cp * self.lcl
-            rhlcl = self.q / get_qsat(temp_lcl, p_lcl)
+            state.lcl += (1.0 - rhlcl) * 1000.0
+            p_lcl = state.surf_pressure - const.rho * const.g * state.lcl
+            temp_lcl = state.theta - const.g / const.cp * state.lcl
+            rhlcl = state.q / get_qsat(temp_lcl, p_lcl)
             it += 1
 
         if it == itmax:
             print("LCL calculation not converged!!")
-            print("RHlcl = %f, zlcl=%f" % (rhlcl, self.lcl))
+            print("RHlcl = %f, zlcl=%f" % (rhlcl, state.lcl))
+
+        return state

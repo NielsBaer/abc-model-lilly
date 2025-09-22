@@ -1,88 +1,62 @@
-import numpy as np
+from dataclasses import dataclass
 
-from ..diagnostics import AbstractDiagnostics
-from ..models import (
-    AbstractInitConds,
-    AbstractLandSurfaceModel,
-    AbstractMixedLayerModel,
-    AbstractParams,
-    AbstractSurfaceLayerModel,
-)
+import numpy as np
+from jaxtyping import PyTree
+
+from ..models import AbstractSurfaceLayerModel
 from ..utils import PhysicalConstants
 
 
-class MinimalSurfaceLayerParams(AbstractParams["MinimalSurfaceLayerModel"]):
-    """Data class for minimal surface layer model parameters.
-
-    Arguments
-    ---------
-    None.
-    """
-
-    def __init__(self):
-        pass
-
-
-class MinimalSurfaceLayerInitConds(AbstractInitConds["MinimalSurfaceLayerModel"]):
+@dataclass
+class MinimalSurfaceLayerInitConds:
     """Data class for minimal surface layer model initial conditions.
 
     Arguments
     ---------
     - ``ustar``: surface friction velocity [m/s].
-    """
 
-    def __init__(self, ustar: float):
-        self.ustar = ustar
-
-
-class MinimalSurfaceLayerDiagnostics(AbstractDiagnostics["MinimalSurfaceLayerModel"]):
-    """Class for minimal surface layer model diagnostic variables.
-
-    Variables
-    -------
+    Others
+    ------
     - ``uw``: surface momentum flux u [m2 s-2].
     - ``vw``: surface momentum flux v [m2 s-2].
-    - ``ustar``: surface friction velocity [m/s].
     """
 
-    def post_init(self, tsteps: int):
-        self.uw = np.zeros(tsteps)
-        self.vw = np.zeros(tsteps)
-        self.ustar = np.zeros(tsteps)
-
-    def store(self, t: int, model: "MinimalSurfaceLayerModel"):
-        self.uw[t] = model.uw
-        self.vw[t] = model.vw
-        self.ustar[t] = model.ustar
+    ustar: float
+    uw: float = np.nan
+    vw: float = np.nan
 
 
 class MinimalSurfaceLayerModel(AbstractSurfaceLayerModel):
     """Minimal surface layer model with constant friction velocity."""
 
-    def __init__(
-        self,
-        params: MinimalSurfaceLayerParams,
-        init_conds: MinimalSurfaceLayerInitConds,
-        diagnostics: AbstractDiagnostics = MinimalSurfaceLayerDiagnostics(),
-    ):
-        self.ustar = init_conds.ustar
-        self.diagnostics = diagnostics
+    def __init__(self):
+        pass
 
-    def run(
-        self,
-        const: PhysicalConstants,
-        land_surface: AbstractLandSurfaceModel,
-        mixed_layer: AbstractMixedLayerModel,
-    ):
+    @staticmethod
+    def calculate_momentum_fluxes(
+        u: float, v: float, ustar: float
+    ) -> tuple[float, float]:
         """Calculate momentum fluxes from wind components and friction velocity."""
-        self.uw = -np.sign(mixed_layer.u) * (
-            self.ustar**4.0 / (mixed_layer.v**2.0 / mixed_layer.u**2.0 + 1.0)
-        ) ** (0.5)
-        self.vw = -np.sign(mixed_layer.v) * (
-            self.ustar**4.0 / (mixed_layer.u**2.0 / mixed_layer.v**2.0 + 1.0)
-        ) ** (0.5)
+        if u == 0.0:
+            uw = 0.0
+        else:
+            uw = -np.sign(u) * (ustar**4.0 / (v**2.0 / u**2.0 + 1.0)) ** (0.5)
 
-    def compute_ra(self, u: float, v: float, wstar: float):
+        if v == 0.0:
+            vw = 0.0
+        else:
+            vw = -np.sign(v) * (ustar**4.0 / (u**2.0 / v**2.0 + 1.0)) ** (0.5)
+        return uw, vw
+
+    def run(self, state: PyTree, const: PhysicalConstants):
+        """Calculate momentum fluxes from wind components and friction velocity."""
+        state.uw, state.vw = self.calculate_momentum_fluxes(
+            state.u, state.v, state.ustar
+        )
+        return state
+
+    @staticmethod
+    def compute_ra(state: PyTree) -> float:
         """Calculate aerodynamic resistance from wind speed and friction velocity."""
-        ueff = np.sqrt(u**2.0 + v**2.0 + wstar**2.0)
-        return ueff / max(1.0e-3, self.ustar) ** 2.0
+        ueff = np.sqrt(state.u**2.0 + state.v**2.0 + state.wstar**2.0)
+        return ueff / max(1.0e-3, state.ustar) ** 2.0

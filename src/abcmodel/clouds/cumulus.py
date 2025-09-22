@@ -1,33 +1,15 @@
+from dataclasses import dataclass
+
 import numpy as np
+from jaxtyping import PyTree
 
-from ..models import (
-    AbstractCloudModel,
-    AbstractDiagnostics,
-    AbstractInitConds,
-    AbstractMixedLayerModel,
-    AbstractParams,
-)
-from ..utils import get_qsat
+from ..models import AbstractCloudModel
+from ..utils import PhysicalConstants, get_qsat
 
 
-class StandardCumulusParams(AbstractParams["StandardCumulusModel"]):
-    """Standard cumulus model parameters."""
-
-    def __init__(self):
-        pass
-
-
-class StandardCumulusInitConds(AbstractInitConds["StandardCumulusModel"]):
-    """Standard cumulus model initial conditions."""
-
-    def __init__(self):
-        self.cc_frac = 0.0
-        self.cc_mf = 0.0
-        self.cc_qf = 0.0
-
-
-class StandardCumulusDiagnostics(AbstractDiagnostics["StandardCumulusModel"]):
-    """Class for standard cumulus model diagnostics.
+@dataclass
+class StandardCumulusInitConds:
+    """Standard cumulus model state.
 
     Variables
     ---------
@@ -36,15 +18,9 @@ class StandardCumulusDiagnostics(AbstractDiagnostics["StandardCumulusModel"]):
     - ``cc_qf``: cloud core moisture flux [kg/kg/s].
     """
 
-    def post_init(self, tsteps: int):
-        self.cc_frac = np.zeros(tsteps)
-        self.cc_mf = np.zeros(tsteps)
-        self.cc_qf = np.zeros(tsteps)
-
-    def store(self, t: int, model: "StandardCumulusModel"):
-        self.cc_frac[t] = model.cc_frac
-        self.cc_mf[t] = model.cc_mf
-        self.cc_qf[t] = model.cc_qf
+    cc_frac: float = 0.0
+    cc_mf: float = 0.0
+    cc_qf: float = 0.0
 
 
 class StandardCumulusModel(AbstractCloudModel):
@@ -57,6 +33,10 @@ class StandardCumulusModel(AbstractCloudModel):
     It quantifies the variance of humidity and CO2 at the mixed-layer top and uses this
     to determine what fraction reaches saturation.
 
+    Parameters
+    ----------
+    None.
+
     Processes
     ---------
     1. Calculates turbulent variance for humidity and CO2 at the mixed-layer top
@@ -67,19 +47,12 @@ class StandardCumulusModel(AbstractCloudModel):
     4. Computes CO2 transport only when CO2 decreases with height.
     """
 
-    def __init__(
-        self,
-        params: StandardCumulusParams,
-        init_conds: StandardCumulusInitConds,
-        diagnostics: AbstractDiagnostics = StandardCumulusDiagnostics(),
-    ):
-        self.cc_frac = init_conds.cc_frac
-        self.cc_mf = init_conds.cc_mf
-        self.cc_qf = init_conds.cc_qf
-        self.diagnostics = diagnostics
+    def __init__(self):
+        pass
 
+    @staticmethod
     def calculate_mixed_layer_variance(
-        self,
+        cc_qf: float,
         wthetav: float,
         wqe: float,
         dq: float,
@@ -95,7 +68,7 @@ class StandardCumulusModel(AbstractCloudModel):
         Based on Neggers et. al 2006/7.
         """
         if wthetav > 0.0:
-            q2_h = -(wqe + self.cc_qf) * dq * abl_height / (dz_h * wstar)
+            q2_h = -(wqe + cc_qf) * dq * abl_height / (dz_h * wstar)
             top_CO22 = -(wCO2e + wCO2M) * dCO2 * abl_height / (dz_h * wstar)
         else:
             q2_h = 0.0
@@ -103,51 +76,48 @@ class StandardCumulusModel(AbstractCloudModel):
 
         return q2_h, top_CO22
 
+    @staticmethod
     def calculate_cloud_core_fraction(
-        self,
-        q: float,
-        top_T: float,
-        top_p: float,
-        q2_h: float,
-    ):
+        q: float, top_T: float, top_p: float, q2_h: float
+    ) -> float:
         """
         Calculate cloud core fraction using the arctangent formulation.
         """
         if q2_h <= 0.0:
-            self.cc_frac = 0.0
-            return None
+            return 0.0
 
         qsat = get_qsat(top_T, top_p)
         saturation_deficit = (q - qsat) / (q2_h**0.5)
         cc_frac = 0.5 + 0.36 * np.arctan(1.55 * saturation_deficit)
-        self.cc_frac = max(0.0, cc_frac)
+        cc_frac = max(0.0, cc_frac)
+        return cc_frac
 
-    def calculate_cloud_core_properties(self, wstar: float, q2_h: float):
+    @staticmethod
+    def calculate_cloud_core_properties(
+        cc_frac: float, wstar: float, q2_h: float
+    ) -> tuple[float, float]:
         """
         Calculate and update cloud core mass flux and moisture flux.
         No return needed since we're updating self attributes directly.
         """
-        self.cc_mf = self.cc_frac * wstar
-        self.cc_qf = self.cc_mf * (q2_h**0.5) if q2_h > 0.0 else 0.0
+        cc_mf = cc_frac * wstar
+        cc_qf = cc_mf * (q2_h**0.5) if q2_h > 0.0 else 0.0
+        return cc_mf, cc_qf
 
-    def calculate_co2_mass_flux(self, top_CO22: float, dCO2: float) -> float:
+    @staticmethod
+    def calculate_co2_mass_flux(cc_mf: float, top_CO22: float, dCO2: float) -> float:
         """
         Calculate CO2 mass flux, only if mixed-layer top jump is negative.
         """
         if dCO2 < 0 and top_CO22 > 0.0:
-            return self.cc_mf * (top_CO22**0.5)
+            return cc_mf * (top_CO22**0.5)
         else:
             return 0.0
 
-    def run(self, mixed_layer: AbstractMixedLayerModel):
+    def run(self, state: PyTree, const: PhysicalConstants):
         """
-        Parameters
-        ----------
-        ``mixed_layer`` : AbstractMixedLayerModel
-        Mixed-layer model containing required thermodynamic and flux variables.
-
-        **Required attributes:**
-
+        State requirements
+        ------------------
         - ``wthetav`` : float - Virtual potential temperature flux [K m/s]
         - ``wqe`` : float - Moisture flux at entrainment [kg/kg m/s]
         - ``dq`` : float - Moisture jump at mixed-layer top [kg/kg]
@@ -163,17 +133,12 @@ class StandardCumulusModel(AbstractCloudModel):
 
         Updates
         -------
-        **self attributes modified:**
-
         - ``cc_frac`` : float
             Cloud core fraction (0 to 1)
         - ``cc_mf`` : float
             Cloud core mass flux [m/s]
         - ``cc_qf`` : float
             Cloud core moisture flux [kg/kg/s]
-
-        **mixed_layer attributes modified:**
-
         - ``q2_h`` : float
             Humidity variance at mixed-layer top
         - ``top_CO22`` : float
@@ -181,27 +146,36 @@ class StandardCumulusModel(AbstractCloudModel):
         - ``wCO2M`` : float
             CO2 mass flux [ppm m/s]
         """
-        mixed_layer.q2_h, mixed_layer.top_CO22 = self.calculate_mixed_layer_variance(
-            mixed_layer.wthetav,
-            mixed_layer.wqe,
-            mixed_layer.dq,
-            mixed_layer.abl_height,
-            mixed_layer.dz_h,
-            mixed_layer.wstar,
-            mixed_layer.wCO2e,
-            mixed_layer.wCO2M,
-            mixed_layer.dCO2,
+        state.q2_h, state.top_CO22 = self.calculate_mixed_layer_variance(
+            state.cc_qf,
+            state.wthetav,
+            state.wqe,
+            state.dq,
+            state.abl_height,
+            state.dz_h,
+            state.wstar,
+            state.wCO2e,
+            state.wCO2M,
+            state.dCO2,
         )
 
-        self.calculate_cloud_core_fraction(
-            mixed_layer.q,
-            mixed_layer.top_T,
-            mixed_layer.top_p,
-            mixed_layer.q2_h,
+        state.cc_frac = self.calculate_cloud_core_fraction(
+            state.q,
+            state.top_T,
+            state.top_p,
+            state.q2_h,
         )
 
-        self.calculate_cloud_core_properties(mixed_layer.wstar, mixed_layer.q2_h)
-
-        mixed_layer.wCO2M = self.calculate_co2_mass_flux(
-            mixed_layer.top_CO22, mixed_layer.dCO2
+        state.cc_mf, state.cc_qf = self.calculate_cloud_core_properties(
+            state.cc_frac,
+            state.wstar,
+            state.q2_h,
         )
+
+        state.wCO2M = self.calculate_co2_mass_flux(
+            state.cc_mf,
+            state.top_CO22,
+            state.dCO2,
+        )
+
+        return state

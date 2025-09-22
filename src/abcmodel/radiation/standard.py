@@ -1,82 +1,33 @@
-import numpy as np
+from dataclasses import dataclass
 
-from ..diagnostics import AbstractDiagnostics
-from ..models import (
-    AbstractInitConds,
-    AbstractLandSurfaceModel,
-    AbstractMixedLayerModel,
-    AbstractParams,
-    AbstractRadiationModel,
-)
+import numpy as np
+from jaxtyping import PyTree
+
+from ..models import AbstractRadiationModel
 from ..utils import PhysicalConstants
 
 
-class StandardRadiationParams(AbstractParams["StandardRadiationModel"]):
-    """Data class for standard radiation model parameters.
-
-    Arguments
-    ----------
-    - ``lat``: latitude [degrees], range -90 to +90.
-    - ``lon``: longitude [degrees], range -180 to +180.
-    - ``doy``: day of year [-], range 1 to 365.
-    - ``tstart``: start time of day [hours UTC], range 0 to 24.
-    - ``cc``: cloud cover fraction [-], range 0 to 1.
-    """
-
-    def __init__(
-        self,
-        lat: float,
-        lon: float,
-        doy: float,
-        tstart: float,
-        cc: float,
-        dFz: float,
-    ):
-        self.lat = lat
-        self.lon = lon
-        self.doy = doy
-        self.tstart = tstart
-        self.cc = cc
-        self.dFz = dFz
-
-
-class StandardRadiationInitConds(AbstractInitConds["StandardRadiationModel"]):
+@dataclass
+class StandardRadiationInitConds:
     """Data class for standard radiation model initial conditions.
 
     Arguments
     --------
     - ``net_rad``: net surface radiation [W/m²].
-    """
 
-    def __init__(self, net_rad: float):
-        self.net_rad = net_rad
-
-
-class StandardRadiationDiagnostics(AbstractDiagnostics["StandardRadiationModel"]):
-    """Class for standard radiation model diagnostic variables.
-
-    Variables
-    ---------
-    - ``net_rad``: net surface radiation [W/m²].
+    Others
+    ------
     - ``in_srad``: incoming solar radiation [W/m²].
     - ``out_srad``: outgoing solar radiation [W/m²].
     - ``in_lrad``: incoming longwave radiation [W/m²].
     - ``out_lrad``: outgoing longwave radiation [W/m²].
     """
 
-    def post_init(self, tsteps: int):
-        self.in_srad = np.zeros(tsteps)
-        self.out_srad = np.zeros(tsteps)
-        self.in_lrad = np.zeros(tsteps)
-        self.out_lrad = np.zeros(tsteps)
-        self.net_rad = np.zeros(tsteps)
-
-    def store(self, t: int, model: "StandardRadiationModel"):
-        self.in_srad[t] = model.in_srad
-        self.out_srad[t] = model.out_srad
-        self.in_lrad[t] = model.in_lrad
-        self.out_lrad[t] = model.out_lrad
-        self.net_rad[t] = model.net_rad
+    net_rad: float
+    in_srad: float = np.nan
+    out_srad: float = np.nan
+    in_lrad: float = np.nan
+    out_lrad: float = np.nan
 
 
 class StandardRadiationModel(AbstractRadiationModel):
@@ -86,7 +37,16 @@ class StandardRadiationModel(AbstractRadiationModel):
     atmospheric conditions. Includes both shortwave (solar) and longwave (thermal)
     radiation components.
 
-    **Processes:**
+    Parameters
+    ----------
+    - ``lat``: latitude [degrees], range -90 to +90.
+    - ``lon``: longitude [degrees], range -180 to +180.
+    - ``doy``: day of year [-], range 1 to 365.
+    - ``tstart``: start time of day [hours UTC], range 0 to 24.
+    - ``cc``: cloud cover fraction [-], range 0 to 1.
+
+    Processes
+    ---------
     1. Calculate solar declination and elevation angles.
     2. Determine air temperature and atmospheric transmission.
     3. Compute all radiation components and net surface radiation.
@@ -94,29 +54,25 @@ class StandardRadiationModel(AbstractRadiationModel):
 
     def __init__(
         self,
-        params: StandardRadiationParams,
-        init_conds: StandardRadiationInitConds,
-        diagnostics: AbstractDiagnostics = StandardRadiationDiagnostics(),
+        lat: float,
+        lon: float,
+        doy: float,
+        tstart: float,
+        cc: float,
     ):
-        self.lat = params.lat
-        self.lon = params.lon
-        self.doy = params.doy
-        self.tstart = params.tstart
-        self.cc = params.cc
-        self.dFz = params.dFz
-        self.net_rad = init_conds.net_rad
-        self.in_lrad: float
-        self.out_lrad: float
-        self.in_srad: float
-        self.out_srad: float
-        self.diagnostics = diagnostics
+        self.lat = lat
+        self.lon = lon
+        self.doy = doy
+        self.tstart = tstart
+        self.cc = cc
 
-    def calculate_solar_declination(self, doy: float) -> float:
+    @staticmethod
+    def calculate_solar_declination(doy: float) -> float:
         """Calculate solar declination angle based on day of year."""
         return 0.409 * np.cos(2.0 * np.pi * (doy - 173.0) / 365.0)
 
     def calculate_solar_elevation(
-        self, t: float, dt: float, solar_declination: float
+        self, t: int, dt: float, solar_declination: float
     ) -> float:
         """Calculate solar elevation angle (sine of elevation)."""
         lat_rad = 2.0 * np.pi * self.lat / 360.0
@@ -129,19 +85,20 @@ class StandardRadiationModel(AbstractRadiationModel):
 
         return max(sinlea, 0.0001)
 
+    @staticmethod
     def calculate_air_temperature(
-        self, mixed_layer: AbstractMixedLayerModel, const: PhysicalConstants
+        surf_pressure: float,
+        abl_height: float,
+        theta: float,
+        const: PhysicalConstants,
     ) -> float:
         """Calculate air temperature at reference level using potential temperature."""
         # calculate pressure at reference level (10% reduction from surface)
-        ref_pressure = (
-            mixed_layer.surf_pressure
-            - 0.1 * mixed_layer.abl_height * const.rho * const.g
-        )
+        ref_pressure = surf_pressure - 0.1 * abl_height * const.rho * const.g
 
         # convert potential temperature to actual temperature
-        pressure_ratio = ref_pressure / mixed_layer.surf_pressure
-        air_temp = mixed_layer.theta * (pressure_ratio ** (const.rd / const.cp))
+        pressure_ratio = ref_pressure / surf_pressure
+        air_temp = theta * (pressure_ratio ** (const.rd / const.cp))
 
         return air_temp
 
@@ -162,72 +119,61 @@ class StandardRadiationModel(AbstractRadiationModel):
         solar_elevation: float,
         atmospheric_transmission: float,
         air_temp: float,
+        alpha: float,
+        surf_temp: float,
         const: PhysicalConstants,
-        land_surface: AbstractLandSurfaceModel,
-    ):
+    ) -> tuple[float, float, float, float, float]:
         """Calculate all radiation components and update attributes."""
         # shortwave radiation components
-        self.in_srad = const.solar_in * atmospheric_transmission * solar_elevation
-        self.out_srad = (
-            land_surface.alpha
-            * const.solar_in
-            * atmospheric_transmission
-            * solar_elevation
-        )
+        in_srad = const.solar_in * atmospheric_transmission * solar_elevation
+        out_srad = alpha * const.solar_in * atmospheric_transmission * solar_elevation
 
         # longwave radiation components
-        self.in_lrad = 0.8 * const.bolz * air_temp**4.0
-        self.out_lrad = const.bolz * land_surface.surf_temp**4.0
+        in_lrad = 0.8 * const.bolz * air_temp**4.0
+        out_lrad = const.bolz * surf_temp**4.0
 
         # net radiation
-        self.net_rad = self.in_srad - self.out_srad + self.in_lrad - self.out_lrad
+        net_rad = in_srad - out_srad + in_lrad - out_lrad
+
+        return net_rad, in_srad, out_srad, in_lrad, out_lrad
 
     def run(
         self,
-        t: float,
+        state: PyTree,
+        t: int,
         dt: float,
         const: PhysicalConstants,
-        land_surface: AbstractLandSurfaceModel,
-        mixed_layer: AbstractMixedLayerModel,
     ):
-        """
-        Calculate radiation components and net surface radiation.
-
-        Parameters
-        ----------
-        - ``t``: current time step.
-        - ``dt``: time step size [s].
-        - ``const``: physical constants.
-        Uses ``solar_in``, ``bolz``, ``rd``, ``cp``, ``rho`` and ``g``.
-        - ``land_surface``: land surface model. Uses ``alpha`` and ``surf_temp``.
-        - ``mixed_layer`` : mixed layer model. Uses ``theta``, ``surf_pressure`` and ``abl_height``.
-
-        Updates
-        -------
-        Updates ``net_rad`` and all radiation components (``in_srad``, ``out_srad``,
-        ``in_lrad``, ``out_lrad``) based on current atmospheric and surface conditions.
-        """
+        """Calculate radiation components and net surface radiation."""
         # solar position
         solar_declination = self.calculate_solar_declination(self.doy)
         solar_elevation = self.calculate_solar_elevation(t, dt, solar_declination)
 
         # atmospheric properties
-        air_temp = self.calculate_air_temperature(mixed_layer, const)
+        air_temp = self.calculate_air_temperature(
+            state.surf_pressure,
+            state.abl_height,
+            state.theta,
+            const,
+        )
         atmospheric_transmission = self.calculate_atmospheric_transmission(
             solar_elevation
         )
 
         # all radiation components
-        self.calculate_radiation_components(
-            solar_elevation, atmospheric_transmission, air_temp, const, land_surface
+        (
+            state.net_rad,
+            state.in_srad,
+            state.out_srad,
+            state.in_lrad,
+            state.out_lrad,
+        ) = self.calculate_radiation_components(
+            solar_elevation,
+            atmospheric_transmission,
+            air_temp,
+            state.alpha,
+            state.surf_temp,
+            const,
         )
 
-    def get_f1(self):
-        """Calculate radiation-dependent scaling factor for surface processes.
-
-        Returns correction factor based on incoming solar radiation that typically
-        ranges from 1.0 to higher values, used to scale surface flux calculations.
-        """
-        ratio = (0.004 * self.in_srad + 0.05) / (0.81 * (0.004 * self.in_srad + 1.0))
-        f1 = 1.0 / min(1.0, ratio)
-        return f1
+        return state

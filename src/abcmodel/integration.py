@@ -1,117 +1,160 @@
+import math
+from types import SimpleNamespace
+
+import jax.numpy as jnp
 import numpy as np
+from jaxtyping import PyTree
 
 from .clouds import NoCloudModel
 from .coupling import ABCoupler
 
 
-def warmup(coupler: ABCoupler, t: int, dt: float):
-    coupler.mixed_layer.statistics(t, coupler.const)
+# limamau: this (or something similar) could be a check to run after
+# warmup since the static type checking for the state is now bad
+def print_nan_variables(state: PyTree):
+    """Print all variables in a CoupledState that have NaN values"""
+    nan_vars = []
+
+    for name, value in state.__dict__.items():
+        try:
+            is_nan = False
+
+            # Check JAX arrays
+            if hasattr(value, "shape") and hasattr(value, "dtype"):
+                if jnp.issubdtype(value.dtype, jnp.floating):
+                    if jnp.any(jnp.isnan(value)):
+                        is_nan = True
+            # Check numpy arrays
+            elif hasattr(value, "dtype") and np.issubdtype(value.dtype, np.floating):
+                if np.any(np.isnan(value)):
+                    is_nan = True
+            # Check regular float values
+            elif isinstance(value, float) and math.isnan(value):
+                is_nan = True
+
+            if is_nan:
+                nan_vars.append((name, value))
+                print(f"Variable '{name}' contains NaN: {value}")
+
+        except (TypeError, AttributeError, Exception):
+            # Skip variables that can't be checked for NaN
+            continue
+
+    if not nan_vars:
+        print("No NaN variables found in the state.")
+
+    return nan_vars
+
+
+def warmup(state: PyTree, coupler: ABCoupler, t: int, dt: float) -> PyTree:
+    state = coupler.mixed_layer.statistics(state, t, coupler.const)
 
     # calculate initial diagnostic variables
-    coupler.radiation.run(
-        t,
-        dt,
-        coupler.const,
-        coupler.land_surface,
-        coupler.mixed_layer,
-    )
+    state = coupler.radiation.run(state, t, dt, coupler.const)
 
     for _ in range(10):
-        coupler.surface_layer.run(
-            coupler.const, coupler.land_surface, coupler.mixed_layer
-        )
+        state = coupler.surface_layer.run(state, coupler.const)
 
-    coupler.land_surface.run(
-        coupler.const,
-        coupler.radiation,
-        coupler.surface_layer,
-        coupler.mixed_layer,
-    )
+    state = coupler.land_surface.run(state, coupler.const, coupler.surface_layer)
 
     if not isinstance(coupler.clouds, NoCloudModel):
-        coupler.mixed_layer.run(
-            coupler.const,
-            coupler.radiation,
-            coupler.surface_layer,
-            coupler.clouds,
-        )
-        coupler.clouds.run(coupler.mixed_layer)
+        state = coupler.mixed_layer.run(state, coupler.const)
+        state = coupler.clouds.run(state, coupler.const)
 
-    coupler.mixed_layer.run(
-        coupler.const,
-        coupler.radiation,
-        coupler.surface_layer,
-        coupler.clouds,
-    )
+    state = coupler.mixed_layer.run(state, coupler.const)
+
+    print_nan_variables(state)
+
+    return state
 
 
-def timestep(coupler: ABCoupler, t: int, dt: float):
-    coupler.mixed_layer.statistics(t, coupler.const)
+def timestep(state: PyTree, coupler: ABCoupler, t: int, dt: float) -> PyTree:
+    state = coupler.mixed_layer.statistics(state, t, coupler.const)
 
     # run radiation model
-    coupler.radiation.run(
-        t,
-        dt,
-        coupler.const,
-        coupler.land_surface,
-        coupler.mixed_layer,
-    )
+    state = coupler.radiation.run(state, t, dt, coupler.const)
 
     # run surface layer model
-    coupler.surface_layer.run(coupler.const, coupler.land_surface, coupler.mixed_layer)
+    state = coupler.surface_layer.run(state, coupler.const)
 
     # run land surface model
-    coupler.land_surface.run(
-        coupler.const,
-        coupler.radiation,
-        coupler.surface_layer,
-        coupler.mixed_layer,
-    )
+    state = coupler.land_surface.run(state, coupler.const, coupler.surface_layer)
 
     # run cumulus parameterization
-    coupler.clouds.run(coupler.mixed_layer)
+    state = coupler.clouds.run(state, coupler.const)
 
     # run mixed-layer model
-    coupler.mixed_layer.run(
-        coupler.const,
-        coupler.radiation,
-        coupler.surface_layer,
-        coupler.clouds,
-    )
-
-    # store output before time integration
-    coupler.store(t)
+    state = coupler.mixed_layer.run(state, coupler.const)
 
     # time integrate land surface model
-    coupler.land_surface.integrate(dt)
+    state = coupler.land_surface.integrate(state, dt)
 
     # time integrate mixed-layer model
-    coupler.mixed_layer.integrate(dt)
+    state = coupler.mixed_layer.integrate(state, dt)
+
+    return state
+
+
+def create_trajectory_collector():
+    """Create a simple trajectory collector function."""
+    data = {}
+
+    def collect(state):
+        # Initialize on first call
+        if not data:
+            for name in state.__dict__.keys():
+                data[name] = []
+
+        # Collect current values
+        for name, value in state.__dict__.items():
+            if name not in data:
+                data[name] = [None] * (len(next(iter(data.values()))) if data else 0)
+
+            # Make copy to avoid reference issues
+            if hasattr(value, "copy"):
+                data[name].append(value.copy())
+            else:
+                data[name].append(
+                    jnp.array(value) if hasattr(value, "__array__") else value
+                )
+
+    def to_namespace():
+        array_data = {name: jnp.array(values) for name, values in data.items()}
+        return SimpleNamespace(**array_data)
+
+    collect.to_namespace = to_namespace
+    return collect
 
 
 def integrate(
+    state: PyTree,
     coupler: ABCoupler,
     dt: float,
     runtime: float,
-    initial_state=None,
 ):
     """Integrate the coupler forward in time."""
     tsteps = int(np.floor(runtime / dt))
 
-    # initialize diagnostics
-    coupler.radiation.diagnostics.post_init(tsteps)
-    coupler.land_surface.diagnostics.post_init(tsteps)
-    coupler.surface_layer.diagnostics.post_init(tsteps)
-    coupler.mixed_layer.diagnostics.post_init(tsteps)
-    coupler.clouds.diagnostics.post_init(tsteps)
-
     # warmup
-    warmup(coupler, 0, dt)
+    state = warmup(state, coupler, 0, dt)
 
     # let's go
+    collect_trajectory = create_trajectory_collector()
     for t in range(tsteps):
-        timestep(coupler, t, dt)
+        state = timestep(state, coupler, t, dt)
+        collect_trajectory(state)
+
+    # # ---------------------------------------------------------------------
+    # # limamau: maybe this is an advanced step for now
+    # def fun(carry, _):
+    #     state, t = carry
+    #     state = timestep(state, coupler, t, dt)
+    #     return (state, t + 1), state
+
+    # state, trajectory = jax.lax.scan(fun, (state, 0), None, length=tsteps)
+    # # ---------------------------------------------------------------------
 
     times = np.arange(tsteps) * dt / 3600.0 + coupler.radiation.tstart
+    trajectory = collect_trajectory.to_namespace()
 
-    return times
+    return times, trajectory

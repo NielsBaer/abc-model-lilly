@@ -1,15 +1,9 @@
-from .bulk import BulkMixedLayerInitConds, BulkMixedLayerModel, BulkMixedLayerParams
-from .minimal import (
-    MinimalMixedLayerInitConds,
-    MinimalMixedLayerModel,
-    MinimalMixedLayerParams,
-)
+from .bulk import BulkMixedLayerInitConds, BulkMixedLayerModel
+from .minimal import MinimalMixedLayerInitConds, MinimalMixedLayerModel
 
 __all__ = [
-    BulkMixedLayerInitConds,
-    BulkMixedLayerModel,
-    BulkMixedLayerParams,
-    MinimalMixedLayerModel,
-    MinimalMixedLayerInitConds,
-    MinimalMixedLayerParams,
+    "BulkMixedLayerInitConds",
+    "BulkMixedLayerModel",
+    "MinimalMixedLayerModel",
+    "MinimalMixedLayerInitConds",
 ]
