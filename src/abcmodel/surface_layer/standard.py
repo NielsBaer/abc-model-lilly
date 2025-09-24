@@ -172,13 +172,15 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
 
         convergence_threshold = 0.001
         perturbation = 0.001
+        max_oblen = 1e4
 
         def cond_fun(carry):
             oblen, oblen0 = carry
-            return jnp.logical_and(
+            res = jnp.logical_and(
                 jnp.abs(oblen - oblen0) > convergence_threshold,
-                jnp.abs(oblen) < 1e15,
+                jnp.abs(oblen) < max_oblen,
             ).squeeze()
+            return res
 
         def body_fun(carry):
             oblen, _ = carry
@@ -202,6 +204,7 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
             return oblen_new, oblen0
 
         oblen, _ = jax.lax.while_loop(cond_fun, body_fun, (oblen, oblen0))
+
         return oblen
 
     def calculate_drag_coefficients(
