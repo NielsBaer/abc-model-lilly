@@ -1,19 +1,7 @@
 import matplotlib.pyplot as plt
 
 import abcconfigs.class_model as cm
-from abcmodel.clouds import StandardCumulusInitConds, StandardCumulusModel
-from abcmodel.coupling import ABCoupler
-from abcmodel.integration import integrate
-from abcmodel.land_surface import JarvisStewartInitConds, JarvisStewartModel
-from abcmodel.mixed_layer import (
-    MinimalMixedLayerInitConds,
-    MinimalMixedLayerModel,
-)
-from abcmodel.radiation import StandardRadiationInitConds, StandardRadiationModel
-from abcmodel.surface_layer import (
-    StandardSurfaceLayerInitConds,
-    StandardSurfaceLayerModel,
-)
+import abcmodel
 
 
 def main():
@@ -22,30 +10,30 @@ def main():
     # total run time [s]
     runtime = 12 * 3600.0
 
-    # define radiation model
-    radiation_init_conds = StandardRadiationInitConds(
+    # radiation
+    radiation_init_conds = abcmodel.radiation.StandardRadiationInitConds(
         **cm.standard_radiation.init_conds_kwargs
     )
-    radiation_model = StandardRadiationModel(
+    radiation_model = abcmodel.radiation.StandardRadiationModel(
         **cm.standard_radiation.model_kwargs,
     )
 
-    # define land surface model
-    land_surface_init_conds = JarvisStewartInitConds(
+    # land surface
+    land_surface_init_conds = abcmodel.land_surface.JarvisStewartInitConds(
         **cm.jarvis_stewart.init_conds_kwargs,
     )
-    land_surface_model = JarvisStewartModel(
+    land_surface_model = abcmodel.land_surface.JarvisStewartModel(
         **cm.jarvis_stewart.model_kwargs,
     )
 
-    # define surface layer model
-    surface_layer_init_conds = StandardSurfaceLayerInitConds(
+    # surface layer
+    surface_layer_init_conds = abcmodel.surface_layer.StandardSurfaceLayerInitConds(
         **cm.standard_surface_layer.init_conds_kwargs
     )
-    surface_layer_model = StandardSurfaceLayerModel()
+    surface_layer_model = abcmodel.surface_layer.StandardSurfaceLayerModel()
 
-    # define mixed layer model
-    mixed_layer_init_conds = MinimalMixedLayerInitConds(
+    # mixed layer
+    mixed_layer_init_conds = abcmodel.mixed_layer.MinimalMixedLayerInitConds(
         # initial ABL height [m]
         abl_height=200.0,
         # surface pressure [Pa]
@@ -75,14 +63,14 @@ def main():
         # transition layer thickness [m]
         dz_h=150.0,
     )
-    mixed_layer_model = MinimalMixedLayerModel()
+    mixed_layer_model = abcmodel.mixed_layer.MinimalMixedLayerModel()
 
-    # define cloud model
-    cloud_init_conds = StandardCumulusInitConds()
-    cloud_model = StandardCumulusModel()
+    # clouds
+    cloud_init_conds = abcmodel.clouds.StandardCumulusInitConds()
+    cloud_model = abcmodel.clouds.StandardCumulusModel()
 
     # define coupler and coupled state
-    abcoupler = ABCoupler(
+    abcoupler = abcmodel.ABCoupler(
         mixed_layer=mixed_layer_model,
         surface_layer=surface_layer_model,
         radiation=radiation_model,
@@ -98,7 +86,7 @@ def main():
     )
 
     # run run run
-    time, trajectory = integrate(state, abcoupler, dt=dt, runtime=runtime)
+    time, trajectory = abcmodel.integrate(state, abcoupler, dt=dt, runtime=runtime)
 
     # plot output
     plt.figure(figsize=(12, 8))

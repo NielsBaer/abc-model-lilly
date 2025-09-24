@@ -29,27 +29,20 @@ import abcconfigs.class_model as cm
 Now we are ready to set up our models with ease...
 We will do this using the `abcmodel` module, which is the _de facto_ module in this repository.
 ```python
-from abcmodel.radiation import StandardRadiationModel
-from abcmodel.land_surface import JarvisStewartModel
-from abcmodel.surface_layer import StandardSurfaceLayerModel
-from abcmodel.mixed_layer import BulkMixedLayerModel
-from abcmodel.clouds import StandardCumulusModel
+import abcmodel
 
 # setup models
-radiation_model = StandardRadiationModel(**cm.standard_radiation.model_kwargs)
-land_surface_model = JarvisStewartModel(**cm.jarvis_stewart.model_kwargs)
-surface_layer_model = StandardSurfaceLayerModel() # no parameters
-mixed_layer_model = BulkMixedLayerModel(**cm.bulk_mixed_layer.model_kwargs)
-cloud_model = StandardCumulusModel() # no parameters
+radiation_model = abcmodel.radiation.StandardRadiationModel(**cm.standard_radiation.model_kwargs)
+land_surface_model = abcmodel.land_surface.JarvisStewartModel(**cm.jarvis_stewart.model_kwargs)
+surface_layer_model = abcmodel.surface_layer.StandardSurfaceLayerModel() # no parameters
+mixed_layer_model = abcmodel.mixed_layer.BulkMixedLayerModel(**cm.bulk_mixed_layer.model_kwargs)
+cloud_model = abcmodel.clouds.StandardCumulusModel() # no parameters
 ```
 
 We have everything we need for our vertical column structure. Now we can setup the coupler
 with these components together with the running time configuration.
-
 ```python
-from abcmodel import ABCoupler
-
-abcoupler = ABCoupler(
+abcoupler = abcmodel.ABCoupler(
     radiation=radiation_model,
     land_surface=land_surface_model,
     surface_layer=surface_layer_model,
@@ -60,26 +53,20 @@ abcoupler = ABCoupler(
 
 To setup the initial condition, we also take advantage of a ready-made config, and we can setup initial conditions for each model.
 ```python
-from abcmodel.radiation import StandardRadiationInitConds
-from abcmodel.land_surface import JarvisStewartInitConds
-from abcmodel.surface_layer import StandardSurfaceLayerInitConds
-from abcmodel.mixed_layer import BulkMixedLayerInitConds
-from abcmodel.clouds import StandardCumulusInitConds
-
 # setup initial condition
-radiation_init_conds = StandardRadiationInitConds(
+radiation_init_conds = abcmodel.radiation.StandardRadiationInitConds(
     **cm.standard_radiation.init_conds_kwargs
 )
-land_surface_init_conds = JarvisStewartInitConds(
+land_surface_init_conds = abcmodel.land_surface.JarvisStewartInitConds(
     **cm.jarvis_stewart.init_conds_kwargs,
 )
-surface_layer_init_conds = StandardSurfaceLayerInitConds(
+surface_layer_init_conds = abcmodel.surface_layer.StandardSurfaceLayerInitConds(
     **cm.standard_surface_layer.init_conds_kwargs
 )
-mixed_layer_init_conds = BulkMixedLayerInitConds(
+mixed_layer_init_conds = abcmodel.mixed_layer.BulkMixedLayerInitConds(
     **cm.bulk_mixed_layer.init_conds_kwargs,
 )
-cloud_init_conds = StandardCumulusInitConds()
+cloud_init_conds = abcmodel.clouds.StandardCumulusInitConds()
 ```
 
 Finally we can use the coupler to bound everything in a initial state that will be carried by our model.
@@ -101,7 +88,7 @@ dt = 60.0
 # total run time [s]
 runtime = 12 * 3600.0
 
-time, trajectory = integrate(state, abcoupler, dt=dt, runtime=runtime)
+time, trajectory = abcmodel.integrate(state, abcoupler, dt=dt, runtime=runtime)
 ```
 
 To plot the results, we will typically follow something like the code below.
@@ -155,14 +142,12 @@ You can take a look at the config [here](https://git.bgc-jena.mpg.de/abc3/abc-mo
 
 Now, for example, you may change from C3 to C4 with something like the following.
 ```python
-from abcmodel.land_surface import AquaCropModel
-
 # new parameters definition
 aquacrop_model_kwargs = cm.aquacrop.model_kwargs
 aquacrop_model_kwargs['c3c4'] = 'c4'
 
 # define a new land model
-land_surface_model = AquaCropModel(**aquacrop_model_kwargs)
+land_surface_model = abcmodel.land_surface.AquaCropModel(**aquacrop_model_kwargs)
 ```
 
 Then you can redefine the coupler, create a new state and integrate it to see different outcomes. You can do something similar to change initial conditions, or even recreate your own!
