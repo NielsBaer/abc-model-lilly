@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "abcmodel"
 version = "0.1.0"
-dependencies = ["jax", "matplotlib"]
+dependencies = ["jax", "matplotlib", "jaxtyping"]
 
 [tool.ruff.lint]
 ignore = ["E731", "F722"]
