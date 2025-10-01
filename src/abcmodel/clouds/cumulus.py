@@ -52,7 +52,7 @@ class StandardCumulusModel(AbstractCloudModel):
 
     def __init__(self, 
                  tcc_cc: float = 2.0,
-                 tcc_trans: float = 0.4
+                 tcc_trans: float = 0.6,
                  ):
         self.tcc_cc = tcc_cc
         self.tcc_trans = tcc_trans
@@ -128,9 +128,9 @@ class StandardCumulusModel(AbstractCloudModel):
     def calculate_cloud_layer_transmittance(self, cc_frac: Array) -> Array:
         """Calculate cloud layer transmittance, with maximum total cloud cover equal to 1"""
         # get total cloud cover
-        tcc = jnp.maximum(cc_frac*self.tcc_cc, 1.0)
+        tcc = jnp.minimum(cc_frac*self.tcc_cc, 1.0)
         # return cloud layer transmittance
-        return 1-tcc * self.tcc_trans
+        return 1.0 - tcc * (1.0 - self.tcc_trans)
 
 
 

@@ -3,7 +3,6 @@ from dataclasses import dataclass
 import jax.numpy as jnp
 from jaxtyping import Array, PyTree
 
-from ..models import AbstractRadiationModel
 from ..utils import PhysicalConstants
 from .standard import StandardRadiationInitConds, StandardRadiationModel
 
