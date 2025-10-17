@@ -2,11 +2,13 @@
 requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
-
 [project]
 name = "abcmodel"
 version = "0.1.0"
 dependencies = ["jax", "matplotlib", "jaxtyping"]
+
+[docs]
+dependencies = ["sphinx", "sphinx-book-theme", "sphinx-autodoc-typehints"]
 
 [tool.ruff.lint]
 ignore = ["E731", "F722"]

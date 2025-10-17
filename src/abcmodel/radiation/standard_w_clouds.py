@@ -8,19 +8,7 @@ from .standard import StandardRadiationInitConds, StandardRadiationModel
 
 @dataclass
 class StandardRadiationwCloudsInitConds(StandardRadiationInitConds):
-    """Data class for standard radiation model with clouds initial conditions.
-
-    Arguments
-    --------
-    - ``net_rad``: net surface radiation [W/m²].
-
-    Others
-    ------
-    - ``in_srad``: incoming solar radiation [W/m²].
-    - ``out_srad``: outgoing solar radiation [W/m²].
-    - ``in_lrad``: incoming longwave radiation [W/m²].
-    - ``out_lrad``: outgoing longwave radiation [W/m²].
-    """
+    """Data class for standard radiation model with clouds initial conditions."""
 
 
 class StandardRadiationwCloudsModel(StandardRadiationModel):
@@ -30,18 +18,15 @@ class StandardRadiationwCloudsModel(StandardRadiationModel):
     atmospheric conditions. Includes both shortwave (solar) and longwave (thermal)
     radiation components.
 
-    Parameters
-    ----------
-    - ``lat``: latitude [degrees], range -90 to +90.
-    - ``lon``: longitude [degrees], range -180 to +180.
-    - ``doy``: day of year [-], range 1 to 365.
-    - ``tstart``: start time of day [hours UTC], range 0 to 24.
-
-    Processes
-    ---------
     1. Calculate solar declination and elevation angles.
     2. Determine air temperature and atmospheric transmission.
     3. Compute all radiation components and net surface radiation.
+
+    Args:
+        lat: latitude [degrees], range -90 to +90.
+        lon: longitude [degrees], range -180 to +180.
+        doy: day of year [-], range 1 to 365.
+        tstart: start time of day [hours UTC], range 0 to 24.
     """
 
     def __init__(
@@ -60,9 +45,7 @@ class StandardRadiationwCloudsModel(StandardRadiationModel):
     def calculate_atmospheric_transmission_w_clouds(
         solar_elevation: Array, cl_trans: Array
     ) -> Array:
-        """
-        Calculate atmospheric transmission coefficient for solar radiation based on elevation and cloud layer transmittance.
-        """
+        """Calculate atmospheric transmission coefficient for solar radiation based on elevation and cloud layer transmittance."""
         # clear-sky transmission increases with solar elevation
         clear_sky_trans = 0.6 + 0.2 * solar_elevation
         # apply cloud layer transmissivity and return

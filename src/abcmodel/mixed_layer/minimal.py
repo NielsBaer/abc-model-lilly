@@ -11,31 +11,27 @@ from .stats import AbstractStandardStatsModel
 class MinimalMixedLayerInitConds:
     """Data class for minimal mixed layer model initial conditions.
 
-    Arguments
-    ---------
-    - ``abl_height``: initial ABL height [m].
-    - ``surf_pressure``: surface pressure [Pa].
-    - ``theta``: initial mixed-layer potential temperature [K].
-    - ``dtheta``: initial temperature jump at h [K].
-    - ``wtheta``: surface kinematic heat flux [K m/s].
-    - ``q``: initial mixed-layer specific humidity [kg/kg].
-    - ``dq``: initial specific humidity jump at h [kg/kg].
-    - ``wq``: surface kinematic moisture flux [kg/kg m/s].
-    - ``co2``: initial mixed-layer CO2 [ppm].
-    - ``dCO2``: initial CO2 jump at h [ppm].
-    - ``wCO2``: surface kinematic CO2 flux [mgC/m²/s].
-    - ``u``: initial mixed-layer u-wind speed [m/s].
-    - ``v``: initial mixed-layer v-wind speed [m/s].
-    - ``dz_h``: transition layer thickness [-].
-    - ``wstar``: convective velocity scale [m s-1]. Defaults to 1e-6.
-
-    Extra
-    -----
-    - ``wCO2A``: surface assimulation CO2 flux [mgC/m²/s]. Defaults to 0.0.
-    - ``wCO2R``: surface respiration CO2 flux [mgC/m²/s]. Defaults to 0.0.
-    - ``wCO2M``: CO2 mass flux [mgC/m²/s]. Defaults to 0.0.
-    - ``wqe``: entrainment moisture flux [kg kg-1 m s-1]. Defaults to 0.0.
-    - ``wCO2e``: entrainment CO2 flux [mgC/m²/s]. Defaults to 0.0.
+    Args:
+        abl_height: initial ABL height [m].
+        surf_pressure: surface pressure [Pa].
+        theta: initial mixed-layer potential temperature [K].
+        dtheta: initial temperature jump at h [K].
+        wtheta: surface kinematic heat flux [K m/s].
+        q: initial mixed-layer specific humidity [kg/kg].
+        dq: initial specific humidity jump at h [kg/kg].
+        wq: surface kinematic moisture flux [kg/kg m/s].
+        co2: initial mixed-layer CO2 [ppm].
+        dCO2: initial CO2 jump at h [ppm].
+        wCO2: surface kinematic CO2 flux [mgC/m²/s].
+        u: initial mixed-layer u-wind speed [m/s].
+        v: initial mixed-layer v-wind speed [m/s].
+        dz_h: transition layer thickness [-].
+        wstar: convective velocity scale [m s-1]. Defaults to 1e-6.
+        wCO2A: surface assimulation CO2 flux [mgC/m²/s]. Defaults to 0.0.
+        wCO2R: surface respiration CO2 flux [mgC/m²/s]. Defaults to 0.0.
+        wCO2M: CO2 mass flux [mgC/m²/s]. Defaults to 0.0.
+        wqe: entrainment moisture flux [kg kg-1 m s-1]. Defaults to 0.0.
+        wCO2e: entrainment CO2 flux [mgC/m²/s]. Defaults to 0.0.
     """
 
     # the following variables are expected to be initialized by the user
@@ -72,19 +68,15 @@ class MinimalMixedLayerInitConds:
 
 
 class MinimalMixedLayerModel(AbstractStandardStatsModel):
-    """Minimal mixed layer model with constant properties.
-
-    Parameters
-    ----------
-    None.
-    """
+    """Minimal mixed layer model with constant properties."""
 
     def __init__(self):
         pass
 
     def run(self, state: PyTree, const: PhysicalConstants):
-        """No calculations."""
+        """Pass."""
         return state
 
     def integrate(self, state: PyTree, dt: float) -> PyTree:
+        """Pass."""
         return state

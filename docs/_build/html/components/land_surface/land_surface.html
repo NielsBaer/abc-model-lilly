@@ -1,0 +1,810 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Land Surface &#8212; abc-model 0.1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=a1637f0b"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'components/land_surface/land_surface';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">abc-model 0.1.0 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../index.html">Model Components</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../clouds/index.html">Cloud Models</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../clouds/cumulus.html">Cumulus Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../clouds/no_clouds.html">No Clouds Model</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/components/land_surface/land_surface.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Land Surface</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.AquaCropInitConds"><code class="docutils literal notranslate"><span class="pre">AquaCropInitConds</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.AquaCropModel"><code class="docutils literal notranslate"><span class="pre">AquaCropModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.AquaCropModel.calculate_canopy_co2_conductance"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_canopy_co2_conductance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.AquaCropModel.calculate_co2_compensation_concentration"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_co2_compensation_concentration()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.AquaCropModel.calculate_gross_assimilation_and_light_use"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_gross_assimilation_and_light_use()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.AquaCropModel.calculate_internal_co2"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_internal_co2()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.AquaCropModel.calculate_max_gross_primary_production"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_max_gross_primary_production()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.AquaCropModel.calculate_mesophyll_conductance"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_mesophyll_conductance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.AquaCropModel.calculate_soil_moisture_stress_factor"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_soil_moisture_stress_factor()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.AquaCropModel.compute_surface_resistance"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.compute_surface_resistance()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.JarvisStewartInitConds"><code class="docutils literal notranslate"><span class="pre">JarvisStewartInitConds</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.JarvisStewartModel"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.JarvisStewartModel.compute_co2_flux"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_co2_flux()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.JarvisStewartModel.compute_surface_resistance"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_surface_resistance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.JarvisStewartModel.get_f1"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.get_f1()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.MinimalLandSurfaceInitConds"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceInitConds</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.MinimalLandSurfaceModel"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.MinimalLandSurfaceModel.integrate"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceModel.integrate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.MinimalLandSurfaceModel.run"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceModel.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-abcmodel.land_surface">
+<span id="land-surface"></span><h1>Land Surface<a class="headerlink" href="#module-abcmodel.land_surface" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.land_surface.AquaCropInitConds">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.land_surface.</span></span><span class="sig-name descname"><span class="pre">AquaCropInitConds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_soil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rssoil</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cliq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_soil_tend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wgtend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wltend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">le_veg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">le_liq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">le_soil</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">le</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">le_pot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">le_ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rsCO2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gcco2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ci</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2abs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/aquacrop.html#AquaCropInitConds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.AquaCropInitConds" title="Link to this definition">#</a></dt>
+<dd><p>Data class for AquaCrop model initial conditions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>StandardLandSurfaceInitConds.</strong> (<em>- all arguments from</em>)</p></li>
+<li><p><strong>Also</strong></p></li>
+<li><p><strong>----</strong></p></li>
+<li><p><strong>rsCO2</strong> (<em>-</em>)</p></li>
+<li><p><strong>gcco2</strong> (<em>-</em>)</p></li>
+<li><p><strong>ci</strong> (<em>-</em>)</p></li>
+<li><p><strong>co2abs</strong> (<em>-</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.land_surface.AquaCropModel">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.land_surface.</span></span><span class="sig-name descname"><span class="pre">AquaCropModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c3c4</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/aquacrop.html#AquaCropModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.AquaCropModel" title="Link to this definition">#</a></dt>
+<dd><p>AquaCrop land surface model with coupled photosynthesis and stomatal conductance.</p>
+<p>A bit more advanced land surface model implementing the AquaCrop approach with coupled
+photosynthesis-stomatal conductance calculations. Includes detailed biochemical
+processes for both C3 and C4 vegetation types, soil moisture stress effects,
+and explicit CO2 flux calculations.</p>
+<section id="processes">
+<h2>Processes<a class="headerlink" href="#processes" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Inherit all standard land surface processes from parent class.</p></li>
+<li><p>Calculate CO2 compensation concentration based on temperature.</p></li>
+<li><p>Compute mesophyll conductance with temperature response functions.</p></li>
+<li><p>Determine internal CO2 concentration using stomatal optimization.</p></li>
+<li><p>Calculate gross primary productivity with light and moisture limitations.</p></li>
+<li><p>Scale from leaf-level to canopy-level fluxes using extinction functions.</p></li>
+<li><p>Compute surface resistance from canopy conductance.</p></li>
+<li><p>Calculate net CO2 fluxes including plant assimilation and soil respiration.</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">param - all arguments from StandardLandSurfaceParams.<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">param - <code class="docutils literal notranslate"><span class="pre">c3c4</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">type - <code class="docutils literal notranslate"><span class="pre">c3c4</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>plant type, either “c3” or “c4”.</p>
+</dd>
+<dt class="field-even">param - <code class="docutils literal notranslate"><span class="pre">co2comp298</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">type - <code class="docutils literal notranslate"><span class="pre">co2comp298</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>CO2 compensation concentration [mg m-3].</p>
+</dd>
+<dt class="field-even">param - <code class="docutils literal notranslate"><span class="pre">net_rad10CO2</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">type - <code class="docutils literal notranslate"><span class="pre">net_rad10CO2</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>function parameter to calculate CO2 compensation concentration [-].</p>
+</dd>
+<dt class="field-even">param - <code class="docutils literal notranslate"><span class="pre">gm298</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">type - <code class="docutils literal notranslate"><span class="pre">gm298</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>mesophyill conductance at 298 K [mm s-1].</p>
+</dd>
+<dt class="field-even">param - <code class="docutils literal notranslate"><span class="pre">ammax298</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">type - <code class="docutils literal notranslate"><span class="pre">ammax298</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>CO2 maximal primary productivity [mg m-2 s-1].</p>
+</dd>
+<dt class="field-even">param - <code class="docutils literal notranslate"><span class="pre">net_rad10gm</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">type - <code class="docutils literal notranslate"><span class="pre">net_rad10gm</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>function parameter to calculate mesophyll conductance [-].</p>
+</dd>
+<dt class="field-even">param - <code class="docutils literal notranslate"><span class="pre">temp1gm</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">type - <code class="docutils literal notranslate"><span class="pre">temp1gm</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>reference temperature to calculate mesophyll conductance gm [K].</p>
+</dd>
+<dt class="field-even">param - <code class="docutils literal notranslate"><span class="pre">temp2gm</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">type - <code class="docutils literal notranslate"><span class="pre">temp2gm</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>reference temperature to calculate mesophyll conductance gm [K].</p>
+</dd>
+<dt class="field-even">param - <code class="docutils literal notranslate"><span class="pre">net_rad10Am</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">type - <code class="docutils literal notranslate"><span class="pre">net_rad10Am</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>function parameter to calculate maximal primary profuctivity Ammax.</p>
+</dd>
+<dt class="field-even">param - <code class="docutils literal notranslate"><span class="pre">temp1Am</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">type - <code class="docutils literal notranslate"><span class="pre">temp1Am</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>reference temperature to calculate maximal primary profuctivity Ammax [K].</p>
+</dd>
+<dt class="field-even">param - <code class="docutils literal notranslate"><span class="pre">temp2Am</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">type - <code class="docutils literal notranslate"><span class="pre">temp2Am</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>reference temperature to calculate maximal primary profuctivity Ammax [K].</p>
+</dd>
+<dt class="field-even">param - <code class="docutils literal notranslate"><span class="pre">f0</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">type - <code class="docutils literal notranslate"><span class="pre">f0</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>maximum value Cfrac [-].</p>
+</dd>
+<dt class="field-even">param - <code class="docutils literal notranslate"><span class="pre">ad</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">type - <code class="docutils literal notranslate"><span class="pre">ad</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>regression coefficient to calculate Cfrac [kPa-1].</p>
+</dd>
+<dt class="field-even">param - <code class="docutils literal notranslate"><span class="pre">alpha0</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">type - <code class="docutils literal notranslate"><span class="pre">alpha0</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>initial low light conditions [mg J-1].</p>
+</dd>
+<dt class="field-even">param - <code class="docutils literal notranslate"><span class="pre">kx</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">type - <code class="docutils literal notranslate"><span class="pre">kx</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>extinction coefficient PAR [-].</p>
+</dd>
+<dt class="field-even">param - <code class="docutils literal notranslate"><span class="pre">gmin</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">type - <code class="docutils literal notranslate"><span class="pre">gmin</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>cuticular (minimum) conductance [mm s-1].</p>
+</dd>
+<dt class="field-even">param - <code class="docutils literal notranslate"><span class="pre">nuco2q</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">type - <code class="docutils literal notranslate"><span class="pre">nuco2q</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>ratio molecular viscosity water to carbon dioxide.</p>
+</dd>
+<dt class="field-even">param - <code class="docutils literal notranslate"><span class="pre">cw</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">type - <code class="docutils literal notranslate"><span class="pre">cw</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>constant water stress correction (eq. 13 Jacobs et al. 2007) [-].</p>
+</dd>
+<dt class="field-even">param - <code class="docutils literal notranslate"><span class="pre">wmax</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">type - <code class="docutils literal notranslate"><span class="pre">wmax</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>upper reference value soil water [-].</p>
+</dd>
+<dt class="field-even">param - <code class="docutils literal notranslate"><span class="pre">wmin</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">type - <code class="docutils literal notranslate"><span class="pre">wmin</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>lower reference value soil water [-].</p>
+</dd>
+<dt class="field-even">param - <code class="docutils literal notranslate"><span class="pre">r10</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">type - <code class="docutils literal notranslate"><span class="pre">r10</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>respiration at 10 C [mg CO2 m-2 s-1].</p>
+</dd>
+<dt class="field-even">param - <code class="docutils literal notranslate"><span class="pre">e0</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">type - <code class="docutils literal notranslate"><span class="pre">e0</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>activation energy [53.3 kJ kmol-1].</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.AquaCropModel.calculate_canopy_co2_conductance">
+<span class="sig-name descname"><span class="pre">calculate_canopy_co2_conductance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alphac</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">par</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">am</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rdark</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fstr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2abs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2comp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmin</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/aquacrop.html#AquaCropModel.calculate_canopy_co2_conductance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.AquaCropModel.calculate_canopy_co2_conductance" title="Link to this definition">#</a></dt>
+<dd><p>Calculate upscaling from leaf to canopy and CO2 conductance at canopy level.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.AquaCropModel.calculate_co2_compensation_concentration">
+<span class="sig-name descname"><span class="pre">calculate_co2_compensation_concentration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thetasurf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/aquacrop.html#AquaCropModel.calculate_co2_compensation_concentration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.AquaCropModel.calculate_co2_compensation_concentration" title="Link to this definition">#</a></dt>
+<dd><p>Calculate CO2 compensation concentration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.AquaCropModel.calculate_gross_assimilation_and_light_use">
+<span class="sig-name descname"><span class="pre">calculate_gross_assimilation_and_light_use</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_srad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ammax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ci</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2comp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2abs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/aquacrop.html#AquaCropModel.calculate_gross_assimilation_and_light_use"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.AquaCropModel.calculate_gross_assimilation_and_light_use" title="Link to this definition">#</a></dt>
+<dd><p>Calculate gross assimilation rate, dark respiration, PAR, and light use efficiency.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.AquaCropModel.calculate_internal_co2">
+<span class="sig-name descname"><span class="pre">calculate_internal_co2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surf_temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2comp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/aquacrop.html#AquaCropModel.calculate_internal_co2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.AquaCropModel.calculate_internal_co2" title="Link to this definition">#</a></dt>
+<dd><p>Calculate internal CO2 concentration and related parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.AquaCropModel.calculate_max_gross_primary_production">
+<span class="sig-name descname"><span class="pre">calculate_max_gross_primary_production</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thetasurf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/aquacrop.html#AquaCropModel.calculate_max_gross_primary_production"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.AquaCropModel.calculate_max_gross_primary_production" title="Link to this definition">#</a></dt>
+<dd><p>Calculate maximal gross primary production in high light conditions (Ag).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.AquaCropModel.calculate_mesophyll_conductance">
+<span class="sig-name descname"><span class="pre">calculate_mesophyll_conductance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thetasurf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/aquacrop.html#AquaCropModel.calculate_mesophyll_conductance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.AquaCropModel.calculate_mesophyll_conductance" title="Link to this definition">#</a></dt>
+<dd><p>Calculate mesophyll conductance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.AquaCropModel.calculate_soil_moisture_stress_factor">
+<span class="sig-name descname"><span class="pre">calculate_soil_moisture_stress_factor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">w2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/aquacrop.html#AquaCropModel.calculate_soil_moisture_stress_factor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.AquaCropModel.calculate_soil_moisture_stress_factor" title="Link to this definition">#</a></dt>
+<dd><p>Calculate effect of soil moisture stress on gross assimilation rate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.AquaCropModel.compute_surface_resistance">
+<span class="sig-name descname"><span class="pre">compute_surface_resistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/aquacrop.html#AquaCropModel.compute_surface_resistance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.AquaCropModel.compute_surface_resistance" title="Link to this definition">#</a></dt>
+<dd><p>Compute surface resistance using AquaCrop photosynthesis-conductance model.</p>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.land_surface.JarvisStewartInitConds">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.land_surface.</span></span><span class="sig-name descname"><span class="pre">JarvisStewartInitConds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_soil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rssoil</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cliq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_soil_tend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wgtend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wltend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">le_veg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">le_liq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">le_soil</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">le</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">le_pot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">le_ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/jarvis_stewart.html#JarvisStewartInitConds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.JarvisStewartInitConds" title="Link to this definition">#</a></dt>
+<dd><p>Data class for Jarvis-Stewart model initial conditions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>StandardLandSurfaceInitConds.</strong> (<em>- all arguments from</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.land_surface.JarvisStewartModel">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.land_surface.</span></span><span class="sig-name descname"><span class="pre">JarvisStewartModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/jarvis_stewart.html#JarvisStewartModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.JarvisStewartModel" title="Link to this definition">#</a></dt>
+<dd><p>Jarvis-Stewart land surface model with empirical surface resistance.</p>
+<p>Implementation of the Jarvis-Stewart approach for calculating surface resistance
+based on environmental stress factors. Uses multiplicative stress functions
+for radiation, soil moisture, vapor pressure deficit, and temperature effects
+on stomatal conductance.</p>
+<section id="id1">
+<h2>Processes<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Inherit all standard land surface processes from parent class.</p></li>
+<li><p>Calculate surface resistance using four environmental stress factors.</p></li>
+<li><p>Apply Jarvis-Stewart multiplicative stress function approach.</p></li>
+<li><p>No CO2 flux calculations (simple implementation).</p></li>
+</ol>
+</section>
+<section id="updates">
+<h2>Updates<a class="headerlink" href="#updates" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">rs</span></code>: surface resistance for transpiration [s m-1].</p></li>
+<li><p>all updates from <code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel</span></code>.</p></li>
+</ul>
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.JarvisStewartModel.compute_co2_flux">
+<span class="sig-name descname"><span class="pre">compute_co2_flux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/jarvis_stewart.html#JarvisStewartModel.compute_co2_flux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.JarvisStewartModel.compute_co2_flux" title="Link to this definition">#</a></dt>
+<dd><p>Pass.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.JarvisStewartModel.compute_surface_resistance">
+<span class="sig-name descname"><span class="pre">compute_surface_resistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/jarvis_stewart.html#JarvisStewartModel.compute_surface_resistance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.JarvisStewartModel.compute_surface_resistance" title="Link to this definition">#</a></dt>
+<dd><p>Compute surface resistance using Jarvis-Stewart approach.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>const</strong> (<em>-</em>)</p></li>
+<li><p><strong>radiation</strong> (<em>-</em>)</p></li>
+<li><p><strong>surface_layer</strong> (<em>-</em>)</p></li>
+<li><p><strong>mixed_layer</strong> (<em>-</em>)</p></li>
+<li><p><strong>Updates</strong></p></li>
+<li><p><strong>-------</strong></p></li>
+<li><p><strong>(</strong><strong>f1</strong><strong>)</strong> (<em>Updates self.rs using multiplicative stress factors for radiation</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<p>:param :
+:param soil moisture (f2):
+:param vapor pressure deficit (f3):
+:param and temperature (f4).:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.JarvisStewartModel.get_f1">
+<span class="sig-name descname"><span class="pre">get_f1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/jarvis_stewart.html#JarvisStewartModel.get_f1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.JarvisStewartModel.get_f1" title="Link to this definition">#</a></dt>
+<dd><p>Calculate radiation-dependent scaling factor for surface processes.</p>
+<p>Returns correction factor based on incoming solar radiation that typically
+ranges from 1.0 to higher values, used to scale surface flux calculations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.land_surface.MinimalLandSurfaceInitConds">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.land_surface.</span></span><span class="sig-name descname"><span class="pre">MinimalLandSurfaceInitConds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/minimal.html#MinimalLandSurfaceInitConds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.MinimalLandSurfaceInitConds" title="Link to this definition">#</a></dt>
+<dd><p>Data class for minimal land surface model initial conditions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha</strong> (<em>-</em>)</p></li>
+<li><p><strong>surf_temp</strong> (<em>-</em>)</p></li>
+<li><p><strong>rs</strong> (<em>-</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.land_surface.MinimalLandSurfaceModel">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.land_surface.</span></span><span class="sig-name descname"><span class="pre">MinimalLandSurfaceModel</span></span><a class="reference internal" href="../../_modules/abcmodel/land_surface/minimal.html#MinimalLandSurfaceModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.MinimalLandSurfaceModel" title="Link to this definition">#</a></dt>
+<dd><p>Minimal land surface model with fixed surface properties.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>None.</strong></p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.MinimalLandSurfaceModel.integrate">
+<span class="sig-name descname"><span class="pre">integrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/minimal.html#MinimalLandSurfaceModel.integrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.MinimalLandSurfaceModel.integrate" title="Link to this definition">#</a></dt>
+<dd><p>Integrate model forward in time.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.MinimalLandSurfaceModel.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface_layer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/minimal.html#MinimalLandSurfaceModel.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.MinimalLandSurfaceModel.run" title="Link to this definition">#</a></dt>
+<dd><p>Execute land surface model calculations.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.AquaCropInitConds"><code class="docutils literal notranslate"><span class="pre">AquaCropInitConds</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.AquaCropModel"><code class="docutils literal notranslate"><span class="pre">AquaCropModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.AquaCropModel.calculate_canopy_co2_conductance"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_canopy_co2_conductance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.AquaCropModel.calculate_co2_compensation_concentration"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_co2_compensation_concentration()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.AquaCropModel.calculate_gross_assimilation_and_light_use"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_gross_assimilation_and_light_use()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.AquaCropModel.calculate_internal_co2"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_internal_co2()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.AquaCropModel.calculate_max_gross_primary_production"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_max_gross_primary_production()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.AquaCropModel.calculate_mesophyll_conductance"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_mesophyll_conductance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.AquaCropModel.calculate_soil_moisture_stress_factor"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_soil_moisture_stress_factor()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.AquaCropModel.compute_surface_resistance"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.compute_surface_resistance()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.JarvisStewartInitConds"><code class="docutils literal notranslate"><span class="pre">JarvisStewartInitConds</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.JarvisStewartModel"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.JarvisStewartModel.compute_co2_flux"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_co2_flux()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.JarvisStewartModel.compute_surface_resistance"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_surface_resistance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.JarvisStewartModel.get_f1"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.get_f1()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.MinimalLandSurfaceInitConds"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceInitConds</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.MinimalLandSurfaceModel"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.MinimalLandSurfaceModel.integrate"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceModel.integrate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.MinimalLandSurfaceModel.run"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceModel.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By ABC3 Group
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright ABC3 Group.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

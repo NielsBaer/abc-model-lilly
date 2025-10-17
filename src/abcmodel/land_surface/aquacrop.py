@@ -1,3 +1,5 @@
+"""I like pizza."""
+
 from dataclasses import dataclass
 
 import jax
@@ -13,16 +15,13 @@ from .standard import AbstractStandardLandSurfaceModel, StandardLandSurfaceInitC
 class AquaCropInitConds(StandardLandSurfaceInitConds):
     """Data class for AquaCrop model initial conditions.
 
-    Arguments
-    ---------
-    - all arguments from StandardLandSurfaceInitConds.
+    Takes all the arguments from StandardLandSurfaceInitConds.
 
-    Also
-    ----
-    - ``rsCO2``: stomatal resistance to CO2.
-    - ``gcco2``: conductance to CO2.
-    - ``ci``: intercellular CO2 concentration.
-    - ``co2abs``: CO2 assimilation rate.
+    Args:
+        rsCO2: stomatal resistance to CO2.
+        gcco2: conductance to CO2.
+        ci: intercellular CO2 concentration.
+        co2abs: CO2 assimilation rate.
     """
 
     rsCO2: float = jnp.nan
@@ -39,8 +38,6 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
     processes for both C3 and C4 vegetation types, soil moisture stress effects,
     and explicit CO2 flux calculations.
 
-    Processes
-    ---------
     1. Inherit all standard land surface processes from parent class.
     2. Calculate CO2 compensation concentration based on temperature.
     3. Compute mesophyll conductance with temperature response functions.
@@ -50,31 +47,29 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
     7. Compute surface resistance from canopy conductance.
     8. Calculate net CO2 fluxes including plant assimilation and soil respiration.
 
-    Parameters
-    ----------
-    - all arguments from StandardLandSurfaceParams.
-    - ``c3c4``: plant type, either "c3" or "c4".
-    - ``co2comp298``: CO2 compensation concentration [mg m-3].
-    - ``net_rad10CO2``: function parameter to calculate CO2 compensation concentration [-].
-    - ``gm298``: mesophyill conductance at 298 K [mm s-1].
-    - ``ammax298``: CO2 maximal primary productivity [mg m-2 s-1].
-    - ``net_rad10gm``: function parameter to calculate mesophyll conductance [-].
-    - ``temp1gm``: reference temperature to calculate mesophyll conductance gm [K].
-    - ``temp2gm``: reference temperature to calculate mesophyll conductance gm [K].
-    - ``net_rad10Am``: function parameter to calculate maximal primary profuctivity Ammax.
-    - ``temp1Am``: reference temperature to calculate maximal primary profuctivity Ammax [K].
-    - ``temp2Am``: reference temperature to calculate maximal primary profuctivity Ammax [K].
-    - ``f0``: maximum value Cfrac [-].
-    - ``ad``: regression coefficient to calculate Cfrac [kPa-1].
-    - ``alpha0``: initial low light conditions [mg J-1].
-    - ``kx``: extinction coefficient PAR [-].
-    - ``gmin``: cuticular (minimum) conductance [mm s-1].
-    - ``nuco2q``: ratio molecular viscosity water to carbon dioxide.
-    - ``cw``: constant water stress correction (eq. 13 Jacobs et al. 2007) [-].
-    - ``wmax``: upper reference value soil water [-].
-    - ``wmin``: lower reference value soil water [-].
-    - ``r10``: respiration at 10 C [mg CO2 m-2 s-1].
-    - ``e0``: activation energy [53.3 kJ kmol-1].
+    Args:
+        c3c4: plant type, either "c3" or "c4".
+        co2comp298: CO2 compensation concentration [mg m-3].
+        net_rad10CO2: function parameter to calculate CO2 compensation concentration [-].
+        gm298: mesophyill conductance at 298 K [mm s-1].
+        ammax298: CO2 maximal primary productivity [mg m-2 s-1].
+        net_rad10gm: function parameter to calculate mesophyll conductance [-].
+        temp1gm: reference temperature to calculate mesophyll conductance gm [K].
+        temp2gm: reference temperature to calculate mesophyll conductance gm [K].
+        net_rad10Am: function parameter to calculate maximal primary productivity Ammax.
+        temp1Am: reference temperature to calculate maximal primary productivity Ammax [K].
+        temp2Am: reference temperature to calculate maximal primary productivity Ammax [K].
+        f0: maximum value Cfrac [-].
+        ad: regression coefficient to calculate Cfrac [kPa-1].
+        alpha0: initial low light conditions [mg J-1].
+        kx: extinction coefficient PAR [-].
+        gmin: cuticular (minimum) conductance [mm s-1].
+        nuco2q: ratio molecular viscosity water to carbon dioxide.
+        cw: constant water stress correction (eq. 13 Jacobs et al. 2007) [-].
+        wmax: upper reference value soil water [-].
+        wmin: lower reference value soil water [-].
+        r10: respiration at 10 C [mg CO2 m-2 s-1].
+        e0: activation energy [53.3 kJ kmol-1].
     """
 
     def __init__(self, c3c4: str, **kwargs):
@@ -278,6 +273,7 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         state.rs = 1.0 / (1.6 * state.gcco2)
 
     def compute_co2_flux(self, state: PyTree, const: PhysicalConstants):
+        """Compute the CO2 flux."""
         state.rsCO2 = 1.0 / state.gcco2
         an = -(state.co2abs - state.ci) / (state.ra + state.rsCO2)
         fw = self.cw * self.wmax / (state.wg + self.wmin)

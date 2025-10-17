@@ -1,0 +1,709 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>abcmodel.clouds package &#8212; abc-model 0.1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=a1637f0b"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'source/api/abcmodel.clouds';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="abcmodel.clouds.cumulus module" href="abcmodel.clouds.cumulus.html" />
+    <link rel="prev" title="abcmodel package" href="abcmodel.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">abc-model 0.1.0 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="modules.html">API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="abcmodel.html">abcmodel package</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 current active has-children"><a class="current reference internal" href="#">abcmodel.clouds package</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.cumulus.html">abcmodel.clouds.cumulus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.no_clouds.html">abcmodel.clouds.no_clouds module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.land_surface.html">abcmodel.land_surface package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.aquacrop.html">abcmodel.land_surface.aquacrop module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.jarvis_stewart.html">abcmodel.land_surface.jarvis_stewart module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.minimal.html">abcmodel.land_surface.minimal module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.standard.html">abcmodel.land_surface.standard module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.mixed_layer.html">abcmodel.mixed_layer package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.bulk.html">abcmodel.mixed_layer.bulk module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.minimal.html">abcmodel.mixed_layer.minimal module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.stats.html">abcmodel.mixed_layer.stats module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.radiation.html">abcmodel.radiation package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.standard.html">abcmodel.radiation.standard module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.standard_w_clouds.html">abcmodel.radiation.standard_w_clouds module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.surface_layer.html">abcmodel.surface_layer package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.minimal.html">abcmodel.surface_layer.minimal module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.standard.html">abcmodel.surface_layer.standard module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.coupling.html">abcmodel.coupling module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.integration.html">abcmodel.integration module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.models.html">abcmodel.models module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.utils.html">abcmodel.utils module</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://git.bgc-jena.mpg.de/abc3/abc-model" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-gitlab"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/source/api/abcmodel.clouds.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>abcmodel.clouds package</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-abcmodel.clouds">Module contents</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.NoCloudInitConds"><code class="docutils literal notranslate"><span class="pre">NoCloudInitConds</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.NoCloudInitConds.cc_frac"><code class="docutils literal notranslate"><span class="pre">NoCloudInitConds.cc_frac</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.NoCloudInitConds.cc_mf"><code class="docutils literal notranslate"><span class="pre">NoCloudInitConds.cc_mf</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.NoCloudInitConds.cc_qf"><code class="docutils literal notranslate"><span class="pre">NoCloudInitConds.cc_qf</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.NoCloudModel"><code class="docutils literal notranslate"><span class="pre">NoCloudModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.NoCloudModel.run"><code class="docutils literal notranslate"><span class="pre">NoCloudModel.run()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.StandardCumulusInitConds"><code class="docutils literal notranslate"><span class="pre">StandardCumulusInitConds</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.StandardCumulusInitConds.cc_frac"><code class="docutils literal notranslate"><span class="pre">StandardCumulusInitConds.cc_frac</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.StandardCumulusInitConds.cc_mf"><code class="docutils literal notranslate"><span class="pre">StandardCumulusInitConds.cc_mf</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.StandardCumulusInitConds.cc_qf"><code class="docutils literal notranslate"><span class="pre">StandardCumulusInitConds.cc_qf</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.StandardCumulusInitConds.cl_trans"><code class="docutils literal notranslate"><span class="pre">StandardCumulusInitConds.cl_trans</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.StandardCumulusModel"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.StandardCumulusModel.calculate_cloud_core_fraction"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_core_fraction()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.StandardCumulusModel.calculate_cloud_core_properties"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_core_properties()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.StandardCumulusModel.calculate_cloud_layer_transmittance"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_layer_transmittance()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.StandardCumulusModel.calculate_co2_mass_flux"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_co2_mass_flux()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.StandardCumulusModel.calculate_mixed_layer_variance"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_mixed_layer_variance()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.StandardCumulusModel.run"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="abcmodel-clouds-package">
+<h1>abcmodel.clouds package<a class="headerlink" href="#abcmodel-clouds-package" title="Link to this heading">#</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.clouds.cumulus.html">abcmodel.clouds.cumulus module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.clouds.cumulus.html#abcmodel.clouds.cumulus.StandardCumulusInitConds"><code class="docutils literal notranslate"><span class="pre">StandardCumulusInitConds</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.clouds.cumulus.html#abcmodel.clouds.cumulus.StandardCumulusInitConds.cc_frac"><code class="docutils literal notranslate"><span class="pre">StandardCumulusInitConds.cc_frac</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.clouds.cumulus.html#abcmodel.clouds.cumulus.StandardCumulusInitConds.cc_mf"><code class="docutils literal notranslate"><span class="pre">StandardCumulusInitConds.cc_mf</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.clouds.cumulus.html#abcmodel.clouds.cumulus.StandardCumulusInitConds.cc_qf"><code class="docutils literal notranslate"><span class="pre">StandardCumulusInitConds.cc_qf</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.clouds.cumulus.html#abcmodel.clouds.cumulus.StandardCumulusInitConds.cl_trans"><code class="docutils literal notranslate"><span class="pre">StandardCumulusInitConds.cl_trans</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.clouds.cumulus.html#abcmodel.clouds.cumulus.StandardCumulusModel"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.clouds.cumulus.html#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_core_fraction"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_core_fraction()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.clouds.cumulus.html#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_core_properties"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_core_properties()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.clouds.cumulus.html#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_layer_transmittance"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_layer_transmittance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.clouds.cumulus.html#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_co2_mass_flux"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_co2_mass_flux()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.clouds.cumulus.html#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_mixed_layer_variance"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_mixed_layer_variance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.clouds.cumulus.html#abcmodel.clouds.cumulus.StandardCumulusModel.run"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.clouds.no_clouds.html">abcmodel.clouds.no_clouds module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.clouds.no_clouds.html#abcmodel.clouds.no_clouds.NoCloudInitConds"><code class="docutils literal notranslate"><span class="pre">NoCloudInitConds</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.clouds.no_clouds.html#abcmodel.clouds.no_clouds.NoCloudInitConds.cc_frac"><code class="docutils literal notranslate"><span class="pre">NoCloudInitConds.cc_frac</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.clouds.no_clouds.html#abcmodel.clouds.no_clouds.NoCloudInitConds.cc_mf"><code class="docutils literal notranslate"><span class="pre">NoCloudInitConds.cc_mf</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.clouds.no_clouds.html#abcmodel.clouds.no_clouds.NoCloudInitConds.cc_qf"><code class="docutils literal notranslate"><span class="pre">NoCloudInitConds.cc_qf</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.clouds.no_clouds.html#abcmodel.clouds.no_clouds.NoCloudModel"><code class="docutils literal notranslate"><span class="pre">NoCloudModel</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.clouds.no_clouds.html#abcmodel.clouds.no_clouds.NoCloudModel.run"><code class="docutils literal notranslate"><span class="pre">NoCloudModel.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-abcmodel.clouds">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-abcmodel.clouds" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.clouds.NoCloudInitConds">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.clouds.</span></span><span class="sig-name descname"><span class="pre">NoCloudInitConds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc_frac</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_mf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_qf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/no_clouds.html#NoCloudInitConds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.NoCloudInitConds" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>No cloud initial conditions.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.clouds.NoCloudInitConds.cc_frac">
+<span class="sig-name descname"><span class="pre">cc_frac</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#abcmodel.clouds.NoCloudInitConds.cc_frac" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.clouds.NoCloudInitConds.cc_mf">
+<span class="sig-name descname"><span class="pre">cc_mf</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#abcmodel.clouds.NoCloudInitConds.cc_mf" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.clouds.NoCloudInitConds.cc_qf">
+<span class="sig-name descname"><span class="pre">cc_qf</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#abcmodel.clouds.NoCloudInitConds.cc_qf" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.clouds.NoCloudModel">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.clouds.</span></span><span class="sig-name descname"><span class="pre">NoCloudModel</span></span><a class="reference internal" href="../../_modules/abcmodel/clouds/no_clouds.html#NoCloudModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.NoCloudModel" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="abcmodel.models.html#abcmodel.models.AbstractCloudModel" title="abcmodel.models.AbstractCloudModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractCloudModel</span></code></a></p>
+<p>No cloud is formed using this model.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.clouds.NoCloudModel.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/no_clouds.html#NoCloudModel.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.NoCloudModel.run" title="Link to this definition">#</a></dt>
+<dd><p>No calculations.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.clouds.StandardCumulusInitConds">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.clouds.</span></span><span class="sig-name descname"><span class="pre">StandardCumulusInitConds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc_frac</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_mf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_qf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_trans</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/cumulus.html#StandardCumulusInitConds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.StandardCumulusInitConds" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Standard cumulus model state.</p>
+<p>Here it goes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cc_frac</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – cloud core fraction [-], range 0 to 1.</p></li>
+<li><p><strong>cc_mf</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – cloud core mass flux [m/s].</p></li>
+<li><p><strong>cc_qf</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – cloud core moisture flux [kg/kg/s].</p></li>
+<li><p><strong>cl_trans</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – cloud layer transmittance [-], range 0 to 1.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.clouds.StandardCumulusInitConds.cc_frac">
+<span class="sig-name descname"><span class="pre">cc_frac</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#abcmodel.clouds.StandardCumulusInitConds.cc_frac" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.clouds.StandardCumulusInitConds.cc_mf">
+<span class="sig-name descname"><span class="pre">cc_mf</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#abcmodel.clouds.StandardCumulusInitConds.cc_mf" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.clouds.StandardCumulusInitConds.cc_qf">
+<span class="sig-name descname"><span class="pre">cc_qf</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#abcmodel.clouds.StandardCumulusInitConds.cc_qf" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.clouds.StandardCumulusInitConds.cl_trans">
+<span class="sig-name descname"><span class="pre">cl_trans</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></em><a class="headerlink" href="#abcmodel.clouds.StandardCumulusInitConds.cl_trans" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.clouds.StandardCumulusModel">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.clouds.</span></span><span class="sig-name descname"><span class="pre">StandardCumulusModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tcc_cc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tcc_trans</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/cumulus.html#StandardCumulusModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.StandardCumulusModel" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="abcmodel.models.html#abcmodel.models.AbstractCloudModel" title="abcmodel.models.AbstractCloudModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractCloudModel</span></code></a></p>
+<p>Standard cumulus cloud model based on Neggers et al. (2006/7).</p>
+<p>This model calculates shallow cumulus convection properties using a variance-based
+approach to determine cloud core fraction and associated mass fluxes. The model
+characterizes turbulent fluctuations in the mixed layer that lead to cloud formation.
+It quantifies the variance of humidity and CO2 at the mixed-layer top and uses this
+to determine what fraction reaches saturation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tcc_cc</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – ratio of total cloud cove to core cloud fraction [-], greater or equal to 1.</p></li>
+<li><p><strong>tcc_trans</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – mean transmittance of cloud cover [-], range 0 to 1.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.clouds.StandardCumulusModel.calculate_cloud_core_fraction">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_cloud_core_fraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2_h</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/cumulus.html#StandardCumulusModel.calculate_cloud_core_fraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.StandardCumulusModel.calculate_cloud_core_fraction" title="Link to this definition">#</a></dt>
+<dd><p>Calculate cloud core fraction using the arctangent formulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.clouds.StandardCumulusModel.calculate_cloud_core_properties">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_cloud_core_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc_frac</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wstar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2_h</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/cumulus.html#StandardCumulusModel.calculate_cloud_core_properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.StandardCumulusModel.calculate_cloud_core_properties" title="Link to this definition">#</a></dt>
+<dd><p>Calculate and update cloud core mass flux and moisture flux.
+No return needed since we’re updating self attributes directly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.clouds.StandardCumulusModel.calculate_cloud_layer_transmittance">
+<span class="sig-name descname"><span class="pre">calculate_cloud_layer_transmittance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc_frac</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/cumulus.html#StandardCumulusModel.calculate_cloud_layer_transmittance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.StandardCumulusModel.calculate_cloud_layer_transmittance" title="Link to this definition">#</a></dt>
+<dd><p>Calculate cloud layer transmittance, with maximum total cloud cover equal to 1</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.clouds.StandardCumulusModel.calculate_co2_mass_flux">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_co2_mass_flux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc_mf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_CO22</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dCO2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/cumulus.html#StandardCumulusModel.calculate_co2_mass_flux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.StandardCumulusModel.calculate_co2_mass_flux" title="Link to this definition">#</a></dt>
+<dd><p>Calculate CO2 mass flux, only if mixed-layer top jump is negative.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.clouds.StandardCumulusModel.calculate_mixed_layer_variance">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_mixed_layer_variance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc_qf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wthetav</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wqe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dz_h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wstar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dCO2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/cumulus.html#StandardCumulusModel.calculate_mixed_layer_variance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.StandardCumulusModel.calculate_mixed_layer_variance" title="Link to this definition">#</a></dt>
+<dd><p>Calculate mixed-layer top relative humidity variance and CO2 variance.
+Based on Neggers et. al 2006/7.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.clouds.StandardCumulusModel.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/cumulus.html#StandardCumulusModel.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.StandardCumulusModel.run" title="Link to this definition">#</a></dt>
+<dd><p>Run the model.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="abcmodel.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">abcmodel package</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="abcmodel.clouds.cumulus.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">abcmodel.clouds.cumulus module</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-abcmodel.clouds">Module contents</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.NoCloudInitConds"><code class="docutils literal notranslate"><span class="pre">NoCloudInitConds</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.NoCloudInitConds.cc_frac"><code class="docutils literal notranslate"><span class="pre">NoCloudInitConds.cc_frac</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.NoCloudInitConds.cc_mf"><code class="docutils literal notranslate"><span class="pre">NoCloudInitConds.cc_mf</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.NoCloudInitConds.cc_qf"><code class="docutils literal notranslate"><span class="pre">NoCloudInitConds.cc_qf</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.NoCloudModel"><code class="docutils literal notranslate"><span class="pre">NoCloudModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.NoCloudModel.run"><code class="docutils literal notranslate"><span class="pre">NoCloudModel.run()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.StandardCumulusInitConds"><code class="docutils literal notranslate"><span class="pre">StandardCumulusInitConds</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.StandardCumulusInitConds.cc_frac"><code class="docutils literal notranslate"><span class="pre">StandardCumulusInitConds.cc_frac</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.StandardCumulusInitConds.cc_mf"><code class="docutils literal notranslate"><span class="pre">StandardCumulusInitConds.cc_mf</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.StandardCumulusInitConds.cc_qf"><code class="docutils literal notranslate"><span class="pre">StandardCumulusInitConds.cc_qf</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.StandardCumulusInitConds.cl_trans"><code class="docutils literal notranslate"><span class="pre">StandardCumulusInitConds.cl_trans</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.StandardCumulusModel"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.StandardCumulusModel.calculate_cloud_core_fraction"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_core_fraction()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.StandardCumulusModel.calculate_cloud_core_properties"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_core_properties()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.StandardCumulusModel.calculate_cloud_layer_transmittance"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_layer_transmittance()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.StandardCumulusModel.calculate_co2_mass_flux"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_co2_mass_flux()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.StandardCumulusModel.calculate_mixed_layer_variance"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_mixed_layer_variance()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.StandardCumulusModel.run"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By ABC3 Group
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright ABC3 Group.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

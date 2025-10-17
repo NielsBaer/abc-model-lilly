@@ -1,7 +1,5 @@
-from .cumulus import (
-    StandardCumulusInitConds,
-    StandardCumulusModel,
-)
+from .cumulus import StandardCumulusInitConds
+from .cumulus import StandardCumulusModel
 from .no_clouds import NoCloudInitConds, NoCloudModel
 
 __all__ = [

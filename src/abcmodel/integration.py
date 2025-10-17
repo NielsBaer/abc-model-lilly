@@ -1,6 +1,4 @@
 import math
-from types import SimpleNamespace
-from typing import Any, Dict, List
 
 import jax
 import jax.numpy as jnp
@@ -93,84 +91,6 @@ def timestep(state: PyTree, coupler: ABCoupler, t: int, dt: float) -> PyTree:
 
     return state
 
-
-class TrajectoryCollector:
-    """Collects state variables over time into separate lists."""
-
-    def __init__(self, initial_state=None):
-        self.data: Dict[str, List[Any]] = {}
-        self.initialized = False
-
-        if initial_state is not None:
-            self._initialize_from_state(initial_state)
-
-    def _initialize_from_state(self, state):
-        """Initialize the collector with variable names from the first state."""
-        self.data = {name: [] for name in state.__dict__.keys()}
-        self.initialized = True
-
-    def append(self, state):
-        """Append current state values to the trajectory."""
-        if not self.initialized:
-            self._initialize_from_state(state)
-
-        # Add any new variables that might have appeared
-        for name in state.__dict__.keys():
-            if name not in self.data:
-                # Backfill with None for missing timesteps
-                self.data[name] = [None] * len(next(iter(self.data.values())))
-
-        # Append current values (making copies to avoid reference issues)
-        for name, value in state.__dict__.items():
-            try:
-                # Make a copy of the value to avoid reference issues
-                if hasattr(value, "copy"):
-                    copied_value = value.copy()
-                elif hasattr(value, "__array__"):
-                    copied_value = jnp.array(value)  # JAX arrays
-                else:
-                    copied_value = value  # Scalars, immutable types
-
-                self.data[name].append(copied_value)
-            except Exception:
-                # Fallback: just store the value as-is
-                self.data[name].append(value)
-
-    def to_arrays(self, use_jax=True):
-        """Convert lists to arrays and return as SimpleNamespace."""
-        array_data = {}
-
-        for name, values in self.data.items():
-            try:
-                if use_jax:
-                    # Try JAX stack first
-                    if all(hasattr(v, "shape") for v in values if v is not None):
-                        array_data[name] = jnp.stack(
-                            [v for v in values if v is not None]
-                        )
-                    else:
-                        array_data[name] = jnp.array(values)
-                else:
-                    # Use numpy
-                    array_data[name] = np.array(values)
-            except Exception as e:
-                print(f"Warning: Could not convert '{name}' to array: {e}")
-                # Keep as list if conversion fails
-                array_data[name] = values
-
-        return SimpleNamespace(**array_data)
-
-    def __len__(self):
-        """Return number of timesteps collected."""
-        if not self.data:
-            return 0
-        return len(next(iter(self.data.values())))
-
-    def get_variable(self, name: str):
-        """Get the trajectory for a specific variable."""
-        return self.data.get(name, [])
-
-
 def integrate(
     state: PyTree,
     coupler: ABCoupler,
@@ -183,25 +103,12 @@ def integrate(
     # warmup
     state = warmup(state, coupler, 0, dt)
 
-    # # ---------------------------------------------
-    # # limamau: this is the old way without scan
-    # trajectory = TrajectoryCollector()
-    # for t in range(tsteps):
-    #     state = timestep(state, coupler, t, dt)
-    #     trajectory.append(state)
-    # trajectory = trajectory.to_arrays(use_jax=True)
-    # # ---------------------------------------------
-
-    # ------------------------------------------------------------------------
-    # limamau: wip
-
     def iter_fn(state, t):
         state = timestep(state, coupler, t, dt)
         return state, state
 
     timesteps = jnp.arange(tsteps)
     state, trajectory = jax.lax.scan(iter_fn, state, timesteps, length=tsteps)
-    # ------------------------------------------------------------------------
 
     times = np.arange(tsteps) * dt / 3600.0 + coupler.radiation.tstart
 

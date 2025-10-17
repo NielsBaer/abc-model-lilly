@@ -16,9 +16,7 @@ class NoCloudInitConds:
 
 
 class NoCloudModel(AbstractCloudModel):
-    """
-    No cloud is formed using this model.
-    """
+    """No cloud is formed using this model."""
 
     def __init__(self):
         pass

@@ -1,0 +1,582 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Cumulus Model &#8212; abc-model 0.1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=a1637f0b"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'components/clouds/cumulus';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">abc-model 0.1.0 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Model Components:</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../radiation.html">Radiation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../land_surface.html">Land Surface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../surface_layer.html">Surface Layer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mixed_layer.html">Mixed Layer</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/components/clouds/cumulus.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Cumulus Model</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusInitConds"><code class="docutils literal notranslate"><span class="pre">StandardCumulusInitConds</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_core_fraction"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_core_fraction()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_core_properties"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_core_properties()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_layer_transmittance"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_layer_transmittance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_co2_mass_flux"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_co2_mass_flux()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_mixed_layer_variance"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_mixed_layer_variance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.run"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="cumulus-model">
+<h1>Cumulus Model<a class="headerlink" href="#cumulus-model" title="Link to this heading">#</a></h1>
+<dl class="py class" id="module-abcmodel.clouds.cumulus">
+<dt class="sig sig-object py" id="abcmodel.clouds.cumulus.StandardCumulusInitConds">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.clouds.cumulus.</span></span><span class="sig-name descname"><span class="pre">StandardCumulusInitConds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc_frac</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_mf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_qf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_trans</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/cumulus.html#StandardCumulusInitConds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.cumulus.StandardCumulusInitConds" title="Link to this definition">#</a></dt>
+<dd><p>Standard cumulus model state.</p>
+<section id="variables">
+<h2>Variables<a class="headerlink" href="#variables" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cc_frac</span></code>: cloud core fraction [-], range 0 to 1.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cc_mf</span></code>: cloud core mass flux [m/s].</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cc_qf</span></code>: cloud core moisture flux [kg/kg/s].</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cl_trans</span></code>: cloud layer transmittance [-], range 0 to 1.</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.clouds.cumulus.StandardCumulusModel">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.clouds.cumulus.</span></span><span class="sig-name descname"><span class="pre">StandardCumulusModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tcc_cc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tcc_trans</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/cumulus.html#StandardCumulusModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.cumulus.StandardCumulusModel" title="Link to this definition">#</a></dt>
+<dd><p>Standard cumulus cloud model based on Neggers et al. (2006/7).</p>
+<p>This model calculates shallow cumulus convection properties using a variance-based
+approach to determine cloud core fraction and associated mass fluxes. The model
+characterizes turbulent fluctuations in the mixed layer that lead to cloud formation.
+It quantifies the variance of humidity and CO2 at the mixed-layer top and uses this
+to determine what fraction reaches saturation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tcc_cc</strong> (<em>-</em>)</p></li>
+<li><p><strong>tcc_trans</strong> (<em>-</em>)</p></li>
+<li><p><strong>Processes</strong></p></li>
+<li><p><strong>---------</strong></p></li>
+<li><p><strong>top</strong> (<em>1. Calculates turbulent variance for humidity and CO2 at the mixed-layer</em>)</p></li>
+<li><p><strong>2006/7</strong><strong>)</strong><strong>.</strong> (<em>using entrainment fluxes and convective scaling</em><em> (</em><em>Neggers et al.</em>)</p></li>
+<li><p><strong>using</strong> (<em>2. Determines fraction</em><em> of </em><em>mixed-layer top that becomes saturated</em>)</p></li>
+<li><p><strong>deficit.</strong> (<em>arctangent formulation based on saturation</em>)</p></li>
+<li><p><strong>cores.</strong> (<em>3. Calculates mass flux and moisture flux through cloud</em>)</p></li>
+<li><p><strong>height.</strong> (<em>4. Computes CO2 transport only when CO2 decreases with</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_core_fraction">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_cloud_core_fraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2_h</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/cumulus.html#StandardCumulusModel.calculate_cloud_core_fraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_core_fraction" title="Link to this definition">#</a></dt>
+<dd><p>Calculate cloud core fraction using the arctangent formulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_core_properties">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_cloud_core_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc_frac</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wstar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2_h</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/cumulus.html#StandardCumulusModel.calculate_cloud_core_properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_core_properties" title="Link to this definition">#</a></dt>
+<dd><p>Calculate and update cloud core mass flux and moisture flux.
+No return needed since we’re updating self attributes directly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_layer_transmittance">
+<span class="sig-name descname"><span class="pre">calculate_cloud_layer_transmittance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc_frac</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/cumulus.html#StandardCumulusModel.calculate_cloud_layer_transmittance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_layer_transmittance" title="Link to this definition">#</a></dt>
+<dd><p>Calculate cloud layer transmittance, with maximum total cloud cover equal to 1</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.clouds.cumulus.StandardCumulusModel.calculate_co2_mass_flux">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_co2_mass_flux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc_mf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_CO22</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dCO2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/cumulus.html#StandardCumulusModel.calculate_co2_mass_flux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_co2_mass_flux" title="Link to this definition">#</a></dt>
+<dd><p>Calculate CO2 mass flux, only if mixed-layer top jump is negative.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.clouds.cumulus.StandardCumulusModel.calculate_mixed_layer_variance">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_mixed_layer_variance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc_qf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wthetav</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wqe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dz_h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wstar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dCO2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/cumulus.html#StandardCumulusModel.calculate_mixed_layer_variance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_mixed_layer_variance" title="Link to this definition">#</a></dt>
+<dd><p>Calculate mixed-layer top relative humidity variance and CO2 variance.
+Based on Neggers et. al 2006/7.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.clouds.cumulus.StandardCumulusModel.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/cumulus.html#StandardCumulusModel.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.cumulus.StandardCumulusModel.run" title="Link to this definition">#</a></dt>
+<dd><section id="state-requirements">
+<h2>State requirements<a class="headerlink" href="#state-requirements" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">wthetav</span></code> : float - Virtual potential temperature flux [K m/s]</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wqe</span></code> : float - Moisture flux at entrainment [kg/kg m/s]</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dq</span></code> : float - Moisture jump at mixed-layer top [kg/kg]</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">abl_height</span></code> : float - Atmospheric boundary layer height [m]</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dz_h</span></code> : float - Layer thickness at mixed-layer top [m]</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wstar</span></code> : float - Convective velocity scale [m/s]</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wCO2e</span></code> : float - CO2 flux at entrainment [ppm m/s]</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wCO2M</span></code> : float - CO2 mass flux [ppm m/s]</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dCO2</span></code> : float - CO2 jump at mixed-layer top [ppm]</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">q</span></code> : float - Specific humidity [kg/kg]</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">top_T</span></code> : float - Temperature at mixed-layer top [K]</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">top_p</span></code> : float - Pressure at mixed-layer top [Pa]</p></li>
+</ul>
+</section>
+<section id="updates">
+<h2>Updates<a class="headerlink" href="#updates" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">cc_frac</span></code><span class="classifier">float</span></dt><dd><p>Cloud core fraction (0 to 1)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">cc_mf</span></code><span class="classifier">float</span></dt><dd><p>Cloud core mass flux [m/s]</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">cc_qf</span></code><span class="classifier">float</span></dt><dd><p>Cloud core moisture flux [kg/kg/s]</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">q2_h</span></code><span class="classifier">float</span></dt><dd><p>Humidity variance at mixed-layer top</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">top_CO22</span></code><span class="classifier">float</span></dt><dd><p>CO2 variance at mixed-layer top</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">wCO2M</span></code><span class="classifier">float</span></dt><dd><p>CO2 mass flux [ppm m/s]</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">cl_trans</span></code>: float</dt><dd><p>cloud layer transmissivity [-]</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusInitConds"><code class="docutils literal notranslate"><span class="pre">StandardCumulusInitConds</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_core_fraction"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_core_fraction()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_core_properties"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_core_properties()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_layer_transmittance"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_layer_transmittance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_co2_mass_flux"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_co2_mass_flux()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_mixed_layer_variance"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_mixed_layer_variance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.run"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By ABC3 Group
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright ABC3 Group.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -35,6 +35,7 @@ class CoupledState(SimpleNamespace):
 
 
 class ABCoupler:
+    """Coupling class to bound all the components."""
     def __init__(
         self,
         radiation: AbstractRadiationModel,

@@ -15,30 +15,29 @@ from ..utils import PhysicalConstants, get_esat, get_qsat
 class StandardLandSurfaceInitConds:
     """Data class for standard land surface model initial conditions.
 
-    Arguments
-    ---------
-    - ``alpha``: slope of the light response curve [mol J-1].
-    - ``wg``: soil moisture content in the root zone [m3 m-3].
-    - ``w2``: soil moisture content in the deep layer [m3 m-3].
-    - ``temp_soil``: soil temperature [K].
-    - ``temp2``: deep soil temperature [K].
-    - ``surf_temp``: Surface temperature [K].
-    - ``wl``: liquid water storage on the canopy [m].
-    - ``rs``: surface resistance [m s-1].
-    - ``rssoil``: soil resistance [m s-1].
-    - ``cliq``: wet fraction of the canopy [-].
-    - ``temp_soil_tend``: soil temperature tendency [K s-1].
-    - ``wgtend``: soil moisture tendency [m3 m-3 s-1].
-    - ``wltend``: canopy water storage tendency [m s-1].
-    - ``le_veg``: latent heat flux from vegetation [W m-2].
-    - ``le_liq``: latent heat flux from liquid water [W m-2].
-    - ``le_soil``: latent heat flux from soil [W m-2].
-    - ``le``: total latent heat flux [W m-2].
-    - ``hf``: sensible heat flux [W m-2].
-    - ``gf``: ground heat flux [W m-2].
-    - ``le_pot``: potential latent heat flux [W m-2].
-    - ``le_ref``: reference latent heat flux [W m-2].
-    - ``ra``: aerodynamic resistance [s m-1].
+    Args:
+        alpha: slope of the light response curve [mol J-1].
+        wg: soil moisture content in the root zone [m3 m-3].
+        w2: soil moisture content in the deep layer [m3 m-3].
+        temp_soil: soil temperature [K].
+        temp2: deep soil temperature [K].
+        surf_temp: Surface temperature [K].
+        wl: liquid water storage on the canopy [m].
+        rs: surface resistance [m s-1].
+        rssoil: soil resistance [m s-1].
+        cliq: wet fraction of the canopy [-].
+        temp_soil_tend: soil temperature tendency [K s-1].
+        wgtend: soil moisture tendency [m3 m-3 s-1].
+        wltend: canopy water storage tendency [m s-1].
+        le_veg: latent heat flux from vegetation [W m-2].
+        le_liq: latent heat flux from liquid water [W m-2].
+        le_soil: latent heat flux from soil [W m-2].
+        le: total latent heat flux [W m-2].
+        hf: sensible heat flux [W m-2].
+        gf: ground heat flux [W m-2].
+        le_pot: potential latent heat flux [W m-2].
+        le_ref: reference latent heat flux [W m-2].
+        ra: aerodynamic resistance [s m-1].
     """
 
     # the following variables are expected to be initialized by the user
@@ -75,25 +74,23 @@ class StandardLandSurfaceInitConds:
 class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
     """Abstract standard land surface model with comprehensive soil-vegetation dynamics.
 
-    Parameters
-    ----------
-    - all parameters of the parent class and...
-    - ``a``: Clapp and Hornberger (1978) retention curve parameter.
-    - ``b``: Clapp and Hornberger (1978) retention curve parameter.
-    - ``p``: Clapp and Hornberger (1978) retention curve parameter.
-    - ``cgsat``: Saturated soil heat capacity [J m-3 K-1].
-    - ``wsat``: Saturated soil moisture content [m3 m-3].
-    - ``wfc``: Soil moisture content at field capacity [m3 m-3].
-    - ``wwilt``: Soil moisture content at wilting point [m3 m-3].
-    - ``c1sat``: saturated soil conductivity parameter [-].
-    - ``c2ref``: reference soil conductivity parameter [-].
-    - ``lai``: Leaf area index [m2 m-2].
-    - ``gD``: Canopy radiation extinction coefficient [-].
-    - ``rsmin``: Minimum stomatal resistance [s m-1].
-    - ``rssoilmin``: Minimum soil resistance [s m-1].
-    - ``cveg``: Vegetation fraction [-].
-    - ``wmax``: Maximum water storage capacity of the canopy [m].
-    - ``lam``: Thermal diffusivity of the soil [W m-1 K-1].
+    Args:
+        a: Clapp and Hornberger (1978) retention curve parameter.
+        b: Clapp and Hornberger (1978) retention curve parameter.
+        p: Clapp and Hornberger (1978) retention curve parameter.
+        cgsat: Saturated soil heat capacity [J m-3 K-1].
+        wsat: Saturated soil moisture content [m3 m-3].
+        wfc: Soil moisture content at field capacity [m3 m-3].
+        wwilt: Soil moisture content at wilting point [m3 m-3].
+        c1sat: saturated soil conductivity parameter [-].
+        c2ref: reference soil conductivity parameter [-].
+        lai: Leaf area index [m2 m-2].
+        gD: Canopy radiation extinction coefficient [-].
+        rsmin: Minimum stomatal resistance [s m-1].
+        rssoilmin: Minimum soil resistance [s m-1].
+        cveg: Vegetation fraction [-].
+        wmax: Maximum water storage capacity of the canopy [m].
+        lam: Thermal diffusivity of the soil [W m-1 K-1].
     """
 
     def __init__(
@@ -156,7 +153,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
         const: PhysicalConstants,
         surface_layer: AbstractSurfaceLayerModel,
     ):
-        """Execute complete land surface model calculations."""
+        """Run the model."""
         # compute aerodynamic resistance
         state.ra = surface_layer.compute_ra(state)
 
@@ -295,9 +292,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
         return state
 
     def integrate(self, state: PyTree, dt: float):
-        """
-        Integrate model forward in time.
-        """
+        """Integrate the model."""
         state.temp_soil += dt * state.temp_soil_tend
         state.wg += dt * state.wgtend
         state.wl += dt * state.wltend

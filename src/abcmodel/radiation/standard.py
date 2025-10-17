@@ -11,16 +11,14 @@ from ..utils import PhysicalConstants
 class StandardRadiationInitConds:
     """Data class for standard radiation model initial conditions.
 
-    Arguments
-    --------
-    - ``net_rad``: net surface radiation [W/m²].
+    Args:
+        net_rad: net surface radiation [W/m²].
 
-    Others
-    ------
-    - ``in_srad``: incoming solar radiation [W/m²].
-    - ``out_srad``: outgoing solar radiation [W/m²].
-    - ``in_lrad``: incoming longwave radiation [W/m²].
-    - ``out_lrad``: outgoing longwave radiation [W/m²].
+    Others:
+        in_srad: incoming solar radiation [W/m²].
+        out_srad: outgoing solar radiation [W/m²].
+        in_lrad: incoming longwave radiation [W/m²].
+        out_lrad: outgoing longwave radiation [W/m²].
     """
 
     net_rad: float
@@ -37,19 +35,16 @@ class StandardRadiationModel(AbstractRadiationModel):
     atmospheric conditions. Includes both shortwave (solar) and longwave (thermal)
     radiation components.
 
-    Parameters
-    ----------
-    - ``lat``: latitude [degrees], range -90 to +90.
-    - ``lon``: longitude [degrees], range -180 to +180.
-    - ``doy``: day of year [-], range 1 to 365.
-    - ``tstart``: start time of day [hours UTC], range 0 to 24.
-    - ``cc``: cloud cover fraction [-], range 0 to 1.
-
-    Processes
-    ---------
     1. Calculate solar declination and elevation angles.
     2. Determine air temperature and atmospheric transmission.
     3. Compute all radiation components and net surface radiation.
+
+    Args:
+        lat: latitude [degrees], range -90 to +90.
+        lon: longitude [degrees], range -180 to +180.
+        doy: day of year [-], range 1 to 365.
+        tstart: start time of day [hours UTC], range 0 to 24.
+        cc: cloud cover fraction [-], range 0 to 1.
     """
 
     def __init__(

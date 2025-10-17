@@ -1,0 +1,638 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Mixed Layer &#8212; abc-model 0.1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=a1637f0b"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'components/mixed_layer/mixed_layer';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">abc-model 0.1.0 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../index.html">Model Components</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../clouds/index.html">Cloud Models</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../clouds/cumulus.html">Cumulus Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../clouds/no_clouds.html">No Clouds Model</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/components/mixed_layer/mixed_layer.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Mixed Layer</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.BulkMixedLayerInitConds"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.BulkMixedLayerModel"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_convective_velocity_scale"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_convective_velocity_scale()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_entrainment_fluxes"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_entrainment_fluxes()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_entrainment_velocity"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_entrainment_velocity()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_free_troposphere_compensation"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_free_troposphere_compensation()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_mixed_layer_tendencies"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_mixed_layer_tendencies()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_transition_layer_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_transition_layer_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_vertical_motions"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_vertical_motions()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_wind_tendencies"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_wind_tendencies()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.BulkMixedLayerModel.integrate"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.integrate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.BulkMixedLayerModel.run"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.run()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.MinimalMixedLayerInitConds"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.MinimalMixedLayerModel"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.MinimalMixedLayerModel.run"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerModel.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-abcmodel.mixed_layer">
+<span id="mixed-layer"></span><h1>Mixed Layer<a class="headerlink" href="#module-abcmodel.mixed_layer" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.BulkMixedLayerInitConds">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.mixed_layer.</span></span><span class="sig-name descname"><span class="pre">BulkMixedLayerInitConds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtheta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wtheta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dCO2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">du</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dz_h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_pressure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wstar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">we</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2A</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2R</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thetav</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wthetav</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wqe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qsat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">esat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2e</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wthetae</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dthetav</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wthetave</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lcl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_rh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">utend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dutend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vtend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dvtend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">htend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thetatend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dthetatend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qtend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dqtend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2tend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dCO2tend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dztend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerInitConds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.BulkMixedLayerInitConds" title="Link to this definition">#</a></dt>
+<dd><p>Data class for bulk mixed layer model initial conditions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>abl_height</strong> (<em>-</em>)</p></li>
+<li><p><strong>theta</strong> (<em>-</em>)</p></li>
+<li><p><strong>dtheta</strong> (<em>-</em>)</p></li>
+<li><p><strong>wtheta</strong> (<em>-</em>)</p></li>
+<li><p><strong>q</strong> (<em>-</em>)</p></li>
+<li><p><strong>dq</strong> (<em>-</em>)</p></li>
+<li><p><strong>wq</strong> (<em>-</em>)</p></li>
+<li><p><strong>co2</strong> (<em>-</em>)</p></li>
+<li><p><strong>dCO2</strong> (<em>-</em>)</p></li>
+<li><p><strong>wCO2</strong> (<em>-</em>)</p></li>
+<li><p><strong>u</strong> (<em>-</em>)</p></li>
+<li><p><strong>du</strong> (<em>-</em>)</p></li>
+<li><p><strong>v</strong> (<em>-</em>)</p></li>
+<li><p><strong>dv</strong> (<em>-</em>)</p></li>
+<li><p><strong>dz_h</strong> (<em>-</em>)</p></li>
+<li><p><strong>wstar</strong> (<em>-</em>)</p></li>
+<li><p><strong>we</strong> (<em>-</em>)</p></li>
+<li><p><strong>wCO2A</strong> (<em>-</em>)</p></li>
+<li><p><strong>wCO2R</strong> (<em>-</em>)</p></li>
+<li><p><strong>wCO2M</strong> (<em>-</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.BulkMixedLayerModel">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.mixed_layer.</span></span><span class="sig-name descname"><span class="pre">BulkMixedLayerModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">divU</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coriolis_param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gammatheta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">advtheta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gammaq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">advq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gammaCO2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">advCO2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gammau</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">advu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gammav</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">advv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dFz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sw_shearwe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sw_fixft</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sw_wind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.BulkMixedLayerModel" title="Link to this definition">#</a></dt>
+<dd><p>Bulk mixed layer model with full atmospheric boundary layer dynamics.</p>
+<p>Complete mixed layer model that simulates atmospheric boundary layer evolution
+including entrainment, subsidence, cloud effects, and wind dynamics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sw_shearwe</strong> (<em>-</em>)</p></li>
+<li><p><strong>sw_fixft</strong> (<em>-</em>)</p></li>
+<li><p><strong>sw_wind</strong> (<em>-</em>)</p></li>
+<li><p><strong>surf_pressure</strong> (<em>-</em>)</p></li>
+<li><p><strong>divU</strong> (<em>-</em>)</p></li>
+<li><p><strong>coriolis_param</strong> (<em>-</em>)</p></li>
+<li><p><strong>gammatheta</strong> (<em>-</em>)</p></li>
+<li><p><strong>advtheta</strong> (<em>-</em>)</p></li>
+<li><p><strong>beta</strong> (<em>-</em>)</p></li>
+<li><p><strong>gammaq</strong> (<em>-</em>)</p></li>
+<li><p><strong>advq</strong> (<em>-</em>)</p></li>
+<li><p><strong>gammaCO2</strong> (<em>-</em>)</p></li>
+<li><p><strong>advCO2</strong> (<em>-</em>)</p></li>
+<li><p><strong>gammau</strong> (<em>-</em>)</p></li>
+<li><p><strong>advu</strong> (<em>-</em>)</p></li>
+<li><p><strong>gammav</strong> (<em>-</em>)</p></li>
+<li><p><strong>advv</strong> (<em>-</em>)</p></li>
+<li><p><strong>dFz</strong> (<em>-</em>)</p></li>
+<li><p><strong>Processes</strong></p></li>
+<li><p><strong>---------</strong></p></li>
+<li><p><strong>effects.</strong> (<em>1. Calculate large-scale vertical motions and compensating</em>)</p></li>
+<li><p><strong>parameters.</strong> (<em>2. Determine convective velocity scale and entrainment</em>)</p></li>
+<li><p><strong>variables.</strong> (<em>3. Compute all tendency terms for mixed layer</em>)</p></li>
+<li><p><strong>time.</strong> (<em>4. Integrate prognostic equations forward in</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.BulkMixedLayerModel.calculate_convective_velocity_scale">
+<span class="sig-name descname"><span class="pre">calculate_convective_velocity_scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wthetav</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thetav</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.calculate_convective_velocity_scale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_convective_velocity_scale" title="Link to this definition">#</a></dt>
+<dd><p>Calculate convective velocity scale and entrainment parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.BulkMixedLayerModel.calculate_entrainment_fluxes">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_entrainment_fluxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">we</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtheta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dCO2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.calculate_entrainment_fluxes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_entrainment_fluxes" title="Link to this definition">#</a></dt>
+<dd><p>Calculate all entrainment fluxes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.BulkMixedLayerModel.calculate_entrainment_velocity">
+<span class="sig-name descname"><span class="pre">calculate_entrainment_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wthetave</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dthetav</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thetav</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ustar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.calculate_entrainment_velocity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_entrainment_velocity" title="Link to this definition">#</a></dt>
+<dd><p>Calculate entrainment velocity with optional shear effects.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.BulkMixedLayerModel.calculate_free_troposphere_compensation">
+<span class="sig-name descname"><span class="pre">calculate_free_troposphere_compensation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.calculate_free_troposphere_compensation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_free_troposphere_compensation" title="Link to this definition">#</a></dt>
+<dd><p>Calculate compensation terms to fix free troposphere values.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.BulkMixedLayerModel.calculate_mixed_layer_tendencies">
+<span class="sig-name descname"><span class="pre">calculate_mixed_layer_tendencies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wqe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">we</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_mf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_qf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wtheta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wthetae</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w_th_ft</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w_q_ft</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w_CO2_ft</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.calculate_mixed_layer_tendencies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_mixed_layer_tendencies" title="Link to this definition">#</a></dt>
+<dd><p>Calculate tendency terms for mixed layer variables.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.BulkMixedLayerModel.calculate_transition_layer_tendency">
+<span class="sig-name descname"><span class="pre">calculate_transition_layer_tendency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lcl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_frac</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dz_h</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.calculate_transition_layer_tendency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_transition_layer_tendency" title="Link to this definition">#</a></dt>
+<dd><p>Calculate transition layer thickness tendency.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.BulkMixedLayerModel.calculate_vertical_motions">
+<span class="sig-name descname"><span class="pre">calculate_vertical_motions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtheta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.calculate_vertical_motions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_vertical_motions" title="Link to this definition">#</a></dt>
+<dd><p>Calculate large-scale subsidence and radiative divergence effects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.BulkMixedLayerModel.calculate_wind_tendencies">
+<span class="sig-name descname"><span class="pre">calculate_wind_tendencies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">we</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_mf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">du</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.calculate_wind_tendencies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_wind_tendencies" title="Link to this definition">#</a></dt>
+<dd><p>Calculate wind tendency terms if wind is prognostic.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.BulkMixedLayerModel.integrate">
+<span class="sig-name descname"><span class="pre">integrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.integrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.BulkMixedLayerModel.integrate" title="Link to this definition">#</a></dt>
+<dd><p>Integrate mixed layer forward in time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyTree</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.BulkMixedLayerModel.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.BulkMixedLayerModel.run" title="Link to this definition">#</a></dt>
+<dd><p>Calculate mixed layer tendencies and update diagnostic variables.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.MinimalMixedLayerInitConds">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.mixed_layer.</span></span><span class="sig-name descname"><span class="pre">MinimalMixedLayerInitConds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_pressure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtheta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wtheta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dCO2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dz_h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wstar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2A</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2R</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wqe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2e</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thetav</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wthetav</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qsat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">esat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lcl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/minimal.html#MinimalMixedLayerInitConds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.MinimalMixedLayerInitConds" title="Link to this definition">#</a></dt>
+<dd><p>Data class for minimal mixed layer model initial conditions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>abl_height</strong> (<em>-</em>)</p></li>
+<li><p><strong>surf_pressure</strong> (<em>-</em>)</p></li>
+<li><p><strong>theta</strong> (<em>-</em>)</p></li>
+<li><p><strong>dtheta</strong> (<em>-</em>)</p></li>
+<li><p><strong>wtheta</strong> (<em>-</em>)</p></li>
+<li><p><strong>q</strong> (<em>-</em>)</p></li>
+<li><p><strong>dq</strong> (<em>-</em>)</p></li>
+<li><p><strong>wq</strong> (<em>-</em>)</p></li>
+<li><p><strong>co2</strong> (<em>-</em>)</p></li>
+<li><p><strong>dCO2</strong> (<em>-</em>)</p></li>
+<li><p><strong>wCO2</strong> (<em>-</em>)</p></li>
+<li><p><strong>u</strong> (<em>-</em>)</p></li>
+<li><p><strong>v</strong> (<em>-</em>)</p></li>
+<li><p><strong>dz_h</strong> (<em>-</em>)</p></li>
+<li><p><strong>wstar</strong> (<em>-</em>)</p></li>
+<li><p><strong>Extra</strong></p></li>
+<li><p><strong>-----</strong></p></li>
+<li><p><strong>wCO2A</strong> (<em>-</em>)</p></li>
+<li><p><strong>wCO2R</strong> (<em>-</em>)</p></li>
+<li><p><strong>wCO2M</strong> (<em>-</em>)</p></li>
+<li><p><strong>wqe</strong> (<em>-</em>)</p></li>
+<li><p><strong>wCO2e</strong> (<em>-</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.MinimalMixedLayerModel">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.mixed_layer.</span></span><span class="sig-name descname"><span class="pre">MinimalMixedLayerModel</span></span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/minimal.html#MinimalMixedLayerModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.MinimalMixedLayerModel" title="Link to this definition">#</a></dt>
+<dd><p>Minimal mixed layer model with constant properties.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>None.</strong></p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.MinimalMixedLayerModel.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/minimal.html#MinimalMixedLayerModel.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.MinimalMixedLayerModel.run" title="Link to this definition">#</a></dt>
+<dd><p>No calculations.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.BulkMixedLayerInitConds"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.BulkMixedLayerModel"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_convective_velocity_scale"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_convective_velocity_scale()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_entrainment_fluxes"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_entrainment_fluxes()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_entrainment_velocity"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_entrainment_velocity()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_free_troposphere_compensation"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_free_troposphere_compensation()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_mixed_layer_tendencies"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_mixed_layer_tendencies()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_transition_layer_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_transition_layer_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_vertical_motions"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_vertical_motions()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_wind_tendencies"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_wind_tendencies()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.BulkMixedLayerModel.integrate"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.integrate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.BulkMixedLayerModel.run"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.run()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.MinimalMixedLayerInitConds"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.MinimalMixedLayerModel"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.MinimalMixedLayerModel.run"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerModel.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By ABC3 Group
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright ABC3 Group.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

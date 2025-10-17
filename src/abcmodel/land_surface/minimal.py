@@ -13,11 +13,10 @@ from ..utils import PhysicalConstants, get_esat, get_qsat
 class MinimalLandSurfaceInitConds:
     """Data class for minimal land surface model initial conditions.
 
-    Arguments
-    ---------
-    - ``alpha``: surface albedo [-], range 0 to 1.
-    - ``surf_temp``: surface temperature [K].
-    - ``rs``: surface resistance [s m-1].
+    Args:
+        alpha: surface albedo [-], range 0 to 1.
+        surf_temp: surface temperature [K].
+        rs: surface resistance [s m-1].
     """
 
     alpha: float
@@ -26,13 +25,7 @@ class MinimalLandSurfaceInitConds:
 
 
 class MinimalLandSurfaceModel(AbstractLandSurfaceModel):
-    """Minimal land surface model with fixed surface properties.
-
-    Parameters
-    ----------
-    None.
-
-    """
+    """Minimal land surface model with fixed surface properties."""
 
     def __init__(self):
         pass
@@ -43,7 +36,7 @@ class MinimalLandSurfaceModel(AbstractLandSurfaceModel):
         const: PhysicalConstants,
         surface_layer: AbstractSurfaceLayerModel,
     ):
-        """Execute land surface model calculations."""
+        """Run the model."""
 
         # limamau: the following two blocks are also computed by
         # the standard class - should we refactor some things here?
@@ -63,7 +56,5 @@ class MinimalLandSurfaceModel(AbstractLandSurfaceModel):
         return state
 
     def integrate(self, state: PyTree, dt: float):
-        """
-        Integrate model forward in time.
-        """
+        """Integrate the model."""
         return state

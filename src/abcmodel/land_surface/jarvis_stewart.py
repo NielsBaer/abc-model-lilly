@@ -9,12 +9,7 @@ from .standard import (
 
 
 class JarvisStewartInitConds(StandardLandSurfaceInitConds):
-    """Data class for Jarvis-Stewart model initial conditions.
-
-    Arguments
-    ---------
-    - all arguments from StandardLandSurfaceInitConds.
-    """
+    """Data class for Jarvis-Stewart model initial conditions."""
 
     pass
 
@@ -27,17 +22,10 @@ class JarvisStewartModel(AbstractStandardLandSurfaceModel):
     for radiation, soil moisture, vapor pressure deficit, and temperature effects
     on stomatal conductance.
 
-    Processes
-    ---------
     1. Inherit all standard land surface processes from parent class.
     2. Calculate surface resistance using four environmental stress factors.
     3. Apply Jarvis-Stewart multiplicative stress function approach.
     4. No CO2 flux calculations (simple implementation).
-
-    Updates
-    --------
-    - ``rs``: surface resistance for transpiration [s m-1].
-    - all updates from ``AbstractStandardLandSurfaceModel``.
     """
 
     def __init__(self, **kwargs):
@@ -58,21 +46,7 @@ class JarvisStewartModel(AbstractStandardLandSurfaceModel):
         state: PyTree,
         const: PhysicalConstants,
     ):
-        """
-        Compute surface resistance using Jarvis-Stewart approach.
-
-        Parameters
-        ----------
-        - ``const``: physical constants (currently unused).
-        - ``radiation``: radiation model. Uses ``get_f1()`` method.
-        - ``surface_layer``: surface layer model (currently unused).
-        - ``mixed_layer``: mixed layer model. Uses ``esat``, ``e``, and ``theta``.
-
-        Updates
-        -------
-        Updates ``self.rs`` using multiplicative stress factors for radiation (f1),
-        soil moisture (f2), vapor pressure deficit (f3), and temperature (f4).
-        """
+        """Compute surface resistance using Jarvis-Stewart approach."""
         # calculate surface resistances using Jarvis-Stewart model
         f1 = self.get_f1(state)
         f2 = jnp.where(
@@ -95,7 +69,5 @@ class JarvisStewartModel(AbstractStandardLandSurfaceModel):
         state: PyTree,
         const: PhysicalConstants,
     ):
-        """
-        Pass.
-        """
+        """Pass."""
         return state

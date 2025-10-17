@@ -1,0 +1,902 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>abcmodel package &#8212; abc-model 0.1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=a1637f0b"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'source/api/abcmodel';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="abcmodel.clouds package" href="abcmodel.clouds.html" />
+    <link rel="prev" title="abcmodel" href="modules.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">abc-model 0.1.0 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="modules.html">API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="current reference internal" href="#">abcmodel package</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.clouds.html">abcmodel.clouds package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.cumulus.html">abcmodel.clouds.cumulus module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.no_clouds.html">abcmodel.clouds.no_clouds module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.land_surface.html">abcmodel.land_surface package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.aquacrop.html">abcmodel.land_surface.aquacrop module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.jarvis_stewart.html">abcmodel.land_surface.jarvis_stewart module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.minimal.html">abcmodel.land_surface.minimal module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.standard.html">abcmodel.land_surface.standard module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.mixed_layer.html">abcmodel.mixed_layer package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.bulk.html">abcmodel.mixed_layer.bulk module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.minimal.html">abcmodel.mixed_layer.minimal module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.stats.html">abcmodel.mixed_layer.stats module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.radiation.html">abcmodel.radiation package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.standard.html">abcmodel.radiation.standard module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.standard_w_clouds.html">abcmodel.radiation.standard_w_clouds module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.surface_layer.html">abcmodel.surface_layer package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.minimal.html">abcmodel.surface_layer.minimal module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.standard.html">abcmodel.surface_layer.standard module</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.coupling.html">abcmodel.coupling module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.integration.html">abcmodel.integration module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.models.html">abcmodel.models module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.utils.html">abcmodel.utils module</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://git.bgc-jena.mpg.de/abc3/abc-model" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-gitlab"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/source/api/abcmodel.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>abcmodel package</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subpackages">Subpackages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-abcmodel">Module contents</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.ABCoupler"><code class="docutils literal notranslate"><span class="pre">ABCoupler</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.ABCoupler.init_state"><code class="docutils literal notranslate"><span class="pre">ABCoupler.init_state()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.integrate"><code class="docutils literal notranslate"><span class="pre">integrate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="abcmodel-package">
+<h1>abcmodel package<a class="headerlink" href="#abcmodel-package" title="Link to this heading">#</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.clouds.html">abcmodel.clouds package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.clouds.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.clouds.cumulus.html">abcmodel.clouds.cumulus module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.cumulus.html#abcmodel.clouds.cumulus.StandardCumulusInitConds"><code class="docutils literal notranslate"><span class="pre">StandardCumulusInitConds</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.cumulus.html#abcmodel.clouds.cumulus.StandardCumulusModel"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.clouds.no_clouds.html">abcmodel.clouds.no_clouds module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.no_clouds.html#abcmodel.clouds.no_clouds.NoCloudInitConds"><code class="docutils literal notranslate"><span class="pre">NoCloudInitConds</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.no_clouds.html#abcmodel.clouds.no_clouds.NoCloudModel"><code class="docutils literal notranslate"><span class="pre">NoCloudModel</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.clouds.html#module-abcmodel.clouds">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.clouds.html#abcmodel.clouds.NoCloudInitConds"><code class="docutils literal notranslate"><span class="pre">NoCloudInitConds</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.html#abcmodel.clouds.NoCloudInitConds.cc_frac"><code class="docutils literal notranslate"><span class="pre">NoCloudInitConds.cc_frac</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.html#abcmodel.clouds.NoCloudInitConds.cc_mf"><code class="docutils literal notranslate"><span class="pre">NoCloudInitConds.cc_mf</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.html#abcmodel.clouds.NoCloudInitConds.cc_qf"><code class="docutils literal notranslate"><span class="pre">NoCloudInitConds.cc_qf</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.clouds.html#abcmodel.clouds.NoCloudModel"><code class="docutils literal notranslate"><span class="pre">NoCloudModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.html#abcmodel.clouds.NoCloudModel.run"><code class="docutils literal notranslate"><span class="pre">NoCloudModel.run()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.clouds.html#abcmodel.clouds.StandardCumulusInitConds"><code class="docutils literal notranslate"><span class="pre">StandardCumulusInitConds</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.html#abcmodel.clouds.StandardCumulusInitConds.cc_frac"><code class="docutils literal notranslate"><span class="pre">StandardCumulusInitConds.cc_frac</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.html#abcmodel.clouds.StandardCumulusInitConds.cc_mf"><code class="docutils literal notranslate"><span class="pre">StandardCumulusInitConds.cc_mf</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.html#abcmodel.clouds.StandardCumulusInitConds.cc_qf"><code class="docutils literal notranslate"><span class="pre">StandardCumulusInitConds.cc_qf</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.html#abcmodel.clouds.StandardCumulusInitConds.cl_trans"><code class="docutils literal notranslate"><span class="pre">StandardCumulusInitConds.cl_trans</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.clouds.html#abcmodel.clouds.StandardCumulusModel"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.html#abcmodel.clouds.StandardCumulusModel.calculate_cloud_core_fraction"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_core_fraction()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.html#abcmodel.clouds.StandardCumulusModel.calculate_cloud_core_properties"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_core_properties()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.html#abcmodel.clouds.StandardCumulusModel.calculate_cloud_layer_transmittance"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_layer_transmittance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.html#abcmodel.clouds.StandardCumulusModel.calculate_co2_mass_flux"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_co2_mass_flux()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.html#abcmodel.clouds.StandardCumulusModel.calculate_mixed_layer_variance"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_mixed_layer_variance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.html#abcmodel.clouds.StandardCumulusModel.run"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.land_surface.html">abcmodel.land_surface package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.land_surface.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land_surface.aquacrop.html">abcmodel.land_surface.aquacrop module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.aquacrop.html#abcmodel.land_surface.aquacrop.AquaCropInitConds"><code class="docutils literal notranslate"><span class="pre">AquaCropInitConds</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.aquacrop.html#abcmodel.land_surface.aquacrop.AquaCropModel"><code class="docutils literal notranslate"><span class="pre">AquaCropModel</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land_surface.jarvis_stewart.html">abcmodel.land_surface.jarvis_stewart module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.jarvis_stewart.html#abcmodel.land_surface.jarvis_stewart.JarvisStewartInitConds"><code class="docutils literal notranslate"><span class="pre">JarvisStewartInitConds</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.jarvis_stewart.html#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land_surface.minimal.html">abcmodel.land_surface.minimal module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.minimal.html#abcmodel.land_surface.minimal.MinimalLandSurfaceInitConds"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceInitConds</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.minimal.html#abcmodel.land_surface.minimal.MinimalLandSurfaceModel"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceModel</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land_surface.standard.html">abcmodel.land_surface.standard module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.standard.html#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.standard.html#abcmodel.land_surface.standard.StandardLandSurfaceInitConds"><code class="docutils literal notranslate"><span class="pre">StandardLandSurfaceInitConds</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.land_surface.html#module-abcmodel.land_surface">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.AquaCropInitConds"><code class="docutils literal notranslate"><span class="pre">AquaCropInitConds</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.AquaCropInitConds.ci"><code class="docutils literal notranslate"><span class="pre">AquaCropInitConds.ci</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.AquaCropInitConds.co2abs"><code class="docutils literal notranslate"><span class="pre">AquaCropInitConds.co2abs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.AquaCropInitConds.gcco2"><code class="docutils literal notranslate"><span class="pre">AquaCropInitConds.gcco2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.AquaCropInitConds.rsCO2"><code class="docutils literal notranslate"><span class="pre">AquaCropInitConds.rsCO2</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.AquaCropModel"><code class="docutils literal notranslate"><span class="pre">AquaCropModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.AquaCropModel.calculate_canopy_co2_conductance"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_canopy_co2_conductance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.AquaCropModel.calculate_co2_compensation_concentration"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_co2_compensation_concentration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.AquaCropModel.calculate_gross_assimilation_and_light_use"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_gross_assimilation_and_light_use()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.AquaCropModel.calculate_internal_co2"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_internal_co2()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.AquaCropModel.calculate_max_gross_primary_production"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_max_gross_primary_production()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.AquaCropModel.calculate_mesophyll_conductance"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_mesophyll_conductance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.AquaCropModel.calculate_soil_moisture_stress_factor"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_soil_moisture_stress_factor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.AquaCropModel.compute_co2_flux"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.compute_co2_flux()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.AquaCropModel.compute_surface_resistance"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.compute_surface_resistance()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.JarvisStewartInitConds"><code class="docutils literal notranslate"><span class="pre">JarvisStewartInitConds</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.JarvisStewartModel"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.JarvisStewartModel.compute_co2_flux"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_co2_flux()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.JarvisStewartModel.compute_surface_resistance"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_surface_resistance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.JarvisStewartModel.get_f1"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.get_f1()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.MinimalLandSurfaceInitConds"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceInitConds</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.MinimalLandSurfaceInitConds.alpha"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceInitConds.alpha</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.MinimalLandSurfaceInitConds.rs"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceInitConds.rs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.MinimalLandSurfaceInitConds.surf_temp"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceInitConds.surf_temp</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.MinimalLandSurfaceModel"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.MinimalLandSurfaceModel.integrate"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceModel.integrate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.html#abcmodel.land_surface.MinimalLandSurfaceModel.run"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceModel.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.mixed_layer.html">abcmodel.mixed_layer package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.mixed_layer.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.mixed_layer.bulk.html">abcmodel.mixed_layer.bulk module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerInitConds"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.mixed_layer.minimal.html">abcmodel.mixed_layer.minimal module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.minimal.html#abcmodel.mixed_layer.minimal.MinimalMixedLayerInitConds"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.minimal.html#abcmodel.mixed_layer.minimal.MinimalMixedLayerModel"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerModel</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.mixed_layer.stats.html">abcmodel.mixed_layer.stats module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.stats.html#abcmodel.mixed_layer.stats.AbstractStandardStatsModel"><code class="docutils literal notranslate"><span class="pre">AbstractStandardStatsModel</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.mixed_layer.html#module-abcmodel.mixed_layer">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.abl_height"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.abl_height</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.co2"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.co2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.co2tend"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.co2tend</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.dCO2"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.dCO2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.dCO2tend"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.dCO2tend</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.dq"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.dq</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.dqtend"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.dqtend</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.dtheta"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.dtheta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.dthetatend"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.dthetatend</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.dthetav"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.dthetav</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.du"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.du</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.dutend"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.dutend</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.dv"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.dv</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.dvtend"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.dvtend</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.dz_h"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.dz_h</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.dztend"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.dztend</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.e"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.e</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.esat"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.esat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.htend"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.htend</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.lcl"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.lcl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.q"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.q</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.qsat"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.qsat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.qtend"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.qtend</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.surf_pressure"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.surf_pressure</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.theta"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.theta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.thetatend"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.thetatend</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.thetav"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.thetav</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.top_rh"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.top_rh</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.u"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.u</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.utend"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.utend</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.v"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.v</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.vtend"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.vtend</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.wCO2"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.wCO2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.wCO2A"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.wCO2A</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.wCO2M"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.wCO2M</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.wCO2R"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.wCO2R</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.wCO2e"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.wCO2e</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.we"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.we</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.wq"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.wq</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.wqe"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.wqe</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.wstar"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.wstar</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.wtheta"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.wtheta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.wthetae"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.wthetae</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.wthetav"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.wthetav</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerInitConds.wthetave"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerInitConds.wthetave</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerModel"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_convective_velocity_scale"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_convective_velocity_scale()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_entrainment_fluxes"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_entrainment_fluxes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_entrainment_velocity"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_entrainment_velocity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_free_troposphere_compensation"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_free_troposphere_compensation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_mixed_layer_tendencies"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_mixed_layer_tendencies()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_transition_layer_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_transition_layer_tendency()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_vertical_motions"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_vertical_motions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerModel.calculate_wind_tendencies"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_wind_tendencies()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerModel.integrate"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.integrate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.BulkMixedLayerModel.run"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.run()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.abl_height"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.abl_height</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.co2"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.co2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.dCO2"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.dCO2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.dq"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.dq</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.dtheta"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.dtheta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.dz_h"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.dz_h</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.e"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.e</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.esat"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.esat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.lcl"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.lcl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.q"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.q</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.qsat"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.qsat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.surf_pressure"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.surf_pressure</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.theta"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.theta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.thetav"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.thetav</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.u"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.u</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.v"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.v</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.wCO2"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.wCO2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.wCO2A"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.wCO2A</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.wCO2M"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.wCO2M</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.wCO2R"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.wCO2R</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.wCO2e"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.wCO2e</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.wq"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.wq</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.wqe"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.wqe</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.wstar"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.wstar</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.wtheta"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.wtheta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerInitConds.wthetav"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerInitConds.wthetav</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerModel"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerModel.integrate"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerModel.integrate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.html#abcmodel.mixed_layer.MinimalMixedLayerModel.run"><code class="docutils literal notranslate"><span class="pre">MinimalMixedLayerModel.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.radiation.html">abcmodel.radiation package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.radiation.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.radiation.standard.html">abcmodel.radiation.standard module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.standard.html#abcmodel.radiation.standard.StandardRadiationInitConds"><code class="docutils literal notranslate"><span class="pre">StandardRadiationInitConds</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.standard.html#abcmodel.radiation.standard.StandardRadiationModel"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.radiation.standard_w_clouds.html">abcmodel.radiation.standard_w_clouds module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.standard_w_clouds.html#abcmodel.radiation.standard_w_clouds.StandardRadiationwCloudsInitConds"><code class="docutils literal notranslate"><span class="pre">StandardRadiationwCloudsInitConds</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.standard_w_clouds.html#abcmodel.radiation.standard_w_clouds.StandardRadiationwCloudsModel"><code class="docutils literal notranslate"><span class="pre">StandardRadiationwCloudsModel</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.radiation.html#module-abcmodel.radiation">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.radiation.html#abcmodel.radiation.StandardRadiationInitConds"><code class="docutils literal notranslate"><span class="pre">StandardRadiationInitConds</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.html#abcmodel.radiation.StandardRadiationInitConds.in_lrad"><code class="docutils literal notranslate"><span class="pre">StandardRadiationInitConds.in_lrad</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.html#abcmodel.radiation.StandardRadiationInitConds.in_srad"><code class="docutils literal notranslate"><span class="pre">StandardRadiationInitConds.in_srad</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.html#abcmodel.radiation.StandardRadiationInitConds.net_rad"><code class="docutils literal notranslate"><span class="pre">StandardRadiationInitConds.net_rad</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.html#abcmodel.radiation.StandardRadiationInitConds.out_lrad"><code class="docutils literal notranslate"><span class="pre">StandardRadiationInitConds.out_lrad</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.html#abcmodel.radiation.StandardRadiationInitConds.out_srad"><code class="docutils literal notranslate"><span class="pre">StandardRadiationInitConds.out_srad</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.radiation.html#abcmodel.radiation.StandardRadiationModel"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.html#abcmodel.radiation.StandardRadiationModel.calculate_air_temperature"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.calculate_air_temperature()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.html#abcmodel.radiation.StandardRadiationModel.calculate_atmospheric_transmission"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.calculate_atmospheric_transmission()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.html#abcmodel.radiation.StandardRadiationModel.calculate_radiation_components"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.calculate_radiation_components()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.html#abcmodel.radiation.StandardRadiationModel.calculate_solar_declination"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.calculate_solar_declination()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.html#abcmodel.radiation.StandardRadiationModel.calculate_solar_elevation"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.calculate_solar_elevation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.html#abcmodel.radiation.StandardRadiationModel.run"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.run()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.radiation.html#abcmodel.radiation.StandardRadiationwCloudsInitConds"><code class="docutils literal notranslate"><span class="pre">StandardRadiationwCloudsInitConds</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.radiation.html#abcmodel.radiation.StandardRadiationwCloudsModel"><code class="docutils literal notranslate"><span class="pre">StandardRadiationwCloudsModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.html#abcmodel.radiation.StandardRadiationwCloudsModel.calculate_atmospheric_transmission_w_clouds"><code class="docutils literal notranslate"><span class="pre">StandardRadiationwCloudsModel.calculate_atmospheric_transmission_w_clouds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.html#abcmodel.radiation.StandardRadiationwCloudsModel.run"><code class="docutils literal notranslate"><span class="pre">StandardRadiationwCloudsModel.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.surface_layer.html">abcmodel.surface_layer package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.surface_layer.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.surface_layer.minimal.html">abcmodel.surface_layer.minimal module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.minimal.html#abcmodel.surface_layer.minimal.MinimalSurfaceLayerInitConds"><code class="docutils literal notranslate"><span class="pre">MinimalSurfaceLayerInitConds</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.minimal.html#abcmodel.surface_layer.minimal.MinimalSurfaceLayerModel"><code class="docutils literal notranslate"><span class="pre">MinimalSurfaceLayerModel</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.surface_layer.standard.html">abcmodel.surface_layer.standard module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.standard.html#abcmodel.surface_layer.standard.StandardSurfaceLayerInitConds"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerInitConds</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.standard.html#abcmodel.surface_layer.standard.StandardSurfaceLayerModel"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerModel</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.standard.html#abcmodel.surface_layer.standard.calculate_effective_wind_speed"><code class="docutils literal notranslate"><span class="pre">calculate_effective_wind_speed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.standard.html#abcmodel.surface_layer.standard.calculate_momentum_correction_term"><code class="docutils literal notranslate"><span class="pre">calculate_momentum_correction_term()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.standard.html#abcmodel.surface_layer.standard.calculate_richardson_number"><code class="docutils literal notranslate"><span class="pre">calculate_richardson_number()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.standard.html#abcmodel.surface_layer.standard.calculate_scalar_correction_term"><code class="docutils literal notranslate"><span class="pre">calculate_scalar_correction_term()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.standard.html#abcmodel.surface_layer.standard.calculate_surface_properties"><code class="docutils literal notranslate"><span class="pre">calculate_surface_properties()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.surface_layer.html#module-abcmodel.surface_layer">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.MinimalSurfaceLayerInitConds"><code class="docutils literal notranslate"><span class="pre">MinimalSurfaceLayerInitConds</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.MinimalSurfaceLayerInitConds.ustar"><code class="docutils literal notranslate"><span class="pre">MinimalSurfaceLayerInitConds.ustar</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.MinimalSurfaceLayerInitConds.uw"><code class="docutils literal notranslate"><span class="pre">MinimalSurfaceLayerInitConds.uw</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.MinimalSurfaceLayerInitConds.vw"><code class="docutils literal notranslate"><span class="pre">MinimalSurfaceLayerInitConds.vw</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.MinimalSurfaceLayerModel"><code class="docutils literal notranslate"><span class="pre">MinimalSurfaceLayerModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.MinimalSurfaceLayerModel.calculate_momentum_fluxes"><code class="docutils literal notranslate"><span class="pre">MinimalSurfaceLayerModel.calculate_momentum_fluxes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.MinimalSurfaceLayerModel.compute_ra"><code class="docutils literal notranslate"><span class="pre">MinimalSurfaceLayerModel.compute_ra()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.MinimalSurfaceLayerModel.run"><code class="docutils literal notranslate"><span class="pre">MinimalSurfaceLayerModel.run()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerInitConds"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerInitConds</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerInitConds.drag_m"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerInitConds.drag_m</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerInitConds.drag_s"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerInitConds.drag_s</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerInitConds.e2m"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerInitConds.e2m</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerInitConds.esat2m"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerInitConds.esat2m</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerInitConds.obukhov_length"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerInitConds.obukhov_length</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerInitConds.q2m"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerInitConds.q2m</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerInitConds.qsurf"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerInitConds.qsurf</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerInitConds.rib_number"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerInitConds.rib_number</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerInitConds.temp_2m"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerInitConds.temp_2m</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerInitConds.theta"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerInitConds.theta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerInitConds.thetasurf"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerInitConds.thetasurf</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerInitConds.thetavsurf"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerInitConds.thetavsurf</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerInitConds.u2m"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerInitConds.u2m</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerInitConds.ustar"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerInitConds.ustar</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerInitConds.uw"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerInitConds.uw</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerInitConds.v2m"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerInitConds.v2m</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerInitConds.vw"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerInitConds.vw</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerInitConds.z0h"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerInitConds.z0h</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerInitConds.z0m"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerInitConds.z0m</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerModel"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerModel.calculate_2m_variables"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerModel.calculate_2m_variables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerModel.calculate_drag_coefficients"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerModel.calculate_drag_coefficients()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerModel.calculate_momentum_fluxes"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerModel.calculate_momentum_fluxes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerModel.calculate_rib_function"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerModel.calculate_rib_function()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerModel.calculate_rib_function_term"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerModel.calculate_rib_function_term()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerModel.compute_ra"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerModel.compute_ra()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerModel.ribtol"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerModel.ribtol()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerModel.run"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerModel.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.coupling.html">abcmodel.coupling module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.coupling.html#abcmodel.coupling.ABCoupler"><code class="docutils literal notranslate"><span class="pre">ABCoupler</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.coupling.html#abcmodel.coupling.ABCoupler.init_state"><code class="docutils literal notranslate"><span class="pre">ABCoupler.init_state()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.coupling.html#abcmodel.coupling.CoupledState"><code class="docutils literal notranslate"><span class="pre">CoupledState</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.coupling.html#abcmodel.coupling.CoupledState.tree_flatten"><code class="docutils literal notranslate"><span class="pre">CoupledState.tree_flatten()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.coupling.html#abcmodel.coupling.CoupledState.tree_unflatten"><code class="docutils literal notranslate"><span class="pre">CoupledState.tree_unflatten()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.integration.html">abcmodel.integration module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.integration.html#abcmodel.integration.integrate"><code class="docutils literal notranslate"><span class="pre">integrate()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.integration.html#abcmodel.integration.print_nan_variables"><code class="docutils literal notranslate"><span class="pre">print_nan_variables()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.integration.html#abcmodel.integration.timestep"><code class="docutils literal notranslate"><span class="pre">timestep()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.integration.html#abcmodel.integration.warmup"><code class="docutils literal notranslate"><span class="pre">warmup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.models.html">abcmodel.models module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.models.html#abcmodel.models.AbstractCloudModel"><code class="docutils literal notranslate"><span class="pre">AbstractCloudModel</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.models.html#abcmodel.models.AbstractCloudModel.run"><code class="docutils literal notranslate"><span class="pre">AbstractCloudModel.run()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.models.html#abcmodel.models.AbstractLandSurfaceModel"><code class="docutils literal notranslate"><span class="pre">AbstractLandSurfaceModel</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.models.html#abcmodel.models.AbstractLandSurfaceModel.integrate"><code class="docutils literal notranslate"><span class="pre">AbstractLandSurfaceModel.integrate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.models.html#abcmodel.models.AbstractLandSurfaceModel.run"><code class="docutils literal notranslate"><span class="pre">AbstractLandSurfaceModel.run()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.models.html#abcmodel.models.AbstractMixedLayerModel"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerModel</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.models.html#abcmodel.models.AbstractMixedLayerModel.integrate"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerModel.integrate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.models.html#abcmodel.models.AbstractMixedLayerModel.run"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerModel.run()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.models.html#abcmodel.models.AbstractMixedLayerModel.statistics"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerModel.statistics()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.models.html#abcmodel.models.AbstractModel"><code class="docutils literal notranslate"><span class="pre">AbstractModel</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.models.html#abcmodel.models.AbstractRadiationModel"><code class="docutils literal notranslate"><span class="pre">AbstractRadiationModel</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.models.html#abcmodel.models.AbstractRadiationModel.run"><code class="docutils literal notranslate"><span class="pre">AbstractRadiationModel.run()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.models.html#abcmodel.models.AbstractRadiationModel.tstart"><code class="docutils literal notranslate"><span class="pre">AbstractRadiationModel.tstart</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.models.html#abcmodel.models.AbstractSurfaceLayerModel"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceLayerModel</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.models.html#abcmodel.models.AbstractSurfaceLayerModel.compute_ra"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceLayerModel.compute_ra()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.models.html#abcmodel.models.AbstractSurfaceLayerModel.run"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceLayerModel.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.utils.html">abcmodel.utils module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.utils.html#abcmodel.utils.PhysicalConstants"><code class="docutils literal notranslate"><span class="pre">PhysicalConstants</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.utils.html#abcmodel.utils.get_esat"><code class="docutils literal notranslate"><span class="pre">get_esat()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.utils.html#abcmodel.utils.get_psih"><code class="docutils literal notranslate"><span class="pre">get_psih()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.utils.html#abcmodel.utils.get_psim"><code class="docutils literal notranslate"><span class="pre">get_psim()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.utils.html#abcmodel.utils.get_qsat"><code class="docutils literal notranslate"><span class="pre">get_qsat()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-abcmodel">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-abcmodel" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.ABCoupler">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.</span></span><span class="sig-name descname"><span class="pre">ABCoupler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radiation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">land_surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface_layer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mixed_layer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clouds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/coupling.html#ABCoupler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.ABCoupler" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Coupling class to bound all the components.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.ABCoupler.init_state">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">init_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radiation_init_conds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">land_surface_init_conds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface_layer_init_conds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mixed_layer_init_conds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clouds_init_conds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/coupling.html#ABCoupler.init_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.ABCoupler.init_state" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="abcmodel.integrate">
+<span class="sig-prename descclassname"><span class="pre">abcmodel.</span></span><span class="sig-name descname"><span class="pre">integrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runtime</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/integration.html#integrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.integrate" title="Link to this definition">#</a></dt>
+<dd><p>Integrate the coupler forward in time.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="modules.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">abcmodel</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="abcmodel.clouds.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">abcmodel.clouds package</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subpackages">Subpackages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-abcmodel">Module contents</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.ABCoupler"><code class="docutils literal notranslate"><span class="pre">ABCoupler</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.ABCoupler.init_state"><code class="docutils literal notranslate"><span class="pre">ABCoupler.init_state()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.integrate"><code class="docutils literal notranslate"><span class="pre">integrate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By ABC3 Group
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright ABC3 Group.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

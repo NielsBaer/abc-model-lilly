@@ -11,12 +11,13 @@ from ..utils import PhysicalConstants, get_qsat
 class StandardCumulusInitConds:
     """Standard cumulus model state.
 
-    Variables
-    ---------
-    - ``cc_frac``: cloud core fraction [-], range 0 to 1.
-    - ``cc_mf``: cloud core mass flux [m/s].
-    - ``cc_qf``: cloud core moisture flux [kg/kg/s].
-    - ``cl_trans``: cloud layer transmittance [-], range 0 to 1.
+    Here it goes.
+
+    Args:
+        cc_frac: cloud core fraction [-], range 0 to 1.
+        cc_mf: cloud core mass flux [m/s].
+        cc_qf: cloud core moisture flux [kg/kg/s].
+        cl_trans: cloud layer transmittance [-], range 0 to 1.
     """
 
     cc_frac: float = 0.0
@@ -26,8 +27,7 @@ class StandardCumulusInitConds:
 
 
 class StandardCumulusModel(AbstractCloudModel):
-    """
-    Standard cumulus cloud model based on Neggers et al. (2006/7).
+    """Standard cumulus cloud model based on Neggers et al. (2006/7).
 
     This model calculates shallow cumulus convection properties using a variance-based
     approach to determine cloud core fraction and associated mass fluxes. The model
@@ -35,19 +35,9 @@ class StandardCumulusModel(AbstractCloudModel):
     It quantifies the variance of humidity and CO2 at the mixed-layer top and uses this
     to determine what fraction reaches saturation.
 
-    Parameters
-    ----------
-    - ``tcc_cc``: ratio of total cloud cove to core cloud fraction [-], greater or equal to 1.
-    - ``tcc_trans``: mean transmittance of cloud cover [-], range 0 to 1.
-
-    Processes
-    ---------
-    1. Calculates turbulent variance for humidity and CO2 at the mixed-layer top
-    using entrainment fluxes and convective scaling (Neggers et al. 2006/7).
-    2. Determines fraction of mixed-layer top that becomes saturated using
-    arctangent formulation based on saturation deficit.
-    3. Calculates mass flux and moisture flux through cloud cores.
-    4. Computes CO2 transport only when CO2 decreases with height.
+    Args:
+        tcc_cc: ratio of total cloud cove to core cloud fraction [-], greater or equal to 1.
+        tcc_trans: mean transmittance of cloud cover [-], range 0 to 1.
     """
 
     def __init__(self, tcc_cc: float = 2.0, tcc_trans: float = 0.6):
@@ -130,39 +120,7 @@ class StandardCumulusModel(AbstractCloudModel):
         return 1.0 - tcc * (1.0 - self.tcc_trans)
 
     def run(self, state: PyTree, const: PhysicalConstants):
-        """
-        State requirements
-        ------------------
-        - ``wthetav`` : float - Virtual potential temperature flux [K m/s]
-        - ``wqe`` : float - Moisture flux at entrainment [kg/kg m/s]
-        - ``dq`` : float - Moisture jump at mixed-layer top [kg/kg]
-        - ``abl_height`` : float - Atmospheric boundary layer height [m]
-        - ``dz_h`` : float - Layer thickness at mixed-layer top [m]
-        - ``wstar`` : float - Convective velocity scale [m/s]
-        - ``wCO2e`` : float - CO2 flux at entrainment [ppm m/s]
-        - ``wCO2M`` : float - CO2 mass flux [ppm m/s]
-        - ``dCO2`` : float - CO2 jump at mixed-layer top [ppm]
-        - ``q`` : float - Specific humidity [kg/kg]
-        - ``top_T`` : float - Temperature at mixed-layer top [K]
-        - ``top_p`` : float - Pressure at mixed-layer top [Pa]
-
-        Updates
-        -------
-        - ``cc_frac`` : float
-            Cloud core fraction (0 to 1)
-        - ``cc_mf`` : float
-            Cloud core mass flux [m/s]
-        - ``cc_qf`` : float
-            Cloud core moisture flux [kg/kg/s]
-        - ``q2_h`` : float
-            Humidity variance at mixed-layer top
-        - ``top_CO22`` : float
-            CO2 variance at mixed-layer top
-        - ``wCO2M`` : float
-            CO2 mass flux [ppm m/s]
-        - ``cl_trans``: float
-            cloud layer transmissivity [-]
-        """
+        """Run the model."""
         state.q2_h, state.top_CO22 = self.calculate_mixed_layer_variance(
             state.cc_qf,
             state.wthetav,

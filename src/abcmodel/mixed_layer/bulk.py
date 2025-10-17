@@ -16,28 +16,27 @@ from .stats import AbstractStandardStatsModel
 class BulkMixedLayerInitConds:
     """Data class for bulk mixed layer model initial conditions.
 
-    Arguments
-    ---------
-    - ``abl_height``: initial ABL height [m].
-    - ``theta``: initial mixed-layer potential temperature [K].
-    - ``dtheta``: initial temperature jump at h [K].
-    - ``wtheta``: surface kinematic heat flux [K m/s].
-    - ``q``: initial mixed-layer specific humidity [kg/kg].
-    - ``dq``: initial specific humidity jump at h [kg/kg].
-    - ``wq``: surface kinematic moisture flux [kg/kg m/s].
-    - ``co2``: initial mixed-layer CO2 [ppm].
-    - ``dCO2``: initial CO2 jump at h [ppm].
-    - ``wCO2``: surface kinematic CO2 flux [mgC/m²/s].
-    - ``u``: initial mixed-layer u-wind speed [m/s].
-    - ``du``: initial u-wind jump at h [m/s].
-    - ``v``: initial mixed-layer v-wind speed [m/s].
-    - ``dv``: initial v-wind jump at h [m/s].
-    - ``dz_h``: transition layer thickness [m].
-    - ``wstar``: convective velocity scale [m s-1]. Defaults to 0.0.
-    - ``we``: entrainment velocity [m s-1]. Defaults to -1.0.
-    - ``wCO2A``: surface assimulation CO2 flux [mgC/m²/s]. Defaults to 0.0.
-    - ``wCO2R``: surface respiration CO2 flux [mgC/m²/s]. Defaults to 0.0.
-    - ``wCO2M``: CO2 mass flux [mgC/m²/s]. Defaults to 0.0.
+    Args:
+        abl_height: initial ABL height [m].
+        theta: initial mixed-layer potential temperature [K].
+        dtheta: initial temperature jump at h [K].
+        wtheta: surface kinematic heat flux [K m/s].
+        q: initial mixed-layer specific humidity [kg/kg].
+        dq: initial specific humidity jump at h [kg/kg].
+        wq: surface kinematic moisture flux [kg/kg m/s].
+        co2: initial mixed-layer CO2 [ppm].
+        dCO2: initial CO2 jump at h [ppm].
+        wCO2: surface kinematic CO2 flux [mgC/m²/s].
+        u: initial mixed-layer u-wind speed [m/s].
+        du: initial u-wind jump at h [m/s].
+        v: initial mixed-layer v-wind speed [m/s].
+        dv: initial v-wind jump at h [m/s].
+        dz_h: transition layer thickness [m].
+        wstar: convective velocity scale [m s-1]. Defaults to 0.0.
+        we: entrainment velocity [m s-1]. Defaults to -1.0.
+        wCO2A: surface assimulation CO2 flux [mgC/m²/s]. Defaults to 0.0.
+        wCO2R: surface respiration CO2 flux [mgC/m²/s]. Defaults to 0.0.
+        wCO2M: CO2 mass flux [mgC/m²/s]. Defaults to 0.0.
     """
 
     # initialized by the user
@@ -99,33 +98,30 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
     Complete mixed layer model that simulates atmospheric boundary layer evolution
     including entrainment, subsidence, cloud effects, and wind dynamics.
 
-    Arguments
-    ---------
-    - ``sw_shearwe``: shear growth mixed-layer switch.
-    - ``sw_fixft``: fix the free-troposphere switch.
-    - ``sw_wind``: prognostic wind switch.
-    - ``surf_pressure``: surface pressure [Pa].
-    - ``divU``: horizontal large-scale divergence of wind [s⁻¹].
-    - ``coriolis_param``: Coriolis parameter [s⁻¹].
-    - ``gammatheta``: free atmosphere potential temperature lapse rate [K/m].
-    - ``advtheta``: advection of heat [K/s].
-    - ``beta``: entrainment ratio for virtual heat [-].
-    - ``gammaq``: free atmosphere specific humidity lapse rate [kg/kg/m].
-    - ``advq``: advection of moisture [kg/kg/s].
-    - ``gammaCO2``: free atmosphere CO2 lapse rate [ppm/m].
-    - ``advCO2``: advection of CO2 [ppm/s].
-    - ``gammau``: free atmosphere u-wind speed lapse rate [s⁻¹].
-    - ``advu``: advection of u-wind [m/s²].
-    - ``gammav``: free atmosphere v-wind speed lapse rate [s⁻¹].
-    - ``advv``: advection of v-wind [m/s²].
-    - ``dFz``: something I forgot :).
-
-    Processes
-    ---------
     1. Calculate large-scale vertical motions and compensating effects.
     2. Determine convective velocity scale and entrainment parameters.
     3. Compute all tendency terms for mixed layer variables.
     4. Integrate prognostic equations forward in time.
+
+    Args:
+        sw_shearwe: shear growth mixed-layer switch.
+        sw_fixft: fix the free-troposphere switch.
+        sw_wind: prognostic wind switch.
+        surf_pressure: surface pressure [Pa].
+        divU: horizontal large-scale divergence of wind [s⁻¹].
+        coriolis_param: Coriolis parameter [s⁻¹].
+        gammatheta: free atmosphere potential temperature lapse rate [K/m].
+        advtheta: advection of heat [K/s].
+        beta: entrainment ratio for virtual heat [-].
+        gammaq: free atmosphere specific humidity lapse rate [kg/kg/m].
+        advq: advection of moisture [kg/kg/s].
+        gammaCO2: free atmosphere CO2 lapse rate [ppm/m].
+        advCO2: advection of CO2 [ppm/s].
+        gammau: free atmosphere u-wind speed lapse rate [s⁻¹].
+        advu: advection of u-wind [m/s²].
+        gammav: free atmosphere v-wind speed lapse rate [s⁻¹].
+        advv: advection of v-wind [m/s²].
+        dFz: something I forgot :).
     """
 
     def __init__(
