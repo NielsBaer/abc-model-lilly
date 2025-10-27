@@ -367,54 +367,53 @@ document.write(`
 <a class="viewcode-back" href="../../../source/api/abcmodel.surface_layer.standard.html#abcmodel.surface_layer.StandardSurfaceLayerInitConds">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">StandardSurfaceLayerInitConds</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Data class for standard surface layer model initial conditions.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        ustar: surface friction velocity [m/s].</span>
-<span class="sd">        z0m: roughness length for momentum [m].</span>
-<span class="sd">        z0h: roughness length for scalars [m].</span>
-<span class="sd">        theta: surface potential temperature [K].</span>
-<span class="sd">        drag_m: drag coefficient for momentum [-]. Default: 1e12.</span>
-<span class="sd">        drag_s: drag coefficient for scalars [-]. Default: 1e12.</span>
-<span class="sd">        uw: surface momentum flux u [m2 s-2].</span>
-<span class="sd">        vw: surface momentum flux v [m2 s-2].</span>
-<span class="sd">        temp_2m: 2m temperature [K].</span>
-<span class="sd">        q2m: 2m specific humidity [kg kg-1].</span>
-<span class="sd">        u2m: 2m u-wind [m s-1].</span>
-<span class="sd">        v2m: 2m v-wind [m s-1].</span>
-<span class="sd">        e2m: 2m vapor pressure [Pa].</span>
-<span class="sd">        esat2m: 2m saturated vapor pressure [Pa].</span>
-<span class="sd">        thetasurf: surface potential temperature [K].</span>
-<span class="sd">        thetavsurf: surface virtual potential temperature [K].</span>
-<span class="sd">        qsurf: surface specific humidity [kg kg-1].</span>
-<span class="sd">        obukhov_length: Obukhov length [m].</span>
-<span class="sd">        rib_number: bulk Richardson number [-].</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Standard surface layer model initial state.&quot;&quot;&quot;</span>
 
     <span class="c1"># the following variables should be initialized by the user</span>
     <span class="n">ustar</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface friction velocity [m/s].&quot;&quot;&quot;</span>
     <span class="n">z0m</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Roughness length for momentum [m].&quot;&quot;&quot;</span>
     <span class="n">z0h</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Roughness length for scalars [m].&quot;&quot;&quot;</span>
     <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface potential temperature [K].&quot;&quot;&quot;</span>
+
     <span class="c1"># the following variables are initialized to high values and</span>
     <span class="c1"># are expected to converge to realistic values during warmup</span>
     <span class="n">drag_m</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e12</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Drag coefficient for momentum [-].&quot;&quot;&quot;</span>
     <span class="n">drag_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e12</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Drag coefficient for scalars [-].&quot;&quot;&quot;</span>
+
     <span class="c1"># the following variables are initialized as NaNs and should</span>
     <span class="c1"># and are expected to be assigned during warmup</span>
     <span class="n">uw</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface momentum flux u [m2 s-2].&quot;&quot;&quot;</span>
     <span class="n">vw</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface momentum flux v [m2 s-2].&quot;&quot;&quot;</span>
     <span class="n">temp_2m</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;2m temperature [K].&quot;&quot;&quot;</span>
     <span class="n">q2m</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;2m specific humidity [kg kg-1].&quot;&quot;&quot;</span>
     <span class="n">u2m</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;2m u-wind [m s-1].&quot;&quot;&quot;</span>
     <span class="n">v2m</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;2m v-wind [m s-1].&quot;&quot;&quot;</span>
     <span class="n">e2m</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;2m vapor pressure [Pa].&quot;&quot;&quot;</span>
     <span class="n">esat2m</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;2m saturated vapor pressure [Pa].&quot;&quot;&quot;</span>
     <span class="n">thetasurf</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface potential temperature [K].&quot;&quot;&quot;</span>
     <span class="n">thetavsurf</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface virtual potential temperature [K].&quot;&quot;&quot;</span>
     <span class="n">qsurf</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface specific humidity [kg kg-1].&quot;&quot;&quot;</span>
     <span class="n">obukhov_length</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">rib_number</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Obukhov length [m].&quot;&quot;&quot;</span>
+    <span class="n">rib_number</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Bulk Richardson number [-].&quot;&quot;&quot;</span></div>
 
 
 
@@ -426,12 +425,6 @@ document.write(`
 <span class="sd">    Calculates surface-atmosphere exchange using Monin-Obukhov similarity theory</span>
 <span class="sd">    with stability functions and iterative solution for Obukhov length.</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    None.</span>
-
-<span class="sd">    Processes</span>
-<span class="sd">    ---------</span>
 <span class="sd">    1. Calculate effective wind speed and surface properties.</span>
 <span class="sd">    2. Determine bulk Richardson number and solve for Obukhov length.</span>
 <span class="sd">    3. Compute drag coefficients with stability corrections.</span>

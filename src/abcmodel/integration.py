@@ -44,6 +44,7 @@ def print_nan_variables(state: PyTree):
 
 
 def warmup(state: PyTree, coupler: ABCoupler, t: int, dt: float) -> PyTree:
+    """Warmup the model by running it for a few timesteps."""
     state = coupler.mixed_layer.statistics(state, t, coupler.const)
 
     # calculate initial diagnostic variables
@@ -66,6 +67,7 @@ def warmup(state: PyTree, coupler: ABCoupler, t: int, dt: float) -> PyTree:
 
 
 def timestep(state: PyTree, coupler: ABCoupler, t: int, dt: float) -> PyTree:
+    """Run a single timestep of the model."""
     state = coupler.mixed_layer.statistics(state, t, coupler.const)
 
     # run radiation model

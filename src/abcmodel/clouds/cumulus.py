@@ -9,19 +9,16 @@ from ..utils import PhysicalConstants, get_qsat
 
 @dataclass
 class StandardCumulusInitConds:
-    """Standard cumulus model state.
-
-    Args:
-        cc_frac: cloud core fraction [-], range 0 to 1.
-        cc_mf: cloud core mass flux [m/s].
-        cc_qf: cloud core moisture flux [kg/kg/s].
-        cl_trans: cloud layer transmittance [-], range 0 to 1.
-    """
+    """Standard cumulus initial state."""
 
     cc_frac: float = 0.0
+    """Cloud core fraction [-], range 0 to 1."""
     cc_mf: float = 0.0
+    """Cloud core mass flux [m/s]."""
     cc_qf: float = 0.0
+    """Cloud core moisture flux [kg/kg/s]."""
     cl_trans: float = 1.0
+    """Cloud layer transmittance [-], range 0 to 1."""
 
 
 class StandardCumulusModel(AbstractCloudModel):

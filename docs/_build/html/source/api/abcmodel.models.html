@@ -153,17 +153,17 @@
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="abcmodel.html">abcmodel package</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.clouds.html">Clouds</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.cumulus.html">Cumulus</a></li>
-<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.no_clouds.html">No clouds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.no_clouds.html">No Clouds</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.land_surface.html">Land surface</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.land_surface.html">Land Surface</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.aquacrop.html">Aquacrop</a></li>
-<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.jarvis_stewart.html">Jarvis stewart</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.jarvis_stewart.html">Jarvis Stewart</a></li>
 <li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.minimal.html">Minimal</a></li>
 <li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.standard.html">Standard</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.mixed_layer.html">Mixed layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.bulk.html">Bulk</a></li>
 <li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.minimal.html">Minimal</a></li>
 <li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.stats.html">Stats</a></li>
@@ -171,10 +171,10 @@
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.radiation.html">Radiation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.standard.html">Standard</a></li>
-<li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.standard_w_clouds.html">Standard w clouds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.standard_w_clouds.html">Standard W Clouds</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.surface_layer.html">Surface layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.surface_layer.html">Surface Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.minimal.html">Minimal</a></li>
 <li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.standard.html">Standard</a></li>
 </ul>
@@ -465,6 +465,7 @@ document.write(`
 <dt class="sig sig-object py" id="abcmodel.models.AbstractRadiationModel">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.models.</span></span><span class="sig-name descname"><span class="pre">AbstractRadiationModel</span></span><a class="reference internal" href="../../_modules/abcmodel/models.html#AbstractRadiationModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.models.AbstractRadiationModel" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#abcmodel.models.AbstractModel" title="abcmodel.models.AbstractModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractModel</span></code></a></p>
+<p>Abstract radiation model class to define the interface for all radiation models.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="abcmodel.models.AbstractRadiationModel.run">
 <em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/models.html#AbstractRadiationModel.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.models.AbstractRadiationModel.run" title="Link to this definition">#</a></dt>
@@ -478,7 +479,8 @@ document.write(`
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.models.AbstractRadiationModel.tstart">
 <span class="sig-name descname"><span class="pre">tstart</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><a class="headerlink" href="#abcmodel.models.AbstractRadiationModel.tstart" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Start time of the model.</p>
+</dd></dl>
 
 </dd></dl>
 

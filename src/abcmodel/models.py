@@ -10,8 +10,9 @@ class AbstractModel:
 
 
 class AbstractRadiationModel(AbstractModel):
-    # limamau: this attribute should probably go out of here...
+    """Abstract radiation model class to define the interface for all radiation models."""
     tstart: float
+    """Start time of the model."""
 
     @abstractmethod
     def run(self, state: PyTree, t: int, dt: float, const: PhysicalConstants) -> PyTree:

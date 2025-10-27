@@ -2,7 +2,7 @@ import jax.numpy as jnp
 from jaxtyping import Array
 
 
-def get_esat(temp):
+def get_esat(temp: Array) -> Array:
     """Calculate saturated vapor pressure using Tetens formula.
 
     Parameters
@@ -18,7 +18,7 @@ def get_esat(temp):
     return 0.611e3 * jnp.exp(17.2694 * temp_celsius / denominator)
 
 
-def get_qsat(temp, pressure):
+def get_qsat(temp: Array, pressure: Array) -> Array:
     """Calculate saturated specific humidity.
 
     Parameters
@@ -37,13 +37,11 @@ def get_qsat(temp, pressure):
 def get_psim(zeta: Array) -> Array:
     """Calculate momentum stability function from Monin-Obukhov similarity theory.
 
-    Parameters
-    ----------
-    - ``zeta``: stability parameter z/L [-].
+    Args:
+        zeta: stability parameter z/L [-].
 
-    Returns
-    -------
-    - Momentum stability correction [-].
+    Returns:
+        Momentum stability correction [-].
     """
     # Constants for stable conditions
     alpha = 0.35
@@ -71,13 +69,11 @@ def get_psim(zeta: Array) -> Array:
 def get_psih(zeta: Array) -> Array:
     """Calculate scalar stability function from Monin-Obukhov similarity theory.
 
-    Parameters
-    ----------
-    - ``zeta``: stability parameter z/L [-].
+    Args:
+        zeta: stability parameter z/L [-].
 
-    Returns
-    -------
-    - Scalar stability correction [-].
+    Returns:
+        Scalar stability correction [-].
     """
     # Constants for stable conditions
     alpha = 0.35

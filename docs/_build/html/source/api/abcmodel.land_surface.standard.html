@@ -43,7 +43,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'source/api/abcmodel.land_surface.standard';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Mixed layer" href="abcmodel.mixed_layer.html" />
+    <link rel="next" title="Mixed Layer" href="abcmodel.mixed_layer.html" />
     <link rel="prev" title="Minimal" href="abcmodel.land_surface.minimal.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -153,17 +153,17 @@
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="abcmodel.html">abcmodel package</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.clouds.html">Clouds</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.cumulus.html">Cumulus</a></li>
-<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.no_clouds.html">No clouds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.clouds.no_clouds.html">No Clouds</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3 current active has-children"><a class="reference internal" href="abcmodel.land_surface.html">Land surface</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="abcmodel.land_surface.html">Land Surface</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.aquacrop.html">Aquacrop</a></li>
-<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.jarvis_stewart.html">Jarvis stewart</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.jarvis_stewart.html">Jarvis Stewart</a></li>
 <li class="toctree-l4"><a class="reference internal" href="abcmodel.land_surface.minimal.html">Minimal</a></li>
 <li class="toctree-l4 current active"><a class="current reference internal" href="#">Standard</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.mixed_layer.html">Mixed layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.bulk.html">Bulk</a></li>
 <li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.minimal.html">Minimal</a></li>
 <li class="toctree-l4"><a class="reference internal" href="abcmodel.mixed_layer.stats.html">Stats</a></li>
@@ -171,10 +171,10 @@
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.radiation.html">Radiation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.standard.html">Standard</a></li>
-<li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.standard_w_clouds.html">Standard w clouds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.radiation.standard_w_clouds.html">Standard W Clouds</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.surface_layer.html">Surface layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.surface_layer.html">Surface Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.minimal.html">Minimal</a></li>
 <li class="toctree-l4"><a class="reference internal" href="abcmodel.surface_layer.standard.html">Standard</a></li>
 </ul>
@@ -444,144 +444,138 @@ document.write(`
 <dt class="sig sig-object py" id="abcmodel.land_surface.standard.StandardLandSurfaceInitConds">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.land_surface.standard.</span></span><span class="sig-name descname"><span class="pre">StandardLandSurfaceInitConds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_soil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rssoil</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cliq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_soil_tend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wgtend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wltend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">le_veg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">le_liq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">le_soil</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">le</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">le_pot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">le_ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#StandardLandSurfaceInitConds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.StandardLandSurfaceInitConds" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Data class for standard land surface model initial conditions.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>alpha</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – slope of the light response curve [mol J-1].</p></li>
-<li><p><strong>wg</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – soil moisture content in the root zone [m3 m-3].</p></li>
-<li><p><strong>w2</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – soil moisture content in the deep layer [m3 m-3].</p></li>
-<li><p><strong>temp_soil</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – soil temperature [K].</p></li>
-<li><p><strong>temp2</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – deep soil temperature [K].</p></li>
-<li><p><strong>surf_temp</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Surface temperature [K].</p></li>
-<li><p><strong>wl</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – liquid water storage on the canopy [m].</p></li>
-<li><p><strong>rs</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – surface resistance [m s-1].</p></li>
-<li><p><strong>rssoil</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – soil resistance [m s-1].</p></li>
-<li><p><strong>cliq</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – wet fraction of the canopy [-].</p></li>
-<li><p><strong>temp_soil_tend</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – soil temperature tendency [K s-1].</p></li>
-<li><p><strong>wgtend</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – soil moisture tendency [m3 m-3 s-1].</p></li>
-<li><p><strong>wltend</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – canopy water storage tendency [m s-1].</p></li>
-<li><p><strong>le_veg</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – latent heat flux from vegetation [W m-2].</p></li>
-<li><p><strong>le_liq</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – latent heat flux from liquid water [W m-2].</p></li>
-<li><p><strong>le_soil</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – latent heat flux from soil [W m-2].</p></li>
-<li><p><strong>le</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – total latent heat flux [W m-2].</p></li>
-<li><p><strong>hf</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – sensible heat flux [W m-2].</p></li>
-<li><p><strong>gf</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – ground heat flux [W m-2].</p></li>
-<li><p><strong>le_pot</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – potential latent heat flux [W m-2].</p></li>
-<li><p><strong>le_ref</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – reference latent heat flux [W m-2].</p></li>
-<li><p><strong>ra</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – aerodynamic resistance [s m-1].</p></li>
-</ul>
-</dd>
-</dl>
+<p>Standard land surface model initial state.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.standard.StandardLandSurfaceInitConds.alpha">
 <span class="sig-name descname"><span class="pre">alpha</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><a class="headerlink" href="#abcmodel.land_surface.standard.StandardLandSurfaceInitConds.alpha" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Slope of the light response curve [mol J-1].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.standard.StandardLandSurfaceInitConds.cliq">
 <span class="sig-name descname"><span class="pre">cliq</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.land_surface.standard.StandardLandSurfaceInitConds.cliq" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Wet fraction of the canopy [-].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.standard.StandardLandSurfaceInitConds.gf">
 <span class="sig-name descname"><span class="pre">gf</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.land_surface.standard.StandardLandSurfaceInitConds.gf" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Ground heat flux [W m-2].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.standard.StandardLandSurfaceInitConds.hf">
 <span class="sig-name descname"><span class="pre">hf</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.land_surface.standard.StandardLandSurfaceInitConds.hf" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Sensible heat flux [W m-2].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.standard.StandardLandSurfaceInitConds.le">
 <span class="sig-name descname"><span class="pre">le</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.land_surface.standard.StandardLandSurfaceInitConds.le" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Total latent heat flux [W m-2].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.standard.StandardLandSurfaceInitConds.le_liq">
 <span class="sig-name descname"><span class="pre">le_liq</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.land_surface.standard.StandardLandSurfaceInitConds.le_liq" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Latent heat flux from liquid water [W m-2].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.standard.StandardLandSurfaceInitConds.le_pot">
 <span class="sig-name descname"><span class="pre">le_pot</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.land_surface.standard.StandardLandSurfaceInitConds.le_pot" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Potential latent heat flux [W m-2].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.standard.StandardLandSurfaceInitConds.le_ref">
 <span class="sig-name descname"><span class="pre">le_ref</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.land_surface.standard.StandardLandSurfaceInitConds.le_ref" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Reference latent heat flux [W m-2].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.standard.StandardLandSurfaceInitConds.le_soil">
 <span class="sig-name descname"><span class="pre">le_soil</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.land_surface.standard.StandardLandSurfaceInitConds.le_soil" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Latent heat flux from soil [W m-2].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.standard.StandardLandSurfaceInitConds.le_veg">
 <span class="sig-name descname"><span class="pre">le_veg</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.land_surface.standard.StandardLandSurfaceInitConds.le_veg" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Latent heat flux from vegetation [W m-2].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.standard.StandardLandSurfaceInitConds.ra">
 <span class="sig-name descname"><span class="pre">ra</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.land_surface.standard.StandardLandSurfaceInitConds.ra" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Aerodynamic resistance [s m-1].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.standard.StandardLandSurfaceInitConds.rs">
 <span class="sig-name descname"><span class="pre">rs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1000000.0</span></em><a class="headerlink" href="#abcmodel.land_surface.standard.StandardLandSurfaceInitConds.rs" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Surface resistance [m s-1].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.standard.StandardLandSurfaceInitConds.rssoil">
 <span class="sig-name descname"><span class="pre">rssoil</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1000000.0</span></em><a class="headerlink" href="#abcmodel.land_surface.standard.StandardLandSurfaceInitConds.rssoil" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Soil resistance [m s-1].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.standard.StandardLandSurfaceInitConds.surf_temp">
 <span class="sig-name descname"><span class="pre">surf_temp</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><a class="headerlink" href="#abcmodel.land_surface.standard.StandardLandSurfaceInitConds.surf_temp" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Surface temperature [K].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.standard.StandardLandSurfaceInitConds.temp2">
 <span class="sig-name descname"><span class="pre">temp2</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><a class="headerlink" href="#abcmodel.land_surface.standard.StandardLandSurfaceInitConds.temp2" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Deep soil temperature [K].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.standard.StandardLandSurfaceInitConds.temp_soil">
 <span class="sig-name descname"><span class="pre">temp_soil</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><a class="headerlink" href="#abcmodel.land_surface.standard.StandardLandSurfaceInitConds.temp_soil" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Soil temperature [K].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.standard.StandardLandSurfaceInitConds.temp_soil_tend">
 <span class="sig-name descname"><span class="pre">temp_soil_tend</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.land_surface.standard.StandardLandSurfaceInitConds.temp_soil_tend" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Soil temperature tendency [K s-1].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.standard.StandardLandSurfaceInitConds.w2">
 <span class="sig-name descname"><span class="pre">w2</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><a class="headerlink" href="#abcmodel.land_surface.standard.StandardLandSurfaceInitConds.w2" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Soil moisture content in the deep layer [m3 m-3].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.standard.StandardLandSurfaceInitConds.wg">
 <span class="sig-name descname"><span class="pre">wg</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><a class="headerlink" href="#abcmodel.land_surface.standard.StandardLandSurfaceInitConds.wg" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Soil moisture content in the root zone [m3 m-3].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.standard.StandardLandSurfaceInitConds.wgtend">
 <span class="sig-name descname"><span class="pre">wgtend</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.land_surface.standard.StandardLandSurfaceInitConds.wgtend" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Soil moisture tendency [m3 m-3 s-1].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.standard.StandardLandSurfaceInitConds.wl">
 <span class="sig-name descname"><span class="pre">wl</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><a class="headerlink" href="#abcmodel.land_surface.standard.StandardLandSurfaceInitConds.wl" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Liquid water storage on the canopy [m].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.standard.StandardLandSurfaceInitConds.wltend">
 <span class="sig-name descname"><span class="pre">wltend</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.land_surface.standard.StandardLandSurfaceInitConds.wltend" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Canopy water storage tendency [m s-1].</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -612,7 +606,7 @@ document.write(`
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Mixed layer</p>
+        <p class="prev-next-title">Mixed Layer</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

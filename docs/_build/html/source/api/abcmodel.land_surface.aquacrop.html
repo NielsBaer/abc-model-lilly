@@ -378,16 +378,17 @@ document.write(`
 <dt class="sig sig-object py" id="abcmodel.land_surface.aquacrop.AquaCropInitConds">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.land_surface.aquacrop.</span></span><span class="sig-name descname"><span class="pre">AquaCropInitConds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_soil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rssoil</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cliq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_soil_tend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wgtend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wltend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">le_veg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">le_liq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">le_soil</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">le</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">le_pot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">le_ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rsCO2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gcco2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ci</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2abs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/aquacrop.html#AquaCropInitConds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.aquacrop.AquaCropInitConds" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="abcmodel.land_surface.standard.html#abcmodel.land_surface.standard.StandardLandSurfaceInitConds" title="abcmodel.land_surface.standard.StandardLandSurfaceInitConds"><code class="xref py py-class docutils literal notranslate"><span class="pre">StandardLandSurfaceInitConds</span></code></a></p>
-<p>Data class for AquaCrop model initial conditions.</p>
+<p>AquaCrop model initial state.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.aquacrop.AquaCropInitConds.alpha">
 <span class="sig-name descname"><span class="pre">alpha</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><a class="headerlink" href="#abcmodel.land_surface.aquacrop.AquaCropInitConds.alpha" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Slope of the light response curve [mol J-1].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.aquacrop.AquaCropInitConds.ci">
 <span class="sig-name descname"><span class="pre">ci</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.land_surface.aquacrop.AquaCropInitConds.ci" title="Link to this definition">#</a></dt>
-<dd><p>intercellular CO2 concentration.</p>
+<dd><p>Intercellular CO2 concentration.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -399,44 +400,50 @@ document.write(`
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.aquacrop.AquaCropInitConds.gcco2">
 <span class="sig-name descname"><span class="pre">gcco2</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.land_surface.aquacrop.AquaCropInitConds.gcco2" title="Link to this definition">#</a></dt>
-<dd><p>conductance to CO2.</p>
+<dd><p>Conductance to CO2.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.aquacrop.AquaCropInitConds.rsCO2">
 <span class="sig-name descname"><span class="pre">rsCO2</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.land_surface.aquacrop.AquaCropInitConds.rsCO2" title="Link to this definition">#</a></dt>
-<dd><p>stomatal resistance to CO2.</p>
+<dd><p>Stomatal resistance to CO2.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.aquacrop.AquaCropInitConds.surf_temp">
 <span class="sig-name descname"><span class="pre">surf_temp</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><a class="headerlink" href="#abcmodel.land_surface.aquacrop.AquaCropInitConds.surf_temp" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Surface temperature [K].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.aquacrop.AquaCropInitConds.temp2">
 <span class="sig-name descname"><span class="pre">temp2</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><a class="headerlink" href="#abcmodel.land_surface.aquacrop.AquaCropInitConds.temp2" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Deep soil temperature [K].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.aquacrop.AquaCropInitConds.temp_soil">
 <span class="sig-name descname"><span class="pre">temp_soil</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><a class="headerlink" href="#abcmodel.land_surface.aquacrop.AquaCropInitConds.temp_soil" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Soil temperature [K].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.aquacrop.AquaCropInitConds.w2">
 <span class="sig-name descname"><span class="pre">w2</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><a class="headerlink" href="#abcmodel.land_surface.aquacrop.AquaCropInitConds.w2" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Soil moisture content in the deep layer [m3 m-3].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.aquacrop.AquaCropInitConds.wg">
 <span class="sig-name descname"><span class="pre">wg</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><a class="headerlink" href="#abcmodel.land_surface.aquacrop.AquaCropInitConds.wg" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Soil moisture content in the root zone [m3 m-3].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land_surface.aquacrop.AquaCropInitConds.wl">
 <span class="sig-name descname"><span class="pre">wl</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><a class="headerlink" href="#abcmodel.land_surface.aquacrop.AquaCropInitConds.wl" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Liquid water storage on the canopy [m].</p>
+</dd></dl>
 
 </dd></dl>
 

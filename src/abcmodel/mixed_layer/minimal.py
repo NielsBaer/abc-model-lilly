@@ -9,62 +9,65 @@ from .stats import AbstractStandardStatsModel
 
 @dataclass
 class MinimalMixedLayerInitConds:
-    """Data class for minimal mixed layer model initial conditions.
-
-    Args:
-        abl_height: initial ABL height [m].
-        surf_pressure: surface pressure [Pa].
-        theta: initial mixed-layer potential temperature [K].
-        dtheta: initial temperature jump at h [K].
-        wtheta: surface kinematic heat flux [K m/s].
-        q: initial mixed-layer specific humidity [kg/kg].
-        dq: initial specific humidity jump at h [kg/kg].
-        wq: surface kinematic moisture flux [kg/kg m/s].
-        co2: initial mixed-layer CO2 [ppm].
-        dCO2: initial CO2 jump at h [ppm].
-        wCO2: surface kinematic CO2 flux [mgC/m²/s].
-        u: initial mixed-layer u-wind speed [m/s].
-        v: initial mixed-layer v-wind speed [m/s].
-        dz_h: transition layer thickness [-].
-        wstar: convective velocity scale [m s-1]. Defaults to 1e-6.
-        wCO2A: surface assimulation CO2 flux [mgC/m²/s]. Defaults to 0.0.
-        wCO2R: surface respiration CO2 flux [mgC/m²/s]. Defaults to 0.0.
-        wCO2M: CO2 mass flux [mgC/m²/s]. Defaults to 0.0.
-        wqe: entrainment moisture flux [kg kg-1 m s-1]. Defaults to 0.0.
-        wCO2e: entrainment CO2 flux [mgC/m²/s]. Defaults to 0.0.
-    """
+    """Minimal mixed layer model initial state."""
 
     # the following variables are expected to be initialized by the user
     abl_height: float
+    """Initial ABL height [m]."""
     surf_pressure: float
+    """Surface pressure [Pa]."""
     theta: float
+    """Initial mixed-layer potential temperature [K]."""
     dtheta: float
+    """Initial temperature jump at h [K]."""
     wtheta: float
+    """Surface kinematic heat flux [K m/s]."""
     q: float
+    """Initial mixed-layer specific humidity [kg/kg]."""
     dq: float
+    """Initial specific humidity jump at h [kg/kg]."""
     wq: float
+    """Surface kinematic moisture flux [kg/kg m/s]."""
     co2: float
+    """Initial mixed-layer CO2 [ppm]."""
     dCO2: float
+    """Initial CO2 jump at h [ppm]."""
     wCO2: float
+    """Surface kinematic CO2 flux [mgC/m²/s]."""
     u: float
+    """Initial mixed-layer u-wind speed [m/s]."""
     v: float
+    """Initial mixed-layer v-wind speed [m/s]."""
     dz_h: float
+    """Transition layer thickness [-]."""
 
     # the following variables are initialized as zero
     wstar: float = 1e-6
-    wCO2A: float = 0.0
-    wCO2R: float = 0.0
-    wCO2M: float = 0.0
+    """Convective velocity scale [m s-1]."""
     wqe: float = 0.0
+    """Entrainment moisture flux [kg kg-1 m s-1]."""
+    wCO2A: float = 0.0
+    """Surface assimilation CO2 flux [mgC m-2 s]."""
+    wCO2R: float = 0.0
+    """Surface respiration CO2 flux [mgC m-2 s]."""
+    wCO2M: float = 0.0
+    """CO2 mass flux [mgC m-2 s]."""
     wCO2e: float = 0.0
+    """Entrainment CO2 flux [mgC m-2 s]."""
 
     # the following variables are expected to be assigned during warmup
     thetav: float = jnp.nan
+    """Mixed-layer potential temperature [K]."""
     wthetav: float = jnp.nan
+    """Surface kinematic virtual heat flux [K m s-1]."""
     qsat: float = jnp.nan
+    """Saturation specific humidity [kg/kg]."""
     e: float = jnp.nan
+    """Vapor pressure [Pa]."""
     esat: float = jnp.nan
+    """Saturation vapor pressure [Pa]."""
     lcl: float = jnp.nan
+    """Lifting condensation level [m]."""
 
 
 class MinimalMixedLayerModel(AbstractStandardStatsModel):

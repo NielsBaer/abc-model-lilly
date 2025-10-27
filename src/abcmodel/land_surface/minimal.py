@@ -11,17 +11,14 @@ from ..utils import PhysicalConstants, get_esat, get_qsat
 
 @dataclass
 class MinimalLandSurfaceInitConds:
-    """Data class for minimal land surface model initial conditions.
-
-    Args:
-        alpha: surface albedo [-], range 0 to 1.
-        surf_temp: surface temperature [K].
-        rs: surface resistance [s m-1].
-    """
+    """Minimal land surface model initial state."""
 
     alpha: float
+    """surface albedo [-], range 0 to 1."""
     surf_temp: float
+    """Surface temperature [K]."""
     rs: float
+    """Surface resistance [s m-1]."""
 
 
 class MinimalLandSurfaceModel(AbstractLandSurfaceModel):

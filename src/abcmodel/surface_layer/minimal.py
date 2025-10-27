@@ -9,19 +9,14 @@ from ..utils import PhysicalConstants
 
 @dataclass
 class MinimalSurfaceLayerInitConds:
-    """Data class for minimal surface layer model initial conditions.
-
-    Args:
-        ustar: surface friction velocity [m/s].
-
-    Args:
-        uw: surface momentum flux u [m2 s-2].
-        vw: surface momentum flux v [m2 s-2].
-    """
+    """Minimal surface layer model initial state."""
 
     ustar: float
+    """Surface friction velocity [m/s]."""
     uw: float = jnp.nan
+    """Zonal surface momentum flux [m2 s-2]."""
     vw: float = jnp.nan
+    """Meridional surface momentum flux [m2 s-2]."""
 
 
 class MinimalSurfaceLayerModel(AbstractSurfaceLayerModel):

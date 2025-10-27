@@ -9,23 +9,18 @@ from ..utils import PhysicalConstants
 
 @dataclass
 class StandardRadiationInitConds:
-    """Data class for standard radiation model initial conditions.
-
-    Args:
-        net_rad: net surface radiation [W/m²].
-
-    Others:
-        in_srad: incoming solar radiation [W/m²].
-        out_srad: outgoing solar radiation [W/m²].
-        in_lrad: incoming longwave radiation [W/m²].
-        out_lrad: outgoing longwave radiation [W/m²].
-    """
+    """Standard radiation model initial state."""
 
     net_rad: float
+    """Net surface radiation [W m-2]."""
     in_srad: float = jnp.nan
+    """Incoming solar radiation [W m-2]."""
     out_srad: float = jnp.nan
+    """Outgoing solar radiation [W m-2]."""
     in_lrad: float = jnp.nan
+    """Incoming longwave radiation [W m-2]."""
     out_lrad: float = jnp.nan
+    """Outgoing longwave radiation [W m-2]."""
 
 
 class StandardRadiationModel(AbstractRadiationModel):

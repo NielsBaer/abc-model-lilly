@@ -465,30 +465,24 @@ document.write(`
 <dt class="sig sig-object py" id="abcmodel.surface_layer.MinimalSurfaceLayerInitConds">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.surface_layer.</span></span><span class="sig-name descname"><span class="pre">MinimalSurfaceLayerInitConds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ustar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/surface_layer/minimal.html#MinimalSurfaceLayerInitConds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.surface_layer.MinimalSurfaceLayerInitConds" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Data class for minimal surface layer model initial conditions.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ustar</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – surface friction velocity [m/s].</p></li>
-<li><p><strong>uw</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – surface momentum flux u [m2 s-2].</p></li>
-<li><p><strong>vw</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – surface momentum flux v [m2 s-2].</p></li>
-</ul>
-</dd>
-</dl>
+<p>Minimal surface layer model initial state.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.surface_layer.MinimalSurfaceLayerInitConds.ustar">
 <span class="sig-name descname"><span class="pre">ustar</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><a class="headerlink" href="#abcmodel.surface_layer.MinimalSurfaceLayerInitConds.ustar" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Surface friction velocity [m/s].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.surface_layer.MinimalSurfaceLayerInitConds.uw">
 <span class="sig-name descname"><span class="pre">uw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.surface_layer.MinimalSurfaceLayerInitConds.uw" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Surface momentum flux u [m2 s-2].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.surface_layer.MinimalSurfaceLayerInitConds.vw">
 <span class="sig-name descname"><span class="pre">vw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.surface_layer.MinimalSurfaceLayerInitConds.vw" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Surface momentum flux v [m2 s-2].</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -531,126 +525,120 @@ document.write(`
 <dt class="sig sig-object py" id="abcmodel.surface_layer.StandardSurfaceLayerInitConds">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.surface_layer.</span></span><span class="sig-name descname"><span class="pre">StandardSurfaceLayerInitConds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ustar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drag_m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drag_s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_2m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u2m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v2m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e2m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">esat2m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thetasurf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thetavsurf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qsurf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obukhov_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rib_number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/surface_layer/standard.html#StandardSurfaceLayerInitConds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.surface_layer.StandardSurfaceLayerInitConds" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Data class for standard surface layer model initial conditions.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ustar</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – surface friction velocity [m/s].</p></li>
-<li><p><strong>z0m</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – roughness length for momentum [m].</p></li>
-<li><p><strong>z0h</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – roughness length for scalars [m].</p></li>
-<li><p><strong>theta</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – surface potential temperature [K].</p></li>
-<li><p><strong>drag_m</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – drag coefficient for momentum [-]. Default: 1e12.</p></li>
-<li><p><strong>drag_s</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – drag coefficient for scalars [-]. Default: 1e12.</p></li>
-<li><p><strong>uw</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – surface momentum flux u [m2 s-2].</p></li>
-<li><p><strong>vw</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – surface momentum flux v [m2 s-2].</p></li>
-<li><p><strong>temp_2m</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – 2m temperature [K].</p></li>
-<li><p><strong>q2m</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – 2m specific humidity [kg kg-1].</p></li>
-<li><p><strong>u2m</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – 2m u-wind [m s-1].</p></li>
-<li><p><strong>v2m</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – 2m v-wind [m s-1].</p></li>
-<li><p><strong>e2m</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – 2m vapor pressure [Pa].</p></li>
-<li><p><strong>esat2m</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – 2m saturated vapor pressure [Pa].</p></li>
-<li><p><strong>thetasurf</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – surface potential temperature [K].</p></li>
-<li><p><strong>thetavsurf</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – surface virtual potential temperature [K].</p></li>
-<li><p><strong>qsurf</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – surface specific humidity [kg kg-1].</p></li>
-<li><p><strong>obukhov_length</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Obukhov length [m].</p></li>
-<li><p><strong>rib_number</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – bulk Richardson number [-].</p></li>
-</ul>
-</dd>
-</dl>
+<p>Standard surface layer model initial state.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.surface_layer.StandardSurfaceLayerInitConds.drag_m">
 <span class="sig-name descname"><span class="pre">drag_m</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1000000000000.0</span></em><a class="headerlink" href="#abcmodel.surface_layer.StandardSurfaceLayerInitConds.drag_m" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Drag coefficient for momentum [-].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.surface_layer.StandardSurfaceLayerInitConds.drag_s">
 <span class="sig-name descname"><span class="pre">drag_s</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1000000000000.0</span></em><a class="headerlink" href="#abcmodel.surface_layer.StandardSurfaceLayerInitConds.drag_s" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Drag coefficient for scalars [-].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.surface_layer.StandardSurfaceLayerInitConds.e2m">
 <span class="sig-name descname"><span class="pre">e2m</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.surface_layer.StandardSurfaceLayerInitConds.e2m" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>2m vapor pressure [Pa].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.surface_layer.StandardSurfaceLayerInitConds.esat2m">
 <span class="sig-name descname"><span class="pre">esat2m</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.surface_layer.StandardSurfaceLayerInitConds.esat2m" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>2m saturated vapor pressure [Pa].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.surface_layer.StandardSurfaceLayerInitConds.obukhov_length">
 <span class="sig-name descname"><span class="pre">obukhov_length</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.surface_layer.StandardSurfaceLayerInitConds.obukhov_length" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Obukhov length [m].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.surface_layer.StandardSurfaceLayerInitConds.q2m">
 <span class="sig-name descname"><span class="pre">q2m</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.surface_layer.StandardSurfaceLayerInitConds.q2m" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>2m specific humidity [kg kg-1].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.surface_layer.StandardSurfaceLayerInitConds.qsurf">
 <span class="sig-name descname"><span class="pre">qsurf</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.surface_layer.StandardSurfaceLayerInitConds.qsurf" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Surface specific humidity [kg kg-1].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.surface_layer.StandardSurfaceLayerInitConds.rib_number">
 <span class="sig-name descname"><span class="pre">rib_number</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.surface_layer.StandardSurfaceLayerInitConds.rib_number" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Bulk Richardson number [-].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.surface_layer.StandardSurfaceLayerInitConds.temp_2m">
 <span class="sig-name descname"><span class="pre">temp_2m</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.surface_layer.StandardSurfaceLayerInitConds.temp_2m" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>2m temperature [K].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.surface_layer.StandardSurfaceLayerInitConds.theta">
 <span class="sig-name descname"><span class="pre">theta</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><a class="headerlink" href="#abcmodel.surface_layer.StandardSurfaceLayerInitConds.theta" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Surface potential temperature [K].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.surface_layer.StandardSurfaceLayerInitConds.thetasurf">
 <span class="sig-name descname"><span class="pre">thetasurf</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.surface_layer.StandardSurfaceLayerInitConds.thetasurf" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Surface potential temperature [K].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.surface_layer.StandardSurfaceLayerInitConds.thetavsurf">
 <span class="sig-name descname"><span class="pre">thetavsurf</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.surface_layer.StandardSurfaceLayerInitConds.thetavsurf" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Surface virtual potential temperature [K].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.surface_layer.StandardSurfaceLayerInitConds.u2m">
 <span class="sig-name descname"><span class="pre">u2m</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.surface_layer.StandardSurfaceLayerInitConds.u2m" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>2m u-wind [m s-1].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.surface_layer.StandardSurfaceLayerInitConds.ustar">
 <span class="sig-name descname"><span class="pre">ustar</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><a class="headerlink" href="#abcmodel.surface_layer.StandardSurfaceLayerInitConds.ustar" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Surface friction velocity [m/s].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.surface_layer.StandardSurfaceLayerInitConds.uw">
 <span class="sig-name descname"><span class="pre">uw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.surface_layer.StandardSurfaceLayerInitConds.uw" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Surface momentum flux u [m2 s-2].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.surface_layer.StandardSurfaceLayerInitConds.v2m">
 <span class="sig-name descname"><span class="pre">v2m</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.surface_layer.StandardSurfaceLayerInitConds.v2m" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>2m v-wind [m s-1].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.surface_layer.StandardSurfaceLayerInitConds.vw">
 <span class="sig-name descname"><span class="pre">vw</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#abcmodel.surface_layer.StandardSurfaceLayerInitConds.vw" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Surface momentum flux v [m2 s-2].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.surface_layer.StandardSurfaceLayerInitConds.z0h">
 <span class="sig-name descname"><span class="pre">z0h</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><a class="headerlink" href="#abcmodel.surface_layer.StandardSurfaceLayerInitConds.z0h" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Roughness length for scalars [m].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.surface_layer.StandardSurfaceLayerInitConds.z0m">
 <span class="sig-name descname"><span class="pre">z0m</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><a class="headerlink" href="#abcmodel.surface_layer.StandardSurfaceLayerInitConds.z0m" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Roughness length for momentum [m].</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -661,19 +649,12 @@ document.write(`
 <p>Standard surface layer model with atmospheric stability corrections.</p>
 <p>Calculates surface-atmosphere exchange using Monin-Obukhov similarity theory
 with stability functions and iterative solution for Obukhov length.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>None.</strong></p></li>
-<li><p><strong>Processes</strong></p></li>
-<li><p><strong>---------</strong></p></li>
-<li><p><strong>properties.</strong> (<em>1. Calculate effective wind speed and surface</em>)</p></li>
-<li><p><strong>length.</strong> (<em>2. Determine bulk Richardson number and solve for Obukhov</em>)</p></li>
-<li><p><strong>corrections.</strong> (<em>3. Compute drag coefficients with stability</em>)</p></li>
-<li><p><strong>variables.</strong> (<em>4. Calculate momentum fluxes and 2m diagnostic</em>)</p></li>
-</ul>
-</dd>
-</dl>
+<ol class="arabic simple">
+<li><p>Calculate effective wind speed and surface properties.</p></li>
+<li><p>Determine bulk Richardson number and solve for Obukhov length.</p></li>
+<li><p>Compute drag coefficients with stability corrections.</p></li>
+<li><p>Calculate momentum fluxes and 2m diagnostic variables.</p></li>
+</ol>
 <dl class="py method">
 <dt class="sig sig-object py" id="abcmodel.surface_layer.StandardSurfaceLayerModel.calculate_2m_variables">
 <em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_2m_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wtheta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_pressure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obukhov_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thetasurf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qsurf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ustar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/surface_layer/standard.html#StandardSurfaceLayerModel.calculate_2m_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.surface_layer.StandardSurfaceLayerModel.calculate_2m_variables" title="Link to this definition">#</a></dt>

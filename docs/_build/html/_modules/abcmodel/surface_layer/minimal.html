@@ -301,19 +301,14 @@ document.write(`
 <a class="viewcode-back" href="../../../source/api/abcmodel.surface_layer.minimal.html#abcmodel.surface_layer.MinimalSurfaceLayerInitConds">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">MinimalSurfaceLayerInitConds</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Data class for minimal surface layer model initial conditions.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        ustar: surface friction velocity [m/s].</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        uw: surface momentum flux u [m2 s-2].</span>
-<span class="sd">        vw: surface momentum flux v [m2 s-2].</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Minimal surface layer model initial state.&quot;&quot;&quot;</span>
 
     <span class="n">ustar</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface friction velocity [m/s].&quot;&quot;&quot;</span>
     <span class="n">uw</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">vw</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface momentum flux u [m2 s-2].&quot;&quot;&quot;</span>
+    <span class="n">vw</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface momentum flux v [m2 s-2].&quot;&quot;&quot;</span></div>
 
 
 

@@ -305,14 +305,14 @@ document.write(`
 <a class="viewcode-back" href="../../../source/api/abcmodel.land_surface.aquacrop.html#abcmodel.land_surface.AquaCropInitConds">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">AquaCropInitConds</span><span class="p">(</span><span class="n">StandardLandSurfaceInitConds</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Data class for AquaCrop model initial conditions.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;AquaCrop model initial state.&quot;&quot;&quot;</span>
 
     <span class="n">rsCO2</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;stomatal resistance to CO2.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stomatal resistance to CO2.&quot;&quot;&quot;</span>
     <span class="n">gcco2</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;conductance to CO2.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Conductance to CO2.&quot;&quot;&quot;</span>
     <span class="n">ci</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;intercellular CO2 concentration.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Intercellular CO2 concentration.&quot;&quot;&quot;</span>
     <span class="n">co2abs</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;CO2 assimilation rate.&quot;&quot;&quot;</span></div>
 

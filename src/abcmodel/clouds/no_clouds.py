@@ -8,11 +8,14 @@ from ..utils import PhysicalConstants
 
 @dataclass
 class NoCloudInitConds:
-    """No cloud initial conditions."""
+    """No cloud initial state."""
 
     cc_frac: float = 0.0
+    """Cloud core fraction [-], range 0 to 1."""
     cc_mf: float = 0.0
+    """Cloud core mass flux [kg/kg/s]."""
     cc_qf: float = 0.0
+    """Cloud core moisture flux [kg/kg/s]."""
 
 
 class NoCloudModel(AbstractCloudModel):

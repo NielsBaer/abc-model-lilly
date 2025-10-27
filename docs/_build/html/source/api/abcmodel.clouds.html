@@ -422,21 +422,24 @@ document.write(`
 <dt class="sig sig-object py" id="abcmodel.clouds.NoCloudInitConds">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.clouds.</span></span><span class="sig-name descname"><span class="pre">NoCloudInitConds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc_frac</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_mf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_qf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/no_clouds.html#NoCloudInitConds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.NoCloudInitConds" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>No cloud initial conditions.</p>
+<p>No cloud initial state.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.clouds.NoCloudInitConds.cc_frac">
 <span class="sig-name descname"><span class="pre">cc_frac</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#abcmodel.clouds.NoCloudInitConds.cc_frac" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Cloud core fraction [-], range 0 to 1.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.clouds.NoCloudInitConds.cc_mf">
 <span class="sig-name descname"><span class="pre">cc_mf</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#abcmodel.clouds.NoCloudInitConds.cc_mf" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Cloud core mass flux [kg/kg/s].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.clouds.NoCloudInitConds.cc_qf">
 <span class="sig-name descname"><span class="pre">cc_qf</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#abcmodel.clouds.NoCloudInitConds.cc_qf" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Cloud core moisture flux [kg/kg/s].</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -457,36 +460,30 @@ document.write(`
 <dt class="sig sig-object py" id="abcmodel.clouds.StandardCumulusInitConds">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.clouds.</span></span><span class="sig-name descname"><span class="pre">StandardCumulusInitConds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc_frac</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_mf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_qf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_trans</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/cumulus.html#StandardCumulusInitConds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.StandardCumulusInitConds" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Standard cumulus model state.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>cc_frac</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – cloud core fraction [-], range 0 to 1.</p></li>
-<li><p><strong>cc_mf</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – cloud core mass flux [m/s].</p></li>
-<li><p><strong>cc_qf</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – cloud core moisture flux [kg/kg/s].</p></li>
-<li><p><strong>cl_trans</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – cloud layer transmittance [-], range 0 to 1.</p></li>
-</ul>
-</dd>
-</dl>
+<p>Standard cumulus initial state.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.clouds.StandardCumulusInitConds.cc_frac">
 <span class="sig-name descname"><span class="pre">cc_frac</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#abcmodel.clouds.StandardCumulusInitConds.cc_frac" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Cloud core fraction [-], range 0 to 1.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.clouds.StandardCumulusInitConds.cc_mf">
 <span class="sig-name descname"><span class="pre">cc_mf</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#abcmodel.clouds.StandardCumulusInitConds.cc_mf" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Cloud core mass flux [m/s].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.clouds.StandardCumulusInitConds.cc_qf">
 <span class="sig-name descname"><span class="pre">cc_qf</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#abcmodel.clouds.StandardCumulusInitConds.cc_qf" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Cloud core moisture flux [kg/kg/s].</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.clouds.StandardCumulusInitConds.cl_trans">
 <span class="sig-name descname"><span class="pre">cl_trans</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></em><a class="headerlink" href="#abcmodel.clouds.StandardCumulusInitConds.cl_trans" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Cloud layer transmittance [-], range 0 to 1.</p>
+</dd></dl>
 
 </dd></dl>
 

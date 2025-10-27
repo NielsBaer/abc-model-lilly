@@ -8,7 +8,7 @@ from .standard import StandardRadiationInitConds, StandardRadiationModel
 
 @dataclass
 class StandardRadiationwCloudsInitConds(StandardRadiationInitConds):
-    """Data class for standard radiation model with clouds initial conditions."""
+    """Standard radiation model with clouds initial state."""
 
 
 class StandardRadiationwCloudsModel(StandardRadiationModel):

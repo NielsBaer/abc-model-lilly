@@ -14,82 +14,103 @@ from .stats import AbstractStandardStatsModel
 
 @dataclass
 class BulkMixedLayerInitConds:
-    """Data class for bulk mixed layer model initial conditions.
-
-    Args:
-        abl_height: initial ABL height [m].
-        theta: initial mixed-layer potential temperature [K].
-        dtheta: initial temperature jump at h [K].
-        wtheta: surface kinematic heat flux [K m/s].
-        q: initial mixed-layer specific humidity [kg/kg].
-        dq: initial specific humidity jump at h [kg/kg].
-        wq: surface kinematic moisture flux [kg/kg m/s].
-        co2: initial mixed-layer CO2 [ppm].
-        dCO2: initial CO2 jump at h [ppm].
-        wCO2: surface kinematic CO2 flux [mgC/m²/s].
-        u: initial mixed-layer u-wind speed [m/s].
-        du: initial u-wind jump at h [m/s].
-        v: initial mixed-layer v-wind speed [m/s].
-        dv: initial v-wind jump at h [m/s].
-        dz_h: transition layer thickness [m].
-        wstar: convective velocity scale [m s-1]. Defaults to 0.0.
-        we: entrainment velocity [m s-1]. Defaults to -1.0.
-        wCO2A: surface assimulation CO2 flux [mgC/m²/s]. Defaults to 0.0.
-        wCO2R: surface respiration CO2 flux [mgC/m²/s]. Defaults to 0.0.
-        wCO2M: CO2 mass flux [mgC/m²/s]. Defaults to 0.0.
-    """
+    """Data class for bulk mixed layer model initial state."""
 
     # initialized by the user
     abl_height: float
+    """Initial ABL height [m]."""
     theta: float
+    """Initial mixed-layer potential temperature [K]."""
     dtheta: float
+    """Initial temperature jump at h [K]."""
     wtheta: float
+    """Surface kinematic heat flux [K m/s]."""
     q: float
+    """Initial mixed-layer specific humidity [kg/kg]."""
     dq: float
+    """Initial specific humidity jump at h [kg/kg]."""
     wq: float
+    """Surface kinematic moisture flux [kg/kg m/s]."""
     co2: float
+    """Initial mixed-layer CO2 [ppm]."""
     dCO2: float
+    """Initial CO2 jump at h [ppm]."""
     wCO2: float
+    """Surface kinematic CO2 flux [mgC/m²/s]."""
     u: float
+    """Initial mixed-layer u-wind speed [m/s]."""
     du: float
+    """Initial u-wind jump at h [m/s]."""
     v: float
+    """Initial mixed-layer v-wind speed [m/s]."""
     dv: float
+    """Initial v-wind jump at h [m/s]."""
     dz_h: float
-    # this is actually not updated
+    """Transition layer thickness [m]."""
     surf_pressure: float
+    """Surface pressure, which is actually not updated (not a state), it's only here for simplicity [Pa]."""
 
     # initialized to zero by default
     wstar: float = 0.0
+    """Convective velocity scale [m s-1]."""
     we: float = -1.0
+    """Entrainment velocity [m s-1]."""
     wCO2A: float = 0.0
+    """Surface assimulation CO2 flux [mgC/m²/s]."""
     wCO2R: float = 0.0
+    """Surface respiration CO2 flux [mgC/m²/s]."""
     wCO2M: float = 0.0
+    """CO2 mass flux [mgC/m²/s]."""
 
     # should be initialized during warmup
     thetav: float = jnp.nan
-    wthetav: float = jnp.nan
-    wqe: float = jnp.nan
-    qsat: float = jnp.nan
-    e: float = jnp.nan
-    esat: float = jnp.nan
-    wCO2e: float = jnp.nan
-    wthetae: float = jnp.nan
+    """Mixed-layer potential temperature [K]."""
     dthetav: float = jnp.nan
+    """Virtual temperature jump at h [K]."""
+    wthetav: float = jnp.nan
+    """Surface kinematic virtual heat flux [K m s-1]."""
+    wqe: float = jnp.nan
+    """Entrainment moisture flux [kg kg-1 m s-1]."""
+    qsat: float = jnp.nan
+    """Saturation specific humidity [kg/kg]."""
+    e: float = jnp.nan
+    """Vapor pressure [Pa]."""
+    esat: float = jnp.nan
+    """Saturation vapor pressure [Pa]."""
+    wCO2e: float = jnp.nan
+    """Entrainment CO2 flux [mgC/m²/s]."""
+    wthetae: float = jnp.nan
+    """Entrainment potential temperature flux [K m s-1]."""
     wthetave: float = jnp.nan
+    """Entrainment virtual heat flux [K m s-1]."""
     lcl: float = jnp.nan
+    """Lifting condensation level [m]."""
     top_rh: float = jnp.nan
+    """Top of mixed layer relative humidity [%]."""
     utend: float = jnp.nan
+    """Zonal wind velocity tendency [m s-2]."""
     dutend: float = jnp.nan
+    """Zonal wind velocity tendency at the ABL height [m s-2]."""
     vtend: float = jnp.nan
+    """Meridional wind velocity tendency [m s-2]."""
     dvtend: float = jnp.nan
+    """Meridional wind velocity tendency at the ABL height [m/s²]."""
     htend: float = jnp.nan
+    """Tendency of CBL [m s-1]."""
     thetatend: float = jnp.nan
+    """Tendency of mixed-layer potential temperature [K s-1]."""
     dthetatend: float = jnp.nan
+    """Tendency of mixed-layer potential temperature at the ABL height [K s-1]."""
     qtend: float = jnp.nan
+    """Tendency of mixed-layer specific humidity [kg/kg s-1]."""
     dqtend: float = jnp.nan
+    """Tendency of mixed-layer specific humidity at the ABL height [kg/kg s-1]."""
     co2tend: float = jnp.nan
+    """Tendency of CO2 concentration [ppm s-1]."""
     dCO2tend: float = jnp.nan
+    """Tendency of CO2 concentration at the ABL height [ppm s-1]."""
     dztend: float = jnp.nan
+    """Tendency of transition layer thickness [m s-1]."""
 
 
 class BulkMixedLayerModel(AbstractStandardStatsModel):
@@ -107,21 +128,20 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         sw_shearwe: shear growth mixed-layer switch.
         sw_fixft: fix the free-troposphere switch.
         sw_wind: prognostic wind switch.
-        surf_pressure: surface pressure [Pa].
-        divU: horizontal large-scale divergence of wind [s⁻¹].
-        coriolis_param: Coriolis parameter [s⁻¹].
-        gammatheta: free atmosphere potential temperature lapse rate [K/m].
-        advtheta: advection of heat [K/s].
+        divU: horizontal large-scale divergence of wind [s-1].
+        coriolis_param: Coriolis parameter [s-1].
+        gammatheta: free atmosphere potential temperature lapse rate [K m-1].
+        advtheta: advection of heat [K s-1].
         beta: entrainment ratio for virtual heat [-].
-        gammaq: free atmosphere specific humidity lapse rate [kg/kg/m].
-        advq: advection of moisture [kg/kg/s].
-        gammaCO2: free atmosphere CO2 lapse rate [ppm/m].
-        advCO2: advection of CO2 [ppm/s].
-        gammau: free atmosphere u-wind speed lapse rate [s⁻¹].
-        advu: advection of u-wind [m/s²].
-        gammav: free atmosphere v-wind speed lapse rate [s⁻¹].
-        advv: advection of v-wind [m/s²].
-        dFz: something I forgot :).
+        gammaq: free atmosphere specific humidity lapse rate [kg/kg m-1].
+        advq: advection of moisture [kg/kg s-1].
+        gammaCO2: free atmosphere CO2 lapse rate [ppm m-1].
+        advCO2: advection of CO2 [ppm s-1].
+        gammau: free atmosphere u-wind speed lapse rate [s-1].
+        advu: advection of u-wind [m s-2].
+        gammav: free atmosphere v-wind speed lapse rate [s-1].
+        advv: advection of v-wind [m s-2].
+        dFz: cloud top radiative divergence [W m-2].
     """
 
     def __init__(

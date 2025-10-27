@@ -13,62 +13,57 @@ from ..utils import PhysicalConstants, get_esat, get_qsat
 
 @dataclass
 class StandardLandSurfaceInitConds:
-    """Data class for standard land surface model initial conditions.
-
-    Args:
-        alpha: slope of the light response curve [mol J-1].
-        wg: soil moisture content in the root zone [m3 m-3].
-        w2: soil moisture content in the deep layer [m3 m-3].
-        temp_soil: soil temperature [K].
-        temp2: deep soil temperature [K].
-        surf_temp: Surface temperature [K].
-        wl: liquid water storage on the canopy [m].
-        rs: surface resistance [m s-1].
-        rssoil: soil resistance [m s-1].
-        cliq: wet fraction of the canopy [-].
-        temp_soil_tend: soil temperature tendency [K s-1].
-        wgtend: soil moisture tendency [m3 m-3 s-1].
-        wltend: canopy water storage tendency [m s-1].
-        le_veg: latent heat flux from vegetation [W m-2].
-        le_liq: latent heat flux from liquid water [W m-2].
-        le_soil: latent heat flux from soil [W m-2].
-        le: total latent heat flux [W m-2].
-        hf: sensible heat flux [W m-2].
-        gf: ground heat flux [W m-2].
-        le_pot: potential latent heat flux [W m-2].
-        le_ref: reference latent heat flux [W m-2].
-        ra: aerodynamic resistance [s m-1].
-    """
-
-    # the following variables are expected to be initialized by the user
-    # here alpha is in a fact a parameter, but it is also used in different models
+    """Standard land surface model initial state."""
+    # the following variables are supposed to be initialized by the user
     alpha: float
+    """Slope of the light response curve [mol J-1]."""
     wg: float
+    """Soil moisture content in the root zone [m3 m-3]."""
     w2: float
+    """Soil moisture content in the deep layer [m3 m-3]."""
     temp_soil: float
+    """Soil temperature [K]."""
     temp2: float
+    """Deep soil temperature [K]."""
     surf_temp: float
+    """Surface temperature [K]."""
     wl: float
+    """Liquid water storage on the canopy [m]."""
 
     # the following variables are initialized to high values and
     # are expected to converge during warmup
     rs: float = 1.0e6
+    """Surface resistance [m s-1]."""
     rssoil: float = 1.0e6
+    """Soil resistance [m s-1]."""
 
     # the following variables are expected to be assigned during warmup
     cliq: float = jnp.nan
+    """Wet fraction of the canopy [-]."""
     temp_soil_tend: float = jnp.nan
+    """Soil temperature tendency [K s-1]."""
     wgtend: float = jnp.nan
+    """Soil moisture tendency [m3 m-3 s-1]."""
     wltend: float = jnp.nan
+    """Canopy water storage tendency [m s-1]."""
     le_veg: float = jnp.nan
+    """Latent heat flux from vegetation [W m-2]."""
     le_liq: float = jnp.nan
+    """Latent heat flux from liquid water [W m-2]."""
     le_soil: float = jnp.nan
+    """Latent heat flux from soil [W m-2]."""
     le: float = jnp.nan
+    """Total latent heat flux [W m-2]."""
     hf: float = jnp.nan
+    """Sensible heat flux [W m-2]."""
     gf: float = jnp.nan
+    """Ground heat flux [W m-2]."""
     le_pot: float = jnp.nan
+    """Potential latent heat flux [W m-2]."""
     le_ref: float = jnp.nan
+    """Reference latent heat flux [W m-2]."""
     ra: float = jnp.nan
+    """Aerodynamic resistance [s m-1]."""
 
 
 class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):

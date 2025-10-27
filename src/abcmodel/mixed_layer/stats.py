@@ -15,6 +15,7 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
     properties, and lifting condensation level determination.
     """
 
+    """Surface pressure, which is actually not updated (not a state), it's only here for simplicity [Pa]."""
     surf_pressure: float
 
     def statistics(self, state: PyTree, t: int, const: PhysicalConstants):

@@ -60,54 +60,53 @@ def calculate_momentum_correction_term(zsl: Array, oblen: Array, z0m: Array) -> 
 
 @dataclass
 class StandardSurfaceLayerInitConds:
-    """Data class for standard surface layer model initial conditions.
-
-    Args:
-        ustar: surface friction velocity [m/s].
-        z0m: roughness length for momentum [m].
-        z0h: roughness length for scalars [m].
-        theta: surface potential temperature [K].
-        drag_m: drag coefficient for momentum [-]. Default: 1e12.
-        drag_s: drag coefficient for scalars [-]. Default: 1e12.
-        uw: surface momentum flux u [m2 s-2].
-        vw: surface momentum flux v [m2 s-2].
-        temp_2m: 2m temperature [K].
-        q2m: 2m specific humidity [kg kg-1].
-        u2m: 2m u-wind [m s-1].
-        v2m: 2m v-wind [m s-1].
-        e2m: 2m vapor pressure [Pa].
-        esat2m: 2m saturated vapor pressure [Pa].
-        thetasurf: surface potential temperature [K].
-        thetavsurf: surface virtual potential temperature [K].
-        qsurf: surface specific humidity [kg kg-1].
-        obukhov_length: Obukhov length [m].
-        rib_number: bulk Richardson number [-].
-    """
+    """Standard surface layer model initial state."""
 
     # the following variables should be initialized by the user
     ustar: float
+    """Surface friction velocity [m/s]."""
     z0m: float
+    """Roughness length for momentum [m]."""
     z0h: float
+    """Roughness length for scalars [m]."""
     theta: float
+    """Surface potential temperature [K]."""
+
     # the following variables are initialized to high values and
     # are expected to converge to realistic values during warmup
     drag_m: float = 1e12
+    """Drag coefficient for momentum [-]."""
     drag_s: float = 1e12
+    """Drag coefficient for scalars [-]."""
+
     # the following variables are initialized as NaNs and should
     # and are expected to be assigned during warmup
     uw: float = jnp.nan
+    """Surface momentum flux u [m2 s-2]."""
     vw: float = jnp.nan
+    """Surface momentum flux v [m2 s-2]."""
     temp_2m: float = jnp.nan
+    """2m temperature [K]."""
     q2m: float = jnp.nan
+    """2m specific humidity [kg kg-1]."""
     u2m: float = jnp.nan
+    """2m u-wind [m s-1]."""
     v2m: float = jnp.nan
+    """2m v-wind [m s-1]."""
     e2m: float = jnp.nan
+    """2m vapor pressure [Pa]."""
     esat2m: float = jnp.nan
+    """2m saturated vapor pressure [Pa]."""
     thetasurf: float = jnp.nan
+    """Surface potential temperature [K]."""
     thetavsurf: float = jnp.nan
+    """Surface virtual potential temperature [K]."""
     qsurf: float = jnp.nan
+    """Surface specific humidity [kg kg-1]."""
     obukhov_length: float = jnp.nan
+    """Obukhov length [m]."""
     rib_number: float = jnp.nan
+    """Bulk Richardson number [-]."""
 
 
 class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
@@ -116,12 +115,6 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
     Calculates surface-atmosphere exchange using Monin-Obukhov similarity theory
     with stability functions and iterative solution for Obukhov length.
 
-    Parameters
-    ----------
-    None.
-
-    Processes
-    ---------
     1. Calculate effective wind speed and surface properties.
     2. Determine bulk Richardson number and solve for Obukhov length.
     3. Compute drag coefficients with stability corrections.

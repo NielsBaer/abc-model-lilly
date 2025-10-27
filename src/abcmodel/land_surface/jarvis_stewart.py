@@ -9,7 +9,7 @@ from .standard import (
 
 
 class JarvisStewartInitConds(StandardLandSurfaceInitConds):
-    """Data class for Jarvis-Stewart model initial conditions."""
+    """Jarvis-Stewart model initial state."""
 
     pass
 

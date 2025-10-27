@@ -152,17 +152,17 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../source/api/abcmodel.html">abcmodel package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.clouds.html">Clouds</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.clouds.cumulus.html">Cumulus</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.clouds.no_clouds.html">No clouds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.clouds.no_clouds.html">No Clouds</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.land_surface.html">Land surface</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.land_surface.html">Land Surface</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.land_surface.aquacrop.html">Aquacrop</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.land_surface.jarvis_stewart.html">Jarvis stewart</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.land_surface.jarvis_stewart.html">Jarvis Stewart</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.land_surface.minimal.html">Minimal</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.land_surface.standard.html">Standard</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.mixed_layer.html">Mixed layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.mixed_layer.bulk.html">Bulk</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.mixed_layer.minimal.html">Minimal</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.mixed_layer.stats.html">Stats</a></li>
@@ -170,10 +170,10 @@
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.radiation.html">Radiation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.radiation.standard.html">Standard</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.radiation.standard_w_clouds.html">Standard w clouds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.radiation.standard_w_clouds.html">Standard W Clouds</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.surface_layer.html">Surface layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.surface_layer.html">Surface Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.surface_layer.minimal.html">Minimal</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.surface_layer.standard.html">Standard</a></li>
 </ul>
@@ -305,62 +305,57 @@ document.write(`
 <a class="viewcode-back" href="../../../source/api/abcmodel.land_surface.standard.html#abcmodel.land_surface.standard.StandardLandSurfaceInitConds">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">StandardLandSurfaceInitConds</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Data class for standard land surface model initial conditions.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        alpha: slope of the light response curve [mol J-1].</span>
-<span class="sd">        wg: soil moisture content in the root zone [m3 m-3].</span>
-<span class="sd">        w2: soil moisture content in the deep layer [m3 m-3].</span>
-<span class="sd">        temp_soil: soil temperature [K].</span>
-<span class="sd">        temp2: deep soil temperature [K].</span>
-<span class="sd">        surf_temp: Surface temperature [K].</span>
-<span class="sd">        wl: liquid water storage on the canopy [m].</span>
-<span class="sd">        rs: surface resistance [m s-1].</span>
-<span class="sd">        rssoil: soil resistance [m s-1].</span>
-<span class="sd">        cliq: wet fraction of the canopy [-].</span>
-<span class="sd">        temp_soil_tend: soil temperature tendency [K s-1].</span>
-<span class="sd">        wgtend: soil moisture tendency [m3 m-3 s-1].</span>
-<span class="sd">        wltend: canopy water storage tendency [m s-1].</span>
-<span class="sd">        le_veg: latent heat flux from vegetation [W m-2].</span>
-<span class="sd">        le_liq: latent heat flux from liquid water [W m-2].</span>
-<span class="sd">        le_soil: latent heat flux from soil [W m-2].</span>
-<span class="sd">        le: total latent heat flux [W m-2].</span>
-<span class="sd">        hf: sensible heat flux [W m-2].</span>
-<span class="sd">        gf: ground heat flux [W m-2].</span>
-<span class="sd">        le_pot: potential latent heat flux [W m-2].</span>
-<span class="sd">        le_ref: reference latent heat flux [W m-2].</span>
-<span class="sd">        ra: aerodynamic resistance [s m-1].</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># the following variables are expected to be initialized by the user</span>
-    <span class="c1"># here alpha is in a fact a parameter, but it is also used in different models</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Standard land surface model initial state.&quot;&quot;&quot;</span>
+    <span class="c1"># the following variables are supposed to be initialized by the user</span>
     <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Slope of the light response curve [mol J-1].&quot;&quot;&quot;</span>
     <span class="n">wg</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Soil moisture content in the root zone [m3 m-3].&quot;&quot;&quot;</span>
     <span class="n">w2</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Soil moisture content in the deep layer [m3 m-3].&quot;&quot;&quot;</span>
     <span class="n">temp_soil</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Soil temperature [K].&quot;&quot;&quot;</span>
     <span class="n">temp2</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Deep soil temperature [K].&quot;&quot;&quot;</span>
     <span class="n">surf_temp</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface temperature [K].&quot;&quot;&quot;</span>
     <span class="n">wl</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Liquid water storage on the canopy [m].&quot;&quot;&quot;</span>
 
     <span class="c1"># the following variables are initialized to high values and</span>
     <span class="c1"># are expected to converge during warmup</span>
     <span class="n">rs</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0e6</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface resistance [m s-1].&quot;&quot;&quot;</span>
     <span class="n">rssoil</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0e6</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Soil resistance [m s-1].&quot;&quot;&quot;</span>
 
     <span class="c1"># the following variables are expected to be assigned during warmup</span>
     <span class="n">cliq</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wet fraction of the canopy [-].&quot;&quot;&quot;</span>
     <span class="n">temp_soil_tend</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Soil temperature tendency [K s-1].&quot;&quot;&quot;</span>
     <span class="n">wgtend</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Soil moisture tendency [m3 m-3 s-1].&quot;&quot;&quot;</span>
     <span class="n">wltend</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Canopy water storage tendency [m s-1].&quot;&quot;&quot;</span>
     <span class="n">le_veg</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Latent heat flux from vegetation [W m-2].&quot;&quot;&quot;</span>
     <span class="n">le_liq</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Latent heat flux from liquid water [W m-2].&quot;&quot;&quot;</span>
     <span class="n">le_soil</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Latent heat flux from soil [W m-2].&quot;&quot;&quot;</span>
     <span class="n">le</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Total latent heat flux [W m-2].&quot;&quot;&quot;</span>
     <span class="n">hf</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sensible heat flux [W m-2].&quot;&quot;&quot;</span>
     <span class="n">gf</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ground heat flux [W m-2].&quot;&quot;&quot;</span>
     <span class="n">le_pot</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Potential latent heat flux [W m-2].&quot;&quot;&quot;</span>
     <span class="n">le_ref</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">ra</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reference latent heat flux [W m-2].&quot;&quot;&quot;</span>
+    <span class="n">ra</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Aerodynamic resistance [s m-1].&quot;&quot;&quot;</span></div>
 
 
 

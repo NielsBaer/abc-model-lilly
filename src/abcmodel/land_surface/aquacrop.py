@@ -13,21 +13,16 @@ from .standard import AbstractStandardLandSurfaceModel, StandardLandSurfaceInitC
 
 @dataclass
 class AquaCropInitConds(StandardLandSurfaceInitConds):
-    """Data class for AquaCrop model initial conditions.
-
-    Takes all the arguments from StandardLandSurfaceInitConds.
-
-    Args:
-        rsCO2: stomatal resistance to CO2.
-        gcco2: conductance to CO2.
-        ci: intercellular CO2 concentration.
-        co2abs: CO2 assimilation rate.
-    """
+    """AquaCrop model initial state."""
 
     rsCO2: float = jnp.nan
+    """Stomatal resistance to CO2."""
     gcco2: float = jnp.nan
+    """Conductance to CO2."""
     ci: float = jnp.nan
+    """Intercellular CO2 concentration."""
     co2abs: float = jnp.nan
+    """CO2 assimilation rate."""
 
 
 class AquaCropModel(AbstractStandardLandSurfaceModel):

@@ -152,17 +152,17 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../source/api/abcmodel.html">abcmodel package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.clouds.html">Clouds</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.clouds.cumulus.html">Cumulus</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.clouds.no_clouds.html">No clouds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.clouds.no_clouds.html">No Clouds</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.land_surface.html">Land surface</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.land_surface.html">Land Surface</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.land_surface.aquacrop.html">Aquacrop</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.land_surface.jarvis_stewart.html">Jarvis stewart</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.land_surface.jarvis_stewart.html">Jarvis Stewart</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.land_surface.minimal.html">Minimal</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.land_surface.standard.html">Standard</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.mixed_layer.html">Mixed layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.mixed_layer.bulk.html">Bulk</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.mixed_layer.minimal.html">Minimal</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.mixed_layer.stats.html">Stats</a></li>
@@ -170,10 +170,10 @@
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.radiation.html">Radiation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.radiation.standard.html">Standard</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.radiation.standard_w_clouds.html">Standard w clouds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.radiation.standard_w_clouds.html">Standard W Clouds</a></li>
 </ul>
 </details></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.surface_layer.html">Surface layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.surface_layer.html">Surface Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.surface_layer.minimal.html">Minimal</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.surface_layer.standard.html">Standard</a></li>
 </ul>
@@ -306,82 +306,103 @@ document.write(`
 <a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.BulkMixedLayerInitConds">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">BulkMixedLayerInitConds</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Data class for bulk mixed layer model initial conditions.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        abl_height: initial ABL height [m].</span>
-<span class="sd">        theta: initial mixed-layer potential temperature [K].</span>
-<span class="sd">        dtheta: initial temperature jump at h [K].</span>
-<span class="sd">        wtheta: surface kinematic heat flux [K m/s].</span>
-<span class="sd">        q: initial mixed-layer specific humidity [kg/kg].</span>
-<span class="sd">        dq: initial specific humidity jump at h [kg/kg].</span>
-<span class="sd">        wq: surface kinematic moisture flux [kg/kg m/s].</span>
-<span class="sd">        co2: initial mixed-layer CO2 [ppm].</span>
-<span class="sd">        dCO2: initial CO2 jump at h [ppm].</span>
-<span class="sd">        wCO2: surface kinematic CO2 flux [mgC/m²/s].</span>
-<span class="sd">        u: initial mixed-layer u-wind speed [m/s].</span>
-<span class="sd">        du: initial u-wind jump at h [m/s].</span>
-<span class="sd">        v: initial mixed-layer v-wind speed [m/s].</span>
-<span class="sd">        dv: initial v-wind jump at h [m/s].</span>
-<span class="sd">        dz_h: transition layer thickness [m].</span>
-<span class="sd">        wstar: convective velocity scale [m s-1]. Defaults to 0.0.</span>
-<span class="sd">        we: entrainment velocity [m s-1]. Defaults to -1.0.</span>
-<span class="sd">        wCO2A: surface assimulation CO2 flux [mgC/m²/s]. Defaults to 0.0.</span>
-<span class="sd">        wCO2R: surface respiration CO2 flux [mgC/m²/s]. Defaults to 0.0.</span>
-<span class="sd">        wCO2M: CO2 mass flux [mgC/m²/s]. Defaults to 0.0.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Data class for bulk mixed layer model initial state.&quot;&quot;&quot;</span>
 
     <span class="c1"># initialized by the user</span>
     <span class="n">abl_height</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initial ABL height [m].&quot;&quot;&quot;</span>
     <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initial mixed-layer potential temperature [K].&quot;&quot;&quot;</span>
     <span class="n">dtheta</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initial temperature jump at h [K].&quot;&quot;&quot;</span>
     <span class="n">wtheta</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface kinematic heat flux [K m/s].&quot;&quot;&quot;</span>
     <span class="n">q</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initial mixed-layer specific humidity [kg/kg].&quot;&quot;&quot;</span>
     <span class="n">dq</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initial specific humidity jump at h [kg/kg].&quot;&quot;&quot;</span>
     <span class="n">wq</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface kinematic moisture flux [kg/kg m/s].&quot;&quot;&quot;</span>
     <span class="n">co2</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initial mixed-layer CO2 [ppm].&quot;&quot;&quot;</span>
     <span class="n">dCO2</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initial CO2 jump at h [ppm].&quot;&quot;&quot;</span>
     <span class="n">wCO2</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface kinematic CO2 flux [mgC/m²/s].&quot;&quot;&quot;</span>
     <span class="n">u</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initial mixed-layer u-wind speed [m/s].&quot;&quot;&quot;</span>
     <span class="n">du</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initial u-wind jump at h [m/s].&quot;&quot;&quot;</span>
     <span class="n">v</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initial mixed-layer v-wind speed [m/s].&quot;&quot;&quot;</span>
     <span class="n">dv</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initial v-wind jump at h [m/s].&quot;&quot;&quot;</span>
     <span class="n">dz_h</span><span class="p">:</span> <span class="nb">float</span>
-    <span class="c1"># this is actually not updated</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transition layer thickness [m].&quot;&quot;&quot;</span>
     <span class="n">surf_pressure</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface pressure, which is actually not updated (not a state), it&#39;s only here for simplicity [Pa].&quot;&quot;&quot;</span>
 
     <span class="c1"># initialized to zero by default</span>
     <span class="n">wstar</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convective velocity scale [m s-1].&quot;&quot;&quot;</span>
     <span class="n">we</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Entrainment velocity [m s-1].&quot;&quot;&quot;</span>
     <span class="n">wCO2A</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface assimulation CO2 flux [mgC/m²/s].&quot;&quot;&quot;</span>
     <span class="n">wCO2R</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface respiration CO2 flux [mgC/m²/s].&quot;&quot;&quot;</span>
     <span class="n">wCO2M</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;CO2 mass flux [mgC/m²/s].&quot;&quot;&quot;</span>
 
     <span class="c1"># should be initialized during warmup</span>
     <span class="n">thetav</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">wthetav</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">wqe</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">qsat</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">e</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">esat</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">wCO2e</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">wthetae</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mixed-layer potential temperature [K].&quot;&quot;&quot;</span>
     <span class="n">dthetav</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Virtual temperature jump at h [K].&quot;&quot;&quot;</span>
+    <span class="n">wthetav</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface kinematic virtual heat flux [K m s-1].&quot;&quot;&quot;</span>
+    <span class="n">wqe</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Entrainment moisture flux [kg kg-1 m s-1].&quot;&quot;&quot;</span>
+    <span class="n">qsat</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Saturation specific humidity [kg/kg].&quot;&quot;&quot;</span>
+    <span class="n">e</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Vapor pressure [Pa].&quot;&quot;&quot;</span>
+    <span class="n">esat</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Saturation vapor pressure [Pa].&quot;&quot;&quot;</span>
+    <span class="n">wCO2e</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Entrainment CO2 flux [mgC/m²/s].&quot;&quot;&quot;</span>
+    <span class="n">wthetae</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Entrainment potential temperature flux [K m s-1].&quot;&quot;&quot;</span>
     <span class="n">wthetave</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Entrainment virtual heat flux [K m s-1].&quot;&quot;&quot;</span>
     <span class="n">lcl</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Lifting condensation level [m].&quot;&quot;&quot;</span>
     <span class="n">top_rh</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Top of mixed layer relative humidity [%].&quot;&quot;&quot;</span>
     <span class="n">utend</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Zonal wind velocity tendency [m s-2].&quot;&quot;&quot;</span>
     <span class="n">dutend</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Zonal wind velocity tendency at the ABL height [m s-2].&quot;&quot;&quot;</span>
     <span class="n">vtend</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Meridional wind velocity tendency [m s-2].&quot;&quot;&quot;</span>
     <span class="n">dvtend</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Meridional wind velocity tendency at the ABL height [m/s²].&quot;&quot;&quot;</span>
     <span class="n">htend</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tendency of CBL [m s-1].&quot;&quot;&quot;</span>
     <span class="n">thetatend</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tendency of mixed-layer potential temperature [K s-1].&quot;&quot;&quot;</span>
     <span class="n">dthetatend</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tendency of mixed-layer potential temperature at the ABL height [K s-1].&quot;&quot;&quot;</span>
     <span class="n">qtend</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tendency of mixed-layer specific humidity [kg/kg s-1].&quot;&quot;&quot;</span>
     <span class="n">dqtend</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tendency of mixed-layer specific humidity at the ABL height [kg/kg s-1].&quot;&quot;&quot;</span>
     <span class="n">co2tend</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tendency of CO2 concentration [ppm s-1].&quot;&quot;&quot;</span>
     <span class="n">dCO2tend</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">dztend</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tendency of CO2 concentration at the ABL height [ppm s-1].&quot;&quot;&quot;</span>
+    <span class="n">dztend</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tendency of transition layer thickness [m s-1].&quot;&quot;&quot;</span></div>
 
 
 
@@ -402,21 +423,20 @@ document.write(`
 <span class="sd">        sw_shearwe: shear growth mixed-layer switch.</span>
 <span class="sd">        sw_fixft: fix the free-troposphere switch.</span>
 <span class="sd">        sw_wind: prognostic wind switch.</span>
-<span class="sd">        surf_pressure: surface pressure [Pa].</span>
-<span class="sd">        divU: horizontal large-scale divergence of wind [s⁻¹].</span>
-<span class="sd">        coriolis_param: Coriolis parameter [s⁻¹].</span>
-<span class="sd">        gammatheta: free atmosphere potential temperature lapse rate [K/m].</span>
-<span class="sd">        advtheta: advection of heat [K/s].</span>
+<span class="sd">        divU: horizontal large-scale divergence of wind [s-1].</span>
+<span class="sd">        coriolis_param: Coriolis parameter [s-1].</span>
+<span class="sd">        gammatheta: free atmosphere potential temperature lapse rate [K m-1].</span>
+<span class="sd">        advtheta: advection of heat [K s-1].</span>
 <span class="sd">        beta: entrainment ratio for virtual heat [-].</span>
-<span class="sd">        gammaq: free atmosphere specific humidity lapse rate [kg/kg/m].</span>
-<span class="sd">        advq: advection of moisture [kg/kg/s].</span>
-<span class="sd">        gammaCO2: free atmosphere CO2 lapse rate [ppm/m].</span>
-<span class="sd">        advCO2: advection of CO2 [ppm/s].</span>
-<span class="sd">        gammau: free atmosphere u-wind speed lapse rate [s⁻¹].</span>
-<span class="sd">        advu: advection of u-wind [m/s²].</span>
-<span class="sd">        gammav: free atmosphere v-wind speed lapse rate [s⁻¹].</span>
-<span class="sd">        advv: advection of v-wind [m/s²].</span>
-<span class="sd">        dFz: something I forgot :).</span>
+<span class="sd">        gammaq: free atmosphere specific humidity lapse rate [kg/kg m-1].</span>
+<span class="sd">        advq: advection of moisture [kg/kg s-1].</span>
+<span class="sd">        gammaCO2: free atmosphere CO2 lapse rate [ppm m-1].</span>
+<span class="sd">        advCO2: advection of CO2 [ppm s-1].</span>
+<span class="sd">        gammau: free atmosphere u-wind speed lapse rate [s-1].</span>
+<span class="sd">        advu: advection of u-wind [m s-2].</span>
+<span class="sd">        gammav: free atmosphere v-wind speed lapse rate [s-1].</span>
+<span class="sd">        advv: advection of v-wind [m s-2].</span>
+<span class="sd">        dFz: cloud top radiative divergence [W m-2].</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
