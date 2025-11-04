@@ -20,7 +20,7 @@ def get_esat(temp: Array) -> Array:
         .. math::
             T_C = T_K - 273.16,
 
-        then, the saturated vapor pressure (:math:`e_{sat}`) is calculated as
+        then, the saturated vapor pressure :math:`e_{sat}` is calculated as
 
         .. math::
             e_{\\text{sat}}(T_C) = 611 \\cdot \\exp\\left( \\frac{17.2694 \\cdot T_C}{T_C + 237.3} \\right),
@@ -44,7 +44,7 @@ def get_qsat(temp: Array, pressure: Array) -> Array:
         Saturated specific humidity [kg/kg].
 
     Notes:
-        Saturated specific humidity (:math:`q_{sat}`) is the maximum amount of
+        Saturated specific humidity :math:`q_{sat}` is the maximum amount of
         water vapor (as a mass fraction) that a parcel of air can hold at
         a given temperature and pressure.
 
@@ -81,36 +81,39 @@ def get_psim(zeta: Array) -> Array:
 
     Notes:
         This function calculates the integrated stability correction function for
-        momentum (:math:`\\Psi_m`), which is used to adjust wind profiles based
+        momentum :math:`\\Psi_m`, which is used to adjust wind profiles based
         on atmospheric stability.
 
         The function is piecewise, depending on the stability parameter
         :math:`\\zeta = z/L`.
 
-        **1. For Unstable Conditions (ζ ≤ 0):**
+        **1. Unstable conditions (ζ ≤ 0):**
 
-        Based on Businger-Dyer relations, an intermediate variable :math:`x`
-        is defined:
+        Based on Businger-Dyer relations, an intermediate variable
 
         .. math::
             x = (1 - 16\\zeta)^{1/4}
 
-        The integrated stability function :math:`\\Psi_m` is then:
+        is used to write the stability function as
 
         .. math::
             \\Psi_m(\\zeta) = \\ln\\left( \\frac{(1+x)^2 (1+x^2)}{8} \\right)
-                             - 2 \\arctan(x) + \\frac{\\pi}{2}
+                             - 2 \\arctan(x) + \\frac{\\pi}{2}.
 
-        **2. For Stable Conditions (ζ > 0):**
+        **2. Stable conditions (ζ > 0):**
 
         This uses an empirical formula (e.g., Holtslag and De Bruin, 1988)
-        with constants: :math:`\\alpha = 0.35`, :math:`\\beta = 5.0 / \\alpha`, :math:`\\gamma = (10.0 / 3.0) / \\alpha`.
+        with constants:
 
-        The stability function is:
+        - :math:`\\alpha = 0.35`,
+        - :math:`\\beta = 5.0 / \\alpha`,
+        - :math:`\\gamma = (10.0 / 3.0) / \\alpha`.
+
+        The stability function is then  given by
 
         .. math::
             \\Psi_m(\\zeta) = -\\frac{2}{3}(\\zeta - \\beta)e^{-\\alpha \\zeta}
-                             - \\zeta - \\gamma
+                             - \\zeta - \\gamma.
     """
     # constants for stable conditions
     alpha = 0.35
@@ -146,34 +149,33 @@ def get_psih(zeta: Array) -> Array:
 
     Notes:
         This function calculates the integrated stability correction function for
-        scalars (:math:`\\Psi_h`) (like heat and humidity), which is used to
+        scalars :math:`\\Psi_h`, like heat and humidity, which is used to
         adjust temperature and humidity profiles based on atmospheric stability.
 
         The function is piecewise, depending on the stability parameter
         :math:`\\zeta = z/L`.
 
-        **1. For Unstable Conditions (ζ ≤ 0):**
+        **1. Unstable conditions (ζ ≤ 0):**
 
-        Based on Businger-Dyer relations, using the same intermediate
-        variable :math:`x`:
+        Based on Businger-Dyer relations, an intermediate variable (same as above)
 
         .. math::
             x = (1 - 16\\zeta)^{1/4}
 
-        The integrated stability function :math:`\\Psi_h` is:
+        is used to write the integrated stability function
 
         .. math::
-            \\Psi_h(\\zeta) = 2 \\ln\\left( \\frac{1+x^2}{2} \\right)
+            \\Psi_h(\\zeta) = 2 \\ln\\left( \\frac{1+x^2}{2} \\right).
 
-        **2. For Stable Conditions (ζ > 0):**
+        **2. Stable conditions (ζ > 0):**
 
         This uses a corresponding empirical formula with the same constants
-        (:math:`\\alpha`, :math:`\\beta`, :math:`\\gamma`):
+        (:math:`\\alpha`, :math:`\\beta`, :math:`\\gamma`) as above to write
 
         .. math::
             \\Psi_h(\\zeta) = -\\frac{2}{3}(\\zeta - \\beta)e^{-\\alpha \\zeta}
                             - \\left(1 + \\frac{2}{3}\\zeta\\right)^{3/2}
-                            - \\gamma + 1
+                            - \\gamma + 1.
     """
     # constants for stable conditions
     alpha = 0.35

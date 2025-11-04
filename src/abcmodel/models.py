@@ -1,3 +1,5 @@
+"""The following is a list of abstract classes that are used to define the interface for all models."""
+
 from abc import abstractmethod
 
 from jaxtyping import Array, PyTree
@@ -11,6 +13,7 @@ class AbstractModel:
 
 class AbstractRadiationModel(AbstractModel):
     """Abstract radiation model class to define the interface for all radiation models."""
+
     tstart: float
     """Start time of the model."""
 
@@ -21,6 +24,7 @@ class AbstractRadiationModel(AbstractModel):
 
 class AbstractLandSurfaceModel(AbstractModel):
     """Abstract land surface model class to define the interface for all land surface models."""
+
     @abstractmethod
     def run(
         self,
@@ -37,6 +41,7 @@ class AbstractLandSurfaceModel(AbstractModel):
 
 class AbstractSurfaceLayerModel(AbstractModel):
     """Abstract surface layer model class to define the interface for all surface layer models."""
+
     @abstractmethod
     def run(self, state: PyTree, const: PhysicalConstants) -> PyTree:
         raise NotImplementedError
@@ -49,6 +54,7 @@ class AbstractSurfaceLayerModel(AbstractModel):
 
 class AbstractMixedLayerModel(AbstractModel):
     """Abstract mixed layer model class to define the interface for all mixed layer models."""
+
     @abstractmethod
     def run(self, state: PyTree, const: PhysicalConstants) -> PyTree:
         raise NotImplementedError
@@ -64,6 +70,7 @@ class AbstractMixedLayerModel(AbstractModel):
 
 class AbstractCloudModel(AbstractModel):
     """Abstract cloud model class to define the interface for all cloud models."""
+
     @abstractmethod
     def run(self, state: PyTree, const: PhysicalConstants) -> PyTree:
         raise NotImplementedError

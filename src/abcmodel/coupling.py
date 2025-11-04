@@ -26,16 +26,19 @@ class CoupledState(SimpleNamespace):
         super().__init__(**kwargs)
 
     def tree_flatten(self):
+        """:meta private:"""
         # children are the values, aux is the keys
         return list(self.__dict__.values()), list(self.__dict__.keys())
 
     @classmethod
     def tree_unflatten(cls, aux, children):
+        """:meta private:"""
         return cls(**dict(zip(aux, children)))
 
 
 class ABCoupler:
     """Coupling class to bound all the components."""
+
     def __init__(
         self,
         radiation: AbstractRadiationModel,

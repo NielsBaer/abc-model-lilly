@@ -396,28 +396,31 @@ document.write(`
 
 <span class="sd">        **1. For Unstable Conditions (ζ ≤ 0):**</span>
 
-<span class="sd">        Based on Businger-Dyer relations, an intermediate variable :math:`x`</span>
-<span class="sd">        is defined:</span>
+<span class="sd">        Based on Businger-Dyer relations, an intermediate variable</span>
 
 <span class="sd">        .. math::</span>
 <span class="sd">            x = (1 - 16\\zeta)^{1/4}</span>
 
-<span class="sd">        The integrated stability function :math:`\\Psi_m` is then:</span>
+<span class="sd">        is used to write the stability function as</span>
 
 <span class="sd">        .. math::</span>
 <span class="sd">            \\Psi_m(\\zeta) = \\ln\\left( \\frac{(1+x)^2 (1+x^2)}{8} \\right)</span>
-<span class="sd">                             - 2 \\arctan(x) + \\frac{\\pi}{2}</span>
+<span class="sd">                             - 2 \\arctan(x) + \\frac{\\pi}{2}.</span>
 
 <span class="sd">        **2. For Stable Conditions (ζ &gt; 0):**</span>
 
 <span class="sd">        This uses an empirical formula (e.g., Holtslag and De Bruin, 1988)</span>
-<span class="sd">        with constants: :math:`\\alpha = 0.35`, :math:`\\beta = 5.0 / \\alpha`, :math:`\\gamma = (10.0 / 3.0) / \\alpha`.</span>
+<span class="sd">        with constants:</span>
 
-<span class="sd">        The stability function is:</span>
+<span class="sd">        - :math:`\\alpha = 0.35`,</span>
+<span class="sd">        - :math:`\\beta = 5.0 / \\alpha`,</span>
+<span class="sd">        - :math:`\\gamma = (10.0 / 3.0) / \\alpha`.</span>
+
+<span class="sd">        The stability function is then  given by</span>
 
 <span class="sd">        .. math::</span>
 <span class="sd">            \\Psi_m(\\zeta) = -\\frac{2}{3}(\\zeta - \\beta)e^{-\\alpha \\zeta}</span>
-<span class="sd">                             - \\zeta - \\gamma</span>
+<span class="sd">                             - \\zeta - \\gamma.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># constants for stable conditions</span>
     <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.35</span>
@@ -456,7 +459,7 @@ document.write(`
 
 <span class="sd">    Notes:</span>
 <span class="sd">        This function calculates the integrated stability correction function for</span>
-<span class="sd">        scalars (:math:`\\Psi_h`) (like heat and humidity), which is used to</span>
+<span class="sd">        scalars (:math:`\\Psi_h`), like heat and humidity, which is used to</span>
 <span class="sd">        adjust temperature and humidity profiles based on atmospheric stability.</span>
 
 <span class="sd">        The function is piecewise, depending on the stability parameter</span>
@@ -464,26 +467,25 @@ document.write(`
 
 <span class="sd">        **1. For Unstable Conditions (ζ ≤ 0):**</span>
 
-<span class="sd">        Based on Businger-Dyer relations, using the same intermediate</span>
-<span class="sd">        variable :math:`x`:</span>
+<span class="sd">        Based on Businger-Dyer relations, an intermediate variable (same as above)</span>
 
 <span class="sd">        .. math::</span>
 <span class="sd">            x = (1 - 16\\zeta)^{1/4}</span>
 
-<span class="sd">        The integrated stability function :math:`\\Psi_h` is:</span>
+<span class="sd">        is used to write the integrated stability function</span>
 
 <span class="sd">        .. math::</span>
-<span class="sd">            \\Psi_h(\\zeta) = 2 \\ln\\left( \\frac{1+x^2}{2} \\right)</span>
+<span class="sd">            \\Psi_h(\\zeta) = 2 \\ln\\left( \\frac{1+x^2}{2} \\right).</span>
 
 <span class="sd">        **2. For Stable Conditions (ζ &gt; 0):**</span>
 
 <span class="sd">        This uses a corresponding empirical formula with the same constants</span>
-<span class="sd">        (:math:`\\alpha`, :math:`\\beta`, :math:`\\gamma`):</span>
+<span class="sd">        (:math:`\\alpha`, :math:`\\beta`, :math:`\\gamma`) as above to write</span>
 
 <span class="sd">        .. math::</span>
 <span class="sd">            \\Psi_h(\\zeta) = -\\frac{2}{3}(\\zeta - \\beta)e^{-\\alpha \\zeta}</span>
 <span class="sd">                            - \\left(1 + \\frac{2}{3}\\zeta\\right)^{3/2}</span>
-<span class="sd">                            - \\gamma + 1</span>
+<span class="sd">                            - \\gamma + 1.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># constants for stable conditions</span>
     <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.35</span>

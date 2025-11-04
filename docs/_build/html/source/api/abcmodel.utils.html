@@ -454,21 +454,25 @@ on atmospheric stability.</p>
 <p>The function is piecewise, depending on the stability parameter
 <span class="math notranslate nohighlight">\(\zeta = z/L\)</span>.</p>
 <p><strong>1. For Unstable Conditions (ζ ≤ 0):</strong></p>
-<p>Based on Businger-Dyer relations, an intermediate variable <span class="math notranslate nohighlight">\(x\)</span>
-is defined:</p>
+<p>Based on Businger-Dyer relations, an intermediate variable</p>
 <div class="math notranslate nohighlight">
 \[x = (1 - 16\zeta)^{1/4}\]</div>
-<p>The integrated stability function <span class="math notranslate nohighlight">\(\Psi_m\)</span> is then:</p>
+<p>is used to write the stability function as</p>
 <div class="math notranslate nohighlight">
 \[\Psi_m(\zeta) = \ln\left( \frac{(1+x)^2 (1+x^2)}{8} \right)
-                 - 2 \arctan(x) + \frac{\pi}{2}\]</div>
+                 - 2 \arctan(x) + \frac{\pi}{2}.\]</div>
 <p><strong>2. For Stable Conditions (ζ &gt; 0):</strong></p>
 <p>This uses an empirical formula (e.g., Holtslag and De Bruin, 1988)
-with constants: <span class="math notranslate nohighlight">\(\alpha = 0.35\)</span>, <span class="math notranslate nohighlight">\(\beta = 5.0 / \alpha\)</span>, <span class="math notranslate nohighlight">\(\gamma = (10.0 / 3.0) / \alpha\)</span>.</p>
-<p>The stability function is:</p>
+with constants:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\alpha = 0.35\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\beta = 5.0 / \alpha\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\gamma = (10.0 / 3.0) / \alpha\)</span>.</p></li>
+</ul>
+<p>The stability function is then  given by</p>
 <div class="math notranslate nohighlight">
 \[\Psi_m(\zeta) = -\frac{2}{3}(\zeta - \beta)e^{-\alpha \zeta}
-                 - \zeta - \gamma\]</div>
+                 - \zeta - \gamma.\]</div>
 </dd></dl>
 
 <dl class="py function">
@@ -485,25 +489,24 @@ with constants: <span class="math notranslate nohighlight">\(\alpha = 0.35\)</sp
 </dl>
 <p class="rubric">Notes</p>
 <p>This function calculates the integrated stability correction function for
-scalars (<span class="math notranslate nohighlight">\(\Psi_h\)</span>) (like heat and humidity), which is used to
+scalars (<span class="math notranslate nohighlight">\(\Psi_h\)</span>), like heat and humidity, which is used to
 adjust temperature and humidity profiles based on atmospheric stability.</p>
 <p>The function is piecewise, depending on the stability parameter
 <span class="math notranslate nohighlight">\(\zeta = z/L\)</span>.</p>
 <p><strong>1. For Unstable Conditions (ζ ≤ 0):</strong></p>
-<p>Based on Businger-Dyer relations, using the same intermediate
-variable <span class="math notranslate nohighlight">\(x\)</span>:</p>
+<p>Based on Businger-Dyer relations, an intermediate variable (same as above)</p>
 <div class="math notranslate nohighlight">
 \[x = (1 - 16\zeta)^{1/4}\]</div>
-<p>The integrated stability function <span class="math notranslate nohighlight">\(\Psi_h\)</span> is:</p>
+<p>is used to write the integrated stability function</p>
 <div class="math notranslate nohighlight">
-\[\Psi_h(\zeta) = 2 \ln\left( \frac{1+x^2}{2} \right)\]</div>
+\[\Psi_h(\zeta) = 2 \ln\left( \frac{1+x^2}{2} \right).\]</div>
 <p><strong>2. For Stable Conditions (ζ &gt; 0):</strong></p>
 <p>This uses a corresponding empirical formula with the same constants
-(<span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(\beta\)</span>, <span class="math notranslate nohighlight">\(\gamma\)</span>):</p>
+(<span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(\beta\)</span>, <span class="math notranslate nohighlight">\(\gamma\)</span>) as above to write</p>
 <div class="math notranslate nohighlight">
 \[\Psi_h(\zeta) = -\frac{2}{3}(\zeta - \beta)e^{-\alpha \zeta}
                 - \left(1 + \frac{2}{3}\zeta\right)^{3/2}
-                - \gamma + 1\]</div>
+                - \gamma + 1.\]</div>
 </dd></dl>
 
 <dl class="py class">
