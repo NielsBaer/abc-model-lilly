@@ -1,12 +1,12 @@
 import jax.numpy as jnp
 import matplotlib.pyplot as plt
 
-import abcconfigs.class_model as cm
+import abcconfigs.aridities as aridity_config
 import abcmodel
 from abcmodel.utils import compute_esat
 
 
-def run_wrapper(wg: float, q: float):
+def run_wrapper(wg: float, q: float, config):
     # time step [s]
     dt = 60.0
     # total run time [s]
@@ -14,36 +14,36 @@ def run_wrapper(wg: float, q: float):
 
     # radiation with clouds
     radiation_init_conds = abcmodel.radiation.StandardRadiationInitConds(
-        **cm.standard_radiation.init_conds_kwargs
+        **config.std_rad_init_conds_kwargs
     )
     radiation_model = abcmodel.radiation.StandardRadiationModel(
-        **cm.standard_radiation.model_kwargs,
+        **config.std_rad_model_kwargs
     )
 
     # land surface
-    ls_kwargs = cm.aquacrop.init_conds_kwargs
-    ls_kwargs["wg"] = wg
+    ags_kwargs = config.ags_init_conds_kwargs
+    ags_kwargs["wg"] = wg
     land_surface_init_conds = abcmodel.land_surface.AquaCropInitConds(
-        **ls_kwargs,
+        **ags_kwargs,
     )
     land_surface_model = abcmodel.land_surface.AquaCropModel(
-        **cm.aquacrop.model_kwargs,
+        **config.ags_model_kwargs,
     )
 
     # surface layer
     surface_layer_init_conds = abcmodel.surface_layer.StandardSurfaceLayerInitConds(
-        **cm.standard_surface_layer.init_conds_kwargs
+        **config.std_sl_init_conds_kwargs
     )
     surface_layer_model = abcmodel.surface_layer.StandardSurfaceLayerModel()
 
     # mixed layer
-    ml_kwargs = cm.bulk_mixed_layer.init_conds_kwargs
+    ml_kwargs = config.bulk_ml_init_conds_kwargs
     ml_kwargs["q"] = q
     mixed_layer_init_conds = abcmodel.mixed_layer.BulkMixedLayerInitConds(
         **ml_kwargs,
     )
     mixed_layer_model = abcmodel.mixed_layer.BulkMixedLayerModel(
-        **cm.bulk_mixed_layer.model_kwargs,
+        **config.bulk_ml_model_kwargs,
     )
 
     # clouds
@@ -76,7 +76,7 @@ def make_fancy_plot(
     color: str,
     marker,
     label: str,
-    factor: int = 60,
+    factor: int = 30,
 ):
     # mixed layer
     axes[0, 0].plot(
@@ -85,8 +85,10 @@ def make_fancy_plot(
         color=color,
         marker=marker,
         linestyle="None",
+        label=f"{label}",
     )
     axes[0, 0].set_title("h [m]")
+
     axes[0, 1].plot(
         time[::factor],
         traj.wCO2A[::factor],
@@ -95,6 +97,7 @@ def make_fancy_plot(
         linestyle="None",
     )
     axes[0, 1].set_title("wCO2A [mgC/m²/s]")
+
     axes[0, 2].plot(
         time[::factor],
         traj.wCO2R[::factor],
@@ -103,16 +106,15 @@ def make_fancy_plot(
         linestyle="None",
     )
     axes[0, 2].set_title("wCO2R [mgC/m²/s]")
+
     axes[0, 3].plot(
         time[::factor],
         traj.wCO2[::factor],
-        label=label,
         color=color,
         marker=marker,
         linestyle="None",
     )
     axes[0, 3].set_title("wCO2 [mgC/m²/s]")
-    axes[0, 3].legend()
 
     # temperature
     axes[1, 0].plot(
@@ -123,6 +125,7 @@ def make_fancy_plot(
         linestyle="None",
     )
     axes[1, 0].set_title("temp soil [K]")
+
     axes[1, 1].plot(
         time[::factor],
         traj.surf_temp[::factor],
@@ -131,6 +134,7 @@ def make_fancy_plot(
         linestyle="None",
     )
     axes[1, 1].set_title("surf temp [K]")
+
     axes[1, 2].plot(
         time[::factor],
         traj.theta[::factor],
@@ -139,6 +143,7 @@ def make_fancy_plot(
         linestyle="None",
     )
     axes[1, 2].set_title("theta [K]")
+
     axes[1, 3].plot(
         time[::factor],
         traj.temp_2m[::factor],
@@ -155,6 +160,7 @@ def make_fancy_plot(
         time[::factor], vpd[::factor], color=color, marker=marker, linestyle="None"
     )
     axes[2, 0].set_title("VPD [kPa]")
+
     axes[2, 1].plot(
         time[::factor], traj.wg[::factor], color=color, marker=marker, linestyle="None"
     )
@@ -164,20 +170,30 @@ def make_fancy_plot(
         time[::factor], traj.q[::factor], color=color, marker=marker, linestyle="None"
     )
     axes[2, 2].set_title("q [kg/kg]")
-    axes[2, 3].plot(
-        time[::factor], traj.w2[::factor], color=color, marker=marker, linestyle="None"
+
+    # axes[2, 3] is dedicated to legend display only
+    axes[2, 3].axis("off")
+    handles, labels = axes[0, 0].get_legend_handles_labels()
+    axes[2, 3].legend(
+        handles,
+        labels,
+        loc="center left",
+        frameon=False,
+        fontsize=12,
+        handlelength=2,
     )
-    axes[2, 3].set_title("w2 [kg/kg]")
 
     # energy fluxes
     axes[3, 0].plot(
         time[::factor], traj.hf[::factor], color=color, marker=marker, linestyle="None"
     )
     axes[3, 0].set_title("H [W/m²]")
+
     axes[3, 1].plot(
         time[::factor], traj.le[::factor], color=color, marker=marker, linestyle="None"
     )
     axes[3, 1].set_title("LE [W/m²]")
+
     axes[3, 2].plot(
         time[::factor],
         traj.le_veg[::factor],
@@ -186,6 +202,7 @@ def make_fancy_plot(
         linestyle="None",
     )
     axes[3, 2].set_title("LEveg [W/m²]")
+
     axes[3, 3].plot(
         time[::factor],
         traj.le_liq[::factor],
@@ -204,6 +221,7 @@ def make_fancy_plot(
         linestyle="None",
     )
     axes[4, 0].set_title("SWin [W/m²]")
+
     axes[4, 1].plot(
         time[::factor],
         traj.out_srad[::factor],
@@ -212,6 +230,7 @@ def make_fancy_plot(
         linestyle="None",
     )
     axes[4, 1].set_title("SWout [W/m²]")
+
     axes[4, 2].plot(
         time[::factor],
         traj.in_lrad[::factor],
@@ -220,6 +239,7 @@ def make_fancy_plot(
         linestyle="None",
     )
     axes[4, 2].set_title("LWin [W/m²]")
+
     axes[4, 3].plot(
         time[::factor],
         traj.out_lrad[::factor],
@@ -230,30 +250,31 @@ def make_fancy_plot(
     axes[4, 3].set_title("LWout [W/m²]")
 
 
-def main():
-    wg_control = 0.21
-    delta_wg = 0.1
-    q_control = 0.008
-    delta_q = 0.004
-
+def run_experiment(
+    wg_control: float,
+    q_control: float,
+    delta_wg: float,
+    delta_q: float,
+    config,
+    exp: str,
+):
     # plot
-    _, axes = plt.subplots(5, 4, figsize=(18, 9))
+    fig, axes = plt.subplots(5, 4, figsize=(18, 9))
 
     # add experiments:
-    # control
-    time, control_traj = run_wrapper(wg_control, q_control)
-    make_fancy_plot(axes, time, control_traj, "gray", "o", "control")
+    time, control_traj = run_wrapper(wg_control, q_control, config)
+    make_fancy_plot(axes, time, control_traj, "gray", "o", f"{exp} control")
     # positive soil moisture anomaly
-    time, pos_soil_moist_traj = run_wrapper(wg_control + delta_wg, q_control)
+    time, pos_soil_moist_traj = run_wrapper(wg_control + delta_wg, q_control, config)
     make_fancy_plot(axes, time, pos_soil_moist_traj, "dodgerblue", "+", "+|ΔSM|")
     # negative soil moisture anomaly
-    time, neg_soil_moist_traj = run_wrapper(wg_control - delta_wg, q_control)
+    time, neg_soil_moist_traj = run_wrapper(wg_control - delta_wg, q_control, config)
     make_fancy_plot(axes, time, neg_soil_moist_traj, "dodgerblue", "_", "-|ΔSM|")
     # positive specific humidity anomaly
-    time, pos_surf_temp_traj = run_wrapper(wg_control, q_control + delta_q)
+    time, pos_surf_temp_traj = run_wrapper(wg_control, q_control + delta_q, config)
     make_fancy_plot(axes, time, pos_surf_temp_traj, "orangered", "+", "+|Δq|")
     # negative specific humidity anomaly
-    time, neg_surf_temp_traj = run_wrapper(wg_control, q_control - delta_q)
+    time, neg_surf_temp_traj = run_wrapper(wg_control, q_control - delta_q, config)
     make_fancy_plot(axes, time, neg_surf_temp_traj, "orangered", "_", "-|Δq|")
 
     # names on each row
@@ -280,6 +301,34 @@ def main():
     # leave space for row labels
     plt.tight_layout()
     plt.show()
+
+    return fig
+
+
+def main():
+    # standard experiment
+    wg_control = 0.21
+    delta_wg = 0.105
+    q_control = 0.008
+    delta_q = 0.004
+    config = aridity_config.standard
+    run_experiment(wg_control, q_control, delta_wg, delta_q, config, "standard")
+
+    # arid experiment
+    wg_control = 0.1
+    delta_wg = 0.05
+    q_control = 0.004
+    delta_q = 0.002
+    config = aridity_config.arid
+    run_experiment(wg_control, q_control, delta_wg, delta_q, config, "arid")
+
+    # humid experiment
+    wg_control = 0.35
+    delta_wg = 0.175
+    q_control = 0.01
+    delta_q = 0.005
+    config = aridity_config.humid
+    run_experiment(wg_control, q_control, delta_wg, delta_q, config, "humid")
 
 
 if __name__ == "__main__":
