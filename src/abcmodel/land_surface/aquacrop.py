@@ -27,18 +27,9 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
     """AquaCrop land surface model with coupled photosynthesis and stomatal conductance.
 
     A bit more advanced land surface model implementing the AquaCrop approach with coupled
-    photosynthesis-stomatal conductance calculations. Includes detailed biochemical
+    photosynthesis-stomatal conductance calculations. Includes biochemical
     processes for both C3 and C4 vegetation types, soil moisture stress effects,
     and explicit CO2 flux calculations.
-
-    1. Inherit all standard land surface processes from parent class.
-    2. Calculate CO2 compensation concentration based on temperature.
-    3. Compute mesophyll conductance with temperature response functions.
-    4. Determine internal CO2 concentration using stomatal optimization.
-    5. Calculate gross primary productivity with light and moisture limitations.
-    6. Scale from leaf-level to canopy-level fluxes using extinction functions.
-    7. Compute surface resistance from canopy conductance.
-    8. Calculate net CO2 fluxes including plant assimilation and soil respiration.
 
     Args:
         c3c4: plant type, either "c3" or "c4".
@@ -78,18 +69,60 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
     def compute_co2comp(
         self,
         thetasurf: Array,
-        const: PhysicalConstants,
+        rho: float,
     ) -> Array:
-        """Calculate CO2 compensation concentration."""
+        """Compute the CO₂ compensation concentration.
+
+        Args:
+            thetasurf: surface potential temperature :math:`\\theta_s` [K].
+            rho: air density [kg m⁻³].
+
+        Returns:
+            The CO₂ compensation concentration :math:`\\Gamma` [ppmv].
+
+        Notes:
+            The CO₂ compensation point is computed as
+
+            .. math::
+                \\Gamma = \\rho \\Gamma_{298} Q_{10} e^{(T_s-298)/10}
+
+            where :math:`\\Gamma_{298}` and :math:`Q_{10}` are parameters depending on the plant type (C3 or C4).
+            Here, :math:`\\theta_s` is used instead of the skin temperature :math:`T_s` to compute the exponential term,
+            probably because this comes before in the order of updates for stability?
+
+        References:
+            Equation E.2 of the CLASS book.
+        """
+        # limamau: why are we using thetasurf here instead of surf_temp?
+        # where is this rho coming from?
         temp_diff = 0.1 * (thetasurf - 298.0)
         exp_term = jnp.pow(self.net_rad10CO2[self.c3c4], temp_diff)
-        return self.co2comp298[self.c3c4] * const.rho * exp_term
+        return self.co2comp298[self.c3c4] * rho * exp_term
 
-    def compute_gm(
-        self,
-        thetasurf: Array,
-    ) -> Array:
-        """Calculate mesophyll conductance."""
+    def compute_gm(self, thetasurf: Array) -> Array:
+        """Compute the mesophyll conductance.
+
+        Args:
+            thetasurf: surface potential temperature :math:`\\theta_s` [K].
+
+        Returns:
+            Mesophyll conductance :math:`g_m` [mm s⁻¹].
+
+        Notes:
+            This is given by
+
+            .. math::
+                g_m
+                = \\frac{g_{m298} \\cdot \\exp((T_s - 298)/10)}
+                {[1 + \\exp(0.3 \\cdot (T_{1g_m} - T_s))] \\cdot [1 + \\exp(0.3 \\cdot (T_s - T_{2g_m}))]},
+
+            where :math:`g_{m298}`, :math:`T_{1g_m}` and :math:`T_{2g_m}` are parameters depending on the plant type (C3 or C4).
+            Here again, instead of using the skin temperature :math:`T_s`, we use :math:`\\theta_s`.
+
+        References:
+            Equation E.7 from the CLASS book.
+
+        """
         temp_diff = 0.1 * (thetasurf - 298.0)
         exp_term = jnp.pow(self.net_rad10gm[self.c3c4], temp_diff)
         temp_factor1 = 1.0 + jnp.exp(0.3 * (self.temp1gm[self.c3c4] - thetasurf))
@@ -97,27 +130,50 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         gm = self.gm298[self.c3c4] * exp_term / (temp_factor1 * temp_factor2)
         return gm / 1000.0
 
-    def calculate_internal_co2(
+    def compute_fmin(
+        self,
+        gm: Array,
+    ) -> Array:
+        """Compute minimum stomatal conductance factor (fmin)."""
+        fmin0 = self.gmin[self.c3c4] / self.nuco2q - 1.0 / 9.0 * gm
+        fmin_sq_term = (
+            jnp.power(fmin0, 2.0) + 4 * self.gmin[self.c3c4] / self.nuco2q * gm
+        )
+        fmin = -fmin0 + jnp.power(fmin_sq_term, 0.5) / (2.0 * gm)
+        return fmin
+
+    def compute_ds(
         self,
         surf_temp: Array,
         e: Array,
+    ) -> Array:
+        """Compute vapor pressure deficit (ds) in kPa."""
+        ds = (compute_esat(surf_temp) - e) / 1000.0  # kPa
+        return ds
+
+    def compute_d0(
+        self,
+        fmin: Array,
+    ) -> Array:
+        """Compute reference vapor pressure deficit (d0) in kPa."""
+        d0 = (self.f0[self.c3c4] - fmin) / self.ad[self.c3c4]
+        return d0
+
+    def compute_internal_co2(
+        self,
+        ds: Array,
+        d0: Array,
+        fmin: Array,
         co2: Array,
         co2comp: Array,
         gm: Array,
         const: PhysicalConstants,
-    ) -> tuple[Array, Array, Array, Array, Array]:
-        """Calculate internal CO2 concentration and related parameters."""
-        fmin0 = self.gmin[self.c3c4] / self.nuco2q - 1.0 / 9.0 * gm
-        fmin_sq_term = jnp.pow(fmin0, 2.0) + 4 * self.gmin[self.c3c4] / self.nuco2q * gm
-        fmin = -fmin0 + jnp.pow(fmin_sq_term, 0.5) / (2.0 * gm)
-        ds = (compute_esat(surf_temp) - e) / 1000.0  # kPa
-
-        d0 = (self.f0[self.c3c4] - fmin) / self.ad[self.c3c4]
-
+    ) -> tuple[Array, Array]:
+        """Compute cfrac, co2abs, and ci (internal CO2 concentration)."""
         cfrac = self.f0[self.c3c4] * (1.0 - (ds / d0)) + fmin * (ds / d0)
         co2abs = co2 * (const.mco2 / const.mair) * const.rho
         ci = cfrac * (co2abs - co2comp) + co2comp
-        return ci, co2abs, fmin, ds, d0
+        return ci, co2abs
 
     def calculate_max_gross_primary_production(self, thetasurf: Array) -> Array:
         """Calculate maximal gross primary production in high light conditions (Ag)."""
@@ -174,23 +230,40 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
 
         return result
 
-    def calculate_gross_assimilation_and_light_use(
+    def compute_gross_assimilation(
         self,
-        in_srad: Array,
         ammax: Array,
         gm: Array,
         ci: Array,
         co2comp: Array,
-        co2abs: Array,
-    ) -> tuple[Array, Array, Array, Array]:
-        """Calculate gross assimilation rate, dark respiration, PAR, and light use efficiency."""
+    ) -> Array:
+        """Compute gross assimilation rate (am)."""
         assimilation_factor = -(gm * (ci - co2comp) / ammax)
         am = ammax * (1.0 - jnp.exp(assimilation_factor))
+        return am
+
+    def compute_dark_respiration(self, am: Array) -> Array:
+        """Compute dark respiration (rdark) as a fraction of gross assimilation."""
         rdark = (1.0 / 9.0) * am
+        return rdark
+
+    def compute_absorbed_par(
+        self,
+        in_srad: Array,
+    ) -> Array:
+        """Compute absorbed photosynthetically active radiation (PAR)."""
         par = 0.5 * jnp.maximum(1e-1, in_srad * self.cveg)
+        return par
+
+    def compute_light_use_efficiency(
+        self,
+        co2abs: Array,
+        co2comp: Array,
+    ) -> Array:
+        """Compute light use efficiency (alphac)."""
         co2_ratio = (co2abs - co2comp) / (co2abs + 2.0 * co2comp)
         alphac = self.alpha0[self.c3c4] * co2_ratio
-        return am, rdark, par, alphac
+        return alphac
 
     def calculate_canopy_co2_conductance(
         self,
@@ -217,45 +290,88 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         gcco2 = self.lai * (self.gmin[self.c3c4] / self.nuco2q + conductance_factor)
         return gcco2
 
+    def compute_rs(self, gcco2: Array):
+        return 1.0 / (1.6 * gcco2)
+
     def update_surface_resistance(self, state: PyTree, const: PhysicalConstants):
         """Compute surface resistance using AquaCrop photosynthesis-conductance model."""
-        co2comp = self.compute_co2comp(state.thetasurf, const)
+        co2comp = self.compute_co2comp(state.thetasurf, const.rho)
         gm = self.compute_gm(state.thetasurf)
-
-        state.ci, state.co2abs, fmin, ds, d0 = self.calculate_internal_co2(
-            state.thetasurf, state.e, state.co2, co2comp, gm, const
+        fmin = self.compute_fmin(gm)
+        ds = self.compute_ds(state.thetasurf, state.e)
+        d0 = self.compute_d0(fmin)
+        state.ci, state.co2abs = self.compute_internal_co2(
+            ds,
+            d0,
+            fmin,
+            state.co2,
+            co2comp,
+            gm,
+            const,
         )
-
         ammax = self.calculate_max_gross_primary_production(state.thetasurf)
         fstr = self.calculate_soil_moisture_stress_factor(state.w2)
-
-        am, rdark, par, alphac = self.calculate_gross_assimilation_and_light_use(
-            state.in_srad,
-            ammax,
-            gm,
-            state.ci,
-            co2comp,
-            state.co2abs,
-        )
-
+        am = self.compute_gross_assimilation(ammax, gm, state.ci, co2comp)
+        rdark = self.compute_dark_respiration(am)
+        par = self.compute_absorbed_par(state.in_srad)
+        alphac = self.compute_light_use_efficiency(state.co2abs, co2comp)
         state.gcco2 = self.calculate_canopy_co2_conductance(
-            alphac, par, am, rdark, fstr, state.co2abs, co2comp, ds, d0, fmin
+            alphac,
+            par,
+            am,
+            rdark,
+            fstr,
+            state.co2abs,
+            co2comp,
+            ds,
+            d0,
+            fmin,
         )
-
-        state.rs = 1.0 / (1.6 * state.gcco2)
-
+        state.rs = self.compute_rs(state.gcco2)
         return state
 
-    def update_co2_flux(self, state: PyTree, const: PhysicalConstants):
-        """Compute the CO2 flux."""
-        state.rsCO2 = 1.0 / state.gcco2
-        an = -(state.co2abs - state.ci) / (state.ra + state.rsCO2)
-        fw = self.cw * self.wmax / (state.wg + self.wmin)
-        temp_ratio = 1.0 - 283.15 / state.temp_soil
+    def compute_surface_co2_resistance(self, gcco2: Array) -> Array:
+        """Compute surface resistance to CO₂ (rsCO2) from canopy conductance."""
+        return 1.0 / gcco2
+
+    def compute_net_assimilation(
+        self, co2abs: Array, ci: Array, ra: Array, rsCO2: Array
+    ) -> Array:
+        """Compute net CO₂ assimilation rate (an)."""
+        return -(co2abs - ci) / (ra + rsCO2)
+
+    def compute_soil_water_fraction(self, wg: Array) -> Array:
+        """Compute soil water fraction (fw) for respiration scaling."""
+        return self.cw * self.wmax / (wg + self.wmin)
+
+    def compute_respiration(
+        self,
+        temp_soil: Array,
+        fw: Array,
+    ) -> Array:
+        """Compute soil respiration (resp) as a function of temperature and soil water."""
+        temp_ratio = 1.0 - 283.15 / temp_soil
         resp_factor = jnp.exp(self.e0 / (283.15 * 8.314) * temp_ratio)
         resp = self.r10 * (1.0 - fw) * resp_factor
-        state.wCO2A = an * (const.mair / (const.rho * const.mco2))
-        state.wCO2R = resp * (const.mair / (const.rho * const.mco2))
-        state.wCO2 = state.wCO2A + state.wCO2R
+        return resp
 
+    def scale_flux_to_mol(
+        self,
+        flux: Array,
+        const: PhysicalConstants,
+    ) -> Array:
+        """Scale a flux to mol m⁻² s⁻¹ using physical constants."""
+        return flux * (const.mair / (const.rho * const.mco2))
+
+    def update_co2_flux(self, state: PyTree, const: PhysicalConstants):
+        """Compute the CO₂ flux and update the state."""
+        state.rsCO2 = self.compute_surface_co2_resistance(state.gcco2)
+        an = self.compute_net_assimilation(
+            state.co2abs, state.ci, state.ra, state.rsCO2
+        )
+        fw = self.compute_soil_water_fraction(state.wg)
+        resp = self.compute_respiration(state.temp_soil, fw)
+        state.wCO2A = self.scale_flux_to_mol(an, const)
+        state.wCO2R = self.scale_flux_to_mol(resp, const)
+        state.wCO2 = state.wCO2A + state.wCO2R
         return state

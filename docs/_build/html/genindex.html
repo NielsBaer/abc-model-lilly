@@ -634,10 +634,6 @@ document.write(`
 </li>
       <li><a href="source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_free_troposphere_compensation">calculate_free_troposphere_compensation() (abcmodel.mixed_layer.bulk.BulkMixedLayerModel method)</a>
 </li>
-      <li><a href="source/api/abcmodel.land_surface.aquacrop.html#abcmodel.land_surface.aquacrop.AquaCropModel.calculate_gross_assimilation_and_light_use">calculate_gross_assimilation_and_light_use() (abcmodel.land_surface.aquacrop.AquaCropModel method)</a>
-</li>
-      <li><a href="source/api/abcmodel.land_surface.aquacrop.html#abcmodel.land_surface.aquacrop.AquaCropModel.calculate_internal_co2">calculate_internal_co2() (abcmodel.land_surface.aquacrop.AquaCropModel method)</a>
-</li>
       <li><a href="source/api/abcmodel.land_surface.aquacrop.html#abcmodel.land_surface.aquacrop.AquaCropModel.calculate_max_gross_primary_production">calculate_max_gross_primary_production() (abcmodel.land_surface.aquacrop.AquaCropModel method)</a>
 </li>
       <li><a href="source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_mixed_layer_tendencies">calculate_mixed_layer_tendencies() (abcmodel.mixed_layer.bulk.BulkMixedLayerModel method)</a>
@@ -690,8 +686,6 @@ document.write(`
         <li><a href="source/api/abcmodel.clouds.no_clouds.html#abcmodel.clouds.no_clouds.NoCloudInitConds.cc_mf">(abcmodel.clouds.no_clouds.NoCloudInitConds attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/api/abcmodel.clouds.cumulus.html#abcmodel.clouds.cumulus.StandardCumulusInitConds.cc_qf">cc_qf (abcmodel.clouds.cumulus.StandardCumulusInitConds attribute)</a>
 
       <ul>
@@ -710,15 +704,25 @@ document.write(`
         <li><a href="source/api/abcmodel.mixed_layer.minimal.html#abcmodel.mixed_layer.minimal.MinimalMixedLayerInitConds.co2">(abcmodel.mixed_layer.minimal.MinimalMixedLayerInitConds attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/api/abcmodel.land_surface.aquacrop.html#abcmodel.land_surface.aquacrop.AquaCropInitConds.co2abs">co2abs (abcmodel.land_surface.aquacrop.AquaCropInitConds attribute)</a>
 </li>
       <li><a href="source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerInitConds.co2tend">co2tend (abcmodel.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
+</li>
+      <li><a href="source/api/abcmodel.land_surface.aquacrop.html#abcmodel.land_surface.aquacrop.AquaCropModel.compute_absorbed_par">compute_absorbed_par() (abcmodel.land_surface.aquacrop.AquaCropModel method)</a>
 </li>
       <li><a href="source/api/abcmodel.land_surface.standard.html#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_cliq">compute_cliq() (abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel method)</a>
 </li>
       <li><a href="source/api/abcmodel.land_surface.aquacrop.html#abcmodel.land_surface.aquacrop.AquaCropModel.compute_co2comp">compute_co2comp() (abcmodel.land_surface.aquacrop.AquaCropModel method)</a>
 </li>
+      <li><a href="source/api/abcmodel.land_surface.aquacrop.html#abcmodel.land_surface.aquacrop.AquaCropModel.compute_d0">compute_d0() (abcmodel.land_surface.aquacrop.AquaCropModel method)</a>
+</li>
+      <li><a href="source/api/abcmodel.land_surface.aquacrop.html#abcmodel.land_surface.aquacrop.AquaCropModel.compute_dark_respiration">compute_dark_respiration() (abcmodel.land_surface.aquacrop.AquaCropModel method)</a>
+</li>
       <li><a href="source/api/abcmodel.land_surface.standard.html#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_dqsatdT">compute_dqsatdT() (abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel method)</a>
+</li>
+      <li><a href="source/api/abcmodel.land_surface.aquacrop.html#abcmodel.land_surface.aquacrop.AquaCropModel.compute_ds">compute_ds() (abcmodel.land_surface.aquacrop.AquaCropModel method)</a>
 </li>
       <li><a href="source/api/abcmodel.land_surface.standard.html#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_e">compute_e() (abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel method)</a>
 </li>
@@ -732,11 +736,17 @@ document.write(`
 </li>
       <li><a href="source/api/abcmodel.land_surface.jarvis_stewart.html#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f4">compute_f4() (abcmodel.land_surface.jarvis_stewart.JarvisStewartModel method)</a>
 </li>
+      <li><a href="source/api/abcmodel.land_surface.aquacrop.html#abcmodel.land_surface.aquacrop.AquaCropModel.compute_fmin">compute_fmin() (abcmodel.land_surface.aquacrop.AquaCropModel method)</a>
+</li>
       <li><a href="source/api/abcmodel.land_surface.standard.html#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_gf">compute_gf() (abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel method)</a>
 </li>
       <li><a href="source/api/abcmodel.land_surface.aquacrop.html#abcmodel.land_surface.aquacrop.AquaCropModel.compute_gm">compute_gm() (abcmodel.land_surface.aquacrop.AquaCropModel method)</a>
 </li>
+      <li><a href="source/api/abcmodel.land_surface.aquacrop.html#abcmodel.land_surface.aquacrop.AquaCropModel.compute_gross_assimilation">compute_gross_assimilation() (abcmodel.land_surface.aquacrop.AquaCropModel method)</a>
+</li>
       <li><a href="source/api/abcmodel.land_surface.standard.html#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_hf">compute_hf() (abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel method)</a>
+</li>
+      <li><a href="source/api/abcmodel.land_surface.aquacrop.html#abcmodel.land_surface.aquacrop.AquaCropModel.compute_internal_co2">compute_internal_co2() (abcmodel.land_surface.aquacrop.AquaCropModel method)</a>
 </li>
       <li><a href="source/api/abcmodel.land_surface.standard.html#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le">compute_le() (abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel method)</a>
 </li>
@@ -750,6 +760,10 @@ document.write(`
 </li>
       <li><a href="source/api/abcmodel.land_surface.standard.html#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_veg">compute_le_veg() (abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel method)</a>
 </li>
+      <li><a href="source/api/abcmodel.land_surface.aquacrop.html#abcmodel.land_surface.aquacrop.AquaCropModel.compute_light_use_efficiency">compute_light_use_efficiency() (abcmodel.land_surface.aquacrop.AquaCropModel method)</a>
+</li>
+      <li><a href="source/api/abcmodel.land_surface.aquacrop.html#abcmodel.land_surface.aquacrop.AquaCropModel.compute_net_assimilation">compute_net_assimilation() (abcmodel.land_surface.aquacrop.AquaCropModel method)</a>
+</li>
       <li><a href="source/api/abcmodel.utils.html#abcmodel.utils.compute_qsat">compute_qsat() (in module abcmodel.utils)</a>
 </li>
       <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractSurfaceLayerModel.compute_ra">compute_ra() (abcmodel.abstracts.AbstractSurfaceLayerModel static method)</a>
@@ -760,9 +774,17 @@ document.write(`
         <li><a href="source/api/abcmodel.surface_layer.standard.html#abcmodel.surface_layer.standard.StandardSurfaceLayerModel.compute_ra">(abcmodel.surface_layer.standard.StandardSurfaceLayerModel static method)</a>
 </li>
       </ul></li>
+      <li><a href="source/api/abcmodel.land_surface.aquacrop.html#abcmodel.land_surface.aquacrop.AquaCropModel.compute_respiration">compute_respiration() (abcmodel.land_surface.aquacrop.AquaCropModel method)</a>
+</li>
+      <li><a href="source/api/abcmodel.land_surface.aquacrop.html#abcmodel.land_surface.aquacrop.AquaCropModel.compute_rs">compute_rs() (abcmodel.land_surface.aquacrop.AquaCropModel method)</a>
+</li>
       <li><a href="source/api/abcmodel.land_surface.standard.html#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_skin_temperature">compute_skin_temperature() (abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel method)</a>
 </li>
       <li><a href="source/api/abcmodel.land_surface.standard.html#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_soil_resistance">compute_soil_resistance() (abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel method)</a>
+</li>
+      <li><a href="source/api/abcmodel.land_surface.aquacrop.html#abcmodel.land_surface.aquacrop.AquaCropModel.compute_soil_water_fraction">compute_soil_water_fraction() (abcmodel.land_surface.aquacrop.AquaCropModel method)</a>
+</li>
+      <li><a href="source/api/abcmodel.land_surface.aquacrop.html#abcmodel.land_surface.aquacrop.AquaCropModel.compute_surface_co2_resistance">compute_surface_co2_resistance() (abcmodel.land_surface.aquacrop.AquaCropModel method)</a>
 </li>
       <li><a href="source/api/abcmodel.land_surface.standard.html#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_temp_soil_tend">compute_temp_soil_tend() (abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel method)</a>
 </li>
@@ -1203,6 +1225,8 @@ document.write(`
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/api/abcmodel.land_surface.aquacrop.html#abcmodel.land_surface.aquacrop.AquaCropModel.scale_flux_to_mol">scale_flux_to_mol() (abcmodel.land_surface.aquacrop.AquaCropModel method)</a>
+</li>
       <li><a href="source/api/abcmodel.utils.html#abcmodel.utils.PhysicalConstants.solar_in">solar_in (abcmodel.utils.PhysicalConstants attribute)</a>
 </li>
       <li><a href="source/api/abcmodel.clouds.cumulus.html#abcmodel.clouds.cumulus.StandardCumulusInitConds">StandardCumulusInitConds (class in abcmodel.clouds.cumulus)</a>
