@@ -431,8 +431,8 @@ document.write(`
 <span class="sd">            Equation 9.28 in the CLASS book.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">f2</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">w2</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">wwilt</span><span class="p">,</span>
-            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wfc</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">wwilt</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">w2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">wwilt</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">w2</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">wwilt</span><span class="p">,</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wfc</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">wwilt</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">wwilt</span><span class="p">),</span>
             <span class="mf">1.0e8</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>

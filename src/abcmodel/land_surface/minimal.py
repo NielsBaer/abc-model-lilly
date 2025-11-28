@@ -19,13 +19,17 @@ class MinimalLandSurfaceInitConds:
     """Surface temperature [K]."""
     rs: float
     """Surface resistance [s m-1]."""
+    wg: float = 0.0
+    """No moisture content in the root zone [m3 m-3]."""
+    wl: float = 0.0
+    """No water content in the canopy [m]."""
 
 
 class MinimalLandSurfaceModel(AbstractLandSurfaceModel):
     """Minimal land surface model with fixed surface properties."""
 
     def __init__(self):
-        pass
+        self.d1 = 0.0
 
     def run(
         self,

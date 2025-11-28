@@ -16,7 +16,6 @@ std_rad_model_kwargs = {
 ags_init_conds_kwargs = {
     "alpha": 0.30,  # higher albedo (dry soil, sparse cover)
     "wg": 0.10,  # low surface soil moisture
-    "w2": 0.12,  # dry subsoil
     "temp_soil": 293.0,  # warm soil
     "temp2": 292.0,
     "surf_temp": 297.0,  # hot surface
@@ -31,6 +30,8 @@ ags_model_kwargs = {
     "wsat": 0.472,
     "wfc": 0.323,
     "wwilt": 0.171,
+    "w2": 0.12,
+    "d1": 0.1,
     "c1sat": 0.132,
     "c2ref": 1.8,
     "lai": 0.8,  # sparse vegetation

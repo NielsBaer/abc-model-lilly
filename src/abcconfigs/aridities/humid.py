@@ -15,7 +15,6 @@ std_rad_model_kwargs = {
 ags_init_conds_kwargs = {
     "alpha": 0.18,  # darker, moist surface
     "wg": 0.35,  # moist topsoil
-    "w2": 0.40,  # near field capacity
     "temp_soil": 285.0,
     "temp2": 285.5,
     "surf_temp": 287.0,
@@ -30,6 +29,8 @@ ags_model_kwargs = {
     "wsat": 0.472,
     "wfc": 0.323,
     "wwilt": 0.171,
+    "w2": 0.42,
+    "d1": 0.5,
     "c1sat": 0.132,
     "c2ref": 1.8,
     "lai": 3.5,  # dense canopy

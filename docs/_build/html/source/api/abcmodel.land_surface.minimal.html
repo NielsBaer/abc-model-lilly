@@ -354,6 +354,8 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.minimal.MinimalLandSurfaceInitConds.alpha"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceInitConds.alpha</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.minimal.MinimalLandSurfaceInitConds.surf_temp"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceInitConds.surf_temp</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.minimal.MinimalLandSurfaceInitConds.rs"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceInitConds.rs</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.minimal.MinimalLandSurfaceInitConds.wg"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceInitConds.wg</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.minimal.MinimalLandSurfaceInitConds.wl"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceInitConds.wl</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.minimal.MinimalLandSurfaceModel"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceModel</span></code></a><ul class="nav section-nav flex-column">
@@ -378,7 +380,7 @@ document.write(`
 <span id="minimal"></span><h1>Minimal<a class="headerlink" href="#module-abcmodel.land_surface.minimal" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="abcmodel.land_surface.minimal.MinimalLandSurfaceInitConds">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.land_surface.minimal.</span></span><span class="sig-name descname"><span class="pre">MinimalLandSurfaceInitConds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/minimal.html#MinimalLandSurfaceInitConds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.minimal.MinimalLandSurfaceInitConds" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.land_surface.minimal.</span></span><span class="sig-name descname"><span class="pre">MinimalLandSurfaceInitConds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/minimal.html#MinimalLandSurfaceInitConds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.minimal.MinimalLandSurfaceInitConds" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Minimal land surface model initial state.</p>
 <dl class="py attribute">
@@ -397,6 +399,18 @@ document.write(`
 <dt class="sig sig-object py" id="abcmodel.land_surface.minimal.MinimalLandSurfaceInitConds.rs">
 <span class="sig-name descname"><span class="pre">rs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><a class="headerlink" href="#abcmodel.land_surface.minimal.MinimalLandSurfaceInitConds.rs" title="Link to this definition">#</a></dt>
 <dd><p>Surface resistance [s m-1].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land_surface.minimal.MinimalLandSurfaceInitConds.wg">
+<span class="sig-name descname"><span class="pre">wg</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#abcmodel.land_surface.minimal.MinimalLandSurfaceInitConds.wg" title="Link to this definition">#</a></dt>
+<dd><p>No moisture content in the root zone [m3 m-3].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land_surface.minimal.MinimalLandSurfaceInitConds.wl">
+<span class="sig-name descname"><span class="pre">wl</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#abcmodel.land_surface.minimal.MinimalLandSurfaceInitConds.wl" title="Link to this definition">#</a></dt>
+<dd><p>No water content in the canopy [m].</p>
 </dd></dl>
 
 </dd></dl>
@@ -521,6 +535,8 @@ and surface pressure <span class="math notranslate nohighlight">\(p\)</span>, wh
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.minimal.MinimalLandSurfaceInitConds.alpha"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceInitConds.alpha</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.minimal.MinimalLandSurfaceInitConds.surf_temp"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceInitConds.surf_temp</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.minimal.MinimalLandSurfaceInitConds.rs"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceInitConds.rs</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.minimal.MinimalLandSurfaceInitConds.wg"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceInitConds.wg</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.minimal.MinimalLandSurfaceInitConds.wl"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceInitConds.wl</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.minimal.MinimalLandSurfaceModel"><code class="docutils literal notranslate"><span class="pre">MinimalLandSurfaceModel</span></code></a><ul class="nav section-nav flex-column">

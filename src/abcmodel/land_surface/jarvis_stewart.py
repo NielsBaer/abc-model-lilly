@@ -113,8 +113,8 @@ class JarvisStewartModel(AbstractStandardLandSurfaceModel):
             Equation 9.28 in the CLASS book.
         """
         f2 = jnp.where(
-            state.w2 > self.wwilt,
-            (self.wfc - self.wwilt) / (state.w2 - self.wwilt),
+            self.w2 > self.wwilt,
+            (self.wfc - self.wwilt) / (self.w2 - self.wwilt),
             1.0e8,
         )
         assert isinstance(f2, jnp.ndarray)

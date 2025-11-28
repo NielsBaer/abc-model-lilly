@@ -325,7 +325,11 @@ document.write(`
     <span class="n">surf_temp</span><span class="p">:</span> <span class="nb">float</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface temperature [K].&quot;&quot;&quot;</span>
     <span class="n">rs</span><span class="p">:</span> <span class="nb">float</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface resistance [s m-1].&quot;&quot;&quot;</span></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface resistance [s m-1].&quot;&quot;&quot;</span>
+    <span class="n">wg</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;No moisture content in the root zone [m3 m-3].&quot;&quot;&quot;</span>
+    <span class="n">wl</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;No water content in the canopy [m].&quot;&quot;&quot;</span></div>
 
 
 
@@ -335,7 +339,7 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Minimal land surface model with fixed surface properties.&quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d1</span> <span class="o">=</span> <span class="mf">0.0</span>
 
 <div class="viewcode-block" id="MinimalLandSurfaceModel.run">
 <a class="viewcode-back" href="../../../source/api/abcmodel.land_surface.minimal.html#abcmodel.land_surface.minimal.MinimalLandSurfaceModel.run">[docs]</a>

@@ -437,7 +437,7 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
             const,
         )
         ammax = self.compute_max_gross_primary_production(state.thetasurf)
-        fstr = self.compute_soil_moisture_stress_factor(state.w2)
+        fstr = self.compute_soil_moisture_stress_factor(self.w2)
         am = self.compute_gross_assimilation(ammax, gm, state.ci, co2comp)
         rdark = self.compute_dark_respiration(am)
         par = self.compute_absorbed_par(state.in_srad)

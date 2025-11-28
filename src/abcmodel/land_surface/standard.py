@@ -16,8 +16,6 @@ class StandardLandSurfaceInitConds:
     """Slope of the light response curve [mol J-1]."""
     wg: float
     """Soil moisture content in the root zone [m3 m-3]."""
-    w2: float
-    """Soil moisture content in the deep layer [m3 m-3]."""
     temp_soil: float
     """Soil temperature [K]."""
     temp2: float
@@ -71,6 +69,8 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
         wsat: saturated soil moisture content [m3 m-3].
         wfc: soil moisture content at field capacity [m3 m-3].
         wwilt: soil moisture content at wilting point [m3 m-3].
+        w2: soil moisture content in the deep layer [m3 m-3].
+        d1: depth of the shallow layer [m].
         c1sat: saturated soil conductivity parameter [-].
         c2ref: reference soil conductivity parameter [-].
         lai: leaf area index [m2 m-2].
@@ -91,6 +91,8 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
         wsat: float,
         wfc: float,
         wwilt: float,
+        w2: float,
+        d1: float,
         c1sat: float,
         c2ref: float,
         lai: float,
@@ -108,6 +110,8 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
         self.wsat = wsat
         self.wfc = wfc
         self.wwilt = wwilt
+        self.w2 = w2
+        self.d1 = d1
         self.c1sat = c1sat
         self.c2ref = c2ref
         self.lai = lai
@@ -591,7 +595,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
         References:
             Equation 9.32 of the CLASS book.
         """
-        cg = self.cgsat * (self.wsat / state.w2) ** (self.b / (2.0 * jnp.log(10.0)))
+        cg = self.cgsat * (self.wsat / self.w2) ** (self.b / (2.0 * jnp.log(10.0)))
         return cg * state.gf - 2.0 * jnp.pi / 86400.0 * (state.temp_soil - state.temp2)
 
     def compute_wgtend(self, state: PyTree, const: PhysicalConstants) -> Array:
@@ -639,14 +643,13 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
             - Clapp, R. B., & Hornberger, G. M. (1978). Empirical equations for some soil hydraulic properties. Water resources research, 14(4), 601-604.
 
         """
-        d1 = 0.1
         c1 = self.c1sat * (self.wsat / state.wg) ** (self.b / 2.0 + 1.0)
-        c2 = self.c2ref * (state.w2 / (self.wsat - state.w2))
-        wgeq = state.w2 - self.wsat * self.a * (
-            (state.w2 / self.wsat) ** self.p
-            * (1.0 - (state.w2 / self.wsat) ** (8.0 * self.p))
+        c2 = self.c2ref * (self.w2 / (self.wsat - self.w2))
+        wgeq = self.w2 - self.wsat * self.a * (
+            (self.w2 / self.wsat) ** self.p
+            * (1.0 - (self.w2 / self.wsat) ** (8.0 * self.p))
         )
-        evap_loss = -c1 / (const.rhow * d1) * state.le_soil / const.lv
+        evap_loss = -c1 / (const.rhow * self.d1) * state.le_soil / const.lv
         deep_grad = c2 / 86400.0 * (state.wg - wgeq)
         return evap_loss + deep_grad
 

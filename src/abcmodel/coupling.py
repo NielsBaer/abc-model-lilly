@@ -95,10 +95,7 @@ class ABCoupler:
         """
         # total water mass (kg/m²)
         vap_w = state.q * self.const.rho * state.abl_height
-        d1 = 0.1  # limamau: this needs to be a parameter!
-        s1_w = state.wg * self.const.rhow * d1
-        # d2 = infinity!
-        # s2_w = state.w2 * self.const.rhow * d2
+        s1_w = state.wg * self.const.rhow * self.land_surface.d1
         can_w = state.wl * self.const.rhow
         state.total_water_mass = vap_w + s1_w + can_w
 
