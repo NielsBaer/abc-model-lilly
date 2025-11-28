@@ -125,9 +125,6 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
     4. Integrate prognostic equations forward in time.
 
     Args:
-        sw_shearwe: shear growth mixed-layer switch.
-        sw_fixft: fix the free-troposphere switch.
-        sw_wind: prognostic wind switch.
         divU: horizontal large-scale divergence of wind [s-1].
         coriolis_param: Coriolis parameter [s-1].
         gammatheta: free atmosphere potential temperature lapse rate [K m-1].
@@ -142,6 +139,9 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         gammav: free atmosphere v-wind speed lapse rate [s-1].
         advv: advection of v-wind [m s-2].
         dFz: cloud top radiative divergence [W m-2].
+        is_shear_growing: shear growth mixed-layer switch.
+        is_fix_free_trop: fix the free-troposphere switch.
+        is_wind_prog: prognostic wind switch.
     """
 
     def __init__(
@@ -160,13 +160,10 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         gammav: float,
         advv: float,
         dFz: float,
-        sw_shearwe: bool = True,
-        sw_fixft: bool = True,
-        sw_wind: bool = True,
+        is_shear_growing: bool = True,
+        is_fix_free_trop: bool = True,
+        is_wind_prog: bool = True,
     ):
-        self.sw_shearwe = sw_shearwe
-        self.sw_fixft = sw_fixft
-        self.sw_wind = sw_wind
         self.divU = divU
         self.coriolis_param = coriolis_param
         self.gammatheta = gammatheta
@@ -181,6 +178,9 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         self.gammav = gammav
         self.advv = advv
         self.dFz = dFz
+        self.is_shear_growing = is_shear_growing
+        self.is_fix_free_trop = is_fix_free_trop
+        self.is_wind_prog = is_wind_prog
 
     def compute_subsidence_velocity(self, abl_height: Array) -> Array:
         """Compute large-scale subsidence velocity.
@@ -220,7 +220,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
                 w_{\\theta,ft} = \\gamma_\\theta w_s
         """
         w_th_ft_active = self.gammatheta * ws
-        return jnp.where(self.sw_fixft, w_th_ft_active, 0.0)
+        return jnp.where(self.is_fix_free_trop, w_th_ft_active, 0.0)
 
     def compute_free_troposphere_q_compensation(self, ws: Array) -> Array:
         """Compute humidity compensation term to fix free troposphere values.
@@ -230,7 +230,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
                 w_{q,ft} = \\gamma_q w_s
         """
         w_q_ft_active = self.gammaq * ws
-        return jnp.where(self.sw_fixft, w_q_ft_active, 0.0)
+        return jnp.where(self.is_fix_free_trop, w_q_ft_active, 0.0)
 
     def compute_free_troposphere_co2_compensation(self, ws: Array) -> Array:
         """Compute CO2 compensation term to fix free troposphere values.
@@ -240,7 +240,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
                 w_{CO2,ft} = \\gamma_{CO2} w_s
         """
         w_CO2_ft_active = self.gammaCO2 * ws
-        return jnp.where(self.sw_fixft, w_CO2_ft_active, 0.0)
+        return jnp.where(self.is_fix_free_trop, w_CO2_ft_active, 0.0)
 
     def compute_convective_velocity_scale(
         self,
@@ -290,7 +290,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
             .. math::
                 w_e = -\\frac{\\overline{w'\\theta_v'}_e}{\\Delta \\theta_v}
 
-            If shear effects are included (``sw_shearwe`` is True), an additional term is added:
+            If shear effects are included (``is_shear_growing`` is True), an additional term is added:
 
             .. math::
                 w_e = \\frac{-\\overline{w'\\theta_v'}_e + 5 u_*^3 \\theta_v / (g h)}{\\Delta \\theta_v}
@@ -303,8 +303,8 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         # entrainment velocity without shear effects
         we_no_shear = -wthetave / dthetav
 
-        # select based on sw_shearwe flag
-        we_calculated = jnp.where(self.sw_shearwe, we_with_shear, we_no_shear)
+        # select based on is_shear_growing flag
+        we_calculated = jnp.where(self.is_shear_growing, we_with_shear, we_no_shear)
 
         # don't allow boundary layer shrinking if wtheta < 0
         assert isinstance(we_calculated, jnp.ndarray)  # limmau: this is not good
@@ -462,7 +462,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         coriolis_term_u = -self.coriolis_param * dv
         momentum_flux_term_u = (uw + we * du) / abl_height
         utend_active = coriolis_term_u + momentum_flux_term_u + self.advu
-        return jnp.where(self.sw_wind, utend_active, 0.0)
+        return jnp.where(self.is_wind_prog, utend_active, 0.0)
 
     def compute_v_wind_tendency(
         self,
@@ -481,7 +481,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         coriolis_term_v = self.coriolis_param * du
         momentum_flux_term_v = (vw + we * dv) / abl_height
         vtend_active = coriolis_term_v + momentum_flux_term_v + self.advv
-        return jnp.where(self.sw_wind, vtend_active, 0.0)
+        return jnp.where(self.is_wind_prog, vtend_active, 0.0)
 
     def compute_u_wind_jump_tendency(
         self,
@@ -498,7 +498,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         """
         entrainment_growth_term = we + wf - cc_mf
         dutend_active = self.gammau * entrainment_growth_term - utend
-        return jnp.where(self.sw_wind, dutend_active, 0.0)
+        return jnp.where(self.is_wind_prog, dutend_active, 0.0)
 
     def compute_v_wind_jump_tendency(
         self,
@@ -515,7 +515,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         """
         entrainment_growth_term = we + wf - cc_mf
         dvtend_active = self.gammav * entrainment_growth_term - vtend
-        return jnp.where(self.sw_wind, dvtend_active, 0.0)
+        return jnp.where(self.is_wind_prog, dvtend_active, 0.0)
 
     def compute_transition_layer_tendency(
         self,
@@ -626,9 +626,9 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         # limit dz to minimal value
         state.dz_h = jnp.maximum(state.dz_h, 50.0)
 
-        state.u = jnp.where(self.sw_wind, state.u + dt * state.utend, state.u)
-        state.du = jnp.where(self.sw_wind, state.du + dt * state.dutend, state.du)
-        state.v = jnp.where(self.sw_wind, state.v + dt * state.vtend, state.v)
-        state.dv = jnp.where(self.sw_wind, state.dv + dt * state.dvtend, state.dv)
+        state.u = jnp.where(self.is_wind_prog, state.u + dt * state.utend, state.u)
+        state.du = jnp.where(self.is_wind_prog, state.du + dt * state.dutend, state.du)
+        state.v = jnp.where(self.is_wind_prog, state.v + dt * state.vtend, state.v)
+        state.dv = jnp.where(self.is_wind_prog, state.dv + dt * state.dvtend, state.dv)
 
         return state

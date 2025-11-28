@@ -435,9 +435,6 @@ document.write(`
 <span class="sd">    4. Integrate prognostic equations forward in time.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        sw_shearwe: shear growth mixed-layer switch.</span>
-<span class="sd">        sw_fixft: fix the free-troposphere switch.</span>
-<span class="sd">        sw_wind: prognostic wind switch.</span>
 <span class="sd">        divU: horizontal large-scale divergence of wind [s-1].</span>
 <span class="sd">        coriolis_param: Coriolis parameter [s-1].</span>
 <span class="sd">        gammatheta: free atmosphere potential temperature lapse rate [K m-1].</span>
@@ -452,6 +449,9 @@ document.write(`
 <span class="sd">        gammav: free atmosphere v-wind speed lapse rate [s-1].</span>
 <span class="sd">        advv: advection of v-wind [m s-2].</span>
 <span class="sd">        dFz: cloud top radiative divergence [W m-2].</span>
+<span class="sd">        is_shear_growing: shear growth mixed-layer switch.</span>
+<span class="sd">        is_fix_free_trop: fix the free-troposphere switch.</span>
+<span class="sd">        is_wind_prog: prognostic wind switch.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
@@ -470,13 +470,10 @@ document.write(`
         <span class="n">gammav</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">advv</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">dFz</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-        <span class="n">sw_shearwe</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="n">sw_fixft</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="n">sw_wind</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">is_shear_growing</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">is_fix_free_trop</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">is_wind_prog</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sw_shearwe</span> <span class="o">=</span> <span class="n">sw_shearwe</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sw_fixft</span> <span class="o">=</span> <span class="n">sw_fixft</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sw_wind</span> <span class="o">=</span> <span class="n">sw_wind</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">divU</span> <span class="o">=</span> <span class="n">divU</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coriolis_param</span> <span class="o">=</span> <span class="n">coriolis_param</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gammatheta</span> <span class="o">=</span> <span class="n">gammatheta</span>
@@ -491,6 +488,9 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">gammav</span> <span class="o">=</span> <span class="n">gammav</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">advv</span> <span class="o">=</span> <span class="n">advv</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dFz</span> <span class="o">=</span> <span class="n">dFz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_shear_growing</span> <span class="o">=</span> <span class="n">is_shear_growing</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_fix_free_trop</span> <span class="o">=</span> <span class="n">is_fix_free_trop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_wind_prog</span> <span class="o">=</span> <span class="n">is_wind_prog</span>
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_subsidence_velocity">
 <a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_subsidence_velocity">[docs]</a>
@@ -538,7 +538,7 @@ document.write(`
 <span class="sd">                w_{\\theta,ft} = \\gamma_\\theta w_s</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">w_th_ft_active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gammatheta</span> <span class="o">*</span> <span class="n">ws</span>
-        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_fixft</span><span class="p">,</span> <span class="n">w_th_ft_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_fix_free_trop</span><span class="p">,</span> <span class="n">w_th_ft_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_free_troposphere_q_compensation">
@@ -551,7 +551,7 @@ document.write(`
 <span class="sd">                w_{q,ft} = \\gamma_q w_s</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">w_q_ft_active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gammaq</span> <span class="o">*</span> <span class="n">ws</span>
-        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_fixft</span><span class="p">,</span> <span class="n">w_q_ft_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_fix_free_trop</span><span class="p">,</span> <span class="n">w_q_ft_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_free_troposphere_co2_compensation">
@@ -564,7 +564,7 @@ document.write(`
 <span class="sd">                w_{CO2,ft} = \\gamma_{CO2} w_s</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">w_CO2_ft_active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gammaCO2</span> <span class="o">*</span> <span class="n">ws</span>
-        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_fixft</span><span class="p">,</span> <span class="n">w_CO2_ft_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_fix_free_trop</span><span class="p">,</span> <span class="n">w_CO2_ft_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_convective_velocity_scale">
@@ -623,7 +623,7 @@ document.write(`
 <span class="sd">            .. math::</span>
 <span class="sd">                w_e = -\\frac{\\overline{w&#39;\\theta_v&#39;}_e}{\\Delta \\theta_v}</span>
 
-<span class="sd">            If shear effects are included (``sw_shearwe`` is True), an additional term is added:</span>
+<span class="sd">            If shear effects are included (``is_shear_growing`` is True), an additional term is added:</span>
 
 <span class="sd">            .. math::</span>
 <span class="sd">                w_e = \\frac{-\\overline{w&#39;\\theta_v&#39;}_e + 5 u_*^3 \\theta_v / (g h)}{\\Delta \\theta_v}</span>
@@ -636,8 +636,8 @@ document.write(`
         <span class="c1"># entrainment velocity without shear effects</span>
         <span class="n">we_no_shear</span> <span class="o">=</span> <span class="o">-</span><span class="n">wthetave</span> <span class="o">/</span> <span class="n">dthetav</span>
 
-        <span class="c1"># select based on sw_shearwe flag</span>
-        <span class="n">we_calculated</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_shearwe</span><span class="p">,</span> <span class="n">we_with_shear</span><span class="p">,</span> <span class="n">we_no_shear</span><span class="p">)</span>
+        <span class="c1"># select based on is_shear_growing flag</span>
+        <span class="n">we_calculated</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_shear_growing</span><span class="p">,</span> <span class="n">we_with_shear</span><span class="p">,</span> <span class="n">we_no_shear</span><span class="p">)</span>
 
         <span class="c1"># don&#39;t allow boundary layer shrinking if wtheta &lt; 0</span>
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">we_calculated</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>  <span class="c1"># limmau: this is not good</span>
@@ -828,7 +828,7 @@ document.write(`
         <span class="n">coriolis_term_u</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">coriolis_param</span> <span class="o">*</span> <span class="n">dv</span>
         <span class="n">momentum_flux_term_u</span> <span class="o">=</span> <span class="p">(</span><span class="n">uw</span> <span class="o">+</span> <span class="n">we</span> <span class="o">*</span> <span class="n">du</span><span class="p">)</span> <span class="o">/</span> <span class="n">abl_height</span>
         <span class="n">utend_active</span> <span class="o">=</span> <span class="n">coriolis_term_u</span> <span class="o">+</span> <span class="n">momentum_flux_term_u</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">advu</span>
-        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_wind</span><span class="p">,</span> <span class="n">utend_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_wind_prog</span><span class="p">,</span> <span class="n">utend_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_v_wind_tendency">
@@ -850,7 +850,7 @@ document.write(`
         <span class="n">coriolis_term_v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coriolis_param</span> <span class="o">*</span> <span class="n">du</span>
         <span class="n">momentum_flux_term_v</span> <span class="o">=</span> <span class="p">(</span><span class="n">vw</span> <span class="o">+</span> <span class="n">we</span> <span class="o">*</span> <span class="n">dv</span><span class="p">)</span> <span class="o">/</span> <span class="n">abl_height</span>
         <span class="n">vtend_active</span> <span class="o">=</span> <span class="n">coriolis_term_v</span> <span class="o">+</span> <span class="n">momentum_flux_term_v</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">advv</span>
-        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_wind</span><span class="p">,</span> <span class="n">vtend_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_wind_prog</span><span class="p">,</span> <span class="n">vtend_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_u_wind_jump_tendency">
@@ -870,7 +870,7 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">entrainment_growth_term</span> <span class="o">=</span> <span class="n">we</span> <span class="o">+</span> <span class="n">wf</span> <span class="o">-</span> <span class="n">cc_mf</span>
         <span class="n">dutend_active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gammau</span> <span class="o">*</span> <span class="n">entrainment_growth_term</span> <span class="o">-</span> <span class="n">utend</span>
-        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_wind</span><span class="p">,</span> <span class="n">dutend_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_wind_prog</span><span class="p">,</span> <span class="n">dutend_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_v_wind_jump_tendency">
@@ -890,7 +890,7 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">entrainment_growth_term</span> <span class="o">=</span> <span class="n">we</span> <span class="o">+</span> <span class="n">wf</span> <span class="o">-</span> <span class="n">cc_mf</span>
         <span class="n">dvtend_active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gammav</span> <span class="o">*</span> <span class="n">entrainment_growth_term</span> <span class="o">-</span> <span class="n">vtend</span>
-        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_wind</span><span class="p">,</span> <span class="n">dvtend_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_wind_prog</span><span class="p">,</span> <span class="n">dvtend_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_transition_layer_tendency">
@@ -1010,10 +1010,10 @@ document.write(`
         <span class="c1"># limit dz to minimal value</span>
         <span class="n">state</span><span class="o">.</span><span class="n">dz_h</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">dz_h</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">)</span>
 
-        <span class="n">state</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_wind</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">u</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">utend</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">u</span><span class="p">)</span>
-        <span class="n">state</span><span class="o">.</span><span class="n">du</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_wind</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">du</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">dutend</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">du</span><span class="p">)</span>
-        <span class="n">state</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_wind</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">vtend</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="p">)</span>
-        <span class="n">state</span><span class="o">.</span><span class="n">dv</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_wind</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">dv</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">dvtend</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">dv</span><span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_wind_prog</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">u</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">utend</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">u</span><span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">du</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_wind_prog</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">du</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">dutend</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">du</span><span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_wind_prog</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">vtend</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">dv</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_wind_prog</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">dv</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">dvtend</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">dv</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">state</span></div>
 </div>

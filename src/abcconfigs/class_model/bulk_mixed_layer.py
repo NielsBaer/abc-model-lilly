@@ -33,6 +33,6 @@ model_kwargs = {
     "gammav": 0.0,
     "advv": 0.0,
     "dFz": 0.0,
-    "sw_wind": True,
+    "is_shear_growing": True,
 }
 """"""
