@@ -3,8 +3,8 @@ from dataclasses import dataclass
 import jax.numpy as jnp
 from jaxtyping import Array, PyTree
 
-from ..abstracts import AbstractCloudModel
 from ...utils import PhysicalConstants, compute_qsat
+from ..abstracts import AbstractCloudModel
 
 
 @dataclass
@@ -45,8 +45,38 @@ class StandardCumulusModel(AbstractCloudModel):
         self.tcc_cc = tcc_cc
         self.tcc_trans = tcc_trans
 
+    def run(self, state: PyTree, const: PhysicalConstants):
+        """Run the model."""
+        state.q2_h = self.compute_q2_h(
+            state.cc_qf,
+            state.wthetav,
+            state.wqe,
+            state.dq,
+            state.abl_height,
+            state.dz_h,
+            state.wstar,
+        )
+        state.top_CO22 = self.compute_top_CO22(
+            state.wthetav,
+            state.abl_height,
+            state.dz_h,
+            state.wstar,
+            state.wCO2e,
+            state.wCO2M,
+            state.dCO2,
+        )
+        state.cc_frac = self.compute_cc_frac(
+            state.q, state.top_T, state.top_p, state.q2_h
+        )
+        state.cc_mf = self.compute_cc_mf(state.cc_frac, state.wstar)
+        state.cc_qf = self.compute_cc_qf(state.cc_mf, state.q2_h)
+        state.wCO2M = self.compute_wCO2M(state.cc_mf, state.top_CO22, state.dCO2)
+        state.cl_trans = self.compute_cl_trans(state.cc_frac)
+
+        return state
+
     @staticmethod
-    def compute_humidity_variance(
+    def compute_q2_h(
         cc_qf: Array,
         wthetav: Array,
         wqe: Array,
@@ -68,7 +98,7 @@ class StandardCumulusModel(AbstractCloudModel):
         )
 
     @staticmethod
-    def compute_co2_variance(
+    def compute_top_CO22(
         wthetav: Array,
         abl_height: Array,
         dz_h: Array,
@@ -90,9 +120,7 @@ class StandardCumulusModel(AbstractCloudModel):
         )
 
     @staticmethod
-    def compute_cloud_core_fraction(
-        q: Array, top_T: Array, top_p: Array, q2_h: Array
-    ) -> Array:
+    def compute_cc_frac(q: Array, top_T: Array, top_p: Array, q2_h: Array) -> Array:
         """Compute cloud core fraction using the arctangent formulation.
 
         Notes:
@@ -114,7 +142,7 @@ class StandardCumulusModel(AbstractCloudModel):
         return cc_frac
 
     @staticmethod
-    def compute_cloud_core_mass_flux(cc_frac: Array, wstar: Array) -> Array:
+    def compute_cc_mf(cc_frac: Array, wstar: Array) -> Array:
         """Compute cloud core mass flux.
 
         Notes:
@@ -126,7 +154,7 @@ class StandardCumulusModel(AbstractCloudModel):
         return cc_frac * wstar
 
     @staticmethod
-    def compute_cloud_core_moisture_flux(cc_mf: Array, q2_h: Array) -> Array:
+    def compute_cc_qf(cc_mf: Array, q2_h: Array) -> Array:
         """Compute cloud core moisture flux.
 
         Notes:
@@ -138,7 +166,7 @@ class StandardCumulusModel(AbstractCloudModel):
         return jnp.where(q2_h > 0.0, cc_mf * (q2_h**0.5), 0.0)
 
     @staticmethod
-    def compute_co2_mass_flux(cc_mf: Array, top_CO22: Array, dCO2: Array) -> Array:
+    def compute_wCO2M(cc_mf: Array, top_CO22: Array, dCO2: Array) -> Array:
         """Compute CO2 mass flux.
 
         Notes:
@@ -149,15 +177,11 @@ class StandardCumulusModel(AbstractCloudModel):
 
             This is only computed if the mixed-layer top jump is negative.
         """
-        # flux value
         flux_value = cc_mf * (top_CO22**0.5)
-
-        # conditions: dCO2 < 0 AND top_CO22 > 0.0
         condition = (dCO2 < 0) & (top_CO22 > 0.0)
-
         return jnp.where(condition, flux_value, 0.0)
 
-    def compute_cloud_layer_transmittance(self, cc_frac: Array) -> Array:
+    def compute_cl_trans(self, cc_frac: Array) -> Array:
         """Compute cloud layer transmittance, with maximum total cloud cover equal to 1.
 
         Notes:
@@ -168,55 +192,5 @@ class StandardCumulusModel(AbstractCloudModel):
 
             where :math:`\\text{TCC} = \\min(a_{cc} \\cdot \\text{ratio}, 1)` is the total cloud cover.
         """
-        # get total cloud cover
         tcc = jnp.minimum(cc_frac * self.tcc_cc, 1.0)
-        # return cloud layer transmittance
         return 1.0 - tcc * (1.0 - self.tcc_trans)
-
-    def run(self, state: PyTree, const: PhysicalConstants):
-        """Run the model."""
-        state.q2_h = self.compute_humidity_variance(
-            state.cc_qf,
-            state.wthetav,
-            state.wqe,
-            state.dq,
-            state.abl_height,
-            state.dz_h,
-            state.wstar,
-        )
-        state.top_CO22 = self.compute_co2_variance(
-            state.wthetav,
-            state.abl_height,
-            state.dz_h,
-            state.wstar,
-            state.wCO2e,
-            state.wCO2M,
-            state.dCO2,
-        )
-
-        state.cc_frac = self.compute_cloud_core_fraction(
-            state.q,
-            state.top_T,
-            state.top_p,
-            state.q2_h,
-        )
-
-        state.cc_mf = self.compute_cloud_core_mass_flux(
-            state.cc_frac,
-            state.wstar,
-        )
-        state.cc_qf = self.compute_cloud_core_moisture_flux(
-            state.cc_mf,
-            state.q2_h,
-        )
-
-        state.wCO2M = self.compute_co2_mass_flux(
-            state.cc_mf,
-            state.top_CO22,
-            state.dCO2,
-        )
-        state.cl_trans = self.compute_cloud_layer_transmittance(
-            state.cc_frac,
-        )
-
-        return state

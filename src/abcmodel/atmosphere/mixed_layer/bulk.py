@@ -190,6 +190,95 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         self.is_fix_free_trop = is_fix_free_trop
         self.is_wind_prog = is_wind_prog
 
+    def run(self, state: PyTree, const: PhysicalConstants):
+        """Run the model."""
+        state.ws = self.compute_subsidence_velocity(state.abl_height)
+        state.wf = self.compute_radiative_growth_velocity(state.dtheta, const)
+
+        w_th_ft = self.compute_free_troposphere_theta_compensation(state.ws)
+        w_q_ft = self.compute_free_troposphere_q_compensation(state.ws)
+        w_CO2_ft = self.compute_free_troposphere_co2_compensation(state.ws)
+        state.wstar = self.compute_convective_velocity_scale(
+            state.abl_height,
+            state.wthetav,
+            state.thetav,
+            const.g,
+        )
+        state.wthetave = self.compute_entrainment_virtual_heat_flux(state.wthetav)
+        state.we = self.compute_entrainment_velocity(
+            state.abl_height,
+            state.wthetave,
+            state.dthetav,
+            state.thetav,
+            state.ustar,
+            const.g,
+        )
+        state.wthetae = self.compute_entrainment_heat_flux(state.we, state.dtheta)
+        state.wqe = self.compute_entrainment_moisture_flux(state.we, state.dq)
+        state.wCO2e = self.compute_entrainment_co2_flux(state.we, state.dCO2)
+        state.htend = self.compute_abl_height_tendency(
+            state.we, state.ws, state.wf, state.cc_mf
+        )
+        state.thetatend = self.compute_potential_temperature_tendency(
+            state.abl_height, state.wtheta, state.wthetae
+        )
+        state.dthetatend = self.compute_potential_temperature_jump_tendency(
+            state.we, state.wf, state.cc_mf, state.thetatend, w_th_ft
+        )
+        state.qtend = self.compute_humidity_tendency(
+            state.abl_height, state.wq, state.wqe, state.cc_qf
+        )
+        state.dqtend = self.compute_humidity_jump_tendency(
+            state.we, state.wf, state.cc_mf, state.qtend, w_q_ft
+        )
+        state.co2tend = self.compute_co2_tendency(
+            state.abl_height, state.wCO2, state.wCO2e, state.wCO2M
+        )
+        state.dCO2tend = self.compute_co2_jump_tendency(
+            state.we, state.wf, state.cc_mf, state.co2tend, w_CO2_ft
+        )
+        state.utend = self.compute_u_wind_tendency(
+            state.abl_height, state.we, state.uw, state.du, state.dv
+        )
+        state.vtend = self.compute_v_wind_tendency(
+            state.abl_height, state.we, state.vw, state.du, state.dv
+        )
+        state.dutend = self.compute_u_wind_jump_tendency(
+            state.we, state.wf, state.cc_mf, state.utend
+        )
+        state.dvtend = self.compute_v_wind_jump_tendency(
+            state.we, state.wf, state.cc_mf, state.vtend
+        )
+        state.dztend = self.compute_transition_layer_tendency(
+            state.lcl,
+            state.abl_height,
+            state.cc_frac,
+            state.dz_h,
+        )
+
+        return state
+
+    def integrate(self, state: PyTree, dt: float) -> PyTree:
+        """Integrate mixed layer forward in time."""
+        state.abl_height += dt * state.htend
+        state.theta += dt * state.thetatend
+        state.dtheta += dt * state.dthetatend
+        state.q += dt * state.qtend
+        state.dq += dt * state.dqtend
+        state.co2 += dt * state.co2tend
+        state.dCO2 += dt * state.dCO2tend
+        state.dz_h += dt * state.dztend
+
+        # limit dz to minimal value
+        state.dz_h = jnp.maximum(state.dz_h, 50.0)
+
+        state.u = jnp.where(self.is_wind_prog, state.u + dt * state.utend, state.u)
+        state.du = jnp.where(self.is_wind_prog, state.du + dt * state.dutend, state.du)
+        state.v = jnp.where(self.is_wind_prog, state.v + dt * state.vtend, state.v)
+        state.dv = jnp.where(self.is_wind_prog, state.dv + dt * state.dvtend, state.dv)
+
+        return state
+
     def compute_subsidence_velocity(self, abl_height: Array) -> Array:
         """Compute large-scale subsidence velocity.
 
@@ -551,92 +640,3 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         dztend = jnp.where(condition, dztend_active, 0.0)
 
         return dztend
-
-    def run(self, state: PyTree, const: PhysicalConstants):
-        """Compute mixed layer tendencies and update diagnostic variables."""
-        state.ws = self.compute_subsidence_velocity(state.abl_height)
-        state.wf = self.compute_radiative_growth_velocity(state.dtheta, const)
-
-        w_th_ft = self.compute_free_troposphere_theta_compensation(state.ws)
-        w_q_ft = self.compute_free_troposphere_q_compensation(state.ws)
-        w_CO2_ft = self.compute_free_troposphere_co2_compensation(state.ws)
-        state.wstar = self.compute_convective_velocity_scale(
-            state.abl_height,
-            state.wthetav,
-            state.thetav,
-            const.g,
-        )
-        state.wthetave = self.compute_entrainment_virtual_heat_flux(state.wthetav)
-        state.we = self.compute_entrainment_velocity(
-            state.abl_height,
-            state.wthetave,
-            state.dthetav,
-            state.thetav,
-            state.ustar,
-            const.g,
-        )
-        state.wthetae = self.compute_entrainment_heat_flux(state.we, state.dtheta)
-        state.wqe = self.compute_entrainment_moisture_flux(state.we, state.dq)
-        state.wCO2e = self.compute_entrainment_co2_flux(state.we, state.dCO2)
-        state.htend = self.compute_abl_height_tendency(
-            state.we, state.ws, state.wf, state.cc_mf
-        )
-        state.thetatend = self.compute_potential_temperature_tendency(
-            state.abl_height, state.wtheta, state.wthetae
-        )
-        state.dthetatend = self.compute_potential_temperature_jump_tendency(
-            state.we, state.wf, state.cc_mf, state.thetatend, w_th_ft
-        )
-        state.qtend = self.compute_humidity_tendency(
-            state.abl_height, state.wq, state.wqe, state.cc_qf
-        )
-        state.dqtend = self.compute_humidity_jump_tendency(
-            state.we, state.wf, state.cc_mf, state.qtend, w_q_ft
-        )
-        state.co2tend = self.compute_co2_tendency(
-            state.abl_height, state.wCO2, state.wCO2e, state.wCO2M
-        )
-        state.dCO2tend = self.compute_co2_jump_tendency(
-            state.we, state.wf, state.cc_mf, state.co2tend, w_CO2_ft
-        )
-        state.utend = self.compute_u_wind_tendency(
-            state.abl_height, state.we, state.uw, state.du, state.dv
-        )
-        state.vtend = self.compute_v_wind_tendency(
-            state.abl_height, state.we, state.vw, state.du, state.dv
-        )
-        state.dutend = self.compute_u_wind_jump_tendency(
-            state.we, state.wf, state.cc_mf, state.utend
-        )
-        state.dvtend = self.compute_v_wind_jump_tendency(
-            state.we, state.wf, state.cc_mf, state.vtend
-        )
-        state.dztend = self.compute_transition_layer_tendency(
-            state.lcl,
-            state.abl_height,
-            state.cc_frac,
-            state.dz_h,
-        )
-
-        return state
-
-    def integrate(self, state: PyTree, dt: float) -> PyTree:
-        """Integrate mixed layer forward in time."""
-        state.abl_height += dt * state.htend
-        state.theta += dt * state.thetatend
-        state.dtheta += dt * state.dthetatend
-        state.q += dt * state.qtend
-        state.dq += dt * state.dqtend
-        state.co2 += dt * state.co2tend
-        state.dCO2 += dt * state.dCO2tend
-        state.dz_h += dt * state.dztend
-
-        # limit dz to minimal value
-        state.dz_h = jnp.maximum(state.dz_h, 50.0)
-
-        state.u = jnp.where(self.is_wind_prog, state.u + dt * state.utend, state.u)
-        state.du = jnp.where(self.is_wind_prog, state.du + dt * state.dutend, state.du)
-        state.v = jnp.where(self.is_wind_prog, state.v + dt * state.vtend, state.v)
-        state.dv = jnp.where(self.is_wind_prog, state.dv + dt * state.dvtend, state.dv)
-
-        return state
