@@ -87,6 +87,10 @@ class BulkMixedLayerInitConds:
     """Lifting condensation level [m]."""
     top_rh: float = jnp.nan
     """Top of mixed layer relative humidity [%]."""
+    top_p: float = jnp.nan
+    """Pressure at top of mixed layer [Pa]."""
+    top_T: float = jnp.nan
+    """Temperature at top of mixed layer [K]."""
     utend: float = jnp.nan
     """Zonal wind velocity tendency [m s-2]."""
     dutend: float = jnp.nan
@@ -111,6 +115,10 @@ class BulkMixedLayerInitConds:
     """Tendency of CO2 concentration at the ABL height [ppm s-1]."""
     dztend: float = jnp.nan
     """Tendency of transition layer thickness [m s-1]."""
+    ws: float = jnp.nan
+    """Large-scale vertical velocity (subsidence) [m s-1]."""
+    wf: float = jnp.nan
+    """Mixed-layer growth due to cloud top radiative divergence [m s-1]."""
 
 
 class BulkMixedLayerModel(AbstractStandardStatsModel):

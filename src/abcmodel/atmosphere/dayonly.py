@@ -37,30 +37,24 @@ class DayOnlyAtmosphereModel(AbstractAtmosphereModel):
         return state
 
     def warmup(self, state: PyTree, const: PhysicalConstants, land) -> PyTree:
-        """Warmup the atmosphere by running it for a few timesteps.
-        
-        This performs atmosphere-specific initialization:
-        - Runs surface layer 10 times to converge turbulent fluxes
-        - Runs land surface model
-        - Conditionally runs clouds if present
-        - Runs mixed layer
-        """
+        """Warmup the atmosphere by running it for a few timesteps."""
         # iterate surface layer to converge turbulent fluxes
         for _ in range(10):
             state = self.surface_layer.run(state, const)
-        
+
         # run land surface
         state = land.run(state, const)
-        
+
         # conditionally run clouds if model is not NoCloudModel
         from .clouds import NoCloudModel
+
         if not isinstance(self.clouds, NoCloudModel):
             state = self.mixed_layer.run(state, const)
             state = self.clouds.run(state, const)
-        
+
         # run mixed layer
         state = self.mixed_layer.run(state, const)
-        
+
         return state
 
     def integrate(self, state: PyTree, dt: float) -> PyTree:

@@ -56,6 +56,16 @@ class StandardLandSurfaceInitConds:
     """Reference latent heat flux [W m-2]."""
     ra: float = jnp.nan
     """Aerodynamic resistance [s m-1]."""
+    esat: float = jnp.nan
+    """Saturation vapor pressure [Pa]."""
+    qsat: float = jnp.nan
+    """Saturation specific humidity [kg/kg]."""
+    dqsatdT: float = jnp.nan
+    """Derivative of saturation specific humidity with respect to temperature [kg/kg/K]."""
+    e: float = jnp.nan
+    """Vapor pressure [Pa]."""
+    qsatsurf: float = jnp.nan
+    """Saturation specific humidity at surface temperature [kg/kg]."""
 
 
 class AbstractStandardLandSurfaceModel(AbstractLandModel):

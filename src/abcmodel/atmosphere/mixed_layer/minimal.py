@@ -68,6 +68,14 @@ class MinimalMixedLayerInitConds:
     """Saturation vapor pressure [Pa]."""
     lcl: float = jnp.nan
     """Lifting condensation level [m]."""
+    dthetav: float = jnp.nan
+    """Virtual temperature jump at h [K]."""
+    top_p: float = jnp.nan
+    """Pressure at top of mixed layer [Pa]."""
+    top_T: float = jnp.nan
+    """Temperature at top of mixed layer [K]."""
+    top_rh: float = jnp.nan
+    """Relative humidity at top of mixed layer [-]."""
 
 
 class MinimalMixedLayerModel(AbstractStandardStatsModel):
