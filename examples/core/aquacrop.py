@@ -79,9 +79,9 @@ def main():
     plt.ylabel("h [m]")
 
     plt.subplot(234)
-    plt.plot(time, trajectory.θ)
+    plt.plot(time, trajectory.theta)
     plt.xlabel("time [h]")
-    plt.ylabel("θ [K]")
+    plt.ylabel("theta [K]")
 
     plt.subplot(232)
     plt.plot(time, trajectory.q * 1000.0)

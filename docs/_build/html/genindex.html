@@ -334,8 +334,6 @@ document.write(`
  | <a href="#V"><strong>V</strong></a>
  | <a href="#W"><strong>W</strong></a>
  | <a href="#Z"><strong>Z</strong></a>
- | <a href="#Δ"><strong>Δ</strong></a>
- | <a href="#Θ"><strong>Θ</strong></a>
  
 </div>
 <h2 id="A">A</h2>
@@ -691,7 +689,9 @@ document.write(`
 </li>
       <li><a href="source/api/abcmodel.land.aquacrop.html#abcmodel.land.aquacrop.AquaCropModel.compute_dark_respiration">compute_dark_respiration() (abcmodel.land.aquacrop.AquaCropModel method)</a>
 </li>
-      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_dCO2tend">compute_dCO2tend() (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel method)</a>
+      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_deltaCO2tend">compute_deltaCO2tend() (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel method)</a>
+</li>
+      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_deltathetatend">compute_deltathetatend() (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel method)</a>
 </li>
       <li><a href="source/api/abcmodel.coupling.html#abcmodel.coupling.ABCoupler.compute_diagnostics">compute_diagnostics() (abcmodel.coupling.ABCoupler method)</a>
 </li>
@@ -747,10 +747,10 @@ document.write(`
 </li>
       <li><a href="source/api/abcmodel.land.standard.html#abcmodel.land.standard.AbstractStandardLandSurfaceModel.compute_le">compute_le() (abcmodel.land.standard.AbstractStandardLandSurfaceModel method)</a>
 </li>
-      <li><a href="source/api/abcmodel.land.standard.html#abcmodel.land.standard.AbstractStandardLandSurfaceModel.compute_le_liq">compute_le_liq() (abcmodel.land.standard.AbstractStandardLandSurfaceModel method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/api/abcmodel.land.standard.html#abcmodel.land.standard.AbstractStandardLandSurfaceModel.compute_le_liq">compute_le_liq() (abcmodel.land.standard.AbstractStandardLandSurfaceModel method)</a>
+</li>
       <li><a href="source/api/abcmodel.land.standard.html#abcmodel.land.standard.AbstractStandardLandSurfaceModel.compute_le_pot">compute_le_pot() (abcmodel.land.standard.AbstractStandardLandSurfaceModel method)</a>
 </li>
       <li><a href="source/api/abcmodel.land.standard.html#abcmodel.land.standard.AbstractStandardLandSurfaceModel.compute_le_ref">compute_le_ref() (abcmodel.land.standard.AbstractStandardLandSurfaceModel method)</a>
@@ -821,6 +821,8 @@ document.write(`
 </li>
       <li><a href="source/api/abcmodel.land.standard.html#abcmodel.land.standard.AbstractStandardLandSurfaceModel.compute_temp_soil_tend">compute_temp_soil_tend() (abcmodel.land.standard.AbstractStandardLandSurfaceModel method)</a>
 </li>
+      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_thetatend">compute_thetatend() (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel method)</a>
+</li>
       <li><a href="source/api/abcmodel.atmosphere.clouds.cumulus.html#abcmodel.atmosphere.clouds.cumulus.StandardCumulusModel.compute_top_CO22">compute_top_CO22() (abcmodel.atmosphere.clouds.cumulus.StandardCumulusModel static method)</a>
 </li>
       <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_utend">compute_utend() (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel method)</a>
@@ -855,15 +857,11 @@ document.write(`
 </li>
       <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_wstar">compute_wstar() (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel method)</a>
 </li>
-      <li><a href="source/api/abcmodel.land.standard.html#abcmodel.land.standard.AbstractStandardLandSurfaceModel.compute_w">compute_wθ() (abcmodel.land.standard.AbstractStandardLandSurfaceModel method)</a>
+      <li><a href="source/api/abcmodel.land.standard.html#abcmodel.land.standard.AbstractStandardLandSurfaceModel.compute_wtheta">compute_wtheta() (abcmodel.land.standard.AbstractStandardLandSurfaceModel method)</a>
 </li>
-      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#id5">compute_wθe() (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel method)</a>
+      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_wthetae">compute_wthetae() (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel method)</a>
 </li>
-      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_wve">compute_wθve() (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel method)</a>
-</li>
-      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#id6">compute_Δθtend() (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel method)</a>
-</li>
-      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_tend">compute_θtend() (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel method)</a>
+      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_wthetave">compute_wthetave() (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel method)</a>
 </li>
       <li><a href="source/api/abcmodel.coupling.html#abcmodel.coupling.CoupledState">CoupledState (class in abcmodel.coupling)</a>
 </li>
@@ -879,28 +877,42 @@ document.write(`
 </li>
       <li><a href="source/api/abcmodel.atmosphere.dayonly.html#abcmodel.atmosphere.dayonly.DayOnlyAtmosphereModel">DayOnlyAtmosphereModel (class in abcmodel.atmosphere.dayonly)</a>
 </li>
-      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds.dCO2">dCO2 (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
+      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds.deltaCO2">deltaCO2 (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
 
       <ul>
-        <li><a href="source/api/abcmodel.atmosphere.mixed_layer.minimal.html#abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds.dCO2">(abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds attribute)</a>
+        <li><a href="source/api/abcmodel.atmosphere.mixed_layer.minimal.html#abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds.deltaCO2">(abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds attribute)</a>
 </li>
       </ul></li>
-      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds.dCO2tend">dCO2tend (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
+      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds.deltaCO2tend">deltaCO2tend (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
 </li>
+      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds.deltatheta">deltatheta (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
+
+      <ul>
+        <li><a href="source/api/abcmodel.atmosphere.mixed_layer.minimal.html#abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds.deltatheta">(abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds.deltathetatend">deltathetatend (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
+</li>
+      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds.deltathetav">deltathetav (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
+
+      <ul>
+        <li><a href="source/api/abcmodel.atmosphere.mixed_layer.minimal.html#abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds.deltathetav">(abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds attribute)</a>
+</li>
+      </ul></li>
       <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds.dq">dq (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
 
       <ul>
         <li><a href="source/api/abcmodel.atmosphere.mixed_layer.minimal.html#abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds.dq">(abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/api/abcmodel.land.minimal.html#abcmodel.land.minimal.MinimalLandSurfaceInitConds.dqsatdT">dqsatdT (abcmodel.land.minimal.MinimalLandSurfaceInitConds attribute)</a>
 
       <ul>
         <li><a href="source/api/abcmodel.land.standard.html#abcmodel.land.standard.StandardLandSurfaceInitConds.dqsatdT">(abcmodel.land.standard.StandardLandSurfaceInitConds attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds.dqtend">dqtend (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
 </li>
       <li><a href="source/api/abcmodel.atmosphere.surface_layer.standard.html#abcmodel.atmosphere.surface_layer.standard.StandardSurfaceLayerInitConds.drag_m">drag_m (abcmodel.atmosphere.surface_layer.standard.StandardSurfaceLayerInitConds attribute)</a>
@@ -1422,6 +1434,28 @@ document.write(`
 </li>
       <li><a href="source/api/abcmodel.land.standard.html#abcmodel.land.standard.StandardLandSurfaceInitConds.temp_soil_tend">temp_soil_tend (abcmodel.land.standard.StandardLandSurfaceInitConds attribute)</a>
 </li>
+      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds.theta">theta (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
+
+      <ul>
+        <li><a href="source/api/abcmodel.atmosphere.mixed_layer.minimal.html#abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds.theta">(abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds attribute)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmosphere.surface_layer.standard.html#abcmodel.atmosphere.surface_layer.standard.StandardSurfaceLayerInitConds.theta">(abcmodel.atmosphere.surface_layer.standard.StandardSurfaceLayerInitConds attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="source/api/abcmodel.atmosphere.surface_layer.standard.html#abcmodel.atmosphere.surface_layer.standard.StandardSurfaceLayerInitConds.thetasurf">thetasurf (abcmodel.atmosphere.surface_layer.standard.StandardSurfaceLayerInitConds attribute)</a>
+</li>
+      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds.thetatend">thetatend (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
+</li>
+      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds.thetav">thetav (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
+
+      <ul>
+        <li><a href="source/api/abcmodel.atmosphere.mixed_layer.minimal.html#abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds.thetav">(abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/api/abcmodel.atmosphere.surface_layer.standard.html#abcmodel.atmosphere.surface_layer.standard.StandardSurfaceLayerInitConds.thetavsurf">thetavsurf (abcmodel.atmosphere.surface_layer.standard.StandardSurfaceLayerInitConds attribute)</a>
+</li>
       <li><a href="source/api/abcmodel.integration.html#abcmodel.integration.timestep">timestep() (in module abcmodel.integration)</a>
 </li>
       <li><a href="source/api/abcmodel.atmosphere.clouds.cumulus.html#abcmodel.atmosphere.clouds.cumulus.StandardCumulusInitConds.top_CO22">top_CO22 (abcmodel.atmosphere.clouds.cumulus.StandardCumulusInitConds attribute)</a>
@@ -1430,8 +1464,6 @@ document.write(`
         <li><a href="source/api/abcmodel.atmosphere.clouds.no_clouds.html#abcmodel.atmosphere.clouds.no_clouds.NoCloudInitConds.top_CO22">(abcmodel.atmosphere.clouds.no_clouds.NoCloudInitConds attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds.top_p">top_p (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
 
       <ul>
@@ -1612,21 +1644,21 @@ document.write(`
         <li><a href="source/api/abcmodel.atmosphere.mixed_layer.minimal.html#abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds.wstar">(abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds attribute)</a>
 </li>
       </ul></li>
-      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds.w">wθ (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
+      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds.wtheta">wtheta (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
 
       <ul>
-        <li><a href="source/api/abcmodel.atmosphere.mixed_layer.minimal.html#abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds.w">(abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds attribute)</a>
+        <li><a href="source/api/abcmodel.atmosphere.mixed_layer.minimal.html#abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds.wtheta">(abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds attribute)</a>
 </li>
       </ul></li>
-      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#id3">wθe (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
+      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds.wthetae">wthetae (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
 </li>
-      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds.wv">wθv (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
+      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds.wthetav">wthetav (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
 
       <ul>
-        <li><a href="source/api/abcmodel.atmosphere.mixed_layer.minimal.html#abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds.wv">(abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds attribute)</a>
+        <li><a href="source/api/abcmodel.atmosphere.mixed_layer.minimal.html#abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds.wthetav">(abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds attribute)</a>
 </li>
       </ul></li>
-      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds.wve">wθve (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
+      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds.wthetave">wthetave (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1639,56 +1671,6 @@ document.write(`
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/api/abcmodel.atmosphere.surface_layer.standard.html#abcmodel.atmosphere.surface_layer.standard.StandardSurfaceLayerInitConds.z0m">z0m (abcmodel.atmosphere.surface_layer.standard.StandardSurfaceLayerInitConds attribute)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="Δ">Δ</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#id0">Δθ (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
-
-      <ul>
-        <li><a href="source/api/abcmodel.atmosphere.mixed_layer.minimal.html#id0">(abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds attribute)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#id4">Δθtend (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
-</li>
-      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#id2">Δθv (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
-
-      <ul>
-        <li><a href="source/api/abcmodel.atmosphere.mixed_layer.minimal.html#id2">(abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds attribute)</a>
-</li>
-      </ul></li>
-  </ul></td>
-</tr></table>
-
-<h2 id="Θ">Θ</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds.">θ (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
-
-      <ul>
-        <li><a href="source/api/abcmodel.atmosphere.mixed_layer.minimal.html#abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds.">(abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds attribute)</a>
-</li>
-        <li><a href="source/api/abcmodel.atmosphere.surface_layer.standard.html#abcmodel.atmosphere.surface_layer.standard.StandardSurfaceLayerInitConds.">(abcmodel.atmosphere.surface_layer.standard.StandardSurfaceLayerInitConds attribute)</a>
-</li>
-      </ul></li>
-      <li><a href="source/api/abcmodel.atmosphere.surface_layer.standard.html#abcmodel.atmosphere.surface_layer.standard.StandardSurfaceLayerInitConds.surf">θsurf (abcmodel.atmosphere.surface_layer.standard.StandardSurfaceLayerInitConds attribute)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds.tend">θtend (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
-</li>
-      <li><a href="source/api/abcmodel.atmosphere.mixed_layer.bulk.html#id1">θv (abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds attribute)</a>
-
-      <ul>
-        <li><a href="source/api/abcmodel.atmosphere.mixed_layer.minimal.html#id1">(abcmodel.atmosphere.mixed_layer.minimal.MinimalMixedLayerInitConds attribute)</a>
-</li>
-      </ul></li>
-      <li><a href="source/api/abcmodel.atmosphere.surface_layer.standard.html#abcmodel.atmosphere.surface_layer.standard.StandardSurfaceLayerInitConds.vsurf">θvsurf (abcmodel.atmosphere.surface_layer.standard.StandardSurfaceLayerInitConds attribute)</a>
 </li>
   </ul></td>
 </tr></table>

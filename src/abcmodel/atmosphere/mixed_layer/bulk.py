@@ -19,11 +19,11 @@ class BulkMixedLayerInitConds:
     # initialized by the user
     h_abl: float
     """Initial atmospheric boundary layer (ABL) height [m]."""
-    θ: float
+    theta: float
     """Initial mixed-layer potential temperature [K]."""
-    Δθ: float
+    deltatheta: float
     """Initial temperature jump at the top of the ABL [K]."""
-    wθ: float
+    wtheta: float
     """Surface kinematic heat flux [K m/s]."""
     q: float
     """Initial mixed-layer specific humidity [kg/kg]."""
@@ -33,7 +33,7 @@ class BulkMixedLayerInitConds:
     """Surface kinematic moisture flux [kg/kg m/s]."""
     co2: float
     """Initial mixed-layer CO2 [ppm]."""
-    dCO2: float
+    deltaCO2: float
     """Initial CO2 jump at the top of the ABL [ppm]."""
     wCO2: float
     """Surface kinematic CO2 flux [mgC/m²/s]."""
@@ -63,11 +63,11 @@ class BulkMixedLayerInitConds:
     """CO2 mass flux [mgC/m²/s]."""
 
     # should be initialized during warmup
-    θv: float = jnp.nan
+    thetav: float = jnp.nan
     """Mixed-layer potential temperature [K]."""
-    Δθv: float = jnp.nan
+    deltathetav: float = jnp.nan
     """Virtual temperature jump at the top of the ABL [K]."""
-    wθv: float = jnp.nan
+    wthetav: float = jnp.nan
     """Surface kinematic virtual heat flux [K m s-1]."""
     wqe: float = jnp.nan
     """Entrainment moisture flux [kg kg-1 m s-1]."""
@@ -79,9 +79,9 @@ class BulkMixedLayerInitConds:
     """Saturation vapor pressure [Pa]."""
     wCO2e: float = jnp.nan
     """Entrainment CO2 flux [mgC/m²/s]."""
-    wθe: float = jnp.nan
+    wthetae: float = jnp.nan
     """Entrainment potential temperature flux [K m s-1]."""
-    wθve: float = jnp.nan
+    wthetave: float = jnp.nan
     """Entrainment virtual heat flux [K m s-1]."""
     lcl: float = jnp.nan
     """Lifting condensation level [m]."""
@@ -101,9 +101,9 @@ class BulkMixedLayerInitConds:
     """Meridional wind velocity tendency at the ABL height [m/s²]."""
     h_abl_tend: float = jnp.nan
     """Tendency of CBL [m s-1]."""
-    θtend: float = jnp.nan
+    thetatend: float = jnp.nan
     """Tendency of mixed-layer potential temperature [K s-1]."""
-    Δθtend: float = jnp.nan
+    deltathetatend: float = jnp.nan
     """Tendency of mixed-layer potential temperature at the ABL height [K s-1]."""
     qtend: float = jnp.nan
     """Tendency of mixed-layer specific humidity [kg/kg s-1]."""
@@ -111,7 +111,7 @@ class BulkMixedLayerInitConds:
     """Tendency of mixed-layer specific humidity at the ABL height [kg/kg s-1]."""
     co2tend: float = jnp.nan
     """Tendency of CO2 concentration [ppm s-1]."""
-    dCO2tend: float = jnp.nan
+    deltaCO2tend: float = jnp.nan
     """Tendency of CO2 concentration at the ABL height [ppm s-1]."""
     dztend: float = jnp.nan
     """Tendency of transition layer thickness [m s-1]."""
@@ -130,16 +130,16 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
     Args:
         divU: horizontal large-scale divergence of wind [s-1].
         coriolis_param: Coriolis parameter [s-1].
-        γθ: free atmosphere potential temperature lapse rate [K m-1].
-        advθ: advection of heat [K s-1].
+        gammatheta: free atmosphere potential temperature lapse rate [K m-1].
+        advtheta: advection of heat [K s-1].
         beta: entrainment ratio for virtual heat [-].
-        γq: free atmosphere specific humidity lapse rate [kg/kg m-1].
+        gammaq: free atmosphere specific humidity lapse rate [kg/kg m-1].
         advq: advection of moisture [kg/kg s-1].
-        γCO2: free atmosphere CO2 lapse rate [ppm m-1].
+        gammaCO2: free atmosphere CO2 lapse rate [ppm m-1].
         advCO2: advection of CO2 [ppm s-1].
-        γu: free atmosphere u-wind speed lapse rate [s-1].
+        gammau: free atmosphere u-wind speed lapse rate [s-1].
         advu: advection of u-wind [m s-2].
-        γv: free atmosphere v-wind speed lapse rate [s-1].
+        gammav: free atmosphere v-wind speed lapse rate [s-1].
         advv: advection of v-wind [m s-2].
         dFz: cloud top radiative divergence [W m-2].
         is_shear_growing: shear growth mixed-layer switch.
@@ -151,16 +151,16 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         self,
         divU: float,
         coriolis_param: float,
-        γθ: float,
-        advθ: float,
+        gammatheta: float,
+        advtheta: float,
         beta: float,
-        γq: float,
+        gammaq: float,
         advq: float,
-        γCO2: float,
+        gammaCO2: float,
         advCO2: float,
-        γu: float,
+        gammau: float,
         advu: float,
-        γv: float,
+        gammav: float,
         advv: float,
         dFz: float,
         is_shear_growing: bool = True,
@@ -169,18 +169,18 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
     ):
         self.divU = divU
         self.coriolis_param = coriolis_param
-        self.γ_θ = γθ
-        self.advθ = advθ
+        self.gamma_theta = gammatheta
+        self.advtheta = advtheta
         self.beta = beta
-        self.γ_q = γq
+        self.gamma_q = gammaq
         self.advq = advq
-        self.γCO2 = γCO2
+        self.gammaCO2 = gammaCO2
         self.advCO2 = advCO2
-        self.γu = γu
+        self.gammau = gammau
         self.advu = advu
-        self.γv = γv
+        self.gammav = gammav
         self.advv = advv
-        self.ΔFz = dFz
+        self.deltaFz = dFz
         self.is_shear_growing = is_shear_growing
         self.is_fix_free_trop = is_fix_free_trop
         self.is_wind_prog = is_wind_prog
@@ -188,34 +188,36 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
     def run(self, state: PyTree, const: PhysicalConstants):
         """Run the model."""
         state.ws = self.compute_ws(state.h_abl)
-        state.wf = self.compute_wf(state.Δθ, const)
+        state.wf = self.compute_wf(state.deltatheta, const)
         w_th_ft = self.compute_w_th_ft(state.ws)
         w_q_ft = self.compute_w_q_ft(state.ws)
         w_CO2_ft = self.compute_w_CO2_ft(state.ws)
         state.wstar = self.compute_wstar(
             state.h_abl,
-            state.wθv,
-            state.θv,
+            state.wthetav,
+            state.thetav,
             const.g,
         )
-        state.wθve = self.compute_wθve(state.wθv)
+        state.wthetave = self.compute_wthetave(state.wthetav)
         state.we = self.compute_we(
             state.h_abl,
-            state.wθve,
-            state.Δθv,
-            state.θv,
+            state.wthetave,
+            state.deltathetav,
+            state.thetav,
             state.ustar,
             const.g,
         )
-        state.wθe = self.compute_wθe(state.we, state.Δθ)
+        state.wthetae = self.compute_wthetae(state.we, state.deltatheta)
         state.wqe = self.compute_wqe(state.we, state.dq)
-        state.wCO2e = self.compute_wCO2e(state.we, state.dCO2)
+        state.wCO2e = self.compute_wCO2e(state.we, state.deltaCO2)
         state.h_abl_tend = self.compute_h_abl_tend(
             state.we, state.ws, state.wf, state.cc_mf
         )
-        state.θtend = self.compute_θtend(state.h_abl, state.wθ, state.wθe)
-        state.Δθtend = self.compute_Δθtend(
-            state.we, state.wf, state.cc_mf, state.θtend, w_th_ft
+        state.thetatend = self.compute_thetatend(
+            state.h_abl, state.wtheta, state.wthetae
+        )
+        state.deltathetatend = self.compute_deltathetatend(
+            state.we, state.wf, state.cc_mf, state.thetatend, w_th_ft
         )
         state.qtend = self.compute_qtend(state.h_abl, state.wq, state.wqe, state.cc_qf)
         state.dqtend = self.compute_dqtend(
@@ -224,7 +226,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         state.co2tend = self.compute_co2tend(
             state.h_abl, state.wCO2, state.wCO2e, state.wCO2M
         )
-        state.dCO2tend = self.compute_dCO2tend(
+        state.deltaCO2tend = self.compute_deltaCO2tend(
             state.we, state.wf, state.cc_mf, state.co2tend, w_CO2_ft
         )
         state.utend = self.compute_utend(
@@ -246,12 +248,12 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
     def integrate(self, state: PyTree, dt: float) -> PyTree:
         """Integrate mixed layer forward in time."""
         state.h_abl += dt * state.h_abl_tend
-        state.θ += dt * state.θtend
-        state.Δθ += dt * state.Δθtend
+        state.theta += dt * state.thetatend
+        state.deltatheta += dt * state.deltathetatend
         state.q += dt * state.qtend
         state.dq += dt * state.dqtend
         state.co2 += dt * state.co2tend
-        state.dCO2 += dt * state.dCO2tend
+        state.deltaCO2 += dt * state.deltaCO2tend
         state.dz_h += dt * state.dztend
 
         # limit dz to minimal value
@@ -274,7 +276,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         """
         return -self.divU * h_abl
 
-    def compute_wf(self, Δθ: Array, const: PhysicalConstants) -> Array:
+    def compute_wf(self, deltatheta: Array, const: PhysicalConstants) -> Array:
         """Compute the mixed-layer growth due to cloud top radiative divergence as
 
         .. math::
@@ -283,8 +285,8 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         where :math:`\\Delta F_z` is the cloud top radiative divergence, :math:`\\rho` is air density,
         :math:`c_p` is specific heat capacity, and :math:`\\Delta \\theta` is the temperature jump at the top of the ABL.
         """
-        radiative_denominator = const.rho * const.cp * Δθ
-        return self.ΔFz / radiative_denominator
+        radiative_denominator = const.rho * const.cp * deltatheta
+        return self.deltaFz / radiative_denominator
 
     def compute_w_th_ft(self, ws: Array) -> Array:
         """Compute the potential temperature compensation term to fix free troposphere values as
@@ -295,7 +297,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         where :math:`\\gamma_\\theta` is the potential temperature compensation factor and :math:`w_s` comes from :meth:`compute_ws`.
         This is used in case we are fixing the free troposhere.
         """
-        w_th_ft_active = self.γ_θ * ws
+        w_th_ft_active = self.gamma_theta * ws
         return jnp.where(self.is_fix_free_trop, w_th_ft_active, 0.0)
 
     def compute_w_q_ft(self, ws: Array) -> Array:
@@ -307,7 +309,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         where :math:`\\gamma_q` is the humidity compensation factor and :math:`w_s` comes from :meth:`compute_ws`.
         This is used in case we are fixing the free troposhere.
         """
-        w_q_ft_active = self.γ_q * ws
+        w_q_ft_active = self.gamma_q * ws
         return jnp.where(self.is_fix_free_trop, w_q_ft_active, 0.0)
 
     def compute_w_CO2_ft(self, ws: Array) -> Array:
@@ -319,14 +321,14 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         where :math:`\\gamma_{CO2}` is the CO2 compensation factor and :math:`w_s` comes from :meth:`compute_ws`.
         This is used in case we are fixing the free troposhere.
         """
-        w_CO2_ft_active = self.γCO2 * ws
+        w_CO2_ft_active = self.gammaCO2 * ws
         return jnp.where(self.is_fix_free_trop, w_CO2_ft_active, 0.0)
 
     def compute_wstar(
         self,
         h_abl: Array,
-        wθv: Array,
-        θv: Array,
+        wthetav: Array,
+        thetav: Array,
         g: float,
     ) -> Array:
         """Compute the convective velocity scale, defined by
@@ -338,12 +340,12 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         :math:`(\\overline{w'\\theta_v'})_s` is the virtual heat flux at the surface and :math:`\\theta_v` is
         the virtual potential temperature.
         """
-        buoyancy_term = g * h_abl * wθv / θv
+        buoyancy_term = g * h_abl * wthetav / thetav
         wstar_positive = buoyancy_term ** (1.0 / 3.0)
-        # clip to 1e-6 in case wθv is negative
-        return jnp.where(wθv > 0.0, wstar_positive, 1e-6)
+        # clip to 1e-6 in case wthetav is negative
+        return jnp.where(wthetav > 0.0, wstar_positive, 1e-6)
 
-    def compute_wθve(self, wθv: Array) -> Array:
+    def compute_wthetave(self, wthetav: Array) -> Array:
         """Compute the entrainment virtual heat flux as
 
         .. math::
@@ -352,14 +354,14 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         where :math:`\\beta` is the entrainment coefficient and
         :math:`(\\overline{w'\\theta_v'})_s` is the virtual heat flux at the surface.
         """
-        return -self.beta * wθv
+        return -self.beta * wthetav
 
     def compute_we(
         self,
         h_abl: Array,
-        wθve: Array,
-        Δθv: Array,
-        θv: Array,
+        wthetave: Array,
+        deltathetav: Array,
+        thetav: Array,
         ustar: Array,
         g: float,
     ):
@@ -380,23 +382,23 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         :math:`g` is gravity acceleration, and :math:`h` is the height of the ABL.
         """
         # entrainment velocity with shear effects
-        shear_term = 5.0 * ustar**3.0 * θv / (g * h_abl)
-        numerator = -wθve + shear_term
-        we_with_shear = numerator / Δθv
+        shear_term = 5.0 * ustar**3.0 * thetav / (g * h_abl)
+        numerator = -wthetave + shear_term
+        we_with_shear = numerator / deltathetav
 
         # entrainment velocity without shear effects
-        we_no_shear = -wθve / Δθv
+        we_no_shear = -wthetave / deltathetav
 
         # select based on is_shear_growing flag
         we_calculated = jnp.where(self.is_shear_growing, we_with_shear, we_no_shear)
 
-        # don't allow boundary layer shrinking if wθ < 0
+        # don't allow boundary layer shrinking if wtheta < 0
         assert isinstance(we_calculated, jnp.ndarray)  # limmau: this is not good
         we_final = jnp.where(we_calculated < 0.0, 0.0, we_calculated)
 
         return we_final
 
-    def compute_wθe(self, we: Array, Δθ: Array) -> Array:
+    def compute_wthetae(self, we: Array, deltatheta: Array) -> Array:
         """Compute the entrainment heat flux as
 
         .. math::
@@ -405,7 +407,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         where :math:`w_e` is the entrainment velocity
         and :math:`\\Delta \\theta` is the potential temperature jump at the top of the ABL.
         """
-        return -we * Δθ
+        return -we * deltatheta
 
     def compute_wqe(self, we: Array, dq: Array) -> Array:
         """Compute the entrainment moisture flux as
@@ -418,7 +420,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         """
         return -we * dq
 
-    def compute_wCO2e(self, we: Array, dCO2: Array) -> Array:
+    def compute_wCO2e(self, we: Array, deltaCO2: Array) -> Array:
         """Compute the entrainment CO2 flux as
 
         .. math::
@@ -427,7 +429,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         where :math:`w_e` is the entrainment velocity
         and :math:`\\Delta CO_2` is the CO2 jump at the top of the ABL.
         """
-        return -we * dCO2
+        return -we * deltaCO2
 
     def compute_h_abl_tend(
         self, we: Array, ws: Array, wf: Array, cc_mf: Array
@@ -435,7 +437,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         """Compute the boundary layer height tendency as
 
         .. math::
-            \\frac{dh}{dt} = w_e + w_s + w_f - \\text{cc}_{mf},
+            \\frac{\\text{d}h}{\\text{d}t} = w_e + w_s + w_f - \\text{cc}_{mf},
 
         where
 
@@ -449,25 +451,26 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         """
         return we + ws + wf - cc_mf
 
-    def compute_θtend(self, h_abl: Array, wθ: Array, wθe: Array) -> Array:
-        """Compute the mixed-layer potential temperature tendency :math:`\\frac{d\\theta}{dt}` as
+    def compute_thetatend(self, h_abl: Array, wtheta: Array, wthetae: Array) -> Array:
+        """Compute the mixed-layer potential temperature tendency as
 
         .. math::
-            \\frac{d\\theta}{dt} = \\frac{(\\overline{w'\\theta'})_s - (\\overline{w'\\theta'})_e}{h} + \\text{adv}_\\theta,
+            \\frac{\\text{d}\\theta}{\\text{d}t}
+            = \\frac{(\\overline{w'\\theta'})_s - (\\overline{w'\\theta'})_e}{h} + \\text{adv}_\\theta,
 
         where :math:`\\overline{w'\\theta'}_s` is the surface potential temperature flux,
         :math:`\\overline{w'\\theta'}_e` is the entrainment potential temperature flux,
         and :math:`\\text{adv}_\\theta` is the potential temperature advection.
         """
-        surface_heat_flux = (wθ - wθe) / h_abl
-        return surface_heat_flux + self.advθ
+        surface_heat_flux = (wtheta - wthetae) / h_abl
+        return surface_heat_flux + self.advtheta
 
-    def compute_Δθtend(
+    def compute_deltathetatend(
         self,
         we: Array,
         wf: Array,
         cc_mf: Array,
-        θtend: Array,
+        thetatend: Array,
         w_th_ft: Array,
     ) -> Array:
         """Compute the potential temperature jump at the top of the ABL tendency as
@@ -480,7 +483,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         where
         """
         egrowth = we + wf - cc_mf
-        return self.γ_θ * egrowth - θtend + w_th_ft
+        return self.gamma_theta * egrowth - thetatend + w_th_ft
 
     def compute_qtend(self, h_abl: Array, wq: Array, wqe: Array, cc_qf: Array) -> Array:
         """Compute the mixed-layer specific humidity tendency as
@@ -505,7 +508,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
             \\frac{\\text{d}\\Delta q}{\\text{d}t} = \\gamma_q (w_e + w_f - \\text{cc}_{mf}) - \\frac{\\text{d}q}{\\text{d}t} + w_{q,ft}
         """
         egrowth = we + wf - cc_mf
-        return self.γ_q * egrowth - qtend + w_q_ft
+        return self.gamma_q * egrowth - qtend + w_q_ft
 
     def compute_co2tend(
         self,
@@ -523,7 +526,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         surface_co2_flux_term = (wCO2 - wCO2e - wCO2M) / h_abl
         return surface_co2_flux_term + self.advCO2
 
-    def compute_dCO2tend(
+    def compute_deltaCO2tend(
         self,
         we: Array,
         wf: Array,
@@ -538,7 +541,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
             = \\gamma_{CO2} (w_e + w_f - \\text{cc}_{mf}) - \\frac{\\text{d}CO_2}{\\text{d}t} + w_{CO2,ft}
         """
         egrowth = we + wf - cc_mf
-        return self.γCO2 * egrowth - co2tend + w_CO2_ft
+        return self.gammaCO2 * egrowth - co2tend + w_CO2_ft
 
     def compute_utend(
         self,
@@ -590,7 +593,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
             \\frac{\\text{d}\\Delta u}{\\text{d}t} = \\gamma_u (w_e + w_f - \\text{cc}_{mf}) - \\frac{\\text{d}u}{\\text{d}t}
         """
         entrainment_growth_term = we + wf - cc_mf
-        dutend_active = self.γu * entrainment_growth_term - utend
+        dutend_active = self.gammau * entrainment_growth_term - utend
         return jnp.where(self.is_wind_prog, dutend_active, 0.0)
 
     def compute_dvtend(
@@ -608,7 +611,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
             - \\frac{\\text{d}v}{\\text{d}t}
         """
         entrainment_growth_term = we + wf - cc_mf
-        dvtend_active = self.γv * entrainment_growth_term - vtend
+        dvtend_active = self.gammav * entrainment_growth_term - vtend
         return jnp.where(self.is_wind_prog, dvtend_active, 0.0)
 
     def compute_dztend(

@@ -62,8 +62,8 @@ class MinimalLandSurfaceModel(AbstractLandModel):
         state.ra = ueff / jnp.maximum(1.0e-3, state.ustar) ** 2.0
 
         # (2) calculate essential thermodynamic variables
-        state.esat = compute_esat(state.θ)
-        state.qsat = compute_qsat(state.θ, state.surf_pressure)
+        state.esat = compute_esat(state.theta)
+        state.qsat = compute_qsat(state.theta, state.surf_pressure)
         state.dqsatdT = self.compute_dqsatdT(state)
         state.e = self.compute_e(state)
 
@@ -85,8 +85,8 @@ class MinimalLandSurfaceModel(AbstractLandModel):
             .. math::
                 \\frac{\\text{d}q_{\\text{sat}}}{\\text{d} T} \\approx \\epsilon \\frac{\\frac{\\text{d}e_\\text{sat}}{\\text{d} T}}{p}.
         """
-        num = 17.2694 * (state.θ - 273.16)
-        den = (state.θ - 35.86) ** 2.0
+        num = 17.2694 * (state.theta - 273.16)
+        den = (state.theta - 35.86) ** 2.0
         mult = num / den
         desatdT = state.esat * mult
         return 0.622 * desatdT / state.surf_pressure

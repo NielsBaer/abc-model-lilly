@@ -157,7 +157,7 @@ class JarvisStewartModel(AbstractStandardLandSurfaceModel):
         References:
             Equation 9.30 in the CLASS book.
         """
-        f4 = 1.0 / (1.0 - 0.0016 * (298.0 - state.θ) ** 2.0)
+        f4 = 1.0 / (1.0 - 0.0016 * (298.0 - state.theta) ** 2.0)
         return f4
 
     def update_co2_flux(

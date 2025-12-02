@@ -331,7 +331,7 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Roughness length for momentum [m].&quot;&quot;&quot;</span>
     <span class="n">z0h</span><span class="p">:</span> <span class="nb">float</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Roughness length for scalars [m].&quot;&quot;&quot;</span>
-    <span class="n">θ</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface potential temperature [K].&quot;&quot;&quot;</span>
 
     <span class="c1"># the following variables are initialized to high values and</span>
@@ -359,9 +359,9 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;2m vapor pressure [Pa].&quot;&quot;&quot;</span>
     <span class="n">esat2m</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;2m saturated vapor pressure [Pa].&quot;&quot;&quot;</span>
-    <span class="n">θsurf</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+    <span class="n">thetasurf</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface potential temperature [K].&quot;&quot;&quot;</span>
-    <span class="n">θvsurf</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+    <span class="n">thetavsurf</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface virtual potential temperature [K].&quot;&quot;&quot;</span>
     <span class="n">qsurf</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface specific humidity [kg kg-1].&quot;&quot;&quot;</span>
@@ -398,13 +398,13 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ueff</span> <span class="o">=</span> <span class="n">compute_effective_wind_speed</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">wstar</span><span class="p">)</span>
         <span class="p">(</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">θsurf</span><span class="p">,</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">thetasurf</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">qsurf</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">θvsurf</span><span class="p">,</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">thetavsurf</span><span class="p">,</span>
         <span class="p">)</span> <span class="o">=</span> <span class="n">compute_surface_properties</span><span class="p">(</span>
             <span class="n">ueff</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">θ</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">wθ</span><span class="p">,</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">wtheta</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">q</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">rs</span><span class="p">,</span>
@@ -414,7 +414,7 @@ document.write(`
         <span class="c1"># this should be a method</span>
         <span class="n">zsl</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">h_abl</span>
         <span class="n">state</span><span class="o">.</span><span class="n">rib_number</span> <span class="o">=</span> <span class="n">compute_richardson_number</span><span class="p">(</span>
-            <span class="n">ueff</span><span class="p">,</span> <span class="n">zsl</span><span class="p">,</span> <span class="n">const</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">θv</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">θvsurf</span>
+            <span class="n">ueff</span><span class="p">,</span> <span class="n">zsl</span><span class="p">,</span> <span class="n">const</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">thetav</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">thetavsurf</span>
         <span class="p">)</span>
         <span class="n">state</span><span class="o">.</span><span class="n">obukhov_length</span> <span class="o">=</span> <span class="n">ribtol</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">rib_number</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">z0h</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">z0m</span><span class="p">)</span>
         <span class="n">state</span><span class="o">.</span><span class="n">drag_m</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">drag_s</span> <span class="o">=</span> <span class="n">compute_drag_coefficients</span><span class="p">(</span>
@@ -431,14 +431,14 @@ document.write(`
             <span class="n">state</span><span class="o">.</span><span class="n">e2m</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">esat2m</span><span class="p">,</span>
         <span class="p">)</span> <span class="o">=</span> <span class="n">compute_2m_variables</span><span class="p">(</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">wθ</span><span class="p">,</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">wtheta</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">wq</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">,</span>
             <span class="n">const</span><span class="o">.</span><span class="n">k</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">z0h</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">z0m</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">obukhov_length</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">θsurf</span><span class="p">,</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">thetasurf</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">qsurf</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">ustar</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">uw</span><span class="p">,</span>
@@ -496,8 +496,8 @@ document.write(`
 <a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.surface_layer.standard.html#abcmodel.atmosphere.surface_layer.standard.compute_surface_properties">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_surface_properties</span><span class="p">(</span>
     <span class="n">ueff</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">θ</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">wθ</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="n">theta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="n">wtheta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
     <span class="n">q</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
     <span class="n">surf_pressure</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
     <span class="n">rs</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -507,8 +507,8 @@ document.write(`
 
 <span class="sd">    Args:</span>
 <span class="sd">        ueff: effective wind speed :math:`u_{\\text{eff}}`.</span>
-<span class="sd">        θ: mixed layer potential temperature :math:`\\theta`.</span>
-<span class="sd">        wθ: surface kinematic heat flux :math:`w&#39;\\theta&#39;`.</span>
+<span class="sd">        theta: mixed layer potential temperature :math:`\\theta`.</span>
+<span class="sd">        wtheta: surface kinematic heat flux :math:`w&#39;\\theta&#39;`.</span>
 <span class="sd">        q: mixed layer specific humidity :math:`q`.</span>
 <span class="sd">        surf_pressure: surface pressure :math:`p`.</span>
 <span class="sd">        rs: surface roughness length :math:`r_s`.</span>
@@ -532,19 +532,19 @@ document.write(`
 <span class="sd">        .. math::</span>
 <span class="sd">            \\theta_{v,s} = \\theta_s (1 + 0.61 q_s)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">θsurf</span> <span class="o">=</span> <span class="n">θ</span> <span class="o">+</span> <span class="n">wθ</span> <span class="o">/</span> <span class="p">(</span><span class="n">drag_s</span> <span class="o">*</span> <span class="n">ueff</span><span class="p">)</span>
-    <span class="n">qsatsurf</span> <span class="o">=</span> <span class="n">compute_qsat</span><span class="p">(</span><span class="n">θsurf</span><span class="p">,</span> <span class="n">surf_pressure</span><span class="p">)</span>
+    <span class="n">thetasurf</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">+</span> <span class="n">wtheta</span> <span class="o">/</span> <span class="p">(</span><span class="n">drag_s</span> <span class="o">*</span> <span class="n">ueff</span><span class="p">)</span>
+    <span class="n">qsatsurf</span> <span class="o">=</span> <span class="n">compute_qsat</span><span class="p">(</span><span class="n">thetasurf</span><span class="p">,</span> <span class="n">surf_pressure</span><span class="p">)</span>
     <span class="n">cq</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">drag_s</span> <span class="o">*</span> <span class="n">ueff</span> <span class="o">*</span> <span class="n">rs</span><span class="p">)</span> <span class="o">**</span> <span class="o">-</span><span class="mf">1.0</span>
     <span class="n">qsurf</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">cq</span><span class="p">)</span> <span class="o">*</span> <span class="n">q</span> <span class="o">+</span> <span class="n">cq</span> <span class="o">*</span> <span class="n">qsatsurf</span>
-    <span class="n">θvsurf</span> <span class="o">=</span> <span class="n">θsurf</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="mf">0.61</span> <span class="o">*</span> <span class="n">qsurf</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">θsurf</span><span class="p">,</span> <span class="n">qsurf</span><span class="p">,</span> <span class="n">θvsurf</span></div>
+    <span class="n">thetavsurf</span> <span class="o">=</span> <span class="n">thetasurf</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="mf">0.61</span> <span class="o">*</span> <span class="n">qsurf</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">thetasurf</span><span class="p">,</span> <span class="n">qsurf</span><span class="p">,</span> <span class="n">thetavsurf</span></div>
 
 
 
 <div class="viewcode-block" id="compute_richardson_number">
 <a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.surface_layer.standard.html#abcmodel.atmosphere.surface_layer.standard.compute_richardson_number">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_richardson_number</span><span class="p">(</span>
-    <span class="n">ueff</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">zsl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">θv</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">θvsurf</span><span class="p">:</span> <span class="n">Array</span>
+    <span class="n">ueff</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">zsl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">thetav</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">thetavsurf</span><span class="p">:</span> <span class="n">Array</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute bulk Richardson number.</span>
 
@@ -552,8 +552,8 @@ document.write(`
 <span class="sd">        ueff: effective wind speed :math:`u_{\\text{eff}}`.</span>
 <span class="sd">        zsl: surface layer height :math:`z_{sl}`.</span>
 <span class="sd">        g: gravity :math:`g`.</span>
-<span class="sd">        θv: virtual potential temperature at reference height :math:`\\theta_v`.</span>
-<span class="sd">        θvsurf: Surface virtual potential temperature :math:`\\theta_{v,s}`.</span>
+<span class="sd">        thetav: virtual potential temperature at reference height :math:`\\theta_v`.</span>
+<span class="sd">        thetavsurf: Surface virtual potential temperature :math:`\\theta_{v,s}`.</span>
 
 <span class="sd">    Notes:</span>
 <span class="sd">        The bulk Richardson number is given by</span>
@@ -563,7 +563,7 @@ document.write(`
 
 <span class="sd">        The value is capped at 0.2 for numerical stability.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">rib_number</span> <span class="o">=</span> <span class="n">g</span> <span class="o">/</span> <span class="n">θv</span> <span class="o">*</span> <span class="n">zsl</span> <span class="o">*</span> <span class="p">(</span><span class="n">θv</span> <span class="o">-</span> <span class="n">θvsurf</span><span class="p">)</span> <span class="o">/</span> <span class="n">ueff</span><span class="o">**</span><span class="mf">2.0</span>
+    <span class="n">rib_number</span> <span class="o">=</span> <span class="n">g</span> <span class="o">/</span> <span class="n">thetav</span> <span class="o">*</span> <span class="n">zsl</span> <span class="o">*</span> <span class="p">(</span><span class="n">thetav</span> <span class="o">-</span> <span class="n">thetavsurf</span><span class="p">)</span> <span class="o">/</span> <span class="n">ueff</span><span class="o">**</span><span class="mf">2.0</span>
     <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">rib_number</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span></div>
 
 
@@ -759,14 +759,14 @@ document.write(`
 <div class="viewcode-block" id="compute_2m_variables">
 <a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.surface_layer.standard.html#abcmodel.atmosphere.surface_layer.standard.compute_2m_variables">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_2m_variables</span><span class="p">(</span>
-    <span class="n">wθ</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="n">wtheta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
     <span class="n">wq</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
     <span class="n">surf_pressure</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
     <span class="n">k</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">z0h</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
     <span class="n">z0m</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
     <span class="n">obukhov_length</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">θsurf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="n">thetasurf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
     <span class="n">qsurf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
     <span class="n">ustar</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
     <span class="n">uw</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -799,7 +799,7 @@ document.write(`
     <span class="n">momentum_scale</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">ustar</span> <span class="o">*</span> <span class="n">k</span><span class="p">)</span>
 
     <span class="c1"># temperature and humidity at 2m</span>
-    <span class="n">temp_2m</span> <span class="o">=</span> <span class="n">θsurf</span> <span class="o">-</span> <span class="n">wθ</span> <span class="o">*</span> <span class="n">scalar_scale</span> <span class="o">*</span> <span class="n">scalar_correction</span>
+    <span class="n">temp_2m</span> <span class="o">=</span> <span class="n">thetasurf</span> <span class="o">-</span> <span class="n">wtheta</span> <span class="o">*</span> <span class="n">scalar_scale</span> <span class="o">*</span> <span class="n">scalar_correction</span>
     <span class="n">q2m</span> <span class="o">=</span> <span class="n">qsurf</span> <span class="o">-</span> <span class="n">wq</span> <span class="o">*</span> <span class="n">scalar_scale</span> <span class="o">*</span> <span class="n">scalar_correction</span>
 
     <span class="c1"># wind components at 2m</span>
@@ -923,7 +923,7 @@ document.write(`
     <span class="c1"># constants for stable conditions</span>
     <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.35</span>
     <span class="n">beta</span> <span class="o">=</span> <span class="mf">5.0</span> <span class="o">/</span> <span class="n">alpha</span>
-    <span class="n">γ</span> <span class="o">=</span> <span class="p">(</span><span class="mf">10.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">alpha</span>
+    <span class="n">gamma</span> <span class="o">=</span> <span class="p">(</span><span class="mf">10.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">alpha</span>
     <span class="n">pi_half</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span>
 
     <span class="c1"># unstable conditions (zeta &lt;= 0)</span>
@@ -935,7 +935,7 @@ document.write(`
 
     <span class="c1"># stable conditions (zeta &gt; 0)</span>
     <span class="n">exponential_term</span> <span class="o">=</span> <span class="p">(</span><span class="n">zeta</span> <span class="o">-</span> <span class="n">beta</span><span class="p">)</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">zeta</span><span class="p">)</span>
-    <span class="n">psim_stable</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">exponential_term</span> <span class="o">-</span> <span class="n">zeta</span> <span class="o">-</span> <span class="n">γ</span>
+    <span class="n">psim_stable</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">exponential_term</span> <span class="o">-</span> <span class="n">zeta</span> <span class="o">-</span> <span class="n">gamma</span>
 
     <span class="c1"># select based on stability condition</span>
     <span class="n">psim</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">zeta</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">psim_unstable</span><span class="p">,</span> <span class="n">psim_stable</span><span class="p">)</span>
@@ -988,7 +988,7 @@ document.write(`
     <span class="c1"># constants for stable conditions</span>
     <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.35</span>
     <span class="n">beta</span> <span class="o">=</span> <span class="mf">5.0</span> <span class="o">/</span> <span class="n">alpha</span>
-    <span class="n">γ</span> <span class="o">=</span> <span class="p">(</span><span class="mf">10.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">alpha</span>
+    <span class="n">gamma</span> <span class="o">=</span> <span class="p">(</span><span class="mf">10.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">alpha</span>
 
     <span class="c1"># unstable conditions (zeta &lt;= 0)</span>
     <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">16.0</span> <span class="o">*</span> <span class="n">zeta</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.25</span>
@@ -998,7 +998,7 @@ document.write(`
     <span class="c1"># stable conditions (zeta &gt; 0)</span>
     <span class="n">exponential_term</span> <span class="o">=</span> <span class="p">(</span><span class="n">zeta</span> <span class="o">-</span> <span class="n">beta</span><span class="p">)</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">zeta</span><span class="p">)</span>
     <span class="n">power_term</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">zeta</span><span class="p">)</span> <span class="o">**</span> <span class="mf">1.5</span>
-    <span class="n">psih_stable</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">exponential_term</span> <span class="o">-</span> <span class="n">power_term</span> <span class="o">-</span> <span class="n">γ</span> <span class="o">+</span> <span class="mf">1.0</span>
+    <span class="n">psih_stable</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">exponential_term</span> <span class="o">-</span> <span class="n">power_term</span> <span class="o">-</span> <span class="n">gamma</span> <span class="o">+</span> <span class="mf">1.0</span>
 
     <span class="c1"># select based on stability condition</span>
     <span class="n">psih</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">zeta</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">psih_unstable</span><span class="p">,</span> <span class="n">psih_stable</span><span class="p">)</span>

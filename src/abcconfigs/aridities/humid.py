@@ -49,21 +49,21 @@ std_sl_init_conds_kwargs = {
     "ustar": 0.25,  # weaker turbulence (smooth, wet)
     "z0m": 0.03,
     "z0h": 0.003,
-    "θ": 287.0,
+    "theta": 287.0,
 }
 """"""
 
 # mixed layer #
 bulk_ml_init_conds_kwargs = {
     "h_abl": 180.0,
-    "θ": 287.0,
-    "Δθ": 0.5,  # weak inversion
-    "wθ": 0.05,
+    "theta": 287.0,
+    "deltatheta": 0.5,  # weak inversion
+    "wtheta": 0.05,
     "q": 0.010,  # humid
     "dq": -0.0005,
     "wq": 2e-4,
     "co2": 420.0,
-    "dCO2": -60.0,
+    "deltaCO2": -60.0,
     "wCO2": 0.0,
     "u": 4.0,
     "du": 2.0,
@@ -76,16 +76,16 @@ bulk_ml_init_conds_kwargs = {
 bulk_ml_model_kwargs = {
     "divU": 0.0,
     "coriolis_param": 1.0e-4,
-    "γθ": 0.004,  # weaker lapse rate
-    "advθ": 0.0,
+    "gammatheta": 0.004,  # weaker lapse rate
+    "advtheta": 0.0,
     "beta": 0.2,
-    "γq": 0.0,
+    "gammaq": 0.0,
     "advq": 0.0,
-    "γCO2": 0.0,
+    "gammaCO2": 0.0,
     "advCO2": 0.0,
-    "γu": 0.0,
+    "gammau": 0.0,
     "advu": 0.0,
-    "γv": 0.0,
+    "gammav": 0.0,
     "advv": 0.0,
     "dFz": 0.0,
 }

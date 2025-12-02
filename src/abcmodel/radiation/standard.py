@@ -89,7 +89,7 @@ class StandardRadiationModel(AbstractRadiationModel):
         air_temp = self.compute_air_temperature(
             state.surf_pressure,
             state.h_abl,
-            state.θ,
+            state.theta,
             const,
         )
         atmospheric_transmission = self.compute_atmospheric_transmission(
@@ -187,7 +187,7 @@ class StandardRadiationModel(AbstractRadiationModel):
         self,
         surf_pressure: float,
         h_abl: float,
-        θ: float,
+        theta: float,
         const: PhysicalConstants,
     ) -> float:
         """Compute air temperature at reference level using potential temperature.
@@ -195,7 +195,7 @@ class StandardRadiationModel(AbstractRadiationModel):
         Args:
             surf_pressure: surface pressure [Pa].
             h_abl: atmospheric boundary layer height [m].
-            θ: potential temperature [K].
+            theta: potential temperature [K].
             const:
 
         Returns:
@@ -232,7 +232,7 @@ class StandardRadiationModel(AbstractRadiationModel):
 
         # convert potential temperature to actual temperature
         pressure_ratio = ref_pressure / surf_pressure
-        air_temp = θ * (pressure_ratio ** (const.rd / const.cp))
+        air_temp = theta * (pressure_ratio ** (const.rd / const.cp))
 
         return air_temp
 

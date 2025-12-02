@@ -50,21 +50,21 @@ std_sl_init_conds_kwargs = {
     "ustar": 0.35,  # stronger mechanical mixing
     "z0m": 0.01,  # smoother dry soil
     "z0h": 0.001,
-    "θ": 294.0,  # warm near-surface air
+    "theta": 294.0,  # warm near-surface air
 }
 """"""
 
 # mixed layer #
 bulk_ml_init_conds_kwargs = {
     "h_abl": 250.0,
-    "θ": 294.0,
-    "Δθ": 2.0,  # stronger inversion
-    "wθ": 0.1,
+    "theta": 294.0,
+    "deltatheta": 2.0,  # stronger inversion
+    "wtheta": 0.1,
     "q": 0.004,  # low humidity
     "dq": -0.0015,
     "wq": 5e-5,
     "co2": 422.0,
-    "dCO2": -20.0,
+    "deltaCO2": -20.0,
     "wCO2": 0.0,
     "u": 5.0,
     "du": 3.0,
@@ -77,16 +77,16 @@ bulk_ml_init_conds_kwargs = {
 bulk_ml_model_kwargs = {
     "divU": 0.0,
     "coriolis_param": 1.0e-4,
-    "γθ": 0.008,  # stronger stability
-    "advθ": 0.0,
+    "gammatheta": 0.008,  # stronger stability
+    "advtheta": 0.0,
     "beta": 0.2,
-    "γq": 0.0,
+    "gammaq": 0.0,
     "advq": 0.0,
-    "γCO2": 0.0,
+    "gammaCO2": 0.0,
     "advCO2": 0.0,
-    "γu": 0.0,
+    "gammau": 0.0,
     "advu": 0.0,
-    "γv": 0.0,
+    "gammav": 0.0,
     "advv": 0.0,
     "dFz": 0.0,
 }

@@ -74,7 +74,7 @@ class StandardRadiationwCloudsModel(StandardRadiationModel):
         air_temp = self.compute_air_temperature(
             state.surf_pressure,
             state.h_abl,
-            state.θ,
+            state.theta,
             const,
         )
         atmospheric_transmission = self.compute_atmospheric_transmission_w_clouds(

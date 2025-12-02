@@ -167,8 +167,8 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
         ueff = jnp.sqrt(state.u**2.0 + state.v**2.0 + state.wstar**2.0)
         state.ra = ueff / jnp.maximum(1.0e-3, state.ustar) ** 2.0
 
-        state.esat = compute_esat(state.θ)
-        state.qsat = compute_qsat(state.θ, state.surf_pressure)
+        state.esat = compute_esat(state.theta)
+        state.qsat = compute_qsat(state.theta, state.surf_pressure)
         state.dqsatdT = self.compute_dqsatdT(state)
         state.e = self.compute_e(state)
         state = self.update_surface_resistance(state, const)
@@ -188,7 +188,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
         state.le_ref = self.compute_le_ref(state, const)
         state.temp_soil_tend = self.compute_temp_soil_tend(state)
         state.wgtend = self.compute_wgtend(state, const)
-        state.wθ = self.compute_wθ(state, const)
+        state.wtheta = self.compute_wtheta(state, const)
         state.wq = self.compute_wq(state, const)
         return state
 
@@ -208,8 +208,8 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             .. math::
                 \\frac{\\text{d}q_{\\text{sat}}}{\\text{d} T} \\approx \\epsilon \\frac{\\frac{\\text{d}e_\\text{sat}}{\\text{d} T}}{p}.
         """
-        num = 17.2694 * (state.θ - 273.16)
-        den = (state.θ - 35.86) ** 2.0
+        num = 17.2694 * (state.theta - 273.16)
+        den = (state.theta - 35.86) ** 2.0
         mult = num / den
         desatdT = state.esat * mult
         return 0.622 * desatdT / state.surf_pressure
@@ -341,24 +341,24 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
         """
         return (
             state.net_rad
-            + const.rho * const.cp / state.ra * state.θ
+            + const.rho * const.cp / state.ra * state.theta
             + self.cveg
             * (1.0 - state.cliq)
             * const.rho
             * const.lv
             / (state.ra + state.rs)
-            * (state.dqsatdT * state.θ - state.qsat + state.q)
+            * (state.dqsatdT * state.theta - state.qsat + state.q)
             + (1.0 - self.cveg)
             * const.rho
             * const.lv
             / (state.ra + state.rssoil)
-            * (state.dqsatdT * state.θ - state.qsat + state.q)
+            * (state.dqsatdT * state.theta - state.qsat + state.q)
             + self.cveg
             * state.cliq
             * const.rho
             * const.lv
             / state.ra
-            * (state.dqsatdT * state.θ - state.qsat + state.q)
+            * (state.dqsatdT * state.theta - state.qsat + state.q)
             + self.lam * state.temp_soil
         ) / (
             const.rho * const.cp / state.ra
@@ -409,7 +409,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
         References:
             Equation 9.15 from the CLASS book.
         """
-        term = state.dqsatdT * (state.surf_temp - state.θ) + state.qsat - state.q
+        term = state.dqsatdT * (state.surf_temp - state.theta) + state.qsat - state.q
         le_veg = const.rho * const.lv / (state.ra + state.rs) * term
         frac = (1.0 - state.cliq) * self.cveg
         return frac * le_veg
@@ -430,7 +430,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
         References:
             Equation 9.18 from the CLASS book.
         """
-        term = state.dqsatdT * (state.surf_temp - state.θ) + state.qsat - state.q
+        term = state.dqsatdT * (state.surf_temp - state.theta) + state.qsat - state.q
         le_liq = const.rho * const.lv / state.ra * term
         frac = state.cliq * self.cveg
         return frac * le_liq
@@ -450,7 +450,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
         References:
             Equation 9.21 from the CLASS book.
         """
-        term = state.dqsatdT * (state.surf_temp - state.θ) + state.qsat - state.q
+        term = state.dqsatdT * (state.surf_temp - state.theta) + state.qsat - state.q
         le_soil = const.rho * const.lv / (state.ra + state.rssoil) * term
         frac = 1.0 - self.cveg
         return frac * le_soil
@@ -502,7 +502,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             Equation 9.13 from the CLASS book, but why are we using :math:`T_s` instead of :math:`\\theta_s`?
             Probably because the variations of pressure are not significant enough.
         """
-        return const.rho * const.cp / state.ra * (state.surf_temp - state.θ)
+        return const.rho * const.cp / state.ra * (state.surf_temp - state.theta)
 
     def compute_gf(self, state: PyTree) -> Array:
         """Compute the ground heat flux ``gf``.
@@ -664,8 +664,8 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
         deep_grad = c2 / 86400.0 * (state.wg - wgeq)
         return evap_loss + deep_grad
 
-    def compute_wθ(self, state: PyTree, const: PhysicalConstants) -> Array:
-        """Compute the kinematic heat flux ``wθ``.
+    def compute_wtheta(self, state: PyTree, const: PhysicalConstants) -> Array:
+        """Compute the kinematic heat flux ``wtheta``.
 
         Notes:
             The kinematic heat flux :math:`\\overline{(w'\\theta')}_s` is directly related to the

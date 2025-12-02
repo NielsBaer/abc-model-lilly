@@ -45,11 +45,11 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
                 \\Delta \\theta_v = (\\theta + \\Delta \\theta)(1 + 0.61(q + \\Delta q)) - \\theta(1 + 0.61q)
         """
         # calculate virtual temperatures
-        state.θv = state.θ + 0.61 * state.θ * state.q
-        state.wθv = state.wθ + 0.61 * state.θ * state.wq
-        state.Δθv = (state.θ + state.Δθ) * (
+        state.thetav = state.theta + 0.61 * state.theta * state.q
+        state.wthetav = state.wtheta + 0.61 * state.theta * state.wq
+        state.deltathetav = (state.theta + state.deltatheta) * (
             1.0 + 0.61 * (state.q + state.dq)
-        ) - state.θ * (1.0 + 0.61 * state.q)
+        ) - state.theta * (1.0 + 0.61 * state.q)
         return state
 
     def compute_mixed_layer_top_properties(
@@ -70,7 +70,7 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
         """
         # mixed-layer top properties
         state.top_p = state.surf_pressure - const.rho * const.g * state.h_abl
-        state.top_T = state.θ - const.g / const.cp * state.h_abl
+        state.top_T = state.theta - const.g / const.cp * state.h_abl
         state.top_rh = state.q / compute_qsat(state.top_T, state.top_p)
         return state
 
@@ -96,7 +96,7 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
 
             # calculate new relative humidity at updated lcl
             p_lcl = state.surf_pressure - const.rho * const.g * new_lcl
-            temp_lcl = state.θ - const.g / const.cp * new_lcl
+            temp_lcl = state.theta - const.g / const.cp * new_lcl
             new_rhlcl = state.q / compute_qsat(temp_lcl, p_lcl)
 
             return new_lcl, new_rhlcl, iteration + 1

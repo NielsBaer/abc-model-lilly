@@ -328,11 +328,11 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initial ABL height [m].&quot;&quot;&quot;</span>
     <span class="n">surf_pressure</span><span class="p">:</span> <span class="nb">float</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface pressure [Pa].&quot;&quot;&quot;</span>
-    <span class="n">θ</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initial mixed-layer potential temperature [K].&quot;&quot;&quot;</span>
-    <span class="n">Δθ</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">deltatheta</span><span class="p">:</span> <span class="nb">float</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initial temperature jump at h [K].&quot;&quot;&quot;</span>
-    <span class="n">wθ</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">wtheta</span><span class="p">:</span> <span class="nb">float</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface kinematic heat flux [K m/s].&quot;&quot;&quot;</span>
     <span class="n">q</span><span class="p">:</span> <span class="nb">float</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initial mixed-layer specific humidity [kg/kg].&quot;&quot;&quot;</span>
@@ -342,7 +342,7 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface kinematic moisture flux [kg/kg m/s].&quot;&quot;&quot;</span>
     <span class="n">co2</span><span class="p">:</span> <span class="nb">float</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initial mixed-layer CO2 [ppm].&quot;&quot;&quot;</span>
-    <span class="n">dCO2</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">deltaCO2</span><span class="p">:</span> <span class="nb">float</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initial CO2 jump at h [ppm].&quot;&quot;&quot;</span>
     <span class="n">wCO2</span><span class="p">:</span> <span class="nb">float</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface kinematic CO2 flux [mgC/m²/s].&quot;&quot;&quot;</span>
@@ -368,9 +368,9 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Entrainment CO2 flux [mgC m-2 s].&quot;&quot;&quot;</span>
 
     <span class="c1"># the following variables are expected to be assigned during warmup</span>
-    <span class="n">θv</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+    <span class="n">thetav</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Mixed-layer potential temperature [K].&quot;&quot;&quot;</span>
-    <span class="n">wθv</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+    <span class="n">wthetav</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface kinematic virtual heat flux [K m s-1].&quot;&quot;&quot;</span>
     <span class="n">qsat</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Saturation specific humidity [kg/kg].&quot;&quot;&quot;</span>
@@ -380,7 +380,7 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Saturation vapor pressure [Pa].&quot;&quot;&quot;</span>
     <span class="n">lcl</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Lifting condensation level [m].&quot;&quot;&quot;</span>
-    <span class="n">Δθv</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
+    <span class="n">deltathetav</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Virtual temperature jump at h [K].&quot;&quot;&quot;</span>
     <span class="n">top_p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">nan</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Pressure at top of mixed layer [Pa].&quot;&quot;&quot;</span>

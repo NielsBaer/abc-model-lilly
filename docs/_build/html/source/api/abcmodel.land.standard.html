@@ -405,7 +405,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.AbstractStandardLandSurfaceModel.compute_le_ref"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_le_ref()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.AbstractStandardLandSurfaceModel.compute_temp_soil_tend"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_temp_soil_tend()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.AbstractStandardLandSurfaceModel.compute_wgtend"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_wgtend()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.AbstractStandardLandSurfaceModel.compute_w"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_wθ()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.AbstractStandardLandSurfaceModel.compute_wtheta"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_wtheta()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.AbstractStandardLandSurfaceModel.compute_wq"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_wq()</span></code></a></li>
 </ul>
 </li>
@@ -979,9 +979,9 @@ and the second term represents the relaxation of soil moisture toward equilibriu
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.land.standard.AbstractStandardLandSurfaceModel.compute_w">
-<span class="sig-name descname"><span class="pre">compute_wθ</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/standard.html#AbstractStandardLandSurfaceModel.compute_wθ"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.standard.AbstractStandardLandSurfaceModel.compute_w" title="Link to this definition">#</a></dt>
-<dd><p>Compute the kinematic heat flux <code class="docutils literal notranslate"><span class="pre">wθ</span></code>.</p>
+<dt class="sig sig-object py" id="abcmodel.land.standard.AbstractStandardLandSurfaceModel.compute_wtheta">
+<span class="sig-name descname"><span class="pre">compute_wtheta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/standard.html#AbstractStandardLandSurfaceModel.compute_wtheta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.standard.AbstractStandardLandSurfaceModel.compute_wtheta" title="Link to this definition">#</a></dt>
+<dd><p>Compute the kinematic heat flux <code class="docutils literal notranslate"><span class="pre">wtheta</span></code>.</p>
 <p class="rubric">Notes</p>
 <p>The kinematic heat flux <span class="math notranslate nohighlight">\(\overline{(w'\theta')}_s\)</span> is directly related to the
 sensible heat flux <span class="math notranslate nohighlight">\(H\)</span> through</p>
@@ -1103,7 +1103,7 @@ latent heat flux <span class="math notranslate nohighlight">\(LE\)</span> throug
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.AbstractStandardLandSurfaceModel.compute_le_ref"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_le_ref()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.AbstractStandardLandSurfaceModel.compute_temp_soil_tend"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_temp_soil_tend()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.AbstractStandardLandSurfaceModel.compute_wgtend"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_wgtend()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.AbstractStandardLandSurfaceModel.compute_w"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_wθ()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.AbstractStandardLandSurfaceModel.compute_wtheta"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_wtheta()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.AbstractStandardLandSurfaceModel.compute_wq"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_wq()</span></code></a></li>
 </ul>
 </li>

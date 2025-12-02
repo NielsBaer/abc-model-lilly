@@ -406,7 +406,7 @@ document.write(`
         <span class="n">air_temp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_air_temperature</span><span class="p">(</span>
             <span class="n">state</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">θ</span><span class="p">,</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
             <span class="n">const</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">atmospheric_transmission</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_atmospheric_transmission</span><span class="p">(</span>
@@ -513,7 +513,7 @@ document.write(`
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">surf_pressure</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">h_abl</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-        <span class="n">θ</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute air temperature at reference level using potential temperature.</span>
@@ -521,7 +521,7 @@ document.write(`
 <span class="sd">        Args:</span>
 <span class="sd">            surf_pressure: surface pressure [Pa].</span>
 <span class="sd">            h_abl: atmospheric boundary layer height [m].</span>
-<span class="sd">            θ: potential temperature [K].</span>
+<span class="sd">            theta: potential temperature [K].</span>
 <span class="sd">            const:</span>
 
 <span class="sd">        Returns:</span>
@@ -558,7 +558,7 @@ document.write(`
 
         <span class="c1"># convert potential temperature to actual temperature</span>
         <span class="n">pressure_ratio</span> <span class="o">=</span> <span class="n">ref_pressure</span> <span class="o">/</span> <span class="n">surf_pressure</span>
-        <span class="n">air_temp</span> <span class="o">=</span> <span class="n">θ</span> <span class="o">*</span> <span class="p">(</span><span class="n">pressure_ratio</span> <span class="o">**</span> <span class="p">(</span><span class="n">const</span><span class="o">.</span><span class="n">rd</span> <span class="o">/</span> <span class="n">const</span><span class="o">.</span><span class="n">cp</span><span class="p">))</span>
+        <span class="n">air_temp</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">*</span> <span class="p">(</span><span class="n">pressure_ratio</span> <span class="o">**</span> <span class="p">(</span><span class="n">const</span><span class="o">.</span><span class="n">rd</span> <span class="o">/</span> <span class="n">const</span><span class="o">.</span><span class="n">cp</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">air_temp</span></div>
 

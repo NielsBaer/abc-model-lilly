@@ -145,12 +145,12 @@ def make_fancy_plot(
 
     axes[1, 2].plot(
         time[::factor],
-        traj.θ[::factor],
+        traj.theta[::factor],
         color=color,
         marker=marker,
         linestyle="None",
     )
-    axes[1, 2].set_title("θ [K]")
+    axes[1, 2].set_title("theta [K]")
 
     axes[1, 3].plot(
         time[::factor],
@@ -274,16 +274,16 @@ def run_experiment(
     make_fancy_plot(axes, time, control_traj, "gray", "o", f"{exp} control")
     # positive soil moisture anomaly
     time, pos_soil_moist_traj = run_wrapper(wg_control + delta_wg, q_control, config)
-    make_fancy_plot(axes, time, pos_soil_moist_traj, "dodgerblue", "+", "+|ΔSM|")
+    make_fancy_plot(axes, time, pos_soil_moist_traj, "dodgerblue", "+", "+|deltaSM|")
     # negative soil moisture anomaly
     time, neg_soil_moist_traj = run_wrapper(wg_control - delta_wg, q_control, config)
-    make_fancy_plot(axes, time, neg_soil_moist_traj, "dodgerblue", "_", "-|ΔSM|")
+    make_fancy_plot(axes, time, neg_soil_moist_traj, "dodgerblue", "_", "-|deltaSM|")
     # positive specific humidity anomaly
     time, pos_surf_temp_traj = run_wrapper(wg_control, q_control + delta_q, config)
-    make_fancy_plot(axes, time, pos_surf_temp_traj, "orangered", "+", "+|Δq|")
+    make_fancy_plot(axes, time, pos_surf_temp_traj, "orangered", "+", "+|deltaq|")
     # negative specific humidity anomaly
     time, neg_surf_temp_traj = run_wrapper(wg_control, q_control - delta_q, config)
-    make_fancy_plot(axes, time, neg_surf_temp_traj, "orangered", "_", "-|Δq|")
+    make_fancy_plot(axes, time, neg_surf_temp_traj, "orangered", "_", "-|deltaq|")
 
     # names on each row
     row_names = [

@@ -49,7 +49,7 @@ class StandardCumulusModel(AbstractCloudModel):
         """Run the model."""
         state.q2_h = self.compute_q2_h(
             state.cc_qf,
-            state.wθv,
+            state.wthetav,
             state.wqe,
             state.dq,
             state.h_abl,
@@ -57,20 +57,20 @@ class StandardCumulusModel(AbstractCloudModel):
             state.wstar,
         )
         state.top_CO22 = self.compute_top_CO22(
-            state.wθv,
+            state.wthetav,
             state.h_abl,
             state.dz_h,
             state.wstar,
             state.wCO2e,
             state.wCO2M,
-            state.dCO2,
+            state.deltaCO2,
         )
         state.cc_frac = self.compute_cc_frac(
             state.q, state.top_T, state.top_p, state.q2_h
         )
         state.cc_mf = self.compute_cc_mf(state.cc_frac, state.wstar)
         state.cc_qf = self.compute_cc_qf(state.cc_mf, state.q2_h)
-        state.wCO2M = self.compute_wCO2M(state.cc_mf, state.top_CO22, state.dCO2)
+        state.wCO2M = self.compute_wCO2M(state.cc_mf, state.top_CO22, state.deltaCO2)
         state.cl_trans = self.compute_cl_trans(state.cc_frac)
 
         return state
@@ -78,7 +78,7 @@ class StandardCumulusModel(AbstractCloudModel):
     @staticmethod
     def compute_q2_h(
         cc_qf: Array,
-        wθv: Array,
+        wthetav: Array,
         wqe: Array,
         dq: Array,
         h_abl: Array,
@@ -93,17 +93,19 @@ class StandardCumulusModel(AbstractCloudModel):
             .. math::
                 \\sigma_{q,h}^2 = -\\frac{(\\overline{w'q'}_e + \\overline{w'q'}_{cc}) \\Delta q h}{\\delta z_h w_*}
         """
-        return jnp.where(wθv > 0.0, -(wqe + cc_qf) * dq * h_abl / (dz_h * wstar), 0.0)
+        return jnp.where(
+            wthetav > 0.0, -(wqe + cc_qf) * dq * h_abl / (dz_h * wstar), 0.0
+        )
 
     @staticmethod
     def compute_top_CO22(
-        wθv: Array,
+        wthetav: Array,
         h_abl: Array,
         dz_h: Array,
         wstar: Array,
         wCO2e: Array,
         wCO2M: Array,
-        dCO2: Array,
+        deltaCO2: Array,
     ) -> Array:
         """Compute mixed-layer top CO2 variance.
 
@@ -114,7 +116,7 @@ class StandardCumulusModel(AbstractCloudModel):
                 \\sigma_{CO2,h}^2 = -\\frac{(\\overline{w'CO_2'}_e + \\overline{w'CO_2'}_{M}) \\Delta CO_2 h}{\\delta z_h w_*}
         """
         return jnp.where(
-            wθv > 0.0, -(wCO2e + wCO2M) * dCO2 * h_abl / (dz_h * wstar), 0.0
+            wthetav > 0.0, -(wCO2e + wCO2M) * deltaCO2 * h_abl / (dz_h * wstar), 0.0
         )
 
     @staticmethod
@@ -164,7 +166,7 @@ class StandardCumulusModel(AbstractCloudModel):
         return jnp.where(q2_h > 0.0, cc_mf * (q2_h**0.5), 0.0)
 
     @staticmethod
-    def compute_wCO2M(cc_mf: Array, top_CO22: Array, dCO2: Array) -> Array:
+    def compute_wCO2M(cc_mf: Array, top_CO22: Array, deltaCO2: Array) -> Array:
         """Compute CO2 mass flux.
 
         Notes:
@@ -176,7 +178,7 @@ class StandardCumulusModel(AbstractCloudModel):
             This is only computed if the mixed-layer top jump is negative.
         """
         flux_value = cc_mf * (top_CO22**0.5)
-        condition = (dCO2 < 0) & (top_CO22 > 0.0)
+        condition = (deltaCO2 < 0) & (top_CO22 > 0.0)
         return jnp.where(condition, flux_value, 0.0)
 
     def compute_cl_trans(self, cc_frac: Array) -> Array:

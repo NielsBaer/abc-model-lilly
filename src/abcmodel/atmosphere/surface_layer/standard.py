@@ -19,7 +19,7 @@ class StandardSurfaceLayerInitConds:
     """Roughness length for momentum [m]."""
     z0h: float
     """Roughness length for scalars [m]."""
-    θ: float
+    theta: float
     """Surface potential temperature [K]."""
 
     # the following variables are initialized to high values and
@@ -47,9 +47,9 @@ class StandardSurfaceLayerInitConds:
     """2m vapor pressure [Pa]."""
     esat2m: float = jnp.nan
     """2m saturated vapor pressure [Pa]."""
-    θsurf: float = jnp.nan
+    thetasurf: float = jnp.nan
     """Surface potential temperature [K]."""
-    θvsurf: float = jnp.nan
+    thetavsurf: float = jnp.nan
     """Surface virtual potential temperature [K]."""
     qsurf: float = jnp.nan
     """Surface specific humidity [kg kg-1]."""
@@ -81,13 +81,13 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
         """
         ueff = compute_effective_wind_speed(state.u, state.v, state.wstar)
         (
-            state.θsurf,
+            state.thetasurf,
             state.qsurf,
-            state.θvsurf,
+            state.thetavsurf,
         ) = compute_surface_properties(
             ueff,
-            state.θ,
-            state.wθ,
+            state.theta,
+            state.wtheta,
             state.q,
             state.surf_pressure,
             state.rs,
@@ -97,7 +97,7 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
         # this should be a method
         zsl = 0.1 * state.h_abl
         state.rib_number = compute_richardson_number(
-            ueff, zsl, const.g, state.θv, state.θvsurf
+            ueff, zsl, const.g, state.thetav, state.thetavsurf
         )
         state.obukhov_length = ribtol(zsl, state.rib_number, state.z0h, state.z0m)
         state.drag_m, state.drag_s = compute_drag_coefficients(
@@ -114,14 +114,14 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
             state.e2m,
             state.esat2m,
         ) = compute_2m_variables(
-            state.wθ,
+            state.wtheta,
             state.wq,
             state.surf_pressure,
             const.k,
             state.z0h,
             state.z0m,
             state.obukhov_length,
-            state.θsurf,
+            state.thetasurf,
             state.qsurf,
             state.ustar,
             state.uw,
@@ -169,8 +169,8 @@ def compute_effective_wind_speed(u: Array, v: Array, wstar: Array) -> Array:
 
 def compute_surface_properties(
     ueff: Array,
-    θ: Array,
-    wθ: Array,
+    theta: Array,
+    wtheta: Array,
     q: Array,
     surf_pressure: Array,
     rs: Array,
@@ -180,8 +180,8 @@ def compute_surface_properties(
 
     Args:
         ueff: effective wind speed :math:`u_{\\text{eff}}`.
-        θ: mixed layer potential temperature :math:`\\theta`.
-        wθ: surface kinematic heat flux :math:`w'\\theta'`.
+        theta: mixed layer potential temperature :math:`\\theta`.
+        wtheta: surface kinematic heat flux :math:`w'\\theta'`.
         q: mixed layer specific humidity :math:`q`.
         surf_pressure: surface pressure :math:`p`.
         rs: surface roughness length :math:`r_s`.
@@ -205,16 +205,16 @@ def compute_surface_properties(
         .. math::
             \\theta_{v,s} = \\theta_s (1 + 0.61 q_s)
     """
-    θsurf = θ + wθ / (drag_s * ueff)
-    qsatsurf = compute_qsat(θsurf, surf_pressure)
+    thetasurf = theta + wtheta / (drag_s * ueff)
+    qsatsurf = compute_qsat(thetasurf, surf_pressure)
     cq = (1.0 + drag_s * ueff * rs) ** -1.0
     qsurf = (1.0 - cq) * q + cq * qsatsurf
-    θvsurf = θsurf * (1.0 + 0.61 * qsurf)
-    return θsurf, qsurf, θvsurf
+    thetavsurf = thetasurf * (1.0 + 0.61 * qsurf)
+    return thetasurf, qsurf, thetavsurf
 
 
 def compute_richardson_number(
-    ueff: Array, zsl: Array, g: float, θv: Array, θvsurf: Array
+    ueff: Array, zsl: Array, g: float, thetav: Array, thetavsurf: Array
 ) -> Array:
     """Compute bulk Richardson number.
 
@@ -222,8 +222,8 @@ def compute_richardson_number(
         ueff: effective wind speed :math:`u_{\\text{eff}}`.
         zsl: surface layer height :math:`z_{sl}`.
         g: gravity :math:`g`.
-        θv: virtual potential temperature at reference height :math:`\\theta_v`.
-        θvsurf: Surface virtual potential temperature :math:`\\theta_{v,s}`.
+        thetav: virtual potential temperature at reference height :math:`\\theta_v`.
+        thetavsurf: Surface virtual potential temperature :math:`\\theta_{v,s}`.
 
     Notes:
         The bulk Richardson number is given by
@@ -233,7 +233,7 @@ def compute_richardson_number(
 
         The value is capped at 0.2 for numerical stability.
     """
-    rib_number = g / θv * zsl * (θv - θvsurf) / ueff**2.0
+    rib_number = g / thetav * zsl * (thetav - thetavsurf) / ueff**2.0
     return jnp.minimum(rib_number, 0.2)
 
 
@@ -414,14 +414,14 @@ def compute_momentum_fluxes(
 
 # limamau: this should be six or three different methods
 def compute_2m_variables(
-    wθ: Array,
+    wtheta: Array,
     wq: Array,
     surf_pressure: Array,
     k: float,
     z0h: Array,
     z0m: Array,
     obukhov_length: Array,
-    θsurf: Array,
+    thetasurf: Array,
     qsurf: Array,
     ustar: Array,
     uw: Array,
@@ -454,7 +454,7 @@ def compute_2m_variables(
     momentum_scale = 1.0 / (ustar * k)
 
     # temperature and humidity at 2m
-    temp_2m = θsurf - wθ * scalar_scale * scalar_correction
+    temp_2m = thetasurf - wtheta * scalar_scale * scalar_correction
     q2m = qsurf - wq * scalar_scale * scalar_correction
 
     # wind components at 2m
@@ -569,7 +569,7 @@ def compute_psim(zeta: Array) -> Array:
     # constants for stable conditions
     alpha = 0.35
     beta = 5.0 / alpha
-    γ = (10.0 / 3.0) / alpha
+    gamma = (10.0 / 3.0) / alpha
     pi_half = jnp.pi / 2.0
 
     # unstable conditions (zeta <= 0)
@@ -581,7 +581,7 @@ def compute_psim(zeta: Array) -> Array:
 
     # stable conditions (zeta > 0)
     exponential_term = (zeta - beta) * jnp.exp(-alpha * zeta)
-    psim_stable = -2.0 / 3.0 * exponential_term - zeta - γ
+    psim_stable = -2.0 / 3.0 * exponential_term - zeta - gamma
 
     # select based on stability condition
     psim = jnp.where(zeta <= 0, psim_unstable, psim_stable)
@@ -631,7 +631,7 @@ def compute_psih(zeta: Array) -> Array:
     # constants for stable conditions
     alpha = 0.35
     beta = 5.0 / alpha
-    γ = (10.0 / 3.0) / alpha
+    gamma = (10.0 / 3.0) / alpha
 
     # unstable conditions (zeta <= 0)
     x = (1.0 - 16.0 * zeta) ** 0.25
@@ -641,7 +641,7 @@ def compute_psih(zeta: Array) -> Array:
     # stable conditions (zeta > 0)
     exponential_term = (zeta - beta) * jnp.exp(-alpha * zeta)
     power_term = (1.0 + (2.0 / 3.0) * zeta) ** 1.5
-    psih_stable = -2.0 / 3.0 * exponential_term - power_term - γ + 1.0
+    psih_stable = -2.0 / 3.0 * exponential_term - power_term - gamma + 1.0
 
     # select based on stability condition
     psih = jnp.where(zeta <= 0, psih_unstable, psih_stable)
