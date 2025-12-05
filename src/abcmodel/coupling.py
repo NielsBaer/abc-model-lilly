@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Generic, TypeVar
 
-import jax
+from simple_pytree import Pytree
 
 from .abstracts import (
     AbstractAtmosphereModel,
@@ -13,7 +13,6 @@ from .abstracts import (
     AbstractRadiationState,
 )
 from .utils import PhysicalConstants
-from simple_pytree import Pytree
 
 
 class DiagnosticsState(Pytree):
@@ -23,7 +22,7 @@ class DiagnosticsState(Pytree):
     total_energy: float = 0.0
 
 
-# Type variables for CoupledState
+# type variables for CoupledState
 A = TypeVar("A", bound=AbstractAtmosphereState)
 L = TypeVar("L", bound=AbstractLandState)
 R = TypeVar("R", bound=AbstractRadiationState)
@@ -33,9 +32,9 @@ R = TypeVar("R", bound=AbstractRadiationState)
 class CoupledState(AbstractCoupledState[A, L, R], Pytree, Generic[A, L, R]):
     """Hierarchical coupled state, generic over component types."""
 
-    atmosphere: A
-    land: L
     radiation: R
+    land: L
+    atmosphere: A
     diagnostics: DiagnosticsState = field(default_factory=DiagnosticsState)
 
 

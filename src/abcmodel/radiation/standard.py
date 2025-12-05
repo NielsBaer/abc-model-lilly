@@ -1,4 +1,4 @@
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 
 import jax
 import jax.numpy as jnp
@@ -18,15 +18,15 @@ from simple_pytree import Pytree
 class StandardRadiationState(AbstractRadiationState, Pytree):
     """Standard radiation model state."""
 
-    net_rad: Array | float
+    net_rad: Array
     """Net surface radiation [W m-2]."""
-    in_srad: Array | float = jnp.nan
+    in_srad: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Incoming solar radiation [W m-2]."""
-    out_srad: Array | float = jnp.nan
+    out_srad: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Outgoing solar radiation [W m-2]."""
-    in_lrad: Array | float = jnp.nan
+    in_lrad: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Incoming longwave radiation [W m-2]."""
-    out_lrad: Array | float = jnp.nan
+    out_lrad: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Outgoing longwave radiation [W m-2]."""
 
 

@@ -1,12 +1,10 @@
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 
-import jax
 import jax.numpy as jnp
-from jaxtyping import Array
 from simple_pytree import Pytree
 
 from ...abstracts import AbstractCoupledState
-from ...utils import PhysicalConstants, compute_qsat
+from ...utils import Array, PhysicalConstants, compute_qsat
 from ..abstracts import AbstractCloudModel, AbstractCloudState
 
 
@@ -14,19 +12,19 @@ from ..abstracts import AbstractCloudModel, AbstractCloudState
 class StandardCumulusState(AbstractCloudState, Pytree):
     """Standard cumulus state."""
 
-    cc_frac: Array = 0.0
+    cc_frac: Array = field(default_factory=lambda: jnp.array(0.0))
     """Cloud core fraction [-], range 0 to 1."""
-    cc_mf: Array = 0.0
+    cc_mf: Array = field(default_factory=lambda: jnp.array(0.0))
     """Cloud core mass flux [m/s]."""
-    cc_qf: Array = 0.0
+    cc_qf: Array = field(default_factory=lambda: jnp.array(0.0))
     """Cloud core moisture flux [kg/kg/s]."""
-    cl_trans: Array = 1.0
+    cl_trans: Array = field(default_factory=lambda: jnp.array(1.0))
     """Cloud layer transmittance [-], range 0 to 1."""
-    q2_h: Array = jnp.nan
+    q2_h: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Humidity variance at mixed-layer top [kg²/kg²]."""
-    top_CO22: Array = jnp.nan
+    top_CO22: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """CO2 variance at mixed-layer top [ppm²]."""
-    wCO2M: Array = 0.0
+    wCO2M: Array = field(default_factory=lambda: jnp.array(0.0))
     """CO2 mass flux [mgC/m²/s]."""
 
 

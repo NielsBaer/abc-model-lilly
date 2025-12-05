@@ -1,15 +1,13 @@
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 
 import jax
 import jax.numpy as jnp
 from jaxtyping import Array
+from simple_pytree import Pytree
 
 from ...abstracts import AbstractCoupledState
 from ...utils import PhysicalConstants, compute_qsat
 from ..abstracts import AbstractSurfaceLayerModel, AbstractSurfaceLayerState
-
-
-from simple_pytree import Pytree
 
 
 @dataclass
@@ -28,38 +26,38 @@ class StandardSurfaceLayerState(AbstractSurfaceLayerState, Pytree):
 
     # the following variables are initialized to high values and
     # are expected to converge to realistic values during warmup
-    drag_m: Array = 1e12
+    drag_m: Array = field(default_factory=lambda: jnp.array(1e12))
     """Drag coefficient for momentum [-]."""
-    drag_s: Array = 1e12
+    drag_s: Array = field(default_factory=lambda: jnp.array(1e12))
     """Drag coefficient for scalars [-]."""
 
     # the following variables are initialized as NaNs and should
     # and are expected to be assigned during warmup
-    uw: Array = jnp.nan
+    uw: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Surface momentum flux u [m2 s-2]."""
-    vw: Array = jnp.nan
+    vw: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Surface momentum flux v [m2 s-2]."""
-    temp_2m: Array = jnp.nan
+    temp_2m: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """2m temperature [K]."""
-    q2m: Array = jnp.nan
+    q2m: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """2m specific humidity [kg kg-1]."""
-    u2m: Array = jnp.nan
+    u2m: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """2m u-wind [m s-1]."""
-    v2m: Array = jnp.nan
+    v2m: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """2m v-wind [m s-1]."""
-    e2m: Array = jnp.nan
+    e2m: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """2m vapor pressure [Pa]."""
-    esat2m: Array = jnp.nan
+    esat2m: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """2m saturated vapor pressure [Pa]."""
-    thetasurf: Array = jnp.nan
+    thetasurf: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Surface potential temperature [K]."""
-    thetavsurf: Array = jnp.nan
+    thetavsurf: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Surface virtual potential temperature [K]."""
-    qsurf: Array = jnp.nan
+    qsurf: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Surface specific humidity [kg kg-1]."""
-    obukhov_length: Array = jnp.nan
+    obukhov_length: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Obukhov length [m]."""
-    rib_number: Array = jnp.nan
+    rib_number: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Bulk Richardson number [-]."""
 
 
@@ -121,9 +119,7 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
         drag_m, drag_s = compute_drag_coefficients(
             zsl, const.k, obukhov_length, sl_state.z0h, sl_state.z0m
         )
-        ustar, uw, vw = compute_momentum_fluxes(
-            ueff, ml_state.u, ml_state.v, drag_m
-        )
+        ustar, uw, vw = compute_momentum_fluxes(ueff, ml_state.u, ml_state.v, drag_m)
         (
             temp_2m,
             q2m,

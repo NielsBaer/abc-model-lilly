@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import jax
 import jax.numpy as jnp
@@ -14,19 +14,19 @@ from .standard import AbstractStandardLandSurfaceModel, StandardLandSurfaceState
 class AquaCropState(StandardLandSurfaceState):
     """AquaCrop model state."""
 
-    rsCO2: Array = jnp.nan
+    rsCO2: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Stomatal resistance to CO2."""
-    gcco2: Array = jnp.nan
+    gcco2: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Conductance to CO2."""
-    ci: Array = jnp.nan
+    ci: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Intercellular CO2 concentration."""
-    co2abs: Array = jnp.nan
+    co2abs: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """CO2 assimilation rate."""
-    wCO2A: Array = jnp.nan
+    wCO2A: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Net assimilation flux [mol m-2 s-1]."""
-    wCO2R: Array = jnp.nan
+    wCO2R: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Respiration flux [mol m-2 s-1]."""
-    wCO2: Array = jnp.nan
+    wCO2: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Total CO2 flux [mol m-2 s-1]."""
 
 

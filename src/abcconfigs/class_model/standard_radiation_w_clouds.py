@@ -1,6 +1,6 @@
 init_conds_kwargs = {
     # net radiation [W/m^2]
-    "net_rad": 400,
+    "net_rad": 400.0,
 }
 """"""
 model_kwargs = {

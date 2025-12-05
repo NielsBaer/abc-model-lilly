@@ -1,9 +1,10 @@
 from abc import abstractmethod
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 
 import jax
 import jax.numpy as jnp
 from jaxtyping import Array, PyTree
+from simple_pytree import Pytree
 
 from ..abstracts import (
     AbstractCoupledState,
@@ -15,72 +16,69 @@ from ..atmosphere.abstracts import AbstractMixedLayerState, AbstractSurfaceLayer
 from ..utils import PhysicalConstants, compute_esat, compute_qsat
 
 
-from simple_pytree import Pytree
-
-
 @dataclass
 class StandardLandSurfaceState(AbstractLandState, Pytree):
     """Standard land surface model state."""
 
-    alpha: Array | float
+    alpha: Array
     """Slope of the light response curve [mol J-1]."""
-    wg: Array | float
+    wg: Array
     """Soil moisture content in the root zone [m3 m-3]."""
-    temp_soil: Array | float
+    temp_soil: Array
     """Soil temperature [K]."""
-    temp2: Array | float
+    temp2: Array
     """Deep soil temperature [K]."""
-    surf_temp: Array | float
+    surf_temp: Array
     """Surface temperature [K]."""
-    wl: Array | float
+    wl: Array
     """Liquid water storage on the canopy [m]."""
 
-    rs: Array | float = 1.0e6
+    rs: Array = field(default_factory=lambda: jnp.array(1.0e6))
     """Surface resistance [m s-1]."""
-    rssoil: Array | float = 1.0e6
+    rssoil: Array = field(default_factory=lambda: jnp.array(1.0e6))
     """Soil resistance [m s-1]."""
 
-    cliq: Array | float = jnp.nan
+    cliq: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Wet fraction of the canopy [-]."""
-    temp_soil_tend: Array | float = jnp.nan
+    temp_soil_tend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Soil temperature tendency [K s-1]."""
-    wgtend: Array | float = jnp.nan
+    wgtend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Soil moisture tendency [m3 m-3 s-1]."""
-    wltend: Array | float = jnp.nan
+    wltend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Canopy water storage tendency [m s-1]."""
-    le_veg: Array | float = jnp.nan
+    le_veg: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Latent heat flux from vegetation [W m-2]."""
-    le_liq: Array | float = jnp.nan
+    le_liq: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Latent heat flux from liquid water [W m-2]."""
-    le_soil: Array | float = jnp.nan
+    le_soil: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Latent heat flux from soil [W m-2]."""
-    le: Array | float = jnp.nan
+    le: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Total latent heat flux [W m-2]."""
-    hf: Array | float = jnp.nan
+    hf: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Sensible heat flux [W m-2]."""
-    gf: Array | float = jnp.nan
+    gf: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Ground heat flux [W m-2]."""
-    le_pot: Array | float = jnp.nan
+    le_pot: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Potential latent heat flux [W m-2]."""
-    le_ref: Array | float = jnp.nan
+    le_ref: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Reference latent heat flux [W m-2]."""
-    ra: Array | float = jnp.nan
+    ra: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Aerodynamic resistance [s m-1]."""
-    esat: Array | float = jnp.nan
+    esat: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Saturation vapor pressure [Pa]."""
-    qsat: Array | float = jnp.nan
+    qsat: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Saturation specific humidity [kg/kg]."""
-    dqsatdT: Array | float = jnp.nan
+    dqsatdT: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Derivative of saturation specific humidity with respect to temperature [kg/kg/K]."""
-    e: Array | float = jnp.nan
+    e: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Vapor pressure [Pa]."""
-    qsatsurf: Array | float = jnp.nan
+    qsatsurf: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Saturation specific humidity at surface temperature [kg/kg]."""
-    wtheta: Array | float = jnp.nan
+    wtheta: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Kinematic heat flux [K m/s]."""
-    wq: Array | float = jnp.nan
+    wq: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Kinematic moisture flux [kg/kg m/s]."""
-    wCO2: Array | float = jnp.nan
+    wCO2: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1]."""
 
 
@@ -197,27 +195,29 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
 
         # We first update flux-related vars (ra, esat, etc) in local variables or a temp state
         # to pass to update_surface_resistance
-        
+
         # NOTE: `replace` is safe to call multiple times or we can gather everything.
         # But `dqsatdT` needs `esat` in `land_state`.
         # So we should update incrementally or construct the values.
-        
+
         esat = compute_esat(ml_state.theta)
         qsat = compute_qsat(ml_state.theta, ml_state.surf_pressure)
-        
+
         # To compute dqsatdT we need esat. We can pass esat explicitely or use a temp state.
         # But compute_dqsatdT expects state.
         # Let's create a temporary state with updated values for intermediate computations.
-        # This is slightly inefficient but safe. Or we can just calculate dqsatdT manually here, 
-        # but better to use the method if possible. However the method takes state. 
+        # This is slightly inefficient but safe. Or we can just calculate dqsatdT manually here,
+        # but better to use the method if possible. However the method takes state.
         # Making a temp state is okay.
-        
+
         temp_state_1 = replace(land_state, ra=ra, esat=esat, qsat=qsat)
-        dqsatdT = self.compute_dqsatdT(temp_state_1, ml_state.theta, ml_state.surf_pressure)
+        dqsatdT = self.compute_dqsatdT(
+            temp_state_1, ml_state.theta, ml_state.surf_pressure
+        )
         e = self.compute_e(ml_state.q, ml_state.surf_pressure)
-        
+
         temp_state_2 = replace(temp_state_1, dqsatdT=dqsatdT, e=e)
-        
+
         # update coupled state with temp land state for the abstract methods
         # This assumes state is a Pytree/Dataclass that can be replaced.
         # AbstractCoupledState is usually a Pytree.
@@ -231,24 +231,32 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
 
         rssoil = self.compute_soil_resistance(land_state_updated)
         cliq = self.compute_cliq(land_state_updated)
-        
+
         # We need to put rssoil and cliq into state for skin temp calc
         land_state_updated = replace(land_state_updated, rssoil=rssoil, cliq=cliq)
-        
+
         surf_temp = self.compute_skin_temperature(
             land_state_updated, ml_state, sl_state, rad_state, const
         )
         qsatsurf = compute_qsat(surf_temp, ml_state.surf_pressure)
-        
-        land_state_updated = replace(land_state_updated, surf_temp=surf_temp, qsatsurf=qsatsurf)
-        
+
+        land_state_updated = replace(
+            land_state_updated, surf_temp=surf_temp, qsatsurf=qsatsurf
+        )
+
         le_veg = self.compute_le_veg(land_state_updated, ml_state, const)
         le_liq = self.compute_le_liq(land_state_updated, ml_state, const)
         le_soil = self.compute_le_soil(land_state_updated, ml_state, const)
         wltend = self.compute_wltend(land_state_updated, const)
-        
-        land_state_updated = replace(land_state_updated, le_veg=le_veg, le_liq=le_liq, le_soil=le_soil, wltend=wltend)
-        
+
+        land_state_updated = replace(
+            land_state_updated,
+            le_veg=le_veg,
+            le_liq=le_liq,
+            le_soil=le_soil,
+            wltend=wltend,
+        )
+
         le = self.compute_le(land_state_updated)
         hf = self.compute_hf(land_state_updated, ml_state, const)
         gf = self.compute_gf(land_state_updated)
@@ -256,11 +264,16 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
         le_ref = self.compute_le_ref(land_state_updated, ml_state, rad_state, const)
         temp_soil_tend = self.compute_temp_soil_tend(land_state_updated)
         wgtend = self.compute_wgtend(land_state_updated, const)
-        
+
         land_state_updated = replace(
-            land_state_updated, 
-            le=le, hf=hf, gf=gf, le_pot=le_pot, le_ref=le_ref, 
-            temp_soil_tend=temp_soil_tend, wgtend=wgtend
+            land_state_updated,
+            le=le,
+            hf=hf,
+            gf=gf,
+            le_pot=le_pot,
+            le_ref=le_ref,
+            temp_soil_tend=temp_soil_tend,
+            wgtend=wgtend,
         )
 
         wtheta = self.compute_wtheta(land_state_updated, const)
