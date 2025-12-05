@@ -5,6 +5,9 @@ init_conds_kwargs = {
     "temp2": 286.0,
     "surf_temp": 290.0,
     "wl": 0.0000,
+    "wtheta": 0.1,
+    "wq": 1e-4,
+    "wCO2": 0.0,
 }
 """"""
 model_kwargs = {

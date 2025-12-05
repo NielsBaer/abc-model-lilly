@@ -24,11 +24,21 @@ class StandardLandSurfaceInitConds:
     """Surface temperature [K]."""
     wl: float
     """Liquid water storage on the canopy [m]."""
+    wtheta: float
+    """Surface kinematic heat flux [K m/s]."""
+    wq: float
+    """Surface kinematic moisture flux [kg/kg m/s]."""
 
     rs: float = 1.0e6
     """Surface resistance [m s-1]."""
     rssoil: float = 1.0e6
     """Soil resistance [m s-1]."""
+    wCO2: float = 0.0
+    """Surface kinematic CO2 flux [mgC/m²/s]."""
+    wCO2A: float = 0.0
+    """Surface assimulation CO2 flux [mgC/m²/s]."""
+    wCO2R: float = 0.0
+    """Surface respiration CO2 flux [mgC/m²/s]."""
 
     cliq: float = jnp.nan
     """Wet fraction of the canopy [-]."""

@@ -23,20 +23,20 @@ class BulkMixedLayerInitConds:
     """Initial mixed-layer potential temperature [K]."""
     deltatheta: float
     """Initial temperature jump at the top of the ABL [K]."""
-    wtheta: float
-    """Surface kinematic heat flux [K m/s]."""
+    deltatheta: float
+    """Initial temperature jump at the top of the ABL [K]."""
     q: float
     """Initial mixed-layer specific humidity [kg/kg]."""
     dq: float
     """Initial specific humidity jump at h [kg/kg]."""
-    wq: float
-    """Surface kinematic moisture flux [kg/kg m/s]."""
+    dq: float
+    """Initial specific humidity jump at h [kg/kg]."""
     co2: float
     """Initial mixed-layer CO2 [ppm]."""
     deltaCO2: float
     """Initial CO2 jump at the top of the ABL [ppm]."""
-    wCO2: float
-    """Surface kinematic CO2 flux [mgC/m²/s]."""
+    deltaCO2: float
+    """Initial CO2 jump at the top of the ABL [ppm]."""
     u: float
     """Initial mixed-layer u-wind speed [m/s]."""
     du: float
@@ -55,10 +55,8 @@ class BulkMixedLayerInitConds:
     """Convective velocity scale [m s-1]."""
     we: float = -1.0
     """Entrainment velocity [m s-1]."""
-    wCO2A: float = 0.0
-    """Surface assimulation CO2 flux [mgC/m²/s]."""
-    wCO2R: float = 0.0
-    """Surface respiration CO2 flux [mgC/m²/s]."""
+    we: float = -1.0
+    """Entrainment velocity [m s-1]."""
 
     # should be initialized during warmup
     thetav: float = jnp.nan

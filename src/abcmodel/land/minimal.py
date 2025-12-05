@@ -22,6 +22,18 @@ class MinimalLandSurfaceInitConds:
     wl: float = 0.0
     """No water content in the canopy [m]."""
 
+    # fluxes (moved from atmosphere init)
+    wtheta: float = 0.0
+    """Surface kinematic heat flux [K m/s]."""
+    wq: float = 0.0
+    """Surface kinematic moisture flux [kg/kg m/s]."""
+    wCO2: float = 0.0
+    """Surface kinematic CO2 flux [mgC/m²/s]."""
+    wCO2A: float = 0.0
+    """Surface assimulation CO2 flux [mgC/m²/s]."""
+    wCO2R: float = 0.0
+    """Surface respiration CO2 flux [mgC/m²/s]."""
+
     # the following variables are assigned during warmup/timestep
     ra: float = jnp.nan
     """Aerodynamic resistance [s/m]."""

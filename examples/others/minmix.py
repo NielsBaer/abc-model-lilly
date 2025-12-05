@@ -44,20 +44,14 @@ def main():
         theta=288.0,
         # initial temperature jump at h [K]
         deltatheta=1.0,
-        # surface kinematic heat flux [K m s-1]
-        wtheta=0.1,
         # initial mixed-layer specific humidity [kg kg-1]
         q=0.008,
         # initial specific humidity jump at h [kg kg-1]
         dq=-0.001,
-        # surface kinematic moisture flux [kg kg-1 m s-1]
-        wq=1e-4,
         # initial mixed-layer CO2 [ppm]
         co2=422.0,
         # initial CO2 jump at h [ppm]
         deltaCO2=-44.0,
-        # surface kinematic CO2 flux [ppm m s-1]
-        wCO2=0.0,
         # initial mixed-layer u-wind speed [m s-1]
         u=6.0,
         # initial mixed-layer v-wind speed [m s-1]

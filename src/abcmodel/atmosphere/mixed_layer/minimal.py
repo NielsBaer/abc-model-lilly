@@ -20,20 +20,20 @@ class MinimalMixedLayerInitConds:
     """Initial mixed-layer potential temperature [K]."""
     deltatheta: float
     """Initial temperature jump at h [K]."""
-    wtheta: float
-    """Surface kinematic heat flux [K m/s]."""
+    deltatheta: float
+    """Initial temperature jump at h [K]."""
     q: float
     """Initial mixed-layer specific humidity [kg/kg]."""
     dq: float
     """Initial specific humidity jump at h [kg/kg]."""
-    wq: float
-    """Surface kinematic moisture flux [kg/kg m/s]."""
+    dq: float
+    """Initial specific humidity jump at h [kg/kg]."""
     co2: float
     """Initial mixed-layer CO2 [ppm]."""
     deltaCO2: float
     """Initial CO2 jump at h [ppm]."""
-    wCO2: float
-    """Surface kinematic CO2 flux [mgC/m²/s]."""
+    deltaCO2: float
+    """Initial CO2 jump at h [ppm]."""
     u: float
     """Initial mixed-layer u-wind speed [m/s]."""
     v: float
@@ -46,10 +46,8 @@ class MinimalMixedLayerInitConds:
     """Convective velocity scale [m s-1]."""
     wqe: float = 0.0
     """Entrainment moisture flux [kg kg-1 m s-1]."""
-    wCO2A: float = 0.0
-    """Surface assimilation CO2 flux [mgC m-2 s]."""
-    wCO2R: float = 0.0
-    """Surface respiration CO2 flux [mgC m-2 s]."""
+    wqe: float = 0.0
+    """Entrainment moisture flux [kg kg-1 m s-1]."""
     wCO2M: float = 0.0
     """CO2 mass flux [mgC m-2 s]."""
     wCO2e: float = 0.0
