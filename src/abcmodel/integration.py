@@ -16,7 +16,7 @@ def print_nan_variables(state: PyTree, prefix: str = ""):
     # If it's a dataclass or SimpleNamespace, iterate over fields
     if hasattr(state, "__dict__"):
         items = state.__dict__.items()
-    elif hasattr(state, "_asdict"): # NamedTuple
+    elif hasattr(state, "_asdict"):  # NamedTuple
         items = state._asdict().items()
     else:
         return nan_vars
@@ -38,10 +38,10 @@ def print_nan_variables(state: PyTree, prefix: str = ""):
             # check regular float values
             elif isinstance(value, float) and math.isnan(value):
                 is_nan = True
-            
+
             # Recursive check for nested objects (like AtmosphereState)
             if hasattr(value, "__dict__") or hasattr(value, "_asdict"):
-                 nan_vars.extend(print_nan_variables(value, full_name))
+                nan_vars.extend(print_nan_variables(value, full_name))
 
             if is_nan:
                 nan_vars.append((full_name, value))
@@ -59,7 +59,8 @@ def warmup(state: PyTree, coupler: ABCoupler, t: int, dt: float) -> PyTree:
     # Update atmosphere statistics
     # statistics returns AtmosphereState, so we assign to state.atmosphere
     state = replace(
-        state, atmosphere=coupler.atmosphere.statistics(state.atmosphere, t, coupler.const)
+        state,
+        atmosphere=coupler.atmosphere.statistics(state.atmosphere, t, coupler.const),
     )
 
     # calculate initial diagnostic variables
@@ -75,34 +76,18 @@ def warmup(state: PyTree, coupler: ABCoupler, t: int, dt: float) -> PyTree:
 
 def timestep(state: PyTree, coupler: ABCoupler, t: int, dt: float) -> PyTree:
     """Run a single timestep of the model."""
-    # Update atmosphere statistics
-    state = replace(
-        state, atmosphere=coupler.atmosphere.statistics(state.atmosphere, t, coupler.const)
-    )
-
-    # Run radiation
-    # radiation.run takes CoupledState and returns RadiationState
-    state = replace(state, radiation=coupler.radiation.run(state, t, dt, coupler.const))
-
-    # Run land
-    state = replace(state, land=coupler.land.run(state, coupler.const))
-
-    # Run atmosphere
-    state = replace(state, atmosphere=coupler.atmosphere.run(state, coupler.const))
-
-    # Integrate prognostic variables
-    state = replace(state, land=coupler.land.integrate(state.land, dt))
-    state = replace(state, atmosphere=coupler.atmosphere.integrate(state.atmosphere, dt))
-    
-    # Compute diagnostics
-    state = coupler.compute_diagnostics(state)
-    return state
-    state.land = coupler.land.run(state, coupler.const)
-    state.atmosphere = coupler.atmosphere.run(state, coupler.const)
-    
-    state.land = coupler.land.integrate(state.land, dt)
-    state.atmosphere = coupler.atmosphere.integrate(state.atmosphere, dt)
-    
+    atmos = coupler.atmosphere.statistics(state.atmosphere, t, coupler.const)
+    state = replace(state, atmosphere=atmos)
+    rad = coupler.radiation.run(state, t, dt, coupler.const)
+    state = replace(state, radiation=rad)
+    land = coupler.land.run(state, coupler.const)
+    state = replace(state, land=land)
+    atmos = coupler.atmosphere.run(state, coupler.const)
+    state = replace(state, atmosphere=atmos)
+    land = coupler.land.integrate(state.land, dt)
+    state = replace(state, land=land)
+    atmos = coupler.atmosphere.integrate(state.atmosphere, dt)
+    state = replace(state, atmosphere=atmos)
     state = coupler.compute_diagnostics(state)
     return state
 

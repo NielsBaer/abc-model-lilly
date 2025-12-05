@@ -1,14 +1,11 @@
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 
-import jax
 import jax.numpy as jnp
-from jaxtyping import Array, PyTree
+from jaxtyping import Array
+from simple_pytree import Pytree
 
 from ..abstracts import AbstractCoupledState, AbstractLandModel, AbstractLandState
 from ..utils import PhysicalConstants, compute_esat, compute_qsat
-
-
-from simple_pytree import Pytree
 
 
 @dataclass
@@ -21,33 +18,33 @@ class MinimalLandSurfaceState(AbstractLandState, Pytree):
     """Surface temperature [K]."""
     rs: Array
     """Surface resistance [s m-1]."""
-    wg: Array = 0.0
+    wg: Array = field(default_factory=lambda: jnp.array(0.0))
     """No moisture content in the root zone [m3 m-3]."""
-    wl: Array = 0.0
+    wl: Array = field(default_factory=lambda: jnp.array(0.0))
     """No water content in the canopy [m]."""
 
     # the following variables are assigned during warmup/timestep
-    ra: Array = jnp.nan
+    ra: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Aerodynamic resistance [s/m]."""
-    esat: Array = jnp.nan
+    esat: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Saturation vapor pressure [Pa]."""
-    qsat: Array = jnp.nan
+    qsat: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Saturation specific humidity [kg/kg]."""
-    dqsatdT: Array = jnp.nan
+    dqsatdT: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Derivative of saturation specific humidity with respect to temperature [kg/kg/K]."""
-    e: Array = jnp.nan
+    e: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Vapor pressure [Pa]."""
-    qsatsurf: Array = jnp.nan
+    qsatsurf: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Saturation specific humidity at surface temperature [kg/kg]."""
-    wtheta: Array = jnp.nan
+    wtheta: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Kinematic heat flux [K m/s]."""
-    wq: Array = jnp.nan
+    wq: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Kinematic moisture flux [kg/kg m/s]."""
-    wCO2: Array = jnp.nan
+    wCO2: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1]."""
 
 
-# Alias for backward compatibility
+# alias
 MinimalLandSurfaceInitConds = MinimalLandSurfaceState
 
 
@@ -83,24 +80,21 @@ class MinimalLandSurfaceModel(AbstractLandModel):
         # (2) calculate essential thermodynamic variables
         esat = compute_esat(ml_state.theta)
         qsat = compute_qsat(ml_state.theta, ml_state.surf_pressure)
-        
+
         # Helper computation without modifying state in place
         # compute_dqsatdT expects state for esat/qsat if it uses them, but here it accesses state.esat
         # So we need to provide a state with Updated esat.
         temp_state = replace(land_state, esat=esat, qsat=qsat)
-        dqsatdT = self.compute_dqsatdT(temp_state, ml_state.theta, ml_state.surf_pressure)
+        dqsatdT = self.compute_dqsatdT(
+            temp_state, ml_state.theta, ml_state.surf_pressure
+        )
         e = self.compute_e(ml_state.q, ml_state.surf_pressure)
 
-        return replace(
-            land_state,
-            ra=ra,
-            esat=esat,
-            qsat=qsat,
-            dqsatdT=dqsatdT,
-            e=e
-        )
+        return replace(land_state, ra=ra, esat=esat, qsat=qsat, dqsatdT=dqsatdT, e=e)
 
-    def compute_dqsatdT(self, state: MinimalLandSurfaceState, theta: float, surf_pressure: float) -> Array:
+    def compute_dqsatdT(
+        self, state: MinimalLandSurfaceState, theta: float, surf_pressure: float
+    ) -> Array:
         """Compute the derivative of saturation vapor pressure with respect to temperature ``dqsatdT``.
 
         Notes:
@@ -122,7 +116,7 @@ class MinimalLandSurfaceModel(AbstractLandModel):
         desatdT = state.esat * mult
         return 0.622 * desatdT / surf_pressure
 
-    def compute_e(self, q: float, surf_pressure: float) -> Array:
+    def compute_e(self, q: Array, surf_pressure: Array) -> Array:
         """Compute the vapor pressure ``e``.
 
         Notes:
@@ -135,7 +129,9 @@ class MinimalLandSurfaceModel(AbstractLandModel):
         """
         return q * surf_pressure / 0.622
 
-    def integrate(self, state: MinimalLandSurfaceState, dt: float) -> MinimalLandSurfaceState:
+    def integrate(
+        self, state: MinimalLandSurfaceState, dt: float
+    ) -> MinimalLandSurfaceState:
         """Integrate the model forward in time.
 
         Args:

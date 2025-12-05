@@ -1,6 +1,6 @@
 from dataclasses import dataclass, replace
 
-import jax
+from simple_pytree import Pytree
 
 from ..abstracts import (
     AbstractAtmosphereModel,
@@ -17,23 +17,16 @@ from .abstracts import (
     AbstractSurfaceLayerModel,
     AbstractSurfaceLayerState,
 )
+from .clouds import NoCloudModel
 
 
-@jax.tree_util.register_pytree_node_class
 @dataclass
-class DayOnlyAtmosphereState(AbstractAtmosphereState):
+class DayOnlyAtmosphereState(AbstractAtmosphereState, Pytree):
     """Atmosphere state aggregating surface layer, mixed layer, and clouds."""
 
     surface_layer: AbstractSurfaceLayerState
     mixed_layer: AbstractMixedLayerState
     clouds: AbstractCloudState
-
-    def tree_flatten(self):
-        return (self.surface_layer, self.mixed_layer, self.clouds), None
-
-    @classmethod
-    def tree_unflatten(cls, aux, children):
-        return cls(*children)
 
 
 class DayOnlyAtmosphereModel(AbstractAtmosphereModel[DayOnlyAtmosphereState]):
@@ -97,9 +90,6 @@ class DayOnlyAtmosphereModel(AbstractAtmosphereModel[DayOnlyAtmosphereState]):
         # Land run returns LandState
         land_state = land.run(current_state, const)
         current_state = replace(current_state, land=land_state)
-
-        # conditionally run clouds if model is not NoCloudModel
-        from .clouds import NoCloudModel
 
         if not isinstance(self.clouds, NoCloudModel):
             # Run mixed layer

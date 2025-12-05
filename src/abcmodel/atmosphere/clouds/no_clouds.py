@@ -3,12 +3,13 @@ from dataclasses import dataclass, field
 import jax.numpy as jnp
 from simple_pytree import Pytree
 
+from ...coupling import AbstractCoupledState
 from ...utils import Array, PhysicalConstants
 from ..abstracts import AbstractCloudModel, AbstractCloudState
 
 
 @dataclass
-class NoCloudInitConds(AbstractCloudState, Pytree):
+class NoCloudState(AbstractCloudState, Pytree):
     """No cloud initial state."""
 
     cc_frac: Array = field(default_factory=lambda: jnp.array(0.0))
@@ -27,12 +28,18 @@ class NoCloudInitConds(AbstractCloudState, Pytree):
     """CO2 mass flux [mgC/m²/s]."""
 
 
+# alias
+NoCloudInitConds = NoCloudState
+
+
 class NoCloudModel(AbstractCloudModel):
     """No cloud is formed using this model."""
 
     def __init__(self):
         pass
 
-    def run(self, state: Pytree, const: PhysicalConstants):
+    def run(
+        self, state: AbstractCoupledState, const: PhysicalConstants
+    ) -> NoCloudState:
         """No calculations."""
-        return state
+        return state.atmosphere.clouds

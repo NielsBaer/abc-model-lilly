@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field, replace
 
-import jax
 import jax.numpy as jnp
+from simple_pytree import Pytree
 
 from ..abstracts import (
     AbstractCoupledState,
@@ -9,9 +9,6 @@ from ..abstracts import (
     AbstractRadiationState,
 )
 from ..utils import Array, PhysicalConstants
-
-
-from simple_pytree import Pytree
 
 
 @dataclass

@@ -35,7 +35,7 @@ def main():
     surface_layer_model = abcmodel.atmosphere.surface_layer.StandardSurfaceLayerModel()
 
     # mixed layer
-    mixed_layer_init_conds = abcmodel.atmosphere.mixed_layer.MinimalMixedLayerInitConds(
+    mixed_layer_init_conds = abcmodel.atmosphere.mixed_layer.MinimalMixedLayerState(
         # initial ABL height [m]
         h_abl=200.0,
         # surface pressure [Pa]

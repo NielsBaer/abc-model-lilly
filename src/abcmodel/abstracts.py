@@ -13,48 +13,48 @@ class AbstractState:
 class AbstractRadiationState(AbstractState):
     """Abstract radiation state."""
 
-    net_rad: Array | float
+    net_rad: Array
     """Net surface radiation [W m-2]."""
-    in_srad: Array | float
+    in_srad: Array
     """Incoming solar radiation [W m-2]."""
-    out_srad: Array | float
+    out_srad: Array
     """Outgoing solar radiation [W m-2]."""
-    in_lrad: Array | float
+    in_lrad: Array
     """Incoming longwave radiation [W m-2]."""
-    out_lrad: Array | float
+    out_lrad: Array
     """Outgoing longwave radiation [W m-2]."""
 
 
 class AbstractLandState(AbstractState):
     """Abstract land state."""
 
-    alpha: Array | float
+    alpha: Array
     """surface albedo [-], range 0 to 1."""
-    surf_temp: Array | float
+    surf_temp: Array
     """Surface temperature [K]."""
-    rs: Array | float
+    rs: Array
     """Surface resistance [s m-1]."""
-    wg: Array | float
+    wg: Array
     """No moisture content in the root zone [m3 m-3]."""
-    wl: Array | float
+    wl: Array
     """No water content in the canopy [m]."""
-    ra: Array | float
+    ra: Array
     """Aerodynamic resistance [s/m]."""
-    esat: Array | float
+    esat: Array
     """Saturation vapor pressure [Pa]."""
-    qsat: Array | float
+    qsat: Array
     """Saturation specific humidity [kg/kg]."""
-    dqsatdT: Array | float
+    dqsatdT: Array
     """Derivative of saturation specific humidity with respect to temperature [kg/kg/K]."""
-    e: Array | float
+    e: Array
     """Vapor pressure [Pa]."""
-    qsatsurf: Array | float
+    qsatsurf: Array
     """Saturation specific humidity at surface temperature [kg/kg]."""
-    wtheta: Array | float
+    wtheta: Array
     """Kinematic heat flux [K m/s]."""
-    wq: Array | float
+    wq: Array
     """Kinematic moisture flux [kg/kg m/s]."""
-    wCO2: Array | float
+    wCO2: Array
     """Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1]."""
 
 

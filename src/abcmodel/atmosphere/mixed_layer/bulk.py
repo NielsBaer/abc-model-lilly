@@ -1,4 +1,4 @@
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 
 import jax.numpy as jnp
 
@@ -53,67 +53,67 @@ class BulkMixedLayerState(AbstractMixedLayerState, Pytree):
     """Surface pressure, which is actually not updated (not a state), it's only here for simplicity [Pa]."""
 
     # initialized to zero by default
-    wstar: Array = 0.0
+    wstar: Array = field(default_factory=lambda: jnp.array(0.0))
     """Convective velocity scale [m s-1]."""
-    we: Array = -1.0
+    we: Array = field(default_factory=lambda: jnp.array(-1.0))
     """Entrainment velocity [m s-1]."""
 
     # should be initialized during warmup
-    thetav: Array = jnp.nan
+    thetav: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Mixed-layer potential temperature [K]."""
-    deltathetav: Array = jnp.nan
+    deltathetav: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Virtual temperature jump at the top of the ABL [K]."""
-    wthetav: Array = jnp.nan
+    wthetav: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Surface kinematic virtual heat flux [K m s-1]."""
-    wqe: Array = jnp.nan
+    wqe: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Entrainment moisture flux [kg kg-1 m s-1]."""
-    qsat: Array = jnp.nan
+    qsat: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Saturation specific humidity [kg/kg]."""
-    e: Array = jnp.nan
+    e: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Vapor pressure [Pa]."""
-    esat: Array = jnp.nan
+    esat: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Saturation vapor pressure [Pa]."""
-    wCO2e: Array = jnp.nan
+    wCO2e: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Entrainment CO2 flux [mgC/m²/s]."""
-    wthetae: Array = jnp.nan
+    wthetae: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Entrainment potential temperature flux [K m s-1]."""
-    wthetave: Array = jnp.nan
+    wthetave: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Entrainment virtual heat flux [K m s-1]."""
-    lcl: Array = jnp.nan
+    lcl: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Lifting condensation level [m]."""
-    top_rh: Array = jnp.nan
+    top_rh: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Top of mixed layer relative humidity [%]."""
-    top_p: Array = jnp.nan
+    top_p: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Pressure at top of mixed layer [Pa]."""
-    top_T: Array = jnp.nan
+    top_T: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Temperature at top of mixed layer [K]."""
-    utend: Array = jnp.nan
+    utend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Zonal wind velocity tendency [m s-2]."""
-    dutend: Array = jnp.nan
+    dutend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Zonal wind velocity tendency at the ABL height [m s-2]."""
-    vtend: Array = jnp.nan
+    vtend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Meridional wind velocity tendency [m s-2]."""
-    dvtend: Array = jnp.nan
+    dvtend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Meridional wind velocity tendency at the ABL height [m/s²]."""
-    h_abl_tend: Array = jnp.nan
+    h_abl_tend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Tendency of CBL [m s-1]."""
-    thetatend: Array = jnp.nan
+    thetatend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Tendency of mixed-layer potential temperature [K s-1]."""
-    deltathetatend: Array = jnp.nan
+    deltathetatend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Tendency of mixed-layer potential temperature at the ABL height [K s-1]."""
-    qtend: Array = jnp.nan
+    qtend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Tendency of mixed-layer specific humidity [kg/kg s-1]."""
-    dqtend: Array = jnp.nan
+    dqtend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Tendency of mixed-layer specific humidity at the ABL height [kg/kg s-1]."""
-    co2tend: Array = jnp.nan
+    co2tend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Tendency of CO2 concentration [ppm s-1]."""
-    deltaCO2tend: Array = jnp.nan
+    deltaCO2tend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Tendency of CO2 concentration at the ABL height [ppm s-1]."""
-    dztend: Array = jnp.nan
+    dztend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Tendency of transition layer thickness [m s-1]."""
-    ws: Array = jnp.nan
+    ws: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Large-scale vertical velocity (subsidence) [m s-1]."""
-    wf: Array = jnp.nan
+    wf: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Mixed-layer growth due to cloud top radiative divergence [m s-1]."""
 
 
@@ -194,9 +194,6 @@ class BulkMixedLayerModel(AbstractStandardStatsModel, AbstractMixedLayerModel):
         sl_state = state.atmosphere.surface_layer
         cloud_state = state.atmosphere.clouds
         land_state = state.land
-
-        # Read surface fluxes from land state if available
-        # Access fluxes from land state (using jnp.where to handle NaNs)
         wtheta = land_state.wtheta
         wq = land_state.wq
         wCO2 = land_state.wCO2

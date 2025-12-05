@@ -43,7 +43,7 @@ def main():
     )
 
     # clouds
-    cloud_init_conds = abcmodel.atmosphere.clouds.NoCloudInitConds()
+    cloud_init_conds = abcmodel.atmosphere.clouds.NoCloudState()
     cloud_model = abcmodel.atmosphere.clouds.NoCloudModel()
 
     # define coupler and coupled state

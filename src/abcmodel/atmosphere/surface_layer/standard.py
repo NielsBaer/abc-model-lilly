@@ -61,7 +61,7 @@ class StandardSurfaceLayerState(AbstractSurfaceLayerState, Pytree):
     """Bulk Richardson number [-]."""
 
 
-# Alias for backward compatibility if needed, or just for clarity in examples
+# alias
 StandardSurfaceLayerInitConds = StandardSurfaceLayerState
 
 

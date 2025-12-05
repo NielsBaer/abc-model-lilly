@@ -1,18 +1,15 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import jax.numpy as jnp
-from jaxtyping import PyTree
+from jaxtyping import Array, PyTree
+from simple_pytree import Pytree
 
 from ...utils import PhysicalConstants
 from .stats import AbstractStandardStatsModel
 
 
-from simple_pytree import Pytree
-from jaxtyping import Array
-
-
 @dataclass
-class MinimalMixedLayerInitConds(Pytree):
+class MinimalMixedLayerState(Pytree):
     """Minimal mixed layer model initial state."""
 
     # the following variables are expected to be initialized by the user
@@ -46,40 +43,44 @@ class MinimalMixedLayerInitConds(Pytree):
     """Transition layer thickness [-]."""
 
     # the following variables are initialized as zero
-    wstar: Array = 1e-6
+    wstar: Array = field(default_factory=lambda: jnp.array(1e-6))
     """Convective velocity scale [m s-1]."""
-    wqe: Array = 0.0
+    wqe: Array = field(default_factory=lambda: jnp.array(0.0))
     """Entrainment moisture flux [kg kg-1 m s-1]."""
-    wCO2A: Array = 0.0
+    wCO2A: Array = field(default_factory=lambda: jnp.array(0.0))
     """Surface assimilation CO2 flux [mgC m-2 s]."""
-    wCO2R: Array = 0.0
+    wCO2R: Array = field(default_factory=lambda: jnp.array(0.0))
     """Surface respiration CO2 flux [mgC m-2 s]."""
-    wCO2M: Array = 0.0
+    wCO2M: Array = field(default_factory=lambda: jnp.array(0.0))
     """CO2 mass flux [mgC m-2 s]."""
-    wCO2e: Array = 0.0
+    wCO2e: Array = field(default_factory=lambda: jnp.array(0.0))
     """Entrainment CO2 flux [mgC m-2 s]."""
 
     # the following variables are expected to be assigned during warmup
-    thetav: Array = jnp.nan
+    thetav: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Mixed-layer potential temperature [K]."""
-    wthetav: Array = jnp.nan
+    wthetav: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Surface kinematic virtual heat flux [K m s-1]."""
-    qsat: Array = jnp.nan
+    qsat: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Saturation specific humidity [kg/kg]."""
-    e: Array = jnp.nan
+    e: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Vapor pressure [Pa]."""
-    esat: Array = jnp.nan
+    esat: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Saturation vapor pressure [Pa]."""
-    lcl: Array = jnp.nan
+    lcl: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Lifting condensation level [m]."""
-    deltathetav: Array = jnp.nan
+    deltathetav: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Virtual temperature jump at h [K]."""
-    top_p: Array = jnp.nan
+    top_p: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Pressure at top of mixed layer [Pa]."""
-    top_T: Array = jnp.nan
+    top_T: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Temperature at top of mixed layer [K]."""
-    top_rh: Array = jnp.nan
+    top_rh: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Relative humidity at top of mixed layer [-]."""
+
+
+# alias
+MinimalMixedLayerInitConds = MinimalMixedLayerState
 
 
 class MinimalMixedLayerModel(AbstractStandardStatsModel):
@@ -92,6 +93,8 @@ class MinimalMixedLayerModel(AbstractStandardStatsModel):
         """Pass."""
         return state
 
-    def integrate(self, state: PyTree, dt: float) -> PyTree:
+    def integrate(
+        self, state: MinimalMixedLayerState, dt: float
+    ) -> MinimalMixedLayerState:
         """Pass."""
         return state

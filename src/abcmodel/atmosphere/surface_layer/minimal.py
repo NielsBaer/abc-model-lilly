@@ -1,7 +1,9 @@
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
+
 import jax.numpy as jnp
-from simple_pytree import Pytree
 from jaxtyping import Array, PyTree
+from simple_pytree import Pytree
+
 from ...utils import PhysicalConstants
 from ..abstracts import AbstractSurfaceLayerModel
 
@@ -12,13 +14,13 @@ class MinimalSurfaceLayerState(Pytree):
 
     ustar: Array
     """Surface friction velocity [m/s]."""
-    uw: Array = jnp.nan
+    uw: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Zonal surface momentum flux [m2 s-2]."""
-    vw: Array = jnp.nan
+    vw: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Meridional surface momentum flux [m2 s-2]."""
 
 
-# Alias
+# alias
 MinimalSurfaceLayerInitConds = MinimalSurfaceLayerState
 
 

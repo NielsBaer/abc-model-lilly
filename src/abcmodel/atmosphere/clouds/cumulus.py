@@ -28,7 +28,7 @@ class StandardCumulusState(AbstractCloudState, Pytree):
     """CO2 mass flux [mgC/m²/s]."""
 
 
-# Alias for backward compatibility
+# alias
 StandardCumulusInitConds = StandardCumulusState
 
 
@@ -54,7 +54,6 @@ class StandardCumulusModel(AbstractCloudModel):
         self, state: AbstractCoupledState, const: PhysicalConstants
     ) -> StandardCumulusState:
         """Run the model."""
-        # Access components
         cloud_state = state.atmosphere.clouds
         ml_state = state.atmosphere.mixed_layer
 

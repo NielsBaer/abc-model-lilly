@@ -1,9 +1,7 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
-
-import jax
 import jax.numpy as jnp
-from jaxtyping import Array, PyTree
+from jaxtyping import Array
 
 from ..abstracts import AbstractCoupledState
 from ..utils import PhysicalConstants
@@ -16,15 +14,17 @@ from .standard import (
 @dataclass
 class JarvisStewartState(StandardLandSurfaceState):
     """Jarvis-Stewart model state."""
+
     pass
 
-# Alias for backward compatibility
+
+# alias
 JarvisStewartInitConds = JarvisStewartState
 
 
 class JarvisStewartModel(AbstractStandardLandSurfaceModel):
     """Jarvis-Stewart land surface model with empirical surface resistance.
-    
+
     ... (docstring omitted for brevity) ...
     """
 
@@ -37,17 +37,17 @@ class JarvisStewartModel(AbstractStandardLandSurfaceModel):
         const: PhysicalConstants,
     ) -> AbstractCoupledState:
         """Update the surface resistance ``rs`` in the state using the Jarvis-Stewart model.
-        
+
         Args:
             state: CoupledState.
             const: PhysicalConstants.
-            
+
         Returns:
             CoupledState (with updated land component).
         """
         # We need to access components
         # state is CoupledState
-        
+
         f1 = self.compute_f1(state)
         f2 = self.compute_f2(state)
         f3 = self.compute_f3(state)
@@ -57,20 +57,16 @@ class JarvisStewartModel(AbstractStandardLandSurfaceModel):
         # Since we are inside `run` which returns `LandState`, we should probably return `CoupledState` here?
         # `run` in `standard.py` calls `state = self.update_surface_resistance(state, const)`.
         # And expects `state` to be `CoupledState` (because it continues to use `state.land`).
-        
+
         # So we update `state.land.rs`.
         # Since `state.land` is a dataclass (PyTree), we can mutate if it's not frozen, OR replace.
         # JAX prefers functional.
-        
+
         new_rs = self.rsmin / self.lai * f1 * f2 * f3 * f4
-        
-        # We need to update `state.land.rs`.
-        # But `state` is a PyTree.
-        # We can use `dataclasses.replace`.
-        from dataclasses import replace
+
         new_land = replace(state.land, rs=new_rs)
         new_state = replace(state, land=new_land)
-        
+
         return new_state
 
     def compute_f1(self, state: AbstractCoupledState) -> Array:
