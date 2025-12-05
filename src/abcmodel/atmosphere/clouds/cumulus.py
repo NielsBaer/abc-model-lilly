@@ -23,8 +23,6 @@ class StandardCumulusInitConds:
     """Humidity variance at mixed-layer top [kg²/kg²]."""
     top_CO22: float = jnp.nan
     """CO2 variance at mixed-layer top [ppm²]."""
-    wCO2M: float = jnp.nan
-    """CO2 mass flux [mgC/m²/s]."""
 
 
 class StandardCumulusModel(AbstractCloudModel):
