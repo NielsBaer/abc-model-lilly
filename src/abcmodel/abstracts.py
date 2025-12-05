@@ -13,60 +13,66 @@ class AbstractState:
 class AbstractRadiationState(AbstractState):
     """Abstract radiation state."""
 
-    net_rad: Array
+    net_rad: Array | float
     """Net surface radiation [W m-2]."""
-    in_srad: Array
+    in_srad: Array | float
     """Incoming solar radiation [W m-2]."""
-    out_srad: Array
+    out_srad: Array | float
     """Outgoing solar radiation [W m-2]."""
-    in_lrad: Array
+    in_lrad: Array | float
     """Incoming longwave radiation [W m-2]."""
-    out_lrad: Array
+    out_lrad: Array | float
     """Outgoing longwave radiation [W m-2]."""
 
 
 class AbstractLandState(AbstractState):
     """Abstract land state."""
 
-    alpha: Array
+    alpha: Array | float
     """surface albedo [-], range 0 to 1."""
-    surf_temp: Array
+    surf_temp: Array | float
     """Surface temperature [K]."""
-    rs: Array
+    rs: Array | float
     """Surface resistance [s m-1]."""
-    wg: Array
+    wg: Array | float
     """No moisture content in the root zone [m3 m-3]."""
-    wl: Array
+    wl: Array | float
     """No water content in the canopy [m]."""
-    ra: Array
+    ra: Array | float
     """Aerodynamic resistance [s/m]."""
-    esat: Array
+    esat: Array | float
     """Saturation vapor pressure [Pa]."""
-    qsat: Array
+    qsat: Array | float
     """Saturation specific humidity [kg/kg]."""
-    dqsatdT: Array
+    dqsatdT: Array | float
     """Derivative of saturation specific humidity with respect to temperature [kg/kg/K]."""
-    e: Array
+    e: Array | float
     """Vapor pressure [Pa]."""
-    qsatsurf: Array
+    qsatsurf: Array | float
     """Saturation specific humidity at surface temperature [kg/kg]."""
+    wtheta: Array | float
+    """Kinematic heat flux [K m/s]."""
+    wq: Array | float
+    """Kinematic moisture flux [kg/kg m/s]."""
+    wCO2: Array | float
+    """Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1]."""
 
 
 class AbstractAtmosphereState(AbstractState):
     """Abstract atmosphere state."""
 
 
-class AbstractCoupledState(AbstractState):
-    """Abstract coupled state."""
-
-    atmosphere: AbstractAtmosphereState
-    land: AbstractLandState
-    radiation: AbstractRadiationState
-
-
 R = TypeVar("R", bound=AbstractRadiationState)
 L = TypeVar("L", bound=AbstractLandState)
 A = TypeVar("A", bound=AbstractAtmosphereState)
+
+
+class AbstractCoupledState(AbstractState, Generic[A, L, R]):
+    """Abstract coupled state, generic over atmosphere, land, and radiation types."""
+
+    atmosphere: A
+    land: L
+    radiation: R
 
 
 class AbstractModel:
@@ -82,7 +88,7 @@ class AbstractRadiationModel(AbstractModel, Generic[R]):
     @abstractmethod
     def run(
         self,
-        state: AbstractCoupledState,
+        state: AbstractCoupledState[A, L, R],
         t: int,
         dt: float,
         const: PhysicalConstants,
@@ -96,7 +102,7 @@ class AbstractLandModel(AbstractModel, Generic[L]):
     @abstractmethod
     def run(
         self,
-        state: AbstractCoupledState,
+        state: AbstractCoupledState[A, L, R],
         const: PhysicalConstants,
     ) -> L:
         raise NotImplementedError
@@ -112,24 +118,24 @@ class AbstractAtmosphereModel(AbstractModel, Generic[A]):
     @abstractmethod
     def warmup(
         self,
-        state: AbstractCoupledState,
+        state: AbstractCoupledState[A, L, R],
         const: PhysicalConstants,
-        land: AbstractLandModel,
-    ) -> AbstractCoupledState:
+        land: AbstractLandModel[L],
+    ) -> AbstractCoupledState[A, L, R]:
         raise NotImplementedError
 
     @abstractmethod
     def run(
         self,
-        state: AbstractCoupledState,
+        state: AbstractCoupledState[A, L, R],
         const: PhysicalConstants,
     ) -> A:
         raise NotImplementedError
 
     @abstractmethod
     def statistics(
-        self, state: AbstractCoupledState, t: int, const: PhysicalConstants
-    ) -> AbstractCoupledState:
+        self, state: AbstractCoupledState[A, L, R], t: int, const: PhysicalConstants
+    ) -> AbstractCoupledState[A, L, R]:
         raise NotImplementedError
 
     @abstractmethod

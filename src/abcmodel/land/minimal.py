@@ -37,6 +37,12 @@ class MinimalLandSurfaceState(AbstractLandState):
     """Vapor pressure [Pa]."""
     qsatsurf: float = jnp.nan
     """Saturation specific humidity at surface temperature [kg/kg]."""
+    wtheta: float = jnp.nan
+    """Kinematic heat flux [K m/s]."""
+    wq: float = jnp.nan
+    """Kinematic moisture flux [kg/kg m/s]."""
+    wCO2: float = jnp.nan
+    """Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1]."""
 
     def tree_flatten(self):
         return (

@@ -181,7 +181,7 @@ class BulkMixedLayerState(AbstractMixedLayerState):
         return cls(*children)
 
 
-# Alias for backward compatibility
+# alias
 BulkMixedLayerInitConds = BulkMixedLayerState
 
 
@@ -276,20 +276,10 @@ class BulkMixedLayerModel(AbstractStandardStatsModel, AbstractMixedLayerModel):
         # In `minimal.py` example, `wtheta` is initialized in `ml_state`.
         # So if `LandModel` doesn't update it, we use `ml_state.wtheta`.
 
-        # Check if land_state has wtheta and it is not NaN
-        wtheta = ml_state.wtheta
-        if hasattr(land_state, "wtheta"):
-            wtheta = jnp.where(
-                jnp.isnan(land_state.wtheta), ml_state.wtheta, land_state.wtheta
-            )
-
-        wq = ml_state.wq
-        if hasattr(land_state, "wq"):
-            wq = jnp.where(jnp.isnan(land_state.wq), ml_state.wq, land_state.wq)
-
-        wCO2 = ml_state.wCO2
-        if hasattr(land_state, "wCO2"):
-            wCO2 = jnp.where(jnp.isnan(land_state.wCO2), ml_state.wCO2, land_state.wCO2)
+        # Access fluxes from land state (using jnp.where to handle NaNs)
+        wtheta = jnp.where(jnp.isnan(land_state.wtheta), ml_state.wtheta, land_state.wtheta)
+        wq = jnp.where(jnp.isnan(land_state.wq), ml_state.wq, land_state.wq)
+        wCO2 = jnp.where(jnp.isnan(land_state.wCO2), ml_state.wCO2, land_state.wCO2)
 
         ml_state.ws = self.compute_ws(ml_state.h_abl)
         ml_state.wf = self.compute_wf(ml_state.deltatheta, const)

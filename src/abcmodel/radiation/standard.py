@@ -8,7 +8,7 @@ from ..abstracts import (
     AbstractRadiationModel,
     AbstractRadiationState,
 )
-from ..utils import Array, PhysicalConstants, nan_as_array
+from ..utils import Array, PhysicalConstants
 
 
 @jax.tree_util.register_pytree_node_class
@@ -16,15 +16,15 @@ from ..utils import Array, PhysicalConstants, nan_as_array
 class StandardRadiationState(AbstractRadiationState):
     """Standard radiation model state."""
 
-    net_rad: Array
+    net_rad: Array | float
     """Net surface radiation [W m-2]."""
-    in_srad: Array = nan_as_array
+    in_srad: Array | float = jnp.nan
     """Incoming solar radiation [W m-2]."""
-    out_srad: Array = nan_as_array
+    out_srad: Array | float = jnp.nan
     """Outgoing solar radiation [W m-2]."""
-    in_lrad: Array = nan_as_array
+    in_lrad: Array | float = jnp.nan
     """Incoming longwave radiation [W m-2]."""
-    out_lrad: Array = nan_as_array
+    out_lrad: Array | float = jnp.nan
     """Outgoing longwave radiation [W m-2]."""
 
     def tree_flatten(self):

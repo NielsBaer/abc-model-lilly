@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 import abcconfigs.class_model as cm
 import abcmodel
@@ -77,22 +77,6 @@ def main():
     time, trajectory = abcmodel.integrate(state, abcoupler, dt=dt, runtime=runtime)
 
     # plot output
-    plt.figure(figsize=(12, 8))
-
-    plt.subplot(231)
-    plt.plot(time, trajectory.atmosphere.mixed_layer.h_abl)
-    plt.xlabel("time [h]")
-    plt.ylabel("h [m]")
-
-    plt.subplot(234)
-    plt.plot(time, trajectory.atmosphere.mixed_layer.theta)
-    plt.xlabel("time [h]")
-    plt.ylabel("theta [K]")
-
-    plt.subplot(232)
-    plt.plot(time, trajectory.atmosphere.mixed_layer.q * 1000.0)
-    plt.xlabel("time [h]")
-    plt.ylabel("q [g kg-1]")
 
     plt.subplot(235)
     plt.plot(time, trajectory.atmosphere.clouds.cc_frac)

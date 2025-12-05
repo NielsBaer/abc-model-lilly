@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 import jax
 import jax.numpy as jnp
-from jaxtyping import Array, PyTree
+from jaxtyping import Array
 
 from ...abstracts import AbstractCoupledState
 from ...utils import PhysicalConstants, compute_qsat
@@ -62,16 +62,31 @@ class StandardSurfaceLayerState(AbstractSurfaceLayerState):
 
     def tree_flatten(self):
         return (
-            self.ustar, self.z0m, self.z0h, self.theta,
-            self.drag_m, self.drag_s,
-            self.uw, self.vw, self.temp_2m, self.q2m, self.u2m, self.v2m,
-            self.e2m, self.esat2m, self.thetasurf, self.thetavsurf,
-            self.qsurf, self.obukhov_length, self.rib_number
+            self.ustar,
+            self.z0m,
+            self.z0h,
+            self.theta,
+            self.drag_m,
+            self.drag_s,
+            self.uw,
+            self.vw,
+            self.temp_2m,
+            self.q2m,
+            self.u2m,
+            self.v2m,
+            self.e2m,
+            self.esat2m,
+            self.thetasurf,
+            self.thetavsurf,
+            self.qsurf,
+            self.obukhov_length,
+            self.rib_number,
         ), None
 
     @classmethod
     def tree_unflatten(cls, aux, children):
         return cls(*children)
+
 
 # Alias for backward compatibility if needed, or just for clarity in examples
 StandardSurfaceLayerInitConds = StandardSurfaceLayerState
@@ -87,7 +102,9 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
     def __init__(self):
         pass
 
-    def run(self, state: AbstractCoupledState, const: PhysicalConstants) -> StandardSurfaceLayerState:
+    def run(
+        self, state: AbstractCoupledState, const: PhysicalConstants
+    ) -> StandardSurfaceLayerState:
         """Run the model.
 
         Args:
@@ -105,7 +122,7 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
         # AbstractAtmosphereState doesn't define surface_layer
         # So we need to cast or assume.
         # For now, we assume the runtime object has the structure.
-        
+
         sl_state = state.atmosphere.surface_layer
         # mixed layer state (for u, v, wstar, theta, q, surf_pressure)
         ml_state = state.atmosphere.mixed_layer
@@ -132,7 +149,9 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
         sl_state.rib_number = compute_richardson_number(
             ueff, zsl, const.g, ml_state.thetav, sl_state.thetavsurf
         )
-        sl_state.obukhov_length = ribtol(zsl, sl_state.rib_number, sl_state.z0h, sl_state.z0m)
+        sl_state.obukhov_length = ribtol(
+            zsl, sl_state.rib_number, sl_state.z0h, sl_state.z0m
+        )
         sl_state.drag_m, sl_state.drag_s = compute_drag_coefficients(
             zsl, const.k, sl_state.obukhov_length, sl_state.z0h, sl_state.z0m
         )

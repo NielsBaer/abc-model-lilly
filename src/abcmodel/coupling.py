@@ -1,4 +1,5 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Generic, TypeVar
 
 import jax
 
@@ -30,15 +31,21 @@ class DiagnosticsState:
         return cls(*children)
 
 
+# Type variables for CoupledState
+A = TypeVar("A", bound=AbstractAtmosphereState)
+L = TypeVar("L", bound=AbstractLandState)
+R = TypeVar("R", bound=AbstractRadiationState)
+
+
 @jax.tree_util.register_pytree_node_class
 @dataclass
-class CoupledState(AbstractCoupledState):
-    """Hierarchical coupled state."""
+class CoupledState(AbstractCoupledState[A, L, R], Generic[A, L, R]):
+    """Hierarchical coupled state, generic over component types."""
 
-    atmosphere: AbstractAtmosphereState
-    land: AbstractLandState
-    radiation: AbstractRadiationState
-    diagnostics: DiagnosticsState = DiagnosticsState()
+    atmosphere: A
+    land: L
+    radiation: R
+    diagnostics: DiagnosticsState = field(default_factory=DiagnosticsState)
 
     def tree_flatten(self):
         children = (self.atmosphere, self.land, self.radiation, self.diagnostics)
@@ -65,10 +72,10 @@ class ABCoupler:
 
     @staticmethod
     def init_state(
-        radiation_state: AbstractRadiationState,
-        land_state: AbstractLandState,
-        atmosphere_state: AbstractAtmosphereState,
-    ) -> CoupledState:
+        radiation_state: R,
+        land_state: L,
+        atmosphere_state: A,
+    ) -> CoupledState[A, L, R]:
         return CoupledState(
             radiation=radiation_state,
             land=land_state,
