@@ -7,6 +7,7 @@ from .abstracts import (
     AbstractMixedLayerModel,
     AbstractSurfaceLayerModel,
 )
+from .clouds import NoCloudModel
 
 
 class DayOnlyAtmosphereModel(AbstractAtmosphereModel):
@@ -44,9 +45,6 @@ class DayOnlyAtmosphereModel(AbstractAtmosphereModel):
 
         # run land surface
         state = land.run(state, const)
-
-        # conditionally run clouds if model is not NoCloudModel
-        from .clouds import NoCloudModel
 
         if not isinstance(self.clouds, NoCloudModel):
             state = self.mixed_layer.run(state, const)
