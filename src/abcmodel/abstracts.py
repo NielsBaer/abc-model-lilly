@@ -130,9 +130,12 @@ class AbstractAtmosphereModel(AbstractModel, Generic[AtmosT]):
     @abstractmethod
     def warmup(
         self,
+        radmodel: AbstractRadiationModel[RadT],
+        landmodel: AbstractLandModel[LandT],
         state: AbstractCoupledState[RadT, LandT, AtmosT],
+        t: int,
+        dt: float,
         const: PhysicalConstants,
-        land: AbstractLandModel[LandT],
     ) -> AbstractCoupledState[RadT, LandT, AtmosT]:
         raise NotImplementedError
 

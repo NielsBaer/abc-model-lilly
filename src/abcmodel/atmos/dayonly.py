@@ -5,6 +5,7 @@ from ..abstracts import (
     AbstractAtmosphereState,
     AbstractCoupledState,
     AbstractLandModel,
+    AbstractRadiationModel,
 )
 from ..utils import PhysicalConstants
 from .abstracts import (
@@ -67,28 +68,35 @@ class DayOnlyAtmosphereModel(AbstractAtmosphereModel[DayOnlyAtmosphereState]):
 
     def warmup(
         self,
+        radmodel: AbstractRadiationModel,
+        landmodel: AbstractLandModel,
         state: AbstractCoupledState,
+        t: int,
+        dt: float,
         const: PhysicalConstants,
-        land: AbstractLandModel,
     ) -> AbstractCoupledState:
         """Warmup the atmos by running it for a few timesteps."""
+        state = state.replace(
+            atmos=self.statistics(state.atmos, t, const),
+        )
+        state = state.replace(rad=radmodel.run(state, t, dt, const))
         for _ in range(10):
             sl_state = self.surface_layer.run(state, const)
             new_atmos = replace(state.atmos, surface_layer=sl_state)
-            state = replace(state, atmos=new_atmos)
-        land_state = land.run(state, const)
-        state = replace(state, land=land_state)
+            state = state.replace(atmos=new_atmos)
+        land_state = landmodel.run(state, const)
+        state = state.replace(land=land_state)
 
         if not isinstance(self.clouds, NoCloudModel):
             ml_state = self.mixed_layer.run(state, const)
             new_atmos = replace(state.atmos, mixed_layer=ml_state)
-            state = replace(state, atmos=new_atmos)
+            state = state.replace(atmos=new_atmos)
             cl_state = self.clouds.run(state, const)
             new_atmos = replace(state.atmos, clouds=cl_state)
-            state = replace(state, atmos=new_atmos)
+            state = state.replace(atmos=new_atmos)
         ml_state = self.mixed_layer.run(state, const)
         new_atmos = replace(state.atmos, mixed_layer=ml_state)
-        state = replace(state, atmos=new_atmos)
+        state = state.replace(atmos=new_atmos)
         return state
 
     def integrate(

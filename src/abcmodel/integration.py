@@ -8,13 +8,11 @@ from jax import Array
 from .coupling import A, ABCoupler, CoupledState, L, R
 
 
-def warmup(state: CoupledState, coupler: ABCoupler, t: int, dt: float) -> CoupledState:
+def warmup(
+    state: CoupledState[R, L, A], coupler: ABCoupler, t: int, dt: float
+) -> CoupledState[R, L, A]:
     """Warmup the model by running it for a few timesteps."""
-    state = state.replace(
-        atmos=coupler.atmos.statistics(state.atmos, t, coupler.const),
-    )
-    state = replace(state, rad=coupler.rad.run(state, t, dt, coupler.const))
-    state = coupler.atmos.warmup(state, coupler.const, coupler.land)
+    state = coupler.atmos.warmup(coupler.rad, coupler.land, state, t, dt, coupler.const)
     return state
 
 
