@@ -193,35 +193,17 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
         ueff = jnp.sqrt(ml_state.u**2.0 + ml_state.v**2.0 + ml_state.wstar**2.0)
         ra = ueff / jnp.maximum(1.0e-3, sl_state.ustar) ** 2.0
 
-        # We first update flux-related vars (ra, esat, etc) in local variables or a temp state
-        # to pass to update_surface_resistance
-
-        # NOTE: `replace` is safe to call multiple times or we can gather everything.
-        # But `dqsatdT` needs `esat` in `land_state`.
-        # So we should update incrementally or construct the values.
-
         esat = compute_esat(ml_state.theta)
         qsat = compute_qsat(ml_state.theta, ml_state.surf_pressure)
 
-        # To compute dqsatdT we need esat. We can pass esat explicitely or use a temp state.
-        # But compute_dqsatdT expects state.
-        # Let's create a temporary state with updated values for intermediate computations.
-        # This is slightly inefficient but safe. Or we can just calculate dqsatdT manually here,
-        # but better to use the method if possible. However the method takes state.
-        # Making a temp state is okay.
-
-        temp_state_1 = replace(land_state, ra=ra, esat=esat, qsat=qsat)
-        dqsatdT = self.compute_dqsatdT(
-            temp_state_1, ml_state.theta, ml_state.surf_pressure
-        )
+        dqsatdT = self.compute_dqsatdT(esat, ml_state.theta, ml_state.surf_pressure)
         e = self.compute_e(ml_state.q, ml_state.surf_pressure)
 
-        temp_state_2 = replace(temp_state_1, dqsatdT=dqsatdT, e=e)
-
-        # update coupled state with temp land state for the abstract methods
-        # This assumes state is a Pytree/Dataclass that can be replaced.
-        # AbstractCoupledState is usually a Pytree.
-        state_for_update = replace(state, land=temp_state_2)
+        # Update temp state for abstract methods
+        land_state_updated = replace(
+            land_state, ra=ra, esat=esat, qsat=qsat, dqsatdT=dqsatdT, e=e
+        )
+        state_for_update = replace(state, land=land_state_updated)
 
         state_after_rs = self.update_surface_resistance(state_for_update, const)
         state_after_co2 = self.update_co2_flux(state_after_rs, const)
@@ -229,44 +211,96 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
         # Now get the updated land state
         land_state_updated = state_after_co2.land
 
-        rssoil = self.compute_soil_resistance(land_state_updated)
-        cliq = self.compute_cliq(land_state_updated)
-
-        # We need to put rssoil and cliq into state for skin temp calc
-        land_state_updated = replace(land_state_updated, rssoil=rssoil, cliq=cliq)
+        rssoil = self.compute_soil_resistance(land_state_updated.wg)
+        cliq = self.compute_cliq(land_state_updated.wl)
 
         surf_temp = self.compute_skin_temperature(
-            land_state_updated, ml_state, sl_state, rad_state, const
+            rad_state.net_rad,
+            ml_state.theta,
+            ml_state.q,
+            land_state_updated.qsat,
+            land_state_updated.dqsatdT,
+            land_state_updated.ra,
+            land_state_updated.rs,
+            rssoil,
+            cliq,
+            land_state_updated.temp_soil,
+            const,
         )
         qsatsurf = compute_qsat(surf_temp, ml_state.surf_pressure)
 
-        land_state_updated = replace(
-            land_state_updated, surf_temp=surf_temp, qsatsurf=qsatsurf
+        le_veg = self.compute_le_veg(
+            surf_temp,
+            ml_state.theta,
+            ml_state.q,
+            land_state_updated.qsat,
+            land_state_updated.dqsatdT,
+            land_state_updated.ra,
+            land_state_updated.rs,
+            cliq,
+            const,
         )
+        le_liq = self.compute_le_liq(
+            surf_temp,
+            ml_state.theta,
+            ml_state.q,
+            land_state_updated.qsat,
+            land_state_updated.dqsatdT,
+            land_state_updated.ra,
+            cliq,
+            const,
+        )
+        le_soil = self.compute_le_soil(
+            surf_temp,
+            ml_state.theta,
+            ml_state.q,
+            land_state_updated.qsat,
+            land_state_updated.dqsatdT,
+            land_state_updated.ra,
+            rssoil,
+            const,
+        )
+        wltend = self.compute_wltend(le_liq, const)
 
-        le_veg = self.compute_le_veg(land_state_updated, ml_state, const)
-        le_liq = self.compute_le_liq(land_state_updated, ml_state, const)
-        le_soil = self.compute_le_soil(land_state_updated, ml_state, const)
-        wltend = self.compute_wltend(land_state_updated, const)
+        le = self.compute_le(le_soil, le_veg, le_liq)
+        hf = self.compute_hf(surf_temp, ml_state.theta, land_state_updated.ra, const)
+        gf = self.compute_gf(surf_temp, land_state_updated.temp_soil)
+        le_pot = self.compute_le_pot(
+            rad_state.net_rad,
+            gf,
+            land_state_updated.dqsatdT,
+            land_state_updated.qsat,
+            ml_state.q,
+            land_state_updated.ra,
+            const,
+        )
+        le_ref = self.compute_le_ref(
+            rad_state.net_rad,
+            gf,
+            land_state_updated.dqsatdT,
+            land_state_updated.qsat,
+            ml_state.q,
+            land_state_updated.ra,
+            const,
+        )
+        temp_soil_tend = self.compute_temp_soil_tend(
+            gf, land_state_updated.temp_soil, land_state_updated.temp2
+        )
+        wgtend = self.compute_wgtend(land_state_updated.wg, le_soil, const)
 
-        land_state_updated = replace(
+        wtheta = self.compute_wtheta(hf, const)
+        wq = self.compute_wq(le, const)
+
+        return replace(
             land_state_updated,
+            rssoil=rssoil,
+            cliq=cliq,
+            surf_temp=surf_temp,
+            qsatsurf=qsatsurf,
             le_veg=le_veg,
             le_liq=le_liq,
             le_soil=le_soil,
             wltend=wltend,
-        )
-
-        le = self.compute_le(land_state_updated)
-        hf = self.compute_hf(land_state_updated, ml_state, const)
-        gf = self.compute_gf(land_state_updated)
-        le_pot = self.compute_le_pot(land_state_updated, ml_state, rad_state, const)
-        le_ref = self.compute_le_ref(land_state_updated, ml_state, rad_state, const)
-        temp_soil_tend = self.compute_temp_soil_tend(land_state_updated)
-        wgtend = self.compute_wgtend(land_state_updated, const)
-
-        land_state_updated = replace(
-            land_state_updated,
             le=le,
             hf=hf,
             gf=gf,
@@ -274,15 +308,12 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             le_ref=le_ref,
             temp_soil_tend=temp_soil_tend,
             wgtend=wgtend,
+            wtheta=wtheta,
+            wq=wq,
         )
 
-        wtheta = self.compute_wtheta(land_state_updated, const)
-        wq = self.compute_wq(land_state_updated, const)
-
-        return replace(land_state_updated, wtheta=wtheta, wq=wq)
-
     def compute_dqsatdT(
-        self, state: StandardLandSurfaceState, theta: float, surf_pressure: float
+        self, esat: Array, theta: float, surf_pressure: float
     ) -> Array:
         """Compute the derivative of saturation vapor pressure with respect to temperature ``dqsatdT``.
 
@@ -302,7 +333,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
         num = 17.2694 * (theta - 273.16)
         den = (theta - 35.86) ** 2.0
         mult = num / den
-        desatdT = state.esat * mult
+        desatdT = esat * mult
         return 0.622 * desatdT / surf_pressure
 
     def compute_e(self, q: Array, surf_pressure: Array) -> Array:
@@ -336,7 +367,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
         """Abstract method to update CO2 flux."""
         raise NotImplementedError
 
-    def compute_soil_resistance(self, state: PyTree) -> Array:
+    def compute_soil_resistance(self, wg: Array) -> Array:
         """Compute the soil resistance ``rssoil``.
 
         Notes:
@@ -363,14 +394,14 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             Equations 9.28 and 9.31 from the CLASS book.
         """
         f2 = jnp.where(
-            state.wg > self.wwilt,
-            (self.wfc - self.wwilt) / (state.wg - self.wwilt),
+            wg > self.wwilt,
+            (self.wfc - self.wwilt) / (wg - self.wwilt),
             1.0e8,
         )
         assert isinstance(f2, Array)
         return self.rssoilmin * f2
 
-    def compute_cliq(self, state: PyTree) -> Array:
+    def compute_cliq(self, wl: Array) -> Array:
         """Compute the wet fraction ``cliq``.
 
         Notes:
@@ -388,14 +419,20 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             Equation 9.19 from the CLASS book.
         """
         wlmx = self.lai * self.wmax
-        return jnp.minimum(1.0, state.wl / wlmx)
+        return jnp.minimum(1.0, wl / wlmx)
 
     def compute_skin_temperature(
         self,
-        state: StandardLandSurfaceState,
-        ml_state: AbstractMixedLayerState,
-        sl_state: AbstractSurfaceLayerState,
-        rad_state: AbstractRadiationState,
+        net_rad: Array,
+        theta: Array,
+        q: Array,
+        qsat: Array,
+        dqsatdT: Array,
+        ra: Array,
+        rs: Array,
+        rssoil: Array,
+        cliq: Array,
+        temp_soil: Array,
         const: PhysicalConstants,
     ) -> Array:
         """Compute the skin temperature ``surf_temp``.
@@ -436,47 +473,53 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             energy fluxes as calculated by the other methods in this class.
         """
         return (
-            rad_state.net_rad
-            + const.rho * const.cp / state.ra * ml_state.theta
+            net_rad
+            + const.rho * const.cp / ra * theta
             + self.cveg
-            * (1.0 - state.cliq)
+            * (1.0 - cliq)
             * const.rho
             * const.lv
-            / (state.ra + state.rs)
-            * (state.dqsatdT * ml_state.theta - state.qsat + ml_state.q)
+            / (ra + rs)
+            * (dqsatdT * theta - qsat + q)
             + (1.0 - self.cveg)
             * const.rho
             * const.lv
-            / (state.ra + state.rssoil)
-            * (state.dqsatdT * ml_state.theta - state.qsat + ml_state.q)
+            / (ra + rssoil)
+            * (dqsatdT * theta - qsat + q)
             + self.cveg
-            * state.cliq
+            * cliq
             * const.rho
             * const.lv
-            / state.ra
-            * (state.dqsatdT * ml_state.theta - state.qsat + ml_state.q)
-            + self.lam * state.temp_soil
+            / ra
+            * (dqsatdT * theta - qsat + q)
+            + self.lam * temp_soil
         ) / (
-            const.rho * const.cp / state.ra
+            const.rho * const.cp / ra
             + self.cveg
-            * (1.0 - state.cliq)
+            * (1.0 - cliq)
             * const.rho
             * const.lv
-            / (state.ra + state.rs)
-            * state.dqsatdT
+            / (ra + rs)
+            * dqsatdT
             + (1.0 - self.cveg)
             * const.rho
             * const.lv
-            / (state.ra + state.rssoil)
-            * state.dqsatdT
-            + self.cveg * state.cliq * const.rho * const.lv / state.ra * state.dqsatdT
+            / (ra + rssoil)
+            * dqsatdT
+            + self.cveg * cliq * const.rho * const.lv / ra * dqsatdT
             + self.lam
         )
 
     def compute_le_veg(
         self,
-        state: StandardLandSurfaceState,
-        ml_state: AbstractMixedLayerState,
+        surf_temp: Array,
+        theta: Array,
+        q: Array,
+        qsat: Array,
+        dqsatdT: Array,
+        ra: Array,
+        rs: Array,
+        cliq: Array,
         const: PhysicalConstants,
     ) -> Array:
         """Compute the latent heat flux (transpiration) from vegetation ``le_veg``.
@@ -511,16 +554,21 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             Equation 9.15 from the CLASS book.
         """
         term = (
-            state.dqsatdT * (state.surf_temp - ml_state.theta) + state.qsat - ml_state.q
+            dqsatdT * (surf_temp - theta) + qsat - q
         )
-        le_veg = const.rho * const.lv / (state.ra + state.rs) * term
-        frac = (1.0 - state.cliq) * self.cveg
+        le_veg = const.rho * const.lv / (ra + rs) * term
+        frac = (1.0 - cliq) * self.cveg
         return frac * le_veg
 
     def compute_le_liq(
         self,
-        state: StandardLandSurfaceState,
-        ml_state: AbstractMixedLayerState,
+        surf_temp: Array,
+        theta: Array,
+        q: Array,
+        qsat: Array,
+        dqsatdT: Array,
+        ra: Array,
+        cliq: Array,
         const: PhysicalConstants,
     ) -> Array:
         """Compute the latent heat flux on the leaf (dew) ``le_liq``.
@@ -539,16 +587,21 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             Equation 9.18 from the CLASS book.
         """
         term = (
-            state.dqsatdT * (state.surf_temp - ml_state.theta) + state.qsat - ml_state.q
+            dqsatdT * (surf_temp - theta) + qsat - q
         )
-        le_liq = const.rho * const.lv / state.ra * term
-        frac = state.cliq * self.cveg
+        le_liq = const.rho * const.lv / ra * term
+        frac = cliq * self.cveg
         return frac * le_liq
 
     def compute_le_soil(
         self,
-        state: StandardLandSurfaceState,
-        ml_state: AbstractMixedLayerState,
+        surf_temp: Array,
+        theta: Array,
+        q: Array,
+        qsat: Array,
+        dqsatdT: Array,
+        ra: Array,
+        rssoil: Array,
         const: PhysicalConstants,
     ) -> Array:
         """Compute the latent heat flux on the soil (evaporation) ``le_soil``.
@@ -566,13 +619,13 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             Equation 9.21 from the CLASS book.
         """
         term = (
-            state.dqsatdT * (state.surf_temp - ml_state.theta) + state.qsat - ml_state.q
+            dqsatdT * (surf_temp - theta) + qsat - q
         )
-        le_soil = const.rho * const.lv / (state.ra + state.rssoil) * term
+        le_soil = const.rho * const.lv / (ra + rssoil) * term
         frac = 1.0 - self.cveg
         return frac * le_soil
 
-    def compute_wltend(self, state: PyTree, const: PhysicalConstants) -> Array:
+    def compute_wltend(self, le_liq: Array, const: PhysicalConstants) -> Array:
         """Compute the water layer depth tendency tendency ``wltend``.
 
         Notes:
@@ -587,9 +640,9 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
         References:
             Equation 9.20 from the CLASS book, with sign convention.
         """
-        return -state.le_liq / (const.rhow * const.lv)
+        return -le_liq / (const.rhow * const.lv)
 
-    def compute_le(self, state: PyTree) -> Array:
+    def compute_le(self, le_soil: Array, le_veg: Array, le_liq: Array) -> Array:
         """Compute the evapotranspiration (latent heat flux) ``le``.
 
         Notes:
@@ -599,12 +652,13 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             - evaporation from bare soil in :meth:`compute_le_soil`;
             - evaporation from wet leaves (dew) in :meth:`compute_le_liq`.
         """
-        return state.le_soil + state.le_veg + state.le_liq
+        return le_soil + le_veg + le_liq
 
     def compute_hf(
         self,
-        state: StandardLandSurfaceState,
-        ml_state: AbstractMixedLayerState,
+        surf_temp: Array,
+        theta: Array,
+        ra: Array,
         const: PhysicalConstants,
     ) -> Array:
         """Compute the sensible heat flux ``hf``.
@@ -624,9 +678,9 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             Equation 9.13 from the CLASS book, but why are we using :math:`T_s` instead of :math:`\\theta_s`?
             Probably because the variations of pressure are not significant enough.
         """
-        return const.rho * const.cp / state.ra * (state.surf_temp - ml_state.theta)
+        return const.rho * const.cp / ra * (surf_temp - theta)
 
-    def compute_gf(self, state: PyTree) -> Array:
+    def compute_gf(self, surf_temp: Array, temp_soil: Array) -> Array:
         """Compute the ground heat flux ``gf``.
 
         Notes:
@@ -643,13 +697,16 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
         References:
             Equation 9.33 from the CLASS book.
         """
-        return self.lam * (state.surf_temp - state.temp_soil)
+        return self.lam * (surf_temp - temp_soil)
 
     def compute_le_pot(
         self,
-        state: StandardLandSurfaceState,
-        ml_state: AbstractMixedLayerState,
-        rad_state: AbstractRadiationState,
+        net_rad: Array,
+        gf: Array,
+        dqsatdT: Array,
+        qsat: Array,
+        q: Array,
+        ra: Array,
         const: PhysicalConstants,
     ) -> Array:
         """Compute the potential latent heat flux ``le_pot``.
@@ -671,16 +728,19 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
         References:
             Equation 9.16 from the CLASS book.
         """
-        rad_term = state.dqsatdT * (rad_state.net_rad - state.gf)
-        aerodynamic_term = const.rho * const.cp / state.ra * (state.qsat - ml_state.q)
-        denominator = state.dqsatdT + const.cp / const.lv
+        rad_term = dqsatdT * (net_rad - gf)
+        aerodynamic_term = const.rho * const.cp / ra * (qsat - q)
+        denominator = dqsatdT + const.cp / const.lv
         return (rad_term + aerodynamic_term) / denominator
 
     def compute_le_ref(
         self,
-        state: StandardLandSurfaceState,
-        ml_state: AbstractMixedLayerState,
-        rad_state: AbstractRadiationState,
+        net_rad: Array,
+        gf: Array,
+        dqsatdT: Array,
+        qsat: Array,
+        q: Array,
+        ra: Array,
         const: PhysicalConstants,
     ) -> Array:
         """Compute the reference latent heat flux ``le_ref``.
@@ -705,13 +765,15 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
         References:
             Equation 9.16 from the CLASS book.
         """
-        rad_term = state.dqsatdT * (rad_state.net_rad - state.gf)
-        aerodynamic_term = const.rho * const.cp / state.ra * (state.qsat - ml_state.q)
-        den1 = state.dqsatdT
-        den2 = const.cp / const.lv * (1.0 + self.rsmin / self.lai / state.ra)
+        rad_term = dqsatdT * (net_rad - gf)
+        aerodynamic_term = const.rho * const.cp / ra * (qsat - q)
+        den1 = dqsatdT
+        den2 = const.cp / const.lv * (1.0 + self.rsmin / self.lai / ra)
         return (rad_term + aerodynamic_term) / (den1 + den2)
 
-    def compute_temp_soil_tend(self, state: PyTree) -> Array:
+    def compute_temp_soil_tend(
+        self, gf: Array, temp_soil: Array, temp2: Array
+    ) -> Array:
         """Compute the soil temperature tendency ``temp_soil_tend``.
 
         Notes:
@@ -741,9 +803,11 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             Equation 9.32 of the CLASS book.
         """
         cg = self.cgsat * (self.wsat / self.w2) ** (self.b / (2.0 * jnp.log(10.0)))
-        return cg * state.gf - 2.0 * jnp.pi / 86400.0 * (state.temp_soil - state.temp2)
+        return cg * gf - 2.0 * jnp.pi / 86400.0 * (temp_soil - temp2)
 
-    def compute_wgtend(self, state: PyTree, const: PhysicalConstants) -> Array:
+    def compute_wgtend(
+        self, wg: Array, le_soil: Array, const: PhysicalConstants
+    ) -> Array:
         """Compute the soil moisture tendency ``wgtend``.
 
         Notes:
@@ -788,17 +852,17 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             - Clapp, R. B., & Hornberger, G. M. (1978). Empirical equations for some soil hydraulic properties. Water resources research, 14(4), 601-604.
 
         """
-        c1 = self.c1sat * (self.wsat / state.wg) ** (self.b / 2.0 + 1.0)
+        c1 = self.c1sat * (self.wsat / wg) ** (self.b / 2.0 + 1.0)
         c2 = self.c2ref * (self.w2 / (self.wsat - self.w2))
         wgeq = self.w2 - self.wsat * self.a * (
             (self.w2 / self.wsat) ** self.p
             * (1.0 - (self.w2 / self.wsat) ** (8.0 * self.p))
         )
-        evap_loss = -c1 / (const.rhow * self.d1) * state.le_soil / const.lv
-        deep_grad = c2 / 86400.0 * (state.wg - wgeq)
+        evap_loss = -c1 / (const.rhow * self.d1) * le_soil / const.lv
+        deep_grad = c2 / 86400.0 * (wg - wgeq)
         return evap_loss + deep_grad
 
-    def compute_wtheta(self, state: PyTree, const: PhysicalConstants) -> Array:
+    def compute_wtheta(self, hf: Array, const: PhysicalConstants) -> Array:
         """Compute the kinematic heat flux ``wtheta``.
 
         Notes:
@@ -811,9 +875,9 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             where :math:`\\rho` is the density of air and
             :math:`c_p` is the specific heat capacity of air at constant pressure.
         """
-        return state.hf / (const.rho * const.cp)
+        return hf / (const.rho * const.cp)
 
-    def compute_wq(self, state: PyTree, const: PhysicalConstants) -> Array:
+    def compute_wq(self, le: Array, const: PhysicalConstants) -> Array:
         """Compute the kinematic moisture flux ``wq``.
 
         Notes:
@@ -826,4 +890,4 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             where :math:`\\rho` is the density of air and
             :math:`L_v` is the latent heat of vaporization.
         """
-        return state.le / (const.rho * const.lv)
+        return le / (const.rho * const.lv)

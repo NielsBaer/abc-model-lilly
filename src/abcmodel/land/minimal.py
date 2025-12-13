@@ -81,19 +81,13 @@ class MinimalLandSurfaceModel(AbstractLandModel):
         esat = compute_esat(ml_state.theta)
         qsat = compute_qsat(ml_state.theta, ml_state.surf_pressure)
 
-        # Helper computation without modifying state in place
-        # compute_dqsatdT expects state for esat/qsat if it uses them, but here it accesses state.esat
-        # So we need to provide a state with Updated esat.
-        temp_state = replace(land_state, esat=esat, qsat=qsat)
-        dqsatdT = self.compute_dqsatdT(
-            temp_state, ml_state.theta, ml_state.surf_pressure
-        )
+        dqsatdT = self.compute_dqsatdT(esat, ml_state.theta, ml_state.surf_pressure)
         e = self.compute_e(ml_state.q, ml_state.surf_pressure)
 
         return replace(land_state, ra=ra, esat=esat, qsat=qsat, dqsatdT=dqsatdT, e=e)
 
     def compute_dqsatdT(
-        self, state: MinimalLandSurfaceState, theta: float, surf_pressure: float
+        self, esat: Array, theta: float, surf_pressure: float
     ) -> Array:
         """Compute the derivative of saturation vapor pressure with respect to temperature ``dqsatdT``.
 
@@ -113,7 +107,7 @@ class MinimalLandSurfaceModel(AbstractLandModel):
         num = 17.2694 * (theta - 273.16)
         den = (theta - 35.86) ** 2.0
         mult = num / den
-        desatdT = state.esat * mult
+        desatdT = esat * mult
         return 0.622 * desatdT / surf_pressure
 
     def compute_e(self, q: Array, surf_pressure: Array) -> Array:

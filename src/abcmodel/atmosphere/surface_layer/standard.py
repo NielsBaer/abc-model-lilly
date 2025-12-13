@@ -162,7 +162,7 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
         )
 
     @staticmethod
-    def compute_ra(state: AbstractCoupledState) -> Array:
+    def compute_ra(u: Array, v: Array, wstar: Array, drag_s: Array) -> Array:
         """Calculate aerodynamic resistance from wind speed and drag coefficient.
 
         Notes:
@@ -173,11 +173,8 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
 
             where :math:`C_s` is the drag coefficient for scalars and :math:`u_{\\text{eff}}` is the effective wind speed.
         """
-        # state is CoupledState
-        ml_state = state.atmosphere.mixed_layer
-        sl_state = state.atmosphere.surface_layer
-        ueff = jnp.sqrt(ml_state.u**2.0 + ml_state.v**2.0 + ml_state.wstar**2.0)
-        return 1.0 / (sl_state.drag_s * ueff)
+        ueff = jnp.sqrt(u**2.0 + v**2.0 + wstar**2.0)
+        return 1.0 / (drag_s * ueff)
 
 
 def compute_effective_wind_speed(u: Array, v: Array, wstar: Array) -> Array:

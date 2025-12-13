@@ -1,4 +1,4 @@
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 import abcconfigs.class_model as cm
 import abcmodel

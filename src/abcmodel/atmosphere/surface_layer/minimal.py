@@ -53,7 +53,7 @@ class MinimalSurfaceLayerModel(AbstractSurfaceLayerModel):
         return replace(state, uw=uw, vw=vw)
 
     @staticmethod
-    def compute_ra(state: PyTree) -> Array:
+    def compute_ra(u: Array, v: Array, wstar: Array, ustar: Array) -> Array:
         """Calculate aerodynamic resistance from wind speed and friction velocity."""
-        ueff = jnp.sqrt(state.u**2.0 + state.v**2.0 + state.wstar**2.0)
-        return ueff / jnp.maximum(1.0e-3, state.ustar) ** 2.0
+        ueff = jnp.sqrt(u**2.0 + v**2.0 + wstar**2.0)
+        return ueff / jnp.maximum(1.0e-3, ustar) ** 2.0
