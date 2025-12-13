@@ -3,10 +3,13 @@
 from abc import abstractmethod
 from typing import Generic, TypeVar
 
-from .utils import Array, PhysicalConstants
+from jax import Array
+from simple_pytree import Pytree
+
+from .utils import PhysicalConstants
 
 
-class AbstractState:
+class AbstractState(Pytree):
     """Abstract state class to define the interface for all states."""
 
 

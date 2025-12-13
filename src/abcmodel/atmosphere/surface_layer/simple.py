@@ -2,15 +2,14 @@ from dataclasses import dataclass, field, replace
 
 import jax.numpy as jnp
 from jax import Array
-from simple_pytree import Pytree
 
 from ...coupling import CoupledState
 from ...utils import PhysicalConstants
-from ..abstracts import AbstractSurfaceLayerModel
+from ..abstracts import AbstractSurfaceLayerModel, AbstractSurfaceLayerState
 
 
 @dataclass
-class SimpleSurfaceLayerState(Pytree):
+class SimpleSurfaceLayerState(AbstractSurfaceLayerState):
     """Minimal surface layer model initial state."""
 
     ustar: Array

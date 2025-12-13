@@ -1,7 +1,6 @@
 from dataclasses import dataclass, field
 
 import jax.numpy as jnp
-from simple_pytree import Pytree
 
 from ...coupling import AbstractCoupledState
 from ...utils import Array, PhysicalConstants
@@ -9,7 +8,7 @@ from ..abstracts import AbstractCloudModel, AbstractCloudState
 
 
 @dataclass
-class NoCloudState(AbstractCloudState, Pytree):
+class NoCloudState(AbstractCloudState):
     """No cloud initial state."""
 
     cc_frac: Array = field(default_factory=lambda: jnp.array(0.0))

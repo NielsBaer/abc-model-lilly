@@ -1,7 +1,6 @@
 from dataclasses import dataclass, field, replace
 
 import jax.numpy as jnp
-from simple_pytree import Pytree
 
 from ...abstracts import AbstractCoupledState
 from ...utils import Array, PhysicalConstants
@@ -10,7 +9,7 @@ from .stats import AbstractStandardStatsModel
 
 
 @dataclass
-class BulkMixedLayerState(AbstractMixedLayerState, Pytree):
+class BulkMixedLayerState(AbstractMixedLayerState):
     """Data class for bulk mixed layer model state."""
 
     # initialized by the user

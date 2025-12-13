@@ -3,7 +3,6 @@ from dataclasses import dataclass, field, replace
 
 import jax.numpy as jnp
 from jax import Array
-from simple_pytree import Pytree
 
 from ..abstracts import (
     AbstractCoupledState,
@@ -14,7 +13,7 @@ from ..utils import PhysicalConstants, compute_esat, compute_qsat
 
 
 @dataclass
-class StandardLandSurfaceState(AbstractLandState, Pytree):
+class StandardLandSurfaceState(AbstractLandState):
     """Standard land surface model state."""
 
     alpha: Array

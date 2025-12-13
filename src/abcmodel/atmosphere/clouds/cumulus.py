@@ -1,7 +1,6 @@
 from dataclasses import dataclass, field, replace
 
 import jax.numpy as jnp
-from simple_pytree import Pytree
 
 from ...abstracts import AbstractCoupledState
 from ...utils import Array, PhysicalConstants, compute_qsat
@@ -9,7 +8,7 @@ from ..abstracts import AbstractCloudModel, AbstractCloudState
 
 
 @dataclass
-class CumulusState(AbstractCloudState, Pytree):
+class CumulusState(AbstractCloudState):
     """Standard cumulus state."""
 
     cc_frac: Array = field(default_factory=lambda: jnp.array(0.0))

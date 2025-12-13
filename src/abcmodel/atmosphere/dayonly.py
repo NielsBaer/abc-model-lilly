@@ -1,7 +1,5 @@
 from dataclasses import dataclass, replace
 
-from simple_pytree import Pytree
-
 from ..abstracts import (
     AbstractAtmosphereModel,
     AbstractAtmosphereState,
@@ -21,7 +19,7 @@ from .clouds import NoCloudModel
 
 
 @dataclass
-class DayOnlyAtmosphereState(AbstractAtmosphereState, Pytree):
+class DayOnlyAtmosphereState(AbstractAtmosphereState):
     """Atmosphere state aggregating surface layer, mixed layer, and clouds."""
 
     surface_layer: AbstractSurfaceLayerState

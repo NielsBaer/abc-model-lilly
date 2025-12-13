@@ -3,7 +3,6 @@ from dataclasses import dataclass, field, replace
 import jax
 import jax.numpy as jnp
 from jax import Array
-from simple_pytree import Pytree
 
 from ...abstracts import AbstractCoupledState
 from ...utils import PhysicalConstants, compute_qsat
@@ -11,7 +10,7 @@ from ..abstracts import AbstractSurfaceLayerModel, AbstractSurfaceLayerState
 
 
 @dataclass
-class ObukhovSurfaceLayerState(AbstractSurfaceLayerState, Pytree):
+class ObukhovSurfaceLayerState(AbstractSurfaceLayerState):
     """Standard surface layer model state."""
 
     # the following variables should be initialized by the user

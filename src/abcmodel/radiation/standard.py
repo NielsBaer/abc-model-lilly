@@ -1,7 +1,6 @@
 from dataclasses import dataclass, field, replace
 
 import jax.numpy as jnp
-from simple_pytree import Pytree
 
 from ..abstracts import (
     AbstractCoupledState,
@@ -12,7 +11,7 @@ from ..utils import Array, PhysicalConstants
 
 
 @dataclass
-class StandardRadiationState(AbstractRadiationState, Pytree):
+class StandardRadiationState(AbstractRadiationState):
     """Standard radiation model state."""
 
     net_rad: Array
