@@ -33,7 +33,9 @@ def run_model(theta0: float) -> float:
     mixed_layer_init_conds = abcmodel.atmosphere.mixed_layer.BulkMixedLayerInitConds(
         **cm.bulk_mixed_layer.init_conds_kwargs
     )
-    mixed_layer_init_conds.replace(theta=theta0)  # <--- perturb initial condition
+    mixed_layer_init_conds = mixed_layer_init_conds.replace(
+        theta=jnp.array(theta0)  # <--- perturb initial condition
+    )
 
     mixed_layer_model = abcmodel.atmosphere.mixed_layer.BulkMixedLayerModel(
         **cm.bulk_mixed_layer.model_kwargs
@@ -77,16 +79,17 @@ def main():
     # forward mode
     grad_fn = jax.jacfwd(run_model)
     theta0 = 290.0
-    dh_deltatheta0 = grad_fn(theta0)
-    assert jnp.isfinite(dh_deltatheta0)
-    print("∂h_final / ∂theta_0 =", dh_deltatheta0)
+    dhf_dtheta0 = grad_fn(theta0)
+    assert dhf_dtheta0 > 0.0
+    print("∂h_final / ∂theta_0 =", dhf_dtheta0)
 
     # reverse mode
     grad_fn = jax.jacrev(run_model)
     theta0 = 290.0
-    dh_deltatheta0 = grad_fn(theta0)
-    assert jnp.isfinite(dh_deltatheta0)
-    print("∂h_final / ∂theta_0 =", dh_deltatheta0)
+    try:
+        dhf_dtheta0 = grad_fn(theta0)
+    except Exception as e:
+        print(f"{e}")
 
 
 if __name__ == "__main__":

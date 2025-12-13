@@ -204,7 +204,6 @@ class AgsModel(AbstractStandardLandSurfaceModel):
         fmin: Array,
         co2: Array,
         co2comp: Array,
-        gm: Array,
         const: PhysicalConstants,
     ) -> tuple[Array, Array]:
         """Compute cfrac, co2abs, and ci (internal CO2 concentration).
@@ -445,7 +444,6 @@ class AgsModel(AbstractStandardLandSurfaceModel):
             fmin,
             ml_state.co2,
             co2comp,
-            gm,
             const,
         )
         ammax = self.compute_max_gross_primary_production(thetasurf)
