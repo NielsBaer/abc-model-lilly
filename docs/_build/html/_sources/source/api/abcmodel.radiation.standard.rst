@@ -2,7 +2,7 @@
 Standard
 ========
 
-.. automodule:: abcmodel.radiation.standard
+.. automodule:: abcmodel.rad.standard
    :members:
    :show-inheritance:
    :undoc-members:

@@ -9,7 +9,7 @@
 ABC Model
 =========
 
-The ABC Model is a simple model coupling the biosphere and atmosphere,
+The ABC Model is a simple model coupling the biosphere and atmos,
 made fully differentiable using `JAX`_ highly inspired by the `CLASS model`_
 with the goal to serve as a simple tool for experiments.
 
@@ -56,30 +56,30 @@ loaded through the ``abcconfigs`` module.
    import abcmodel
 
    # 1. Setup models
-   radiation_model = abcmodel.radiation.StandardRadiationModel(**cm.standard_radiation.model_kwargs)
-   land_surface_model = abcmodel.land_surface.JarvisStewartModel(**cm.jarvis_stewart.model_kwargs)
+   rad_model = abcmodel.rad.StandardRadiationModel(**cm.standard_rad.model_kwargs)
+   land_model = abcmodel.land.JarvisStewartModel(**cm.jarvis_stewart.model_kwargs)
    surface_layer_model = abcmodel.surface_layer.StandardSurfaceLayerModel()
    mixed_layer_model = abcmodel.mixed_layer.BulkMixedLayerModel(**cm.bulk_mixed_layer.model_kwargs)
    cloud_model = abcmodel.clouds.StandardCumulusModel()
 
    # 2. Setup the coupler with the components
    abcoupler = abcmodel.ABCoupler(
-       radiation=radiation_model,
-       land_surface=land_surface_model,
+       rad=rad_model,
+       land=land_model,
        surface_layer=surface_layer_model,
        mixed_layer=mixed_layer_model,
        clouds=cloud_model,
    )
 
    # 3. Setup initial conditions
-   radiation_init_conds = abcmodel.radiation.StandardRadiationInitConds(
-       **cm.standard_radiation.init_conds_kwargs
+   rad_init_conds = abcmodel.rad.StandardRadiationInitConds(
+       **cm.standard_rad.init_conds_kwargs
    )
-   land_surface_init_conds = abcmodel.land_surface.JarvisStewartInitConds(
+   land_init_conds = abcmodel.land.JarvisStewartInitConds(
        **cm.jarvis_stewart.init_conds_kwargs,
    )
    surface_layer_init_conds = abcmodel.surface_layer.StandardSurfaceLayerInitConds(
-       **cm.standard_surface_layer.init_conds_kwargs
+       **cm.obukhov_surface_layer.init_conds_kwargs
    )
    mixed_layer_init_conds = abcmodel.mixed_layer.BulkMixedLayerInitConds(
        **cm.bulk_mixed_layer.init_conds_kwargs,
@@ -88,8 +88,8 @@ loaded through the ``abcconfigs`` module.
 
    # 4. Bind everything into an initial state
    state = abcoupler.init_state(
-       radiation_init_conds,
-       land_surface_init_conds,
+       rad_init_conds,
+       land_init_conds,
        surface_layer_init_conds,
        mixed_layer_init_conds,
        cloud_init_conds,
@@ -110,17 +110,17 @@ Changing Models and Parameters
 ------------------------------
 
 You can easily swap out models or change their parameters. For example, to
-replace the ``JarvisStewartModel`` with ``AquaCropModel`` and change it from
+replace the ``JarvisStewartModel`` with ``AgsModel`` and change it from
 C3 to C4 vegetation, you can do the following:
 
 .. code-block:: python
 
    # New parameters definition
-   aquacrop_model_kwargs = cm.aquacrop.model_kwargs
-   aquacrop_model_kwargs['c3c4'] = 'c4'
+   ags_model_kwargs = cm.ags.model_kwargs
+   ags_model_kwargs['c3c4'] = 'c4'
 
    # Define a new land model
-   land_surface_model = abcmodel.land_surface.AquaCropModel(**aquacrop_model_kwargs)
+   land_model = abcmodel.land.AgsModel(**ags_model_kwargs)
 
    # ... then redefine the coupler, create a new state, and integrate.
 

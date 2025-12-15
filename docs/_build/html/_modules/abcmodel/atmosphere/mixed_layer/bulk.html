@@ -1,313 +1,784 @@
+<!doctype html>
 
-<!DOCTYPE html>
+<html lang="en" data-content_root="../../../../">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>
+            abcmodel.atmos.mixed_layer.bulk &#8212; abc-model 0.1.0
+            documentation
+        </title>
 
+        <script data-cfasync="false">
+            document.documentElement.dataset.mode =
+                localStorage.getItem("mode") || "";
+            document.documentElement.dataset.theme =
+                localStorage.getItem("theme") || "";
+        </script>
 
-<html lang="en" data-content_root="../../../../" >
+        <!-- Loaded before other Sphinx assets -->
+        <link
+            href="../../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b"
+            rel="stylesheet"
+        />
+        <link
+            href="../../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b"
+            rel="stylesheet"
+        />
+        <link
+            href="../../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b"
+            rel="stylesheet"
+        />
 
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>abcmodel.atmosphere.mixed_layer.bulk &#8212; abc-model 0.1.0 documentation</title>
-  
-  
-  
-  <script data-cfasync="false">
-    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
-  </script>
-  
-  <!-- Loaded before other Sphinx assets -->
-  <link href="../../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+        <link
+            href="../../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b"
+            rel="stylesheet"
+        />
+        <link
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            crossorigin
+            href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2"
+        />
+        <link
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            crossorigin
+            href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2"
+        />
+        <link
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            crossorigin
+            href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2"
+        />
 
-  
-  <link href="../../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="../../../../_static/pygments.css?v=8f2a1f02"
+        />
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="../../../../_static/styles/sphinx-book-theme.css?v=eba8b062"
+        />
 
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
-  
-  <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+        <!-- Pre-loaded scripts that we'll load fully later -->
+        <link
+            rel="preload"
+            as="script"
+            href="../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"
+        />
+        <link
+            rel="preload"
+            as="script"
+            href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"
+        />
+        <script src="../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../../../_static/documentation_options.js?v=a1637f0b"></script>
-    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/abcmodel/atmosphere/mixed_layer/bulk';</script>
-    <link rel="index" title="Index" href="../../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../../search.html" />
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="en"/>
-  </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+        <script src="../../../../_static/documentation_options.js?v=a1637f0b"></script>
+        <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+        <script>
+            DOCUMENTATION_OPTIONS.pagename =
+                "_modules/abcmodel/atmos/mixed_layer/bulk";
+        </script>
+        <link rel="index" title="Index" href="../../../../genindex.html" />
+        <link rel="search" title="Search" href="../../../../search.html" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="docsearch:language" content="en" />
+    </head>
 
-  
-  
-  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
-  
-  <div id="pst-scroll-pixel-helper"></div>
-  
-  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
-    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+    <body
+        data-bs-spy="scroll"
+        data-bs-target=".bd-toc-nav"
+        data-offset="180"
+        data-bs-root-margin="0px 0px -60%"
+        data-default-mode=""
+    >
+        <div id="pst-skip-link" class="skip-link d-print-none">
+            <a href="#main-content">Skip to main content</a>
+        </div>
 
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
-<form class="bd-search d-flex align-items-center"
-      action="../../../../search.html"
-      method="get">
-  <i class="fa-solid fa-magnifying-glass"></i>
-  <input type="search"
-         class="form-control"
-         name="q"
-         id="search-input"
-         placeholder="Search..."
-         aria-label="Search..."
-         autocomplete="off"
-         autocorrect="off"
-         autocapitalize="off"
-         spellcheck="false"/>
-  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+        <div id="pst-scroll-pixel-helper"></div>
 
-  <div class="pst-async-banner-revealer d-none">
-  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
-</div>
+        <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+            <i class="fa-solid fa-arrow-up"></i>Back to top
+        </button>
 
-  
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
-    </header>
-  
+        <input
+            type="checkbox"
+            class="sidebar-toggle"
+            id="pst-primary-sidebar-checkbox"
+        />
+        <label
+            class="overlay overlay-primary"
+            for="pst-primary-sidebar-checkbox"
+        ></label>
 
-  <div class="bd-container">
-    <div class="bd-container__inner bd-page-width">
-      
-      
-      
-        
-      
-      <div class="bd-sidebar-primary bd-sidebar">
-        
+        <input
+            type="checkbox"
+            class="sidebar-toggle"
+            id="pst-secondary-sidebar-checkbox"
+        />
+        <label
+            class="overlay overlay-secondary"
+            for="pst-secondary-sidebar-checkbox"
+        ></label>
 
-  
-  <div class="sidebar-header-items sidebar-primary__section">
-    
-    
-    
-    
-  </div>
-  
-    <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item">
+        <div class="search-button__wrapper">
+            <div class="search-button__overlay"></div>
+            <div class="search-button__search-container">
+                <form
+                    class="bd-search d-flex align-items-center"
+                    action="../../../../search.html"
+                    method="get"
+                >
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input
+                        type="search"
+                        class="form-control"
+                        name="q"
+                        id="search-input"
+                        placeholder="Search..."
+                        aria-label="Search..."
+                        autocomplete="off"
+                        autocorrect="off"
+                        autocapitalize="off"
+                        spellcheck="false"
+                    />
+                    <span class="search-button__kbd-shortcut"
+                        ><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd
+                            >K</kbd
+                        ></span
+                    >
+                </form>
+            </div>
+        </div>
 
-  
-    
-  
+        <div class="pst-async-banner-revealer d-none">
+            <aside
+                id="bd-header-version-warning"
+                class="d-none d-print-none"
+                aria-label="Version warning"
+            ></aside>
+        </div>
 
-<a class="navbar-brand logo" href="../../../../index.html">
-  
-  
-  
-  
-  
-  
-    <p class="title logo__title">abc-model 0.1.0 documentation</p>
-  
-</a></div>
-        <div class="sidebar-primary-item">
+        <header
+            class="bd-header navbar navbar-expand-lg bd-navbar d-print-none"
+        ></header>
 
- <script>
- document.write(`
+        <div class="bd-container">
+            <div class="bd-container__inner bd-page-width">
+                <div class="bd-sidebar-primary bd-sidebar">
+                    <div
+                        class="sidebar-header-items sidebar-primary__section"
+                    ></div>
+
+                    <div
+                        class="sidebar-primary-items__start sidebar-primary__section"
+                    >
+                        <div class="sidebar-primary-item">
+                            <a
+                                class="navbar-brand logo"
+                                href="../../../../index.html"
+                            >
+                                <p class="title logo__title">
+                                    abc-model 0.1.0 documentation
+                                </p>
+                            </a>
+                        </div>
+                        <div class="sidebar-primary-item">
+                            <script>
+                                document.write(`
    <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
     <span class="search-button__default-text">Search</span>
     <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
    </button>
  `);
- </script></div>
-        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
-    <div class="bd-toc-item navbar-nav active">
-        <ul class="nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.html">ABC Model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.radiation.html">Radiation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcmodel.radiation.standard.html">Standard</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcmodel.radiation.standard_w_clouds.html">Standard With Clouds</a></li>
-</ul>
-</details></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.land.html">Land</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcmodel.land.aquacrop.html">Aquacrop</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcmodel.land.jarvis_stewart.html">Jarvis Stewart</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcmodel.land.minimal.html">Minimal</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcmodel.land.standard.html">Standard</a></li>
-</ul>
-</details></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.atmosphere.html">Atmosphere</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcmodel.atmosphere.dayonly.html">Dayonly</a></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.atmosphere.surface_layer.html">Surface Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../../source/api/abcmodel.atmosphere.surface_layer.minimal.html">Minimal</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../../source/api/abcmodel.atmosphere.surface_layer.standard.html">Standard</a></li>
-</ul>
-</details></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html">Bulk</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.minimal.html">Minimal</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.stats.html">Stats</a></li>
-</ul>
-</details></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.atmosphere.clouds.html">Clouds</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../../source/api/abcmodel.atmosphere.clouds.cumulus.html">Cumulus</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../../source/api/abcmodel.atmosphere.clouds.no_clouds.html">No Clouds</a></li>
-</ul>
-</details></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcmodel.atmosphere.abstracts.html">Abstracts</a></li>
-</ul>
-</details></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../source/api/abcmodel.abstracts.html">Abstracts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../source/api/abcmodel.coupling.html">Coupling</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../source/api/abcmodel.integration.html">Integration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../source/api/abcmodel.utils.html">Utils</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../source/api/abcconfigs.html">ABC Configs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../source/api/abcconfigs.aridities.html">Aridities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcconfigs.aridities.arid.html">Arid</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcconfigs.aridities.humid.html">Humid</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcconfigs.aridities.standard.html">Standard</a></li>
-</ul>
-</details></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../source/api/abcconfigs.class_model.html">Class Model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcconfigs.class_model.aquacrop.html">Aquacrop</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcconfigs.class_model.bulk_mixed_layer.html">Bulk Mixed Layer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcconfigs.class_model.jarvis_stewart.html">Jarvis Stewart</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcconfigs.class_model.standard_radiation.html">Standard Radiation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcconfigs.class_model.standard_radiation_w_clouds.html">Standard Radiation W Clouds</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcconfigs.class_model.standard_surface_layer.html">Standard Surface Layer</a></li>
-</ul>
-</details></li>
-</ul>
-</details></li>
-</ul>
+                            </script>
+                        </div>
+                        <div class="sidebar-primary-item">
+                            <nav class="bd-links bd-docs-nav" aria-label="Main">
+                                <div class="bd-toc-item navbar-nav active">
+                                    <ul class="nav bd-sidenav">
+                                        <li class="toctree-l1 has-children">
+                                            <a
+                                                class="reference internal"
+                                                href="../../../../source/api/abcmodel.html"
+                                                >ABC Model</a
+                                            >
+                                            <details>
+                                                <summary>
+                                                    <span
+                                                        class="toctree-toggle"
+                                                        role="presentation"
+                                                        ><i
+                                                            class="fa-solid fa-chevron-down"
+                                                        ></i
+                                                    ></span>
+                                                </summary>
+                                                <ul>
+                                                    <li
+                                                        class="toctree-l2 has-children"
+                                                    >
+                                                        <a
+                                                            class="reference internal"
+                                                            href="../../../../source/api/abcmodel.rad.html"
+                                                            >Radiation</a
+                                                        >
+                                                        <details>
+                                                            <summary>
+                                                                <span
+                                                                    class="toctree-toggle"
+                                                                    role="presentation"
+                                                                    ><i
+                                                                        class="fa-solid fa-chevron-down"
+                                                                    ></i
+                                                                ></span>
+                                                            </summary>
+                                                            <ul>
+                                                                <li
+                                                                    class="toctree-l3"
+                                                                >
+                                                                    <a
+                                                                        class="reference internal"
+                                                                        href="../../../../source/api/abcmodel.rad.standard.html"
+                                                                        >Standard</a
+                                                                    >
+                                                                </li>
+                                                                <li
+                                                                    class="toctree-l3"
+                                                                >
+                                                                    <a
+                                                                        class="reference internal"
+                                                                        href="../../../../source/api/abcmodel.rad.standard_w_clouds.html"
+                                                                        >Standard
+                                                                        With
+                                                                        Clouds</a
+                                                                    >
+                                                                </li>
+                                                            </ul>
+                                                        </details>
+                                                    </li>
+                                                    <li
+                                                        class="toctree-l2 has-children"
+                                                    >
+                                                        <a
+                                                            class="reference internal"
+                                                            href="../../../../source/api/abcmodel.land.html"
+                                                            >Land</a
+                                                        >
+                                                        <details>
+                                                            <summary>
+                                                                <span
+                                                                    class="toctree-toggle"
+                                                                    role="presentation"
+                                                                    ><i
+                                                                        class="fa-solid fa-chevron-down"
+                                                                    ></i
+                                                                ></span>
+                                                            </summary>
+                                                            <ul>
+                                                                <li
+                                                                    class="toctree-l3"
+                                                                >
+                                                                    <a
+                                                                        class="reference internal"
+                                                                        href="../../../../source/api/abcmodel.land.aquacrop.html"
+                                                                        >Aquacrop</a
+                                                                    >
+                                                                </li>
+                                                                <li
+                                                                    class="toctree-l3"
+                                                                >
+                                                                    <a
+                                                                        class="reference internal"
+                                                                        href="../../../../source/api/abcmodel.land.jarvis_stewart.html"
+                                                                        >Jarvis
+                                                                        Stewart</a
+                                                                    >
+                                                                </li>
+                                                                <li
+                                                                    class="toctree-l3"
+                                                                >
+                                                                    <a
+                                                                        class="reference internal"
+                                                                        href="../../../../source/api/abcmodel.land.minimal.html"
+                                                                        >Minimal</a
+                                                                    >
+                                                                </li>
+                                                                <li
+                                                                    class="toctree-l3"
+                                                                >
+                                                                    <a
+                                                                        class="reference internal"
+                                                                        href="../../../../source/api/abcmodel.land.standard.html"
+                                                                        >Standard</a
+                                                                    >
+                                                                </li>
+                                                            </ul>
+                                                        </details>
+                                                    </li>
+                                                    <li
+                                                        class="toctree-l2 has-children"
+                                                    >
+                                                        <a
+                                                            class="reference internal"
+                                                            href="../../../../source/api/abcmodel.atmos.html"
+                                                            >Atmosphere</a
+                                                        >
+                                                        <details>
+                                                            <summary>
+                                                                <span
+                                                                    class="toctree-toggle"
+                                                                    role="presentation"
+                                                                    ><i
+                                                                        class="fa-solid fa-chevron-down"
+                                                                    ></i
+                                                                ></span>
+                                                            </summary>
+                                                            <ul>
+                                                                <li
+                                                                    class="toctree-l3"
+                                                                >
+                                                                    <a
+                                                                        class="reference internal"
+                                                                        href="../../../../source/api/abcmodel.atmos.dayonly.html"
+                                                                        >Dayonly</a
+                                                                    >
+                                                                </li>
+                                                                <li
+                                                                    class="toctree-l3 has-children"
+                                                                >
+                                                                    <a
+                                                                        class="reference internal"
+                                                                        href="../../../../source/api/abcmodel.atmos.surface_layer.html"
+                                                                        >Surface
+                                                                        Layer</a
+                                                                    >
+                                                                    <details>
+                                                                        <summary>
+                                                                            <span
+                                                                                class="toctree-toggle"
+                                                                                role="presentation"
+                                                                                ><i
+                                                                                    class="fa-solid fa-chevron-down"
+                                                                                ></i
+                                                                            ></span>
+                                                                        </summary>
+                                                                        <ul>
+                                                                            <li
+                                                                                class="toctree-l4"
+                                                                            >
+                                                                                <a
+                                                                                    class="reference internal"
+                                                                                    href="../../../../source/api/abcmodel.atmos.surface_layer.minimal.html"
+                                                                                    >Minimal</a
+                                                                                >
+                                                                            </li>
+                                                                            <li
+                                                                                class="toctree-l4"
+                                                                            >
+                                                                                <a
+                                                                                    class="reference internal"
+                                                                                    href="../../../../source/api/abcmodel.atmos.surface_layer.standard.html"
+                                                                                    >Standard</a
+                                                                                >
+                                                                            </li>
+                                                                        </ul>
+                                                                    </details>
+                                                                </li>
+                                                                <li
+                                                                    class="toctree-l3 has-children"
+                                                                >
+                                                                    <a
+                                                                        class="reference internal"
+                                                                        href="../../../../source/api/abcmodel.atmos.mixed_layer.html"
+                                                                        >Mixed
+                                                                        Layer</a
+                                                                    >
+                                                                    <details>
+                                                                        <summary>
+                                                                            <span
+                                                                                class="toctree-toggle"
+                                                                                role="presentation"
+                                                                                ><i
+                                                                                    class="fa-solid fa-chevron-down"
+                                                                                ></i
+                                                                            ></span>
+                                                                        </summary>
+                                                                        <ul>
+                                                                            <li
+                                                                                class="toctree-l4"
+                                                                            >
+                                                                                <a
+                                                                                    class="reference internal"
+                                                                                    href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html"
+                                                                                    >Bulk</a
+                                                                                >
+                                                                            </li>
+                                                                            <li
+                                                                                class="toctree-l4"
+                                                                            >
+                                                                                <a
+                                                                                    class="reference internal"
+                                                                                    href="../../../../source/api/abcmodel.atmos.mixed_layer.minimal.html"
+                                                                                    >Minimal</a
+                                                                                >
+                                                                            </li>
+                                                                            <li
+                                                                                class="toctree-l4"
+                                                                            >
+                                                                                <a
+                                                                                    class="reference internal"
+                                                                                    href="../../../../source/api/abcmodel.atmos.mixed_layer.stats.html"
+                                                                                    >Stats</a
+                                                                                >
+                                                                            </li>
+                                                                        </ul>
+                                                                    </details>
+                                                                </li>
+                                                                <li
+                                                                    class="toctree-l3 has-children"
+                                                                >
+                                                                    <a
+                                                                        class="reference internal"
+                                                                        href="../../../../source/api/abcmodel.atmos.clouds.html"
+                                                                        >Clouds</a
+                                                                    >
+                                                                    <details>
+                                                                        <summary>
+                                                                            <span
+                                                                                class="toctree-toggle"
+                                                                                role="presentation"
+                                                                                ><i
+                                                                                    class="fa-solid fa-chevron-down"
+                                                                                ></i
+                                                                            ></span>
+                                                                        </summary>
+                                                                        <ul>
+                                                                            <li
+                                                                                class="toctree-l4"
+                                                                            >
+                                                                                <a
+                                                                                    class="reference internal"
+                                                                                    href="../../../../source/api/abcmodel.atmos.clouds.cumulus.html"
+                                                                                    >Cumulus</a
+                                                                                >
+                                                                            </li>
+                                                                            <li
+                                                                                class="toctree-l4"
+                                                                            >
+                                                                                <a
+                                                                                    class="reference internal"
+                                                                                    href="../../../../source/api/abcmodel.atmos.clouds.no_clouds.html"
+                                                                                    >No
+                                                                                    Clouds</a
+                                                                                >
+                                                                            </li>
+                                                                        </ul>
+                                                                    </details>
+                                                                </li>
+                                                                <li
+                                                                    class="toctree-l3"
+                                                                >
+                                                                    <a
+                                                                        class="reference internal"
+                                                                        href="../../../../source/api/abcmodel.atmos.abstracts.html"
+                                                                        >Abstracts</a
+                                                                    >
+                                                                </li>
+                                                            </ul>
+                                                        </details>
+                                                    </li>
+                                                    <li class="toctree-l2">
+                                                        <a
+                                                            class="reference internal"
+                                                            href="../../../../source/api/abcmodel.abstracts.html"
+                                                            >Abstracts</a
+                                                        >
+                                                    </li>
+                                                    <li class="toctree-l2">
+                                                        <a
+                                                            class="reference internal"
+                                                            href="../../../../source/api/abcmodel.coupling.html"
+                                                            >Coupling</a
+                                                        >
+                                                    </li>
+                                                    <li class="toctree-l2">
+                                                        <a
+                                                            class="reference internal"
+                                                            href="../../../../source/api/abcmodel.integration.html"
+                                                            >Integration</a
+                                                        >
+                                                    </li>
+                                                    <li class="toctree-l2">
+                                                        <a
+                                                            class="reference internal"
+                                                            href="../../../../source/api/abcmodel.utils.html"
+                                                            >Utils</a
+                                                        >
+                                                    </li>
+                                                </ul>
+                                            </details>
+                                        </li>
+                                        <li class="toctree-l1 has-children">
+                                            <a
+                                                class="reference internal"
+                                                href="../../../../source/api/abcconfigs.html"
+                                                >ABC Configs</a
+                                            >
+                                            <details>
+                                                <summary>
+                                                    <span
+                                                        class="toctree-toggle"
+                                                        role="presentation"
+                                                        ><i
+                                                            class="fa-solid fa-chevron-down"
+                                                        ></i
+                                                    ></span>
+                                                </summary>
+                                                <ul>
+                                                    <li
+                                                        class="toctree-l2 has-children"
+                                                    >
+                                                        <a
+                                                            class="reference internal"
+                                                            href="../../../../source/api/abcconfigs.aridities.html"
+                                                            >Aridities</a
+                                                        >
+                                                        <details>
+                                                            <summary>
+                                                                <span
+                                                                    class="toctree-toggle"
+                                                                    role="presentation"
+                                                                    ><i
+                                                                        class="fa-solid fa-chevron-down"
+                                                                    ></i
+                                                                ></span>
+                                                            </summary>
+                                                            <ul>
+                                                                <li
+                                                                    class="toctree-l3"
+                                                                >
+                                                                    <a
+                                                                        class="reference internal"
+                                                                        href="../../../../source/api/abcconfigs.aridities.arid.html"
+                                                                        >Arid</a
+                                                                    >
+                                                                </li>
+                                                                <li
+                                                                    class="toctree-l3"
+                                                                >
+                                                                    <a
+                                                                        class="reference internal"
+                                                                        href="../../../../source/api/abcconfigs.aridities.humid.html"
+                                                                        >Humid</a
+                                                                    >
+                                                                </li>
+                                                                <li
+                                                                    class="toctree-l3"
+                                                                >
+                                                                    <a
+                                                                        class="reference internal"
+                                                                        href="../../../../source/api/abcconfigs.aridities.standard.html"
+                                                                        >Standard</a
+                                                                    >
+                                                                </li>
+                                                            </ul>
+                                                        </details>
+                                                    </li>
+                                                    <li
+                                                        class="toctree-l2 has-children"
+                                                    >
+                                                        <a
+                                                            class="reference internal"
+                                                            href="../../../../source/api/abcconfigs.class_model.html"
+                                                            >Class Model</a
+                                                        >
+                                                        <details>
+                                                            <summary>
+                                                                <span
+                                                                    class="toctree-toggle"
+                                                                    role="presentation"
+                                                                    ><i
+                                                                        class="fa-solid fa-chevron-down"
+                                                                    ></i
+                                                                ></span>
+                                                            </summary>
+                                                            <ul>
+                                                                <li
+                                                                    class="toctree-l3"
+                                                                >
+                                                                    <a
+                                                                        class="reference internal"
+                                                                        href="../../../../source/api/abcconfigs.class_model.aquacrop.html"
+                                                                        >Aquacrop</a
+                                                                    >
+                                                                </li>
+                                                                <li
+                                                                    class="toctree-l3"
+                                                                >
+                                                                    <a
+                                                                        class="reference internal"
+                                                                        href="../../../../source/api/abcconfigs.class_model.bulk_mixed_layer.html"
+                                                                        >Bulk
+                                                                        Mixed
+                                                                        Layer</a
+                                                                    >
+                                                                </li>
+                                                                <li
+                                                                    class="toctree-l3"
+                                                                >
+                                                                    <a
+                                                                        class="reference internal"
+                                                                        href="../../../../source/api/abcconfigs.class_model.jarvis_stewart.html"
+                                                                        >Jarvis
+                                                                        Stewart</a
+                                                                    >
+                                                                </li>
+                                                                <li
+                                                                    class="toctree-l3"
+                                                                >
+                                                                    <a
+                                                                        class="reference internal"
+                                                                        href="../../../../source/api/abcconfigs.class_model.standard_rad.html"
+                                                                        >Standard
+                                                                        Radiation</a
+                                                                    >
+                                                                </li>
+                                                                <li
+                                                                    class="toctree-l3"
+                                                                >
+                                                                    <a
+                                                                        class="reference internal"
+                                                                        href="../../../../source/api/abcconfigs.class_model.cloudy_rad.html"
+                                                                        >Standard
+                                                                        Radiation
+                                                                        W
+                                                                        Clouds</a
+                                                                    >
+                                                                </li>
+                                                                <li
+                                                                    class="toctree-l3"
+                                                                >
+                                                                    <a
+                                                                        class="reference internal"
+                                                                        href="../../../../source/api/abcconfigs.class_model.obukhov_surface_layer.html"
+                                                                        >Standard
+                                                                        Surface
+                                                                        Layer</a
+                                                                    >
+                                                                </li>
+                                                            </ul>
+                                                        </details>
+                                                    </li>
+                                                </ul>
+                                            </details>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
 
-    </div>
-</nav></div>
-    </div>
-  
-  
-  <div class="sidebar-primary-items__end sidebar-primary__section">
-  </div>
-  
-  <div id="rtd-footer-container"></div>
+                    <div
+                        class="sidebar-primary-items__end sidebar-primary__section"
+                    ></div>
 
+                    <div id="rtd-footer-container"></div>
+                </div>
 
-      </div>
-      
-      <main id="main-content" class="bd-main" role="main">
-        
-        
+                <main id="main-content" class="bd-main" role="main">
+                    <div class="sbt-scroll-pixel-helper"></div>
 
-<div class="sbt-scroll-pixel-helper"></div>
+                    <div class="bd-content">
+                        <div class="bd-article-container">
+                            <div class="bd-header-article d-print-none">
+                                <div
+                                    class="header-article-items header-article__inner"
+                                >
+                                    <div class="header-article-items__start">
+                                        <div class="header-article-item">
+                                            <button
+                                                class="sidebar-toggle primary-toggle btn btn-sm"
+                                                title="Toggle primary sidebar"
+                                                data-bs-placement="bottom"
+                                                data-bs-toggle="tooltip"
+                                            >
+                                                <span
+                                                    class="fa-solid fa-bars"
+                                                ></span>
+                                            </button>
+                                        </div>
+                                    </div>
 
-          <div class="bd-content">
-            <div class="bd-article-container">
-              
-              <div class="bd-header-article d-print-none">
-<div class="header-article-items header-article__inner">
-  
-    <div class="header-article-items__start">
-      
-        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <span class="fa-solid fa-bars"></span>
-</button></div>
-      
-    </div>
-  
-  
-    <div class="header-article-items__end">
-      
-        <div class="header-article-item">
+                                    <div class="header-article-items__end">
+                                        <div class="header-article-item">
+                                            <div class="article-header-buttons">
+                                                <a
+                                                    href="https://git.bgc-jena.mpg.de/abc3/abc-model"
+                                                    target="_blank"
+                                                    class="btn btn-sm btn-source-repository-button"
+                                                    title="Source repository"
+                                                    data-bs-placement="bottom"
+                                                    data-bs-toggle="tooltip"
+                                                >
+                                                    <span
+                                                        class="btn__icon-container"
+                                                    >
+                                                        <i
+                                                            class="fab fa-gitlab"
+                                                        ></i>
+                                                    </span>
+                                                </a>
 
-<div class="article-header-buttons">
-
-
-<a href="https://git.bgc-jena.mpg.de/abc3/abc-model" target="_blank"
-   class="btn btn-sm btn-source-repository-button"
-   title="Source repository"
-   data-bs-placement="bottom" data-bs-toggle="tooltip"
->
-  
-
-<span class="btn__icon-container">
-  <i class="fab fa-gitlab"></i>
-  </span>
-
-</a>
-
-
-
-<script>
-document.write(`
+                                                <script>
+                                                    document.write(`
   <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
   </button>
 `);
-</script>
+                                                </script>
 
-
-<script>
-document.write(`
+                                                <script>
+                                                    document.write(`
   <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
-</script>
+                                                </script>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-</div></div>
-      
-    </div>
-  
-</div>
-</div>
-              
-              
+                            <div id="jb-print-docs-body" class="onlyprint">
+                                <h1></h1>
+                                <!-- Table of contents -->
+                                <div id="print-main-content">
+                                    <div id="jb-print-toc"></div>
+                                </div>
+                            </div>
 
-<div id="jb-print-docs-body" class="onlyprint">
-    <h1></h1>
-    <!-- Table of contents -->
-    <div id="print-main-content">
-        <div id="jb-print-toc">
-            
-        </div>
-    </div>
-</div>
-
-              
-                
-<div id="searchbox"></div>
-                <article class="bd-article">
-                  
-  <h1>Source code for abcmodel.atmosphere.mixed_layer.bulk</h1><div class="highlight"><pre>
+                            <div id="searchbox"></div>
+                            <article class="bd-article">
+                                <h1>
+                                    Source code for
+                                    abcmodel.atmos.mixed_layer.bulk
+                                </h1>
+                                <div class="highlight">
+                                    <pre>
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
@@ -323,7 +794,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerInitConds">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerInitConds">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerInitConds">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">BulkMixedLayerInitConds</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Data class for bulk mixed layer model initial state.&quot;&quot;&quot;</span>
@@ -435,7 +906,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">BulkMixedLayerModel</span><span class="p">(</span><span class="n">AbstractStandardStatsModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Bulk mixed layer model with full atmospheric boundary layer dynamics.</span>
 
@@ -445,16 +916,16 @@ document.write(`
 <span class="sd">    Args:</span>
 <span class="sd">        divU: horizontal large-scale divergence of wind [s-1].</span>
 <span class="sd">        coriolis_param: Coriolis parameter [s-1].</span>
-<span class="sd">        gammatheta: free atmosphere potential temperature lapse rate [K m-1].</span>
+<span class="sd">        gammatheta: free atmos potential temperature lapse rate [K m-1].</span>
 <span class="sd">        advtheta: advection of heat [K s-1].</span>
 <span class="sd">        beta: entrainment ratio for virtual heat [-].</span>
-<span class="sd">        gammaq: free atmosphere specific humidity lapse rate [kg/kg m-1].</span>
+<span class="sd">        gammaq: free atmos specific humidity lapse rate [kg/kg m-1].</span>
 <span class="sd">        advq: advection of moisture [kg/kg s-1].</span>
-<span class="sd">        gammaCO2: free atmosphere CO2 lapse rate [ppm m-1].</span>
+<span class="sd">        gammaCO2: free atmos CO2 lapse rate [ppm m-1].</span>
 <span class="sd">        advCO2: advection of CO2 [ppm s-1].</span>
-<span class="sd">        gammau: free atmosphere u-wind speed lapse rate [s-1].</span>
+<span class="sd">        gammau: free atmos u-wind speed lapse rate [s-1].</span>
 <span class="sd">        advu: advection of u-wind [m s-2].</span>
-<span class="sd">        gammav: free atmosphere v-wind speed lapse rate [s-1].</span>
+<span class="sd">        gammav: free atmos v-wind speed lapse rate [s-1].</span>
 <span class="sd">        advv: advection of v-wind [m s-2].</span>
 <span class="sd">        dFz: cloud top radiative divergence [W m-2].</span>
 <span class="sd">        is_shear_growing: shear growth mixed-layer switch.</span>
@@ -501,7 +972,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">is_wind_prog</span> <span class="o">=</span> <span class="n">is_wind_prog</span>
 
 <div class="viewcode-block" id="BulkMixedLayerModel.run">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.run">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.run">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">,</span> <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the model.&quot;&quot;&quot;</span>
         <span class="n">state</span><span class="o">.</span><span class="n">ws</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_ws</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">)</span>
@@ -564,7 +1035,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.integrate">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.integrate">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.integrate">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">integrate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Integrate mixed layer forward in time.&quot;&quot;&quot;</span>
         <span class="n">state</span><span class="o">.</span><span class="n">h_abl</span> <span class="o">+=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">h_abl_tend</span>
@@ -588,7 +1059,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_ws">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_ws">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_ws">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_ws</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h_abl</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the large-scale subsidence velocity as</span>
 
@@ -601,7 +1072,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_wf">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_wf">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_wf">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_wf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deltatheta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the mixed-layer growth due to cloud top radiative divergence as</span>
 
@@ -616,7 +1087,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_w_th_ft">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_w_th_ft">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_w_th_ft">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_w_th_ft</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ws</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the potential temperature compensation term to fix free troposphere values as</span>
 
@@ -631,7 +1102,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_w_q_ft">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_w_q_ft">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_w_q_ft">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_w_q_ft</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ws</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute humidity compensation term to fix free troposphere values as</span>
 
@@ -646,7 +1117,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_w_CO2_ft">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_w_CO2_ft">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_w_CO2_ft">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_w_CO2_ft</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ws</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute CO2 compensation term to fix free troposphere values as</span>
 
@@ -661,7 +1132,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_wstar">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_wstar">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_wstar">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_wstar</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">h_abl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -685,7 +1156,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_wthetave">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_wthetave">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_wthetave">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_wthetave</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wthetav</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the entrainment virtual heat flux as</span>
 
@@ -699,7 +1170,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_we">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_we">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_we">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_we</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">h_abl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -744,7 +1215,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_wthetae">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_wthetae">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_wthetae">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_wthetae</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">deltatheta</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the entrainment heat flux as</span>
 
@@ -758,7 +1229,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_wqe">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_wqe">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_wqe">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_wqe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">dq</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the entrainment moisture flux as</span>
 
@@ -772,7 +1243,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_wCO2e">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_wCO2e">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_wCO2e">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_wCO2e</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">deltaCO2</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the entrainment CO2 flux as</span>
 
@@ -786,7 +1257,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_h_abl_tend">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_h_abl_tend">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_h_abl_tend">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_h_abl_tend</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">ws</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">wf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">cc_mf</span><span class="p">:</span> <span class="n">Array</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
@@ -809,7 +1280,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_thetatend">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_thetatend">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_thetatend">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_thetatend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h_abl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">wtheta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">wthetae</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the mixed-layer potential temperature tendency as</span>
 
@@ -826,7 +1297,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_deltathetatend">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_deltathetatend">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_deltathetatend">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_deltathetatend</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -849,7 +1320,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_qtend">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_qtend">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_qtend">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_qtend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h_abl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">wq</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">wqe</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">cc_qf</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the mixed-layer specific humidity tendency as</span>
 
@@ -861,7 +1332,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_dqtend">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_dqtend">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_dqtend">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_dqtend</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -880,7 +1351,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_co2tend">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_co2tend">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_co2tend">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_co2tend</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">h_abl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -899,7 +1370,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_deltaCO2tend">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_deltaCO2tend">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_deltaCO2tend">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_deltaCO2tend</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -919,7 +1390,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_utend">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_utend">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_utend">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_utend</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">h_abl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -941,7 +1412,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_vtend">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_vtend">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_vtend">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_vtend</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">h_abl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -962,7 +1433,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_dutend">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_dutend">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_dutend">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_dutend</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -981,7 +1452,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_dvtend">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_dvtend">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_dvtend">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_dvtend</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -1002,7 +1473,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_dztend">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmosphere.mixed_layer.bulk.html#abcmodel.atmosphere.mixed_layer.bulk.BulkMixedLayerModel.compute_dztend">[docs]</a>
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_dztend">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_dztend</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">lcl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -1028,72 +1499,41 @@ document.write(`
         <span class="k">return</span> <span class="n">dztend</span></div>
 </div>
 
-</pre></div>
+</pre>
+                                </div>
+                            </article>
 
-                </article>
-              
+                            <footer class="prev-next-footer d-print-none">
+                                <div class="prev-next-area"></div>
+                            </footer>
+                        </div>
+                    </div>
+                    <footer class="bd-footer-content">
+                        <div class="bd-footer-content__inner container">
+                            <div class="footer-item">
+                                <p class="component-author">By ABC³ Group</p>
+                            </div>
 
-              
-              
-              
-              
-                <footer class="prev-next-footer d-print-none">
-                  
-<div class="prev-next-area">
-</div>
-                </footer>
-              
+                            <div class="footer-item">
+                                <p class="copyright">
+                                    © Copyright ABC³ Group.
+                                    <br />
+                                </p>
+                            </div>
+
+                            <div class="footer-item"></div>
+
+                            <div class="footer-item"></div>
+                        </div>
+                    </footer>
+                </main>
             </div>
-            
-            
-              
-            
-          </div>
-          <footer class="bd-footer-content">
-            
-<div class="bd-footer-content__inner container">
-  
-  <div class="footer-item">
-    
-<p class="component-author">
-By ABC³ Group
-</p>
+        </div>
 
-  </div>
-  
-  <div class="footer-item">
-    
+        <!-- Scripts loaded after <body> so the DOM is not blocked -->
+        <script src="../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+        <script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-  <p class="copyright">
-    
-      © Copyright ABC³ Group.
-      <br/>
-    
-  </p>
-
-  </div>
-  
-  <div class="footer-item">
-    
-  </div>
-  
-  <div class="footer-item">
-    
-  </div>
-  
-</div>
-          </footer>
-        
-
-      </main>
-    </div>
-  </div>
-  
-  <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
-
-  <footer class="bd-footer">
-  </footer>
-  </body>
+        <footer class="bd-footer"></footer>
+    </body>
 </html>

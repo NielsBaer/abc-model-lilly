@@ -2,7 +2,7 @@
 Aquacrop
 ========
 
-.. automodule:: abcmodel.land.aquacrop
+.. automodule:: abcmodel.land.ags
    :members:
    :show-inheritance:
    :undoc-members:

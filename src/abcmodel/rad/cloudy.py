@@ -1,22 +1,29 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
-from jaxtyping import Array, PyTree
+from jax import Array
 
+from ..abstracts import AbstractCoupledState, AtmosT, LandT
 from ..utils import PhysicalConstants
-from .standard import StandardRadiationInitConds, StandardRadiationModel
+from .standard import StandardRadiationModel, StandardRadiationState
 
 
 @dataclass
-class StandardRadiationwCloudsInitConds(StandardRadiationInitConds):
-    """Standard radiation model with clouds initial state."""
+class CloudyRadiationState(StandardRadiationState):
+    """Standard rad model with clouds state."""
+
+    pass
 
 
-class StandardRadiationwCloudsModel(StandardRadiationModel):
-    """Standard radiation model with solar position and atmospheric effects including prognostic cloud transmittance.
+CloudyRadiationInitConds = CloudyRadiationState
+StateAlias = AbstractCoupledState[StandardRadiationState, LandT, AtmosT]
 
-    Calculates time-varying solar radiation based on geographic location and
+
+class CloudyRadiationModel(StandardRadiationModel):
+    """Standard rad model with solar position and atmospheric effects including prognostic cloud transmittance.
+
+    Calculates time-varying solar rad based on geographic location and
     atmospheric conditions. Includes both shortwave (solar) and longwave (thermal)
-    radiation components.
+    rad components.
 
     Args:
         lat: latitude [degrees], range -90 to +90.
@@ -27,10 +34,10 @@ class StandardRadiationwCloudsModel(StandardRadiationModel):
 
     def __init__(
         self,
-        lat: float,
-        lon: float,
-        doy: float,
-        tstart: float,
+        lat: Array,
+        lon: Array,
+        doy: Array,
+        tstart: Array,
     ):
         self.lat = lat
         self.lon = lon
@@ -39,72 +46,70 @@ class StandardRadiationwCloudsModel(StandardRadiationModel):
 
     def run(
         self,
-        state: PyTree,
+        state: StateAlias,
         t: int,
         dt: float,
         const: PhysicalConstants,
-    ):
-        """Calculate radiation components and net surface radiation.
+    ) -> StandardRadiationState:
+        """Calculate rad components and net surface rad.
 
         Args:
-            state: The current PyTree state of the model.
+            state: CoupledState.
             t: Current time step index [-].
             dt: Time step duration [s].
             const: PhysicalConstants object.
 
         Returns:
-            The updated state object with new radiation values.
-
-        Notes:
-            1.  Calculates solar position with
-                :meth:`~abcmodel.radiation.standard.StandardRadiationModel.calculate_solar_declination` and
-                :meth:`~abcmodel.radiation.standard.StandardRadiationModel.calculate_solar_elevation`.
-            2.  Determines atmospheric properties with
-                :meth:`~abcmodel.radiation.standard.StandardRadiationModel.calculate_air_temperature` and
-                :meth:`~calculate_atmospheric_transmission_w_clouds`.
-            3.  Computes all radiation components and the final
-                net radiation with :meth:`~abcmodel.radiation.standard.StandardRadiationModel.calculate_radiation_components`,
-                then updates the state object with the results.
+            The updated rad state object.
         """
-        # solar position
+        # needed components
+        rad_state = state.rad
+        ml_state = state.atmos.mixed
+        land_state = state.land
+        cloud_state = state.atmos.clouds
+
+        # computations
         solar_declination = self.compute_solar_declination(self.doy)
         solar_elevation = self.compute_solar_elevation(t, dt, solar_declination)
-
-        # atmospheric properties
         air_temp = self.compute_air_temperature(
-            state.surf_pressure,
-            state.h_abl,
-            state.theta,
+            ml_state.surf_pressure,
+            ml_state.h_abl,
+            ml_state.theta,
             const,
         )
         atmospheric_transmission = self.compute_atmospheric_transmission_w_clouds(
             solar_elevation,
-            state.cl_trans,
+            cloud_state.cl_trans,
         )
-
-        # all radiation components
         (
-            state.net_rad,
-            state.in_srad,
-            state.out_srad,
-            state.in_lrad,
-            state.out_lrad,
-        ) = self.compute_radiation_components(
+            net_rad,
+            in_srad,
+            out_srad,
+            in_lrad,
+            out_lrad,
+        ) = self.compute_rad_components(
             solar_elevation,
             atmospheric_transmission,
             air_temp,
-            state.alpha,
-            state.surf_temp,
+            land_state.alpha,
+            land_state.surf_temp,
             const,
         )
 
-        return state
+        return replace(
+            rad_state,
+            net_rad=net_rad,
+            in_srad=in_srad,
+            out_srad=out_srad,
+            in_lrad=in_lrad,
+            out_lrad=out_lrad,
+        )
 
     @staticmethod
     def compute_atmospheric_transmission_w_clouds(
         solar_elevation: Array, cl_trans: Array
     ) -> Array:
-        """Calculate atmospheric transmission coefficient for solar radiation.
+        """Calculate atmospheric transmission coefficient for solar rad.
 
         Args:
             solar_elevation: sine of the solar elevation angle [-].

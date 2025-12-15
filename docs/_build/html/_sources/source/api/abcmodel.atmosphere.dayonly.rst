@@ -2,7 +2,7 @@
 Dayonly
 =======
 
-.. automodule:: abcmodel.atmosphere.dayonly
+.. automodule:: abcmodel.atmos.dayonly
    :members:
    :show-inheritance:
    :undoc-members:

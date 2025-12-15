@@ -2,7 +2,7 @@
 Bulk
 ====
 
-.. automodule:: abcmodel.atmosphere.mixed_layer.bulk
+.. automodule:: abcmodel.atmos.mixed_layer.bulk
    :members:
    :show-inheritance:
    :undoc-members:

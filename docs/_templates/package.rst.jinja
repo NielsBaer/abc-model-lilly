@@ -19,7 +19,7 @@
 
 {# --- Title --- #}
 {%- if '.' in pkgname %}
-{# This is a SUB-package, e.g. "abcmodel.radiation" #}
+{# This is a SUB-package, e.g. "abcmodel.rad" #}
 {{- pkgname.split('.')[-1].replace('_', ' ') | title | e | heading }}
 {%- else %}
 {# This is a ROOT package#}
@@ -52,7 +52,7 @@ Subpackages
 {# Submodules Section #}
 {%- if submodules %}
 {%- if is_first_level_subpackage %}
-{# CUSTOM TEMPLATE for e.g. abcmodel.radiation #}
+{# CUSTOM TEMPLATE for e.g. abcmodel.rad #}
 
 .. toctree::
     :maxdepth: 1
@@ -61,7 +61,7 @@ Subpackages
 {%- endfor %}
 
 {%- else %}
-{# CUSTOM TEMPLATE for e.g. abcmodel.radiation.standard #}
+{# CUSTOM TEMPLATE for e.g. abcmodel.rad.standard #}
 Submodules
 ----------
 {% if separatemodules %}

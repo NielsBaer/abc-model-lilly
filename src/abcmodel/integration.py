@@ -1,74 +1,52 @@
-import math
-
 import jax
 import jax.numpy as jnp
 import numpy as np
-from jaxtyping import PyTree
+from jax import Array
 
+from .abstracts import AbstractCoupledState, AtmosT, LandT, RadT
 from .coupling import ABCoupler
 
 
-# limamau: this (or something similar) could be a check to run after
-# warmup since the static type checking for the state is now bad
-def print_nan_variables(state: PyTree):
-    """Print all variables in a CoupledState that have NaN values"""
-    nan_vars = []
-
-    for name, value in state.__dict__.items():
-        try:
-            is_nan = False
-
-            # check JAX arrays
-            if hasattr(value, "shape") and hasattr(value, "dtype"):
-                if jnp.issubdtype(value.dtype, jnp.floating):
-                    if jnp.any(jnp.isnan(value)):
-                        is_nan = True
-            # check numpy arrays
-            elif hasattr(value, "dtype") and np.issubdtype(value.dtype, np.floating):
-                if np.any(np.isnan(value)):
-                    is_nan = True
-            # check regular float values
-            elif isinstance(value, float) and math.isnan(value):
-                is_nan = True
-
-            if is_nan:
-                nan_vars.append((name, value))
-                print(f"Variable '{name}' contains NaN: {value}")
-
-        except (TypeError, AttributeError, Exception):
-            # skip variables that can't be checked for NaN
-            continue
-
-    return nan_vars
-
-
-def warmup(state: PyTree, coupler: ABCoupler, t: int, dt: float) -> PyTree:
+def warmup(
+    state: AbstractCoupledState[RadT, LandT, AtmosT],
+    coupler: ABCoupler,
+    t: int,
+    dt: float,
+) -> AbstractCoupledState[RadT, LandT, AtmosT]:
     """Warmup the model by running it for a few timesteps."""
-    state = coupler.atmosphere.statistics(state, t, coupler.const)
-
-    # calculate initial diagnostic variables
-    state = coupler.radiation.run(state, t, dt, coupler.const)
-
-    # warmup atmosphere and land
-    # limamau: would it be possible to warmup land then atmosphere?
-    state = coupler.atmosphere.warmup(state, coupler.const, coupler.land)
-
+    state = coupler.atmos.warmup(coupler.rad, coupler.land, state, t, dt, coupler.const)
     return state
 
 
-def timestep(state: PyTree, coupler: ABCoupler, t: int, dt: float) -> PyTree:
+def timestep(
+    state: AbstractCoupledState[RadT, LandT, AtmosT],
+    coupler: ABCoupler,
+    t: int,
+    dt: float,
+) -> AbstractCoupledState[RadT, LandT, AtmosT]:
     """Run a single timestep of the model."""
-    state = coupler.atmosphere.statistics(state, t, coupler.const)
-    state = coupler.radiation.run(state, t, dt, coupler.const)
-    state = coupler.land.run(state, coupler.const)
-    state = coupler.atmosphere.run(state, coupler.const)
-    state = coupler.land.integrate(state, dt)
-    state = coupler.atmosphere.integrate(state, dt)
+    atmos = coupler.atmos.statistics(state, t, coupler.const)
+    state = state.replace(atmos=atmos)
+    rad = coupler.rad.run(state, t, dt, coupler.const)
+    state = state.replace(rad=rad)
+    land = coupler.land.run(state, coupler.const)
+    state = state.replace(land=land)
+    atmos = coupler.atmos.run(state, coupler.const)
+    state = state.replace(atmos=atmos)
+    land = coupler.land.integrate(state.land, dt)
+    state = state.replace(land=land)
+    atmos = coupler.atmos.integrate(state.atmos, dt)
+    state = state.replace(atmos=atmos)
     state = coupler.compute_diagnostics(state)
     return state
 
 
-def integrate(state: PyTree, coupler: ABCoupler, dt: float, runtime: float):
+def integrate(
+    state: AbstractCoupledState[RadT, LandT, AtmosT],
+    coupler: ABCoupler,
+    dt: float,
+    runtime: float,
+) -> tuple[Array, AbstractCoupledState[RadT, LandT, AtmosT]]:
     """Integrate the coupler forward in time.
 
     Args:
@@ -79,7 +57,7 @@ def integrate(state: PyTree, coupler: ABCoupler, dt: float, runtime: float):
 
     Returns:
         times: Array of time values [h].
-        trajectory: PyTree containing the full state trajectory.
+        trajectory: CoupledState containing the full state trajectory.
     """
     tsteps = int(np.floor(runtime / dt))
 
@@ -94,6 +72,6 @@ def integrate(state: PyTree, coupler: ABCoupler, dt: float, runtime: float):
     timesteps = jnp.arange(tsteps)
     state, trajectory = jax.lax.scan(iter_fn, state, timesteps, length=tsteps)
 
-    times = jnp.arange(tsteps) * dt / 3600.0 + coupler.radiation.tstart
+    times = jnp.arange(tsteps) * dt / 3600.0 + coupler.rad.tstart
 
     return times, trajectory

@@ -5,5 +5,5 @@ Clouds
 .. toctree::
     :maxdepth: 1
 
-    abcmodel.atmosphere.clouds.cumulus
-    abcmodel.atmosphere.clouds.no_clouds
+    abcmodel.atmos.clouds.cumulus
+    abcmodel.atmos.clouds.no_clouds

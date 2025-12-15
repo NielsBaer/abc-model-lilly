@@ -2,7 +2,7 @@
 Standard
 ========
 
-.. automodule:: abcmodel.atmosphere.surface_layer.standard
+.. automodule:: abcmodel.atmos.surface_layer.standard
    :members:
    :show-inheritance:
    :undoc-members:

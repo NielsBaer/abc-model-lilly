@@ -2,7 +2,7 @@
 Minimal
 =======
 
-.. automodule:: abcmodel.atmosphere.mixed_layer.minimal
+.. automodule:: abcmodel.atmos.mixed_layer.minimal
    :members:
    :show-inheritance:
    :undoc-members:

@@ -1,5 +1,5 @@
 # ABC Model
-A simple model coupling biosphere and atmosphere, but made fully differentiable using JAX.
+A simple model coupling biosphere and atmos, but made fully differentiable using JAX.
 
 ## Installation
 Install with
@@ -32,8 +32,8 @@ We will do this using the `abcmodel` module, which is the _de facto_ module in t
 import abcmodel
 
 # setup models
-radiation_model = abcmodel.radiation.StandardRadiationModel(**cm.standard_radiation.model_kwargs)
-land_surface_model = abcmodel.land_surface.JarvisStewartModel(**cm.jarvis_stewart.model_kwargs)
+rad_model = abcmodel.rad.StandardRadiationModel(**cm.standard_rad.model_kwargs)
+land_model = abcmodel.land.JarvisStewartModel(**cm.jarvis_stewart.model_kwargs)
 surface_layer_model = abcmodel.surface_layer.StandardSurfaceLayerModel() # no parameters
 mixed_layer_model = abcmodel.mixed_layer.BulkMixedLayerModel(**cm.bulk_mixed_layer.model_kwargs)
 cloud_model = abcmodel.clouds.StandardCumulusModel() # no parameters
@@ -43,8 +43,8 @@ We have everything we need for our vertical column structure. Now we can setup t
 with these components together with the running time configuration.
 ```python
 abcoupler = abcmodel.ABCoupler(
-    radiation=radiation_model,
-    land_surface=land_surface_model,
+    rad=rad_model,
+    land=land_model,
     surface_layer=surface_layer_model,
     mixed_layer=mixed_layer_model,
     clouds=cloud_model,
@@ -54,14 +54,14 @@ abcoupler = abcmodel.ABCoupler(
 To setup the initial condition, we also take advantage of a ready-made config, and we can setup initial conditions for each model.
 ```python
 # setup initial condition
-radiation_init_conds = abcmodel.radiation.StandardRadiationInitConds(
-    **cm.standard_radiation.init_conds_kwargs
+rad_init_conds = abcmodel.rad.StandardRadiationInitConds(
+    **cm.standard_rad.init_conds_kwargs
 )
-land_surface_init_conds = abcmodel.land_surface.JarvisStewartInitConds(
+land_init_conds = abcmodel.land.JarvisStewartInitConds(
     **cm.jarvis_stewart.init_conds_kwargs,
 )
 surface_layer_init_conds = abcmodel.surface_layer.StandardSurfaceLayerInitConds(
-    **cm.standard_surface_layer.init_conds_kwargs
+    **cm.obukhov_surface_layer.init_conds_kwargs
 )
 mixed_layer_init_conds = abcmodel.mixed_layer.BulkMixedLayerInitConds(
     **cm.bulk_mixed_layer.init_conds_kwargs,
@@ -72,8 +72,8 @@ cloud_init_conds = abcmodel.clouds.StandardCumulusInitConds()
 Finally we can use the coupler to bound everything in a initial state that will be carried by our model.
 ```python
 state = abcoupler.init_state(
-    radiation_init_conds,
-    land_surface_init_conds,
+    rad_init_conds,
+    land_init_conds,
     surface_layer_init_conds,
     mixed_layer_init_conds,
     cloud_init_conds,
@@ -136,18 +136,18 @@ Which should give us something like the figure below.
 
 ## Changing models, parameters and initial conditions
 Now let's say you want to use a different model for the land surface.
-Instead of the Jarvis Stewart model, you may choose AquaCrop.
+Instead of the Jarvis Stewart model, you may choose Ags.
 We also provide a configuration for that, which you can load using the `abcconfigs` module, as previously done.
-You can take a look at the config [here](https://git.bgc-jena.mpg.de/abc3/abc-model/-/blob/main/src/abcconfigs/class_model/aquacrop.py?ref_type=heads).
+You can take a look at the config [here](https://git.bgc-jena.mpg.de/abc3/abc-model/-/blob/main/src/abcconfigs/class_model/ags.py?ref_type=heads).
 
 Now, for example, you may change from C3 to C4 with something like the following.
 ```python
 # new parameters definition
-aquacrop_model_kwargs = cm.aquacrop.model_kwargs
-aquacrop_model_kwargs['c3c4'] = 'c4'
+ags_model_kwargs = cm.ags.model_kwargs
+ags_model_kwargs['c3c4'] = 'c4'
 
 # define a new land model
-land_surface_model = abcmodel.land_surface.AquaCropModel(**aquacrop_model_kwargs)
+land_model = abcmodel.land.AgsModel(**ags_model_kwargs)
 ```
 
 Then you can redefine the coupler, create a new state and integrate it to see different outcomes. You can do something similar to change initial conditions, or even recreate your own!

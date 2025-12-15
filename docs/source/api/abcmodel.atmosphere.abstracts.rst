@@ -2,7 +2,7 @@
 Abstracts
 =========
 
-.. automodule:: abcmodel.atmosphere.abstracts
+.. automodule:: abcmodel.atmos.abstracts
    :members:
    :show-inheritance:
    :undoc-members:

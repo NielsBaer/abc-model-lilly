@@ -1,11 +1,11 @@
-from . import atmosphere, land, radiation
+from . import atmos, land, rad
 from .coupling import ABCoupler
 from .integration import integrate
 
 __all__ = [
     "integrate",
     "ABCoupler",
-    "atmosphere",
+    "atmos",
     "land",
-    "radiation",
+    "rad",
 ]

@@ -2,7 +2,7 @@
 Stats
 =====
 
-.. automodule:: abcmodel.atmosphere.mixed_layer.stats
+.. automodule:: abcmodel.atmos.mixed_layer.stats
    :members:
    :show-inheritance:
    :undoc-members:

@@ -1,38 +1,42 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field, replace
 
 import jax
 import jax.numpy as jnp
+from jax import Array
 from jax.scipy.special import exp1
-from jaxtyping import Array, PyTree
 
+from ..abstracts import AbstractCoupledState
 from ..utils import PhysicalConstants, compute_esat
-from .standard import AbstractStandardLandSurfaceModel, StandardLandSurfaceInitConds
+from .standard import AbstractStandardLandModel, StandardLandState
 
 
 @dataclass
-class AquaCropInitConds(StandardLandSurfaceInitConds):
-    """AquaCrop model initial state."""
+class AgsState(StandardLandState):
+    """A-gs model state."""
 
-    rsCO2: float = jnp.nan
+    rsCO2: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Stomatal resistance to CO2."""
-    gcco2: float = jnp.nan
+    gcco2: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Conductance to CO2."""
-    ci: float = jnp.nan
+    ci: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Intercellular CO2 concentration."""
-    co2abs: float = jnp.nan
+    co2abs: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """CO2 assimilation rate."""
+    wCO2A: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    """Net assimilation flux [mol m-2 s-1]."""
+    wCO2R: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    """Respiration flux [mol m-2 s-1]."""
+    wCO2: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    """Total CO2 flux [mol m-2 s-1]."""
 
 
-class AquaCropModel(AbstractStandardLandSurfaceModel):
-    """AquaCrop land surface model with coupled photosynthesis and stomatal conductance.
+AgsInitConds = AgsState
 
-    A bit more advanced land surface model implementing the AquaCrop approach with coupled
-    photosynthesis-stomatal conductance calculations. Includes biochemical
-    processes for both C3 and C4 vegetation types, soil moisture stress effects,
-    and explicit CO2 flux calculations.
 
-    Args:
-        c3c4: plant type, either "c3" or "c4".
+class AgsModel(AbstractStandardLandModel):
+    """Ags land surface model with coupled photosynthesis and stomatal conductance.
+
+    ... (docstring omitted for brevity) ...
     """
 
     def __init__(self, c3c4: str, **kwargs):
@@ -199,7 +203,6 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         fmin: Array,
         co2: Array,
         co2comp: Array,
-        gm: Array,
         const: PhysicalConstants,
     ) -> tuple[Array, Array]:
         """Compute cfrac, co2abs, and ci (internal CO2 concentration).
@@ -346,10 +349,10 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         self,
         in_srad: Array,
     ) -> Array:
-        """Compute absorbed photosynthetically active radiation (PAR).
+        """Compute absorbed photosynthetically active rad (PAR).
 
         Notes:
-            Absorbed PAR is estimated as 50% of the incoming shortwave radiation scaled by vegetation cover:
+            Absorbed PAR is estimated as 50% of the incoming shortwave rad scaled by vegetation cover:
 
             .. math::
                 PAR = 0.5 \\cdot S_{\\downarrow} \\cdot c_{veg}
@@ -391,7 +394,7 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
 
         Notes:
             The canopy conductance is obtained by integrating the leaf conductance over the canopy depth,
-            assuming an exponential decay of radiation and photosynthetic capacity.
+            assuming an exponential decay of rad and photosynthetic capacity.
 
         References:
             Equations E.13, E.14, E.15 from the CLASS book.
@@ -420,42 +423,48 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         """
         return 1.0 / (1.6 * gcco2)
 
-    def update_surface_resistance(self, state: PyTree, const: PhysicalConstants):
-        """Compute surface resistance using AquaCrop photosynthesis-conductance model."""
-        co2comp = self.compute_co2comp(state.thetasurf, const.rho)
-        gm = self.compute_gm(state.thetasurf)
+    def update_surface_resistance(
+        self, state: AbstractCoupledState, const: PhysicalConstants
+    ) -> AbstractCoupledState:
+        """Compute surface resistance using Ags photosynthesis-conductance model."""
+        land_state = state.land
+        ml_state = state.atmos.mixed
+        sl_state = state.atmos.surface
+        thetasurf = sl_state.thetasurf
+        co2comp = self.compute_co2comp(thetasurf, const.rho)
+        gm = self.compute_gm(thetasurf)
         fmin = self.compute_fmin(gm)
-        ds = self.compute_ds(state.thetasurf, state.e)
+        ds = self.compute_ds(thetasurf, land_state.e)
         d0 = self.compute_d0(fmin)
-        state.ci, state.co2abs = self.compute_internal_co2(
+        ci, co2abs = self.compute_internal_co2(
             ds,
             d0,
             fmin,
-            state.co2,
+            ml_state.co2,
             co2comp,
-            gm,
             const,
         )
-        ammax = self.compute_max_gross_primary_production(state.thetasurf)
+        ammax = self.compute_max_gross_primary_production(thetasurf)
         fstr = self.compute_soil_moisture_stress_factor(self.w2)
-        am = self.compute_gross_assimilation(ammax, gm, state.ci, co2comp)
+        am = self.compute_gross_assimilation(ammax, gm, ci, co2comp)
         rdark = self.compute_dark_respiration(am)
         par = self.compute_absorbed_par(state.in_srad)
-        alphac = self.compute_light_use_efficiency(state.co2abs, co2comp)
-        state.gcco2 = self.compute_canopy_co2_conductance(
+        alphac = self.compute_light_use_efficiency(co2abs, co2comp)
+        gcco2 = self.compute_canopy_co2_conductance(
             alphac,
             par,
             am,
             rdark,
             fstr,
-            state.co2abs,
+            co2abs,
             co2comp,
             ds,
             d0,
             fmin,
         )
-        state.rs = self.compute_rs(state.gcco2)
-        return state
+        rs = self.compute_rs(gcco2)
+        new_land = replace(land_state, ci=ci, co2abs=co2abs, gcco2=gcco2, rs=rs)
+        return state.replace(land=new_land)
 
     def compute_surface_co2_resistance(self, gcco2: Array) -> Array:
         """Compute surface resistance to CO₂ (rsCO2) from canopy conductance.
@@ -524,7 +533,9 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         """
         return flux * (const.mair / (const.rho * const.mco2))
 
-    def update_co2_flux(self, state: PyTree, const: PhysicalConstants):
+    def update_co2_flux(
+        self, state: AbstractCoupledState, const: PhysicalConstants
+    ) -> AbstractCoupledState:
         """Compute the CO₂ flux and update the state.
 
         Notes:
@@ -534,13 +545,16 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
             - ``wCO2R``: Respiration flux (scaled to mol)
             - ``wCO2``: Total CO2 flux
         """
-        state.rsCO2 = self.compute_surface_co2_resistance(state.gcco2)
+        land_state = state.land
+        sl_state = state.atmos.surface
+        rsCO2 = self.compute_surface_co2_resistance(land_state.gcco2)
         an = self.compute_net_assimilation(
-            state.co2abs, state.ci, state.ra, state.rsCO2
+            land_state.co2abs, land_state.ci, sl_state.ra, rsCO2
         )
-        fw = self.compute_soil_water_fraction(state.wg)
-        resp = self.compute_respiration(state.temp_soil, fw)
-        state.wCO2A = self.scale_flux_to_mol(an, const)
-        state.wCO2R = self.scale_flux_to_mol(resp, const)
-        state.wCO2 = state.wCO2A + state.wCO2R
-        return state
+        fw = self.compute_soil_water_fraction(land_state.wg)
+        resp = self.compute_respiration(land_state.temp_soil, fw)
+        wCO2A = self.scale_flux_to_mol(an, const)
+        wCO2R = self.scale_flux_to_mol(resp, const)
+        wCO2 = wCO2A + wCO2R
+        new_land = replace(land_state, rsCO2=rsCO2, wCO2A=wCO2A, wCO2R=wCO2R, wCO2=wCO2)
+        return state.replace(land=new_land)

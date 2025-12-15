@@ -2,7 +2,7 @@
 Aquacrop
 ========
 
-.. automodule:: abcconfigs.class_model.aquacrop
+.. automodule:: abcconfigs.class_model.ags
    :members:
    :show-inheritance:
    :undoc-members:

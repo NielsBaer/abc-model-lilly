@@ -24,9 +24,9 @@ Components
 .. toctree::
    :maxdepth: 1
 
-   abcmodel.radiation
+   abcmodel.rad
    abcmodel.land
-   abcmodel.atmosphere
+   abcmodel.atmos
 
 Functionalities
 ---------------

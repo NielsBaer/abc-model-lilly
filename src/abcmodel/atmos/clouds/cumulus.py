@@ -1,34 +1,36 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field, replace
 
 import jax.numpy as jnp
-from jaxtyping import Array, PyTree
 
-from ...abstracts import AbstractState
-from ...utils import PhysicalConstants, compute_qsat
-from ..abstracts import AbstractCloudModel
+from ...abstracts import AbstractCoupledState
+from ...utils import Array, PhysicalConstants, compute_qsat
+from ..abstracts import AbstractCloudModel, AbstractCloudState
 
 
 @dataclass
-class StandardCumulusInitConds(AbstractState, mutable=True):
-    """Standard cumulus initial state."""
+class CumulusState(AbstractCloudState):
+    """Standard cumulus state."""
 
-    cc_frac: float = 0.0
+    cc_frac: Array = field(default_factory=lambda: jnp.array(0.0))
     """Cloud core fraction [-], range 0 to 1."""
-    cc_mf: float = 0.0
+    cc_mf: Array = field(default_factory=lambda: jnp.array(0.0))
     """Cloud core mass flux [m/s]."""
-    cc_qf: float = 0.0
+    cc_qf: Array = field(default_factory=lambda: jnp.array(0.0))
     """Cloud core moisture flux [kg/kg/s]."""
-    cl_trans: float = 1.0
+    cl_trans: Array = field(default_factory=lambda: jnp.array(1.0))
     """Cloud layer transmittance [-], range 0 to 1."""
-    q2_h: float = jnp.nan
+    q2_h: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Humidity variance at mixed-layer top [kg²/kg²]."""
-    top_CO22: float = jnp.nan
+    top_CO22: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """CO2 variance at mixed-layer top [ppm²]."""
-    wCO2M: float = 0.0
+    wCO2M: Array = field(default_factory=lambda: jnp.array(0.0))
     """CO2 mass flux [mgC/m²/s]."""
 
 
-class StandardCumulusModel(AbstractCloudModel):
+CumulusInitConds = CumulusState
+
+
+class CumulusModel(AbstractCloudModel):
     """Standard cumulus cloud model based on Neggers et al. (2006/7).
 
     This model calculates shallow cumulus convection properties using a variance-based
@@ -46,35 +48,47 @@ class StandardCumulusModel(AbstractCloudModel):
         self.tcc_cc = tcc_cc
         self.tcc_trans = tcc_trans
 
-    def run(self, state: PyTree, const: PhysicalConstants):
+    def run(
+        self, state: AbstractCoupledState, const: PhysicalConstants
+    ) -> CumulusState:
         """Run the model."""
-        state.q2_h = self.compute_q2_h(
-            state.cc_qf,
-            state.wthetav,
-            state.wqe,
-            state.dq,
-            state.h_abl,
-            state.dz_h,
-            state.wstar,
-        )
-        state.top_CO22 = self.compute_top_CO22(
-            state.wthetav,
-            state.h_abl,
-            state.dz_h,
-            state.wstar,
-            state.wCO2e,
-            state.wCO2M,
-            state.deltaCO2,
-        )
-        state.cc_frac = self.compute_cc_frac(
-            state.q, state.top_T, state.top_p, state.q2_h
-        )
-        state.cc_mf = self.compute_cc_mf(state.cc_frac, state.wstar)
-        state.cc_qf = self.compute_cc_qf(state.cc_mf, state.q2_h)
-        state.wCO2M = self.compute_wCO2M(state.cc_mf, state.top_CO22, state.deltaCO2)
-        state.cl_trans = self.compute_cl_trans(state.cc_frac)
+        cloud_state = state.atmos.clouds
+        ml_state = state.atmos.mixed
 
-        return state
+        q2_h = self.compute_q2_h(
+            cloud_state.cc_qf,
+            ml_state.wthetav,
+            ml_state.wqe,
+            ml_state.dq,
+            ml_state.h_abl,
+            ml_state.dz_h,
+            ml_state.wstar,
+        )
+        top_CO22 = self.compute_top_CO22(
+            ml_state.wthetav,
+            ml_state.h_abl,
+            ml_state.dz_h,
+            ml_state.wstar,
+            ml_state.wCO2e,
+            cloud_state.wCO2M,
+            ml_state.deltaCO2,
+        )
+        cc_frac = self.compute_cc_frac(ml_state.q, ml_state.top_T, ml_state.top_p, q2_h)
+        cc_mf = self.compute_cc_mf(cc_frac, ml_state.wstar)
+        cc_qf = self.compute_cc_qf(cc_mf, q2_h)
+        wCO2M = self.compute_wCO2M(cc_mf, top_CO22, ml_state.deltaCO2)
+        cl_trans = self.compute_cl_trans(cc_frac)
+
+        return replace(
+            cloud_state,
+            q2_h=q2_h,
+            top_CO22=top_CO22,
+            cc_frac=cc_frac,
+            cc_mf=cc_mf,
+            cc_qf=cc_qf,
+            wCO2M=wCO2M,
+            cl_trans=cl_trans,
+        )
 
     @staticmethod
     def compute_q2_h(

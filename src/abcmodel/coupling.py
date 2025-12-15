@@ -1,36 +1,31 @@
-from dataclasses import asdict
-from types import SimpleNamespace
+from dataclasses import dataclass, field
+from typing import Generic
 
-import jax
+import jax.numpy as jnp
+from jax import Array
 
 from .abstracts import (
     AbstractAtmosphereModel,
+    AbstractCoupledState,
     AbstractLandModel,
     AbstractRadiationModel,
+    AtmosT,
+    LandT,
+    RadT,
 )
 from .utils import PhysicalConstants
 
 
-# limamau: is this ""optimized""??
-# also, for the static type checking of the code,
-# it would be nice to guarantee that all fields
-# are at least an instance of jax.Array
-@jax.tree_util.register_pytree_node_class
-class CoupledState(SimpleNamespace):
-    """A pytree-compatible state with attribute access! But not very type friendly..."""
+@dataclass
+class CoupledState(
+    AbstractCoupledState[RadT, LandT, AtmosT], Generic[RadT, LandT, AtmosT]
+):
+    """Hierarchical coupled state, generic over component types."""
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def tree_flatten(self):
-        """:meta private:"""
-        # children are the values, aux is the keys
-        return list(self.__dict__.values()), list(self.__dict__.keys())
-
-    @classmethod
-    def tree_unflatten(cls, aux, children):
-        """:meta private:"""
-        return cls(**dict(zip(aux, children)))
+    rad: RadT
+    land: LandT
+    atmos: AtmosT
+    total_water_mass: Array = field(default_factory=lambda: jnp.array(0.0))
 
 
 class ABCoupler:
@@ -38,49 +33,29 @@ class ABCoupler:
 
     def __init__(
         self,
-        radiation: AbstractRadiationModel,
+        rad: AbstractRadiationModel,
         land: AbstractLandModel,
-        atmosphere: AbstractAtmosphereModel,
+        atmos: AbstractAtmosphereModel,
     ):
-        # constants
+        self.rad = rad
+        self.land = land
+        self.atmos = atmos
         self.const = PhysicalConstants()
 
-        # models
-        self.radiation = radiation
-        self.land = land
-        self.atmosphere = atmosphere
-
     @staticmethod
-    def init_state(*args):
-        state_dict = {}
-        for arg in args:
-            state_dict.update(asdict(arg))
+    def init_state(
+        rad_state: RadT,
+        land_state: LandT,
+        atmos_state: AtmosT,
+    ) -> CoupledState[RadT, LandT, AtmosT]:
+        return CoupledState(
+            rad=rad_state,
+            land=land_state,
+            atmos=atmos_state,
+        )
 
-        # diagnostic variables for water and energy budgets
-        state_dict["total_water_mass"] = 0.0
-        state_dict["total_energy"] = 0.0
-
-        state = CoupledState(**state_dict)
-        return state
-
-    def compute_diagnostics(self, state: CoupledState) -> CoupledState:
-        """Compute diagnostic variables for total water budget.
-
-        In the future it would be nice to include the energy budget, although
-        this is significantly more complicated.
-
-        Notes:
-            Total water mass (kg/m²):
-
-            - water vapor in the mixed layer: :math:`q \\rho h`;
-            - soil moisture in layer 1: :math:`w_g \\rho_w`;
-            - soil moisture in layer 2: :math:`w_2 \\rho_w`.
-            - canopy moisture: :math:`w_l \\rho_w`.
-        """
-        # total water mass (kg/m²)
-        vap_w = state.q * self.const.rho * state.h_abl
-        s1_w = state.wg * self.const.rhow * self.land.d1
-        can_w = state.wl * self.const.rhow
-        state.total_water_mass = vap_w + s1_w + can_w
-
-        return state
+    def compute_diagnostics(self, state: AbstractCoupledState) -> AbstractCoupledState:
+        """Compute diagnostic variables for total water budget."""
+        # limamau: this needs to be re-implemented
+        total_water_mass = jnp.array(0.0)
+        return state.replace(total_water_mass=total_water_mass)
