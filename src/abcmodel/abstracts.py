@@ -75,11 +75,7 @@ class AbstractCoupledState(AbstractState, Generic[RadT, LandT, AtmosT]):
     rad: RadT
     land: LandT
     atmos: AtmosT
-
-    total_water_mass: float = 0.0
-    """Total water mass [kg m-2]."""
-    total_energy: float = 0.0
-    """Total energy [J m-2]."""
+    total_water_mass: Array
 
     @property
     def net_rad(self) -> Array:
@@ -92,6 +88,8 @@ class AbstractCoupledState(AbstractState, Generic[RadT, LandT, AtmosT]):
         return self.rad.in_srad
 
 
+# limamau: for now this is not needed,
+# but in the future we might say that this is an eqx.Module or something
 class AbstractModel:
     """Abstract model class to define the interface for all models."""
 

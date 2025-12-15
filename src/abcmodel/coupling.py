@@ -1,5 +1,8 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Generic
+
+import jax.numpy as jnp
+from jax import Array
 
 from .abstracts import (
     AbstractAtmosphereModel,
@@ -22,6 +25,7 @@ class CoupledState(
     rad: RadT
     land: LandT
     atmos: AtmosT
+    total_water_mass: Array = field(default_factory=lambda: jnp.array(0.0))
 
 
 class ABCoupler:
@@ -52,4 +56,6 @@ class ABCoupler:
 
     def compute_diagnostics(self, state: AbstractCoupledState) -> AbstractCoupledState:
         """Compute diagnostic variables for total water budget."""
-        return state
+        # limamau: this needs to be re-implemented
+        total_water_mass = jnp.array(0.0)
+        return state.replace(total_water_mass=total_water_mass)
