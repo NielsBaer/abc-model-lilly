@@ -339,9 +339,6 @@ document.write(`
 
 
 
-<span class="n">CumulusInitConds</span> <span class="o">=</span> <span class="n">CumulusState</span>
-
-
 <div class="viewcode-block" id="CumulusModel">
 <a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.clouds.cumulus.html#abcmodel.atmos.clouds.cumulus.CumulusModel">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CumulusModel</span><span class="p">(</span><span class="n">AbstractCloudModel</span><span class="p">[</span><span class="n">CumulusState</span><span class="p">]):</span>
@@ -361,6 +358,17 @@ document.write(`
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tcc_cc</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">tcc_trans</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.6</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tcc_cc</span> <span class="o">=</span> <span class="n">tcc_cc</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tcc_trans</span> <span class="o">=</span> <span class="n">tcc_trans</span>
+
+<div class="viewcode-block" id="CumulusModel.init_state">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.clouds.cumulus.html#abcmodel.atmos.clouds.cumulus.CumulusModel.init_state">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">init_state</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CumulusState</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the model state.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The initial cloud state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">CumulusState</span><span class="p">()</span></div>
+
 
 <div class="viewcode-block" id="CumulusModel.run">
 <a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.clouds.cumulus.html#abcmodel.atmos.clouds.cumulus.CumulusModel.run">[docs]</a>

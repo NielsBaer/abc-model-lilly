@@ -1,5 +1,6 @@
 from dataclasses import dataclass, replace
 
+import jax.numpy as jnp
 from jax import Array
 
 from ..abstracts import AbstractCoupledState, AtmosT, LandT
@@ -13,7 +14,6 @@ class CloudyRadiationState(StandardRadiationState):
     pass
 
 
-CloudyRadiationInitConds = CloudyRadiationState
 StateAlias = AbstractCoupledState[StandardRadiationState, LandT, AtmosT]
 
 
@@ -32,13 +32,26 @@ class CloudyRadiationModel(StandardRadiationModel):
 
     def __init__(
         self,
-        lat: Array,
-        lon: Array,
-        doy: Array,
+        lat: float,
+        lon: float,
+        doy: float,
     ):
-        self.lat = lat
-        self.lon = lon
-        self.doy = doy
+        self.lat = jnp.array(lat)
+        self.lon = jnp.array(lon)
+        self.doy = jnp.array(doy)
+
+    def init_state(self, net_rad: float) -> CloudyRadiationState:
+        """Initialize the model state.
+
+        Args:
+            net_rad: Net surface radiation [W m-2].
+
+        Returns:
+            The initial radiation state.
+        """
+        return CloudyRadiationState(
+            net_rad=jnp.array(net_rad),
+        )
 
     def run(
         self,

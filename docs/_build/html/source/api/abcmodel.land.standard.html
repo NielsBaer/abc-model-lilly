@@ -363,6 +363,11 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.wl"><code class="docutils literal notranslate"><span class="pre">StandardLandState.wl</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.rs"><code class="docutils literal notranslate"><span class="pre">StandardLandState.rs</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.rssoil"><code class="docutils literal notranslate"><span class="pre">StandardLandState.rssoil</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.esat"><code class="docutils literal notranslate"><span class="pre">StandardLandState.esat</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.qsat"><code class="docutils literal notranslate"><span class="pre">StandardLandState.qsat</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.dqsatdT"><code class="docutils literal notranslate"><span class="pre">StandardLandState.dqsatdT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.e"><code class="docutils literal notranslate"><span class="pre">StandardLandState.e</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.qsatsurf"><code class="docutils literal notranslate"><span class="pre">StandardLandState.qsatsurf</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.cliq"><code class="docutils literal notranslate"><span class="pre">StandardLandState.cliq</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.temp_soil_tend"><code class="docutils literal notranslate"><span class="pre">StandardLandState.temp_soil_tend</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.wgtend"><code class="docutils literal notranslate"><span class="pre">StandardLandState.wgtend</span></code></a></li>
@@ -376,18 +381,13 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.le_pot"><code class="docutils literal notranslate"><span class="pre">StandardLandState.le_pot</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.le_ref"><code class="docutils literal notranslate"><span class="pre">StandardLandState.le_ref</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.ra"><code class="docutils literal notranslate"><span class="pre">StandardLandState.ra</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.esat"><code class="docutils literal notranslate"><span class="pre">StandardLandState.esat</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.qsat"><code class="docutils literal notranslate"><span class="pre">StandardLandState.qsat</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.dqsatdT"><code class="docutils literal notranslate"><span class="pre">StandardLandState.dqsatdT</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.e"><code class="docutils literal notranslate"><span class="pre">StandardLandState.e</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.qsatsurf"><code class="docutils literal notranslate"><span class="pre">StandardLandState.qsatsurf</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.wtheta"><code class="docutils literal notranslate"><span class="pre">StandardLandState.wtheta</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.wq"><code class="docutils literal notranslate"><span class="pre">StandardLandState.wq</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.wCO2"><code class="docutils literal notranslate"><span class="pre">StandardLandState.wCO2</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandInitConds"><code class="docutils literal notranslate"><span class="pre">StandardLandInitConds</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.AbstractStandardLandModel"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.AbstractStandardLandModel.init_state"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandModel.init_state()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.AbstractStandardLandModel.integrate"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandModel.integrate()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.AbstractStandardLandModel.run"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandModel.run()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.AbstractStandardLandModel.compute_dqsatdT"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandModel.compute_dqsatdT()</span></code></a></li>
@@ -479,6 +479,36 @@ document.write(`
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.standard.StandardLandState.esat">
+<span class="sig-name descname"><span class="pre">esat</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.standard.StandardLandState.esat" title="Link to this definition">#</a></dt>
+<dd><p>Saturation vapor pressure [Pa].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.standard.StandardLandState.qsat">
+<span class="sig-name descname"><span class="pre">qsat</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.standard.StandardLandState.qsat" title="Link to this definition">#</a></dt>
+<dd><p>Saturation specific humidity [kg/kg].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.standard.StandardLandState.dqsatdT">
+<span class="sig-name descname"><span class="pre">dqsatdT</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.standard.StandardLandState.dqsatdT" title="Link to this definition">#</a></dt>
+<dd><p>Derivative of saturation specific humidity with respect to temperature [kg/kg/K].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.standard.StandardLandState.e">
+<span class="sig-name descname"><span class="pre">e</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.standard.StandardLandState.e" title="Link to this definition">#</a></dt>
+<dd><p>Vapor pressure [Pa].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.standard.StandardLandState.qsatsurf">
+<span class="sig-name descname"><span class="pre">qsatsurf</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.standard.StandardLandState.qsatsurf" title="Link to this definition">#</a></dt>
+<dd><p>Saturation specific humidity at surface temperature [kg/kg].</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land.standard.StandardLandState.cliq">
 <span class="sig-name descname"><span class="pre">cliq</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.standard.StandardLandState.cliq" title="Link to this definition">#</a></dt>
 <dd><p>Wet fraction of the canopy [-].</p>
@@ -557,36 +587,6 @@ document.write(`
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="abcmodel.land.standard.StandardLandState.esat">
-<span class="sig-name descname"><span class="pre">esat</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.standard.StandardLandState.esat" title="Link to this definition">#</a></dt>
-<dd><p>Saturation vapor pressure [Pa].</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="abcmodel.land.standard.StandardLandState.qsat">
-<span class="sig-name descname"><span class="pre">qsat</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.standard.StandardLandState.qsat" title="Link to this definition">#</a></dt>
-<dd><p>Saturation specific humidity [kg/kg].</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="abcmodel.land.standard.StandardLandState.dqsatdT">
-<span class="sig-name descname"><span class="pre">dqsatdT</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.standard.StandardLandState.dqsatdT" title="Link to this definition">#</a></dt>
-<dd><p>Derivative of saturation specific humidity with respect to temperature [kg/kg/K].</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="abcmodel.land.standard.StandardLandState.e">
-<span class="sig-name descname"><span class="pre">e</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.standard.StandardLandState.e" title="Link to this definition">#</a></dt>
-<dd><p>Vapor pressure [Pa].</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="abcmodel.land.standard.StandardLandState.qsatsurf">
-<span class="sig-name descname"><span class="pre">qsatsurf</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.standard.StandardLandState.qsatsurf" title="Link to this definition">#</a></dt>
-<dd><p>Saturation specific humidity at surface temperature [kg/kg].</p>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.land.standard.StandardLandState.wtheta">
 <span class="sig-name descname"><span class="pre">wtheta</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.standard.StandardLandState.wtheta" title="Link to this definition">#</a></dt>
 <dd><p>Kinematic heat flux [K m/s].</p>
@@ -604,12 +604,6 @@ document.write(`
 <dd><p>Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1].</p>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="abcmodel.land.standard.StandardLandInitConds">
-<span class="sig-prename descclassname"><span class="pre">abcmodel.land.standard.</span></span><span class="sig-name descname"><span class="pre">StandardLandInitConds</span></span><a class="headerlink" href="#abcmodel.land.standard.StandardLandInitConds" title="Link to this definition">#</a></dt>
-<dd><p>alias of <a class="reference internal" href="#abcmodel.land.standard.StandardLandState" title="abcmodel.land.standard.StandardLandState"><code class="xref py py-class docutils literal notranslate"><span class="pre">StandardLandState</span></code></a></p>
 </dd></dl>
 
 <dl class="py class">
@@ -641,6 +635,30 @@ document.write(`
 </ul>
 </dd>
 </dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.standard.AbstractStandardLandModel.init_state">
+<span class="sig-name descname"><span class="pre">init_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_soil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rssoil</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/standard.html#AbstractStandardLandModel.init_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.standard.AbstractStandardLandModel.init_state" title="Link to this definition">#</a></dt>
+<dd><p>Initialize the model state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – albedo [-].</p></li>
+<li><p><strong>wg</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Volumetric soil moisture [m3 m-3].</p></li>
+<li><p><strong>temp_soil</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Soil temperature [K].</p></li>
+<li><p><strong>temp2</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Deep soil temperature [K].</p></li>
+<li><p><strong>surf_temp</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Surface temperature [K].</p></li>
+<li><p><strong>wl</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Canopy water content [m].</p></li>
+<li><p><strong>wq</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Kinematic moisture flux [kg/kg m/s].</p></li>
+<li><p><strong>rs</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Surface resistance [s m-1].</p></li>
+<li><p><strong>rssoil</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Soil resistance [s m-1].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The initial land state.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="abcmodel.land.standard.AbstractStandardLandModel.integrate">
 <span class="sig-name descname"><span class="pre">integrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/standard.html#AbstractStandardLandModel.integrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.standard.AbstractStandardLandModel.integrate" title="Link to this definition">#</a></dt>
@@ -1086,6 +1104,11 @@ latent heat flux <span class="math notranslate nohighlight">\(LE\)</span> throug
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.wl"><code class="docutils literal notranslate"><span class="pre">StandardLandState.wl</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.rs"><code class="docutils literal notranslate"><span class="pre">StandardLandState.rs</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.rssoil"><code class="docutils literal notranslate"><span class="pre">StandardLandState.rssoil</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.esat"><code class="docutils literal notranslate"><span class="pre">StandardLandState.esat</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.qsat"><code class="docutils literal notranslate"><span class="pre">StandardLandState.qsat</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.dqsatdT"><code class="docutils literal notranslate"><span class="pre">StandardLandState.dqsatdT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.e"><code class="docutils literal notranslate"><span class="pre">StandardLandState.e</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.qsatsurf"><code class="docutils literal notranslate"><span class="pre">StandardLandState.qsatsurf</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.cliq"><code class="docutils literal notranslate"><span class="pre">StandardLandState.cliq</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.temp_soil_tend"><code class="docutils literal notranslate"><span class="pre">StandardLandState.temp_soil_tend</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.wgtend"><code class="docutils literal notranslate"><span class="pre">StandardLandState.wgtend</span></code></a></li>
@@ -1099,18 +1122,13 @@ latent heat flux <span class="math notranslate nohighlight">\(LE\)</span> throug
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.le_pot"><code class="docutils literal notranslate"><span class="pre">StandardLandState.le_pot</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.le_ref"><code class="docutils literal notranslate"><span class="pre">StandardLandState.le_ref</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.ra"><code class="docutils literal notranslate"><span class="pre">StandardLandState.ra</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.esat"><code class="docutils literal notranslate"><span class="pre">StandardLandState.esat</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.qsat"><code class="docutils literal notranslate"><span class="pre">StandardLandState.qsat</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.dqsatdT"><code class="docutils literal notranslate"><span class="pre">StandardLandState.dqsatdT</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.e"><code class="docutils literal notranslate"><span class="pre">StandardLandState.e</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.qsatsurf"><code class="docutils literal notranslate"><span class="pre">StandardLandState.qsatsurf</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.wtheta"><code class="docutils literal notranslate"><span class="pre">StandardLandState.wtheta</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.wq"><code class="docutils literal notranslate"><span class="pre">StandardLandState.wq</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandState.wCO2"><code class="docutils literal notranslate"><span class="pre">StandardLandState.wCO2</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.StandardLandInitConds"><code class="docutils literal notranslate"><span class="pre">StandardLandInitConds</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.AbstractStandardLandModel"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.AbstractStandardLandModel.init_state"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandModel.init_state()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.AbstractStandardLandModel.integrate"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandModel.integrate()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.AbstractStandardLandModel.run"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandModel.run()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.standard.AbstractStandardLandModel.compute_dqsatdT"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandModel.compute_dqsatdT()</span></code></a></li>

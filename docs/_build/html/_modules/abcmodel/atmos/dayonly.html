@@ -366,6 +366,24 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">mixed_layer</span> <span class="o">=</span> <span class="n">mixed_layer</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">clouds</span> <span class="o">=</span> <span class="n">clouds</span>
 
+<div class="viewcode-block" id="DayOnlyAtmosphereModel.init_state">
+<a class="viewcode-back" href="../../../source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereModel.init_state">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">init_state</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">SurfT</span><span class="p">,</span> <span class="n">mixed</span><span class="p">:</span> <span class="n">MixedT</span><span class="p">,</span> <span class="n">clouds</span><span class="p">:</span> <span class="n">CloudT</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DayOnlyAtmosphereState</span><span class="p">[</span><span class="n">SurfT</span><span class="p">,</span> <span class="n">MixedT</span><span class="p">,</span> <span class="n">CloudT</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the model state.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            surface: The initial surface layer state.</span>
+<span class="sd">            mixed: The initial mixed layer state.</span>
+<span class="sd">            clouds: The initial cloud state.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The initial atmosphere state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">DayOnlyAtmosphereState</span><span class="p">(</span><span class="n">surface</span><span class="o">=</span><span class="n">surface</span><span class="p">,</span> <span class="n">mixed</span><span class="o">=</span><span class="n">mixed</span><span class="p">,</span> <span class="n">clouds</span><span class="o">=</span><span class="n">clouds</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="DayOnlyAtmosphereModel.run">
 <a class="viewcode-back" href="../../../source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereModel.run">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span>

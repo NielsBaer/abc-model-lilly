@@ -13,46 +13,47 @@ def main():
     tstart = 6.8
 
     # define rad model
-    rad_init_conds = abcmodel.rad.StandardRadiationInitConds(
-        **cm.standard_radiation.init_conds_kwargs
-    )
     rad_model = abcmodel.rad.StandardRadiationModel(
         **cm.standard_radiation.model_kwargs,
     )
+    rad_state = rad_model.init_state(**cm.standard_radiation.state_kwargs)
 
     # land surface
-    land_init_conds = abcmodel.land.MinimalLandSurfaceInitConds(
-        alpha=jnp.array(0.25),
-        surf_temp=jnp.array(288.8),
-        rs=jnp.array(1.0),
-    )
     land_model = abcmodel.land.MinimalLandSurfaceModel()
+    land_state = land_model.init_state(
+        alpha=0.25,
+        surf_temp=288.8,
+        rs=1.0,
+    )
 
     # surface layer
-    surface_layer_init_conds = (
-        abcmodel.atmos.surface_layer.ObukhovSurfaceLayerInitConds(
-            **cm.obukhov_surface_layer.init_conds_kwargs
-        )
-    )
     surface_layer_model = abcmodel.atmos.surface_layer.ObukhovSurfaceLayerModel()
+    surface_layer_state = surface_layer_model.init_state(
+        **cm.obukhov_surface_layer.state_kwargs
+    )
 
     # mixed layer
-    mixed_layer_init_conds = abcmodel.atmos.mixed_layer.BulkMixedLayerInitConds(
-        **cm.bulk_mixed_layer.init_conds_kwargs,
-    )
     mixed_layer_model = abcmodel.atmos.mixed_layer.BulkMixedLayerModel(
         **cm.bulk_mixed_layer.model_kwargs,
     )
+    mixed_layer_state = mixed_layer_model.init_state(
+        **cm.bulk_mixed_layer.state_kwargs,
+    )
 
     # clouds
-    cloud_init_conds = abcmodel.atmos.clouds.CumulusInitConds()
     cloud_model = abcmodel.atmos.clouds.CumulusModel()
+    cloud_state = cloud_model.init_state()
 
     # define atmos model
     atmos_model = abcmodel.atmos.DayOnlyAtmosphereModel(
         surface_layer=surface_layer_model,
         mixed_layer=mixed_layer_model,
         clouds=cloud_model,
+    )
+    atmos_state = atmos_model.init_state(
+        surface=surface_layer_state,
+        mixed=mixed_layer_state,
+        clouds=cloud_state,
     )
 
     # define coupler and coupled state
@@ -61,14 +62,9 @@ def main():
         land=land_model,
         atmos=atmos_model,
     )
-    atmos_state = abcmodel.atmos.DayOnlyAtmosphereState(
-        surface=surface_layer_init_conds,
-        mixed=mixed_layer_init_conds,
-        clouds=cloud_init_conds,
-    )
     state = abcoupler.init_state(
-        rad_init_conds,
-        land_init_conds,
+        rad_state,
+        land_state,
         atmos_state,
     )
 

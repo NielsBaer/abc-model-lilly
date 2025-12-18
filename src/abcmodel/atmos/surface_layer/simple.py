@@ -27,7 +27,6 @@ class SimpleSurfaceLayerState(AbstractSurfaceLayerState):
     """Aerodynamic resistance [s/m]."""
 
 
-SimpleSurfaceLayerInitConds = SimpleSurfaceLayerState
 # limamau: maybe these type variables could be abstracts...
 StateAlias = AbstractCoupledState[
     RadT,
@@ -45,6 +44,19 @@ class SimpleSurfaceLayerModel(AbstractSurfaceLayerModel[SimpleSurfaceLayerState]
 
     def __init__(self):
         pass
+
+    def init_state(self, ustar: float) -> SimpleSurfaceLayerState:
+        """Initialize the model state.
+
+        Args:
+            ustar: Friction velocity [m/s].
+
+        Returns:
+            The initial surface layer state.
+        """
+        return SimpleSurfaceLayerState(
+            ustar=jnp.array(ustar),
+        )
 
     def run(self, state: StateAlias):
         """Run the model.

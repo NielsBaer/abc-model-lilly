@@ -364,8 +364,8 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.ags.AgsState.wCO2"><code class="docutils literal notranslate"><span class="pre">AgsState.wCO2</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.ags.AgsInitConds"><code class="docutils literal notranslate"><span class="pre">AgsInitConds</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.ags.AgsModel"><code class="docutils literal notranslate"><span class="pre">AgsModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.ags.AgsModel.init_state"><code class="docutils literal notranslate"><span class="pre">AgsModel.init_state()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.ags.AgsModel.compute_co2comp"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_co2comp()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.ags.AgsModel.compute_gm"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_gm()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.ags.AgsModel.compute_fmin"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_fmin()</span></code></a></li>
@@ -451,12 +451,6 @@ document.write(`
 
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="abcmodel.land.ags.AgsInitConds">
-<span class="sig-prename descclassname"><span class="pre">abcmodel.land.ags.</span></span><span class="sig-name descname"><span class="pre">AgsInitConds</span></span><a class="headerlink" href="#abcmodel.land.ags.AgsInitConds" title="Link to this definition">#</a></dt>
-<dd><p>alias of <a class="reference internal" href="#abcmodel.land.ags.AgsState" title="abcmodel.land.ags.AgsState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AgsState</span></code></a></p>
-</dd></dl>
-
 <dl class="py class">
 <dt class="sig sig-object py" id="abcmodel.land.ags.AgsModel">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">abcmodel.land.ags.</span></span><span class="sig-name descname"><span class="pre">AgsModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c3c4</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/ags.html#AgsModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.ags.AgsModel" title="Link to this definition">#</a></dt>
@@ -470,6 +464,30 @@ document.write(`
 </ul>
 </dd>
 </dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.ags.AgsModel.init_state">
+<span class="sig-name descname"><span class="pre">init_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_soil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rssoil</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/ags.html#AgsModel.init_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.ags.AgsModel.init_state" title="Link to this definition">#</a></dt>
+<dd><p>Initialize the model state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – albedo [-].</p></li>
+<li><p><strong>wg</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Volumetric soil moisture [m3 m-3].</p></li>
+<li><p><strong>temp_soil</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Soil temperature [K].</p></li>
+<li><p><strong>temp2</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Deep soil temperature [K].</p></li>
+<li><p><strong>surf_temp</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Surface temperature [K].</p></li>
+<li><p><strong>wl</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Canopy water content [m].</p></li>
+<li><p><strong>wq</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Kinematic moisture flux [kg/kg m/s].</p></li>
+<li><p><strong>rs</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Surface resistance [s m-1].</p></li>
+<li><p><strong>rssoil</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Soil resistance [s m-1].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The initial land state.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="abcmodel.land.ags.AgsModel.compute_co2comp">
 <span class="sig-name descname"><span class="pre">compute_co2comp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thetasurf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/ags.html#AgsModel.compute_co2comp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.ags.AgsModel.compute_co2comp" title="Link to this definition">#</a></dt>
@@ -793,8 +811,8 @@ and <span class="math notranslate nohighlight">\(T_{ref} = 283.15\)</span> K.</p
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.ags.AgsState.wCO2"><code class="docutils literal notranslate"><span class="pre">AgsState.wCO2</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.ags.AgsInitConds"><code class="docutils literal notranslate"><span class="pre">AgsInitConds</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.ags.AgsModel"><code class="docutils literal notranslate"><span class="pre">AgsModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.ags.AgsModel.init_state"><code class="docutils literal notranslate"><span class="pre">AgsModel.init_state()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.ags.AgsModel.compute_co2comp"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_co2comp()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.ags.AgsModel.compute_gm"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_gm()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.ags.AgsModel.compute_fmin"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_fmin()</span></code></a></li>

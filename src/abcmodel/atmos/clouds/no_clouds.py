@@ -27,14 +27,19 @@ class NoCloudState(AbstractCloudState):
     """CO2 mass flux [mgC/m²/s]."""
 
 
-NoCloudInitConds = NoCloudState
-
-
 class NoCloudModel(AbstractCloudModel[NoCloudState]):
     """No cloud is formed using this model."""
 
     def __init__(self):
         pass
+
+    def init_state(self) -> NoCloudState:
+        """Initialize the model state.
+
+        Returns:
+            The initial cloud state.
+        """
+        return NoCloudState()
 
     def run(self, state: AbstractCoupledState) -> NoCloudState:
         """No calculations."""

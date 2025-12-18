@@ -27,9 +27,6 @@ class CumulusState(AbstractCloudState):
     """CO2 mass flux [mgC/m²/s]."""
 
 
-CumulusInitConds = CumulusState
-
-
 class CumulusModel(AbstractCloudModel[CumulusState]):
     """Standard cumulus cloud model based on Neggers et al. (2006/7).
 
@@ -47,6 +44,14 @@ class CumulusModel(AbstractCloudModel[CumulusState]):
     def __init__(self, tcc_cc: float = 2.0, tcc_trans: float = 0.6):
         self.tcc_cc = tcc_cc
         self.tcc_trans = tcc_trans
+
+    def init_state(self) -> CumulusState:
+        """Initialize the model state.
+
+        Returns:
+            The initial cloud state.
+        """
+        return CumulusState()
 
     def run(self, state: AbstractCoupledState) -> CumulusState:
         """Run the model.

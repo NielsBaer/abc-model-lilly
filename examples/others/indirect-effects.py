@@ -15,42 +15,34 @@ def run_wrapper(wg: float, q: float, config):
     tstart = 6.8
 
     # rad with clouds
-    rad_init_conds = abcmodel.rad.StandardRadiationInitConds(
-        **config.std_rad_init_conds_kwargs
-    )
     rad_model = abcmodel.rad.StandardRadiationModel(**config.std_rad_model_kwargs)
+    rad_state = rad_model.init_state(**config.std_rad_state_kwargs)
 
     # land surface
-    ags_kwargs = config.ags_init_conds_kwargs
+    ags_kwargs = config.ags_state_kwargs
     ags_kwargs["wg"] = wg
-    land_init_conds = abcmodel.land.AgsInitConds(
-        **ags_kwargs,
-    )
     land_model = abcmodel.land.AgsModel(
         **config.ags_model_kwargs,
     )
+    land_state = land_model.init_state(**ags_kwargs)
 
     # surface layer
-    surface_layer_init_conds = (
-        abcmodel.atmos.surface_layer.ObukhovSurfaceLayerInitConds(
-            **config.std_sl_init_conds_kwargs
-        )
-    )
     surface_layer_model = abcmodel.atmos.surface_layer.ObukhovSurfaceLayerModel()
+    surface_layer_state = surface_layer_model.init_state(
+        **config.obukhov_sl_state_kwargs
+    )
 
     # mixed layer
-    ml_kwargs = config.bulk_ml_init_conds_kwargs
+    ml_kwargs = config.bulk_ml_state_kwargs
     ml_kwargs["q"] = q
-    mixed_layer_init_conds = abcmodel.atmos.mixed_layer.BulkMixedLayerInitConds(
-        **ml_kwargs,
-    )
     mixed_layer_model = abcmodel.atmos.mixed_layer.BulkMixedLayerModel(
         **config.bulk_ml_model_kwargs,
     )
+    mixed_layer_state = mixed_layer_model.init_state(**ml_kwargs)
 
     # clouds
-    cloud_init_conds = abcmodel.atmos.clouds.CumulusInitConds()
     cloud_model = abcmodel.atmos.clouds.CumulusModel()
+    cloud_state = cloud_model.init_state()
 
     # define atmos model
     atmos_model = abcmodel.atmos.DayOnlyAtmosphereModel(
@@ -58,10 +50,10 @@ def run_wrapper(wg: float, q: float, config):
         mixed_layer=mixed_layer_model,
         clouds=cloud_model,
     )
-    atmos_init_conds = abcmodel.atmos.DayOnlyAtmosphereState(
-        surface=surface_layer_init_conds,
-        mixed=mixed_layer_init_conds,
-        clouds=cloud_init_conds,
+    atmos_state = atmos_model.init_state(
+        surface=surface_layer_state,
+        mixed=mixed_layer_state,
+        clouds=cloud_state,
     )
 
     # define coupler and coupled state
@@ -72,9 +64,9 @@ def run_wrapper(wg: float, q: float, config):
     )
 
     state = abcoupler.init_state(
-        rad_init_conds,
-        land_init_conds,
-        atmos_init_conds,
+        rad_state,
+        land_state,
+        atmos_state,
     )
 
     return abcmodel.integrate(state, abcoupler, dt, runtime, tstart)
@@ -92,7 +84,7 @@ def make_fancy_plot(
     # mixed layer
     axes[0, 0].plot(
         time[::factor],
-        traj.atmos.mixed_layer.h_abl[::factor],
+        traj.atmos.mixed.h_abl[::factor],
         color=color,
         marker=marker,
         linestyle="None",
@@ -148,7 +140,7 @@ def make_fancy_plot(
 
     axes[1, 2].plot(
         time[::factor],
-        traj.atmos.mixed_layer.theta[::factor],
+        traj.atmos.mixed.theta[::factor],
         color=color,
         marker=marker,
         linestyle="None",
@@ -157,7 +149,7 @@ def make_fancy_plot(
 
     axes[1, 3].plot(
         time[::factor],
-        traj.atmos.surface_layer.temp_2m[::factor],
+        traj.atmos.surface.temp_2m[::factor],
         color=color,
         marker=marker,
         linestyle="None",
@@ -183,7 +175,7 @@ def make_fancy_plot(
     # - - - - - - - - - - - - - - - - - #
     axes[2, 2].plot(
         time[::factor],
-        traj.atmos.mixed_layer.q[::factor],
+        traj.atmos.mixed.q[::factor],
         color=color,
         marker=marker,
         linestyle="None",

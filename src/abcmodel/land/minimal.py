@@ -43,14 +43,39 @@ class MinimalLandSurfaceState(AbstractLandState):
 
 
 # alias
-MinimalLandSurfaceInitConds = MinimalLandSurfaceState
-
-
 class MinimalLandSurfaceModel(AbstractLandModel):
     """Minimal land surface model with fixed surface properties."""
 
     def __init__(self):
         self.d1 = 0.0
+
+    def init_state(
+        self,
+        alpha: float,
+        surf_temp: float,
+        rs: float,
+        wg: float = 0.0,
+        wl: float = 0.0,
+    ) -> MinimalLandSurfaceState:
+        """Initialize the model state.
+
+        Args:
+            alpha: surface albedo [-], range 0 to 1.
+            surf_temp: Surface temperature [K].
+            rs: Surface resistance [s m-1].
+            wg: Volumetric soil moisture [m3 m-3].
+            wl: Canopy water content [m].
+
+        Returns:
+            The initial land state.
+        """
+        return MinimalLandSurfaceState(
+            alpha=jnp.array(alpha),
+            surf_temp=jnp.array(surf_temp),
+            rs=jnp.array(rs),
+            wg=jnp.array(wg),
+            wl=jnp.array(wl),
+        )
 
     def run(
         self,

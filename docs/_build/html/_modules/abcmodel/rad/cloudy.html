@@ -309,6 +309,7 @@ document.write(`
   <h1>Source code for abcmodel.rad.cloudy</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">replace</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">jax</span><span class="w"> </span><span class="kn">import</span> <span class="n">Array</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..abstracts</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractCoupledState</span><span class="p">,</span> <span class="n">AtmosT</span><span class="p">,</span> <span class="n">LandT</span>
@@ -325,7 +326,6 @@ document.write(`
 
 
 
-<span class="n">CloudyRadiationInitConds</span> <span class="o">=</span> <span class="n">CloudyRadiationState</span>
 <span class="n">StateAlias</span> <span class="o">=</span> <span class="n">AbstractCoupledState</span><span class="p">[</span><span class="n">StandardRadiationState</span><span class="p">,</span> <span class="n">LandT</span><span class="p">,</span> <span class="n">AtmosT</span><span class="p">]</span>
 
 
@@ -346,13 +346,29 @@ document.write(`
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">lat</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">lon</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">doy</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">lat</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">lon</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">doy</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lat</span> <span class="o">=</span> <span class="n">lat</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lon</span> <span class="o">=</span> <span class="n">lon</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">doy</span> <span class="o">=</span> <span class="n">doy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lat</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">lat</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lon</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">lon</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">doy</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">doy</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CloudyRadiationModel.init_state">
+<a class="viewcode-back" href="../../../source/api/abcmodel.rad.cloudy.html#abcmodel.rad.cloudy.CloudyRadiationModel.init_state">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">init_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">net_rad</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CloudyRadiationState</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the model state.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            net_rad: Net surface radiation [W m-2].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The initial radiation state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">CloudyRadiationState</span><span class="p">(</span>
+            <span class="n">net_rad</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">net_rad</span><span class="p">),</span>
+        <span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="CloudyRadiationModel.run">
 <a class="viewcode-back" href="../../../source/api/abcmodel.rad.cloudy.html#abcmodel.rad.cloudy.CloudyRadiationModel.run">[docs]</a>

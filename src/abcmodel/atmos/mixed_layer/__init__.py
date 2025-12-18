@@ -1,3 +1,3 @@
-from .bulk import BulkMixedLayerInitConds, BulkMixedLayerModel
+from .bulk import BulkMixedLayerModel
 
-__all__ = ["BulkMixedLayerInitConds", "BulkMixedLayerModel"]
+__all__ = ["BulkMixedLayerModel"]

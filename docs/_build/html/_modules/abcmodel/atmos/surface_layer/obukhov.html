@@ -331,7 +331,6 @@ document.write(`
 <span class="k">class</span><span class="w"> </span><span class="nc">ObukhovSurfaceLayerState</span><span class="p">(</span><span class="n">AbstractSurfaceLayerState</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Standard surface layer model state.&quot;&quot;&quot;</span>
 
-    <span class="c1"># the following variables should be initialized by the user</span>
     <span class="n">ustar</span><span class="p">:</span> <span class="n">Array</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface friction velocity [m/s].&quot;&quot;&quot;</span>
     <span class="n">z0m</span><span class="p">:</span> <span class="n">Array</span>
@@ -379,7 +378,6 @@ document.write(`
 
 
 
-<span class="n">ObukhovSurfaceLayerInitConds</span> <span class="o">=</span> <span class="n">ObukhovSurfaceLayerState</span>
 <span class="n">StateAlias</span> <span class="o">=</span> <span class="n">AbstractCoupledState</span><span class="p">[</span>
     <span class="n">RadT</span><span class="p">,</span>
     <span class="n">LandT</span><span class="p">,</span>
@@ -402,6 +400,31 @@ document.write(`
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span>
+
+<div class="viewcode-block" id="ObukhovSurfaceLayerModel.init_state">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerModel.init_state">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">init_state</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">ustar</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">z0m</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">z0h</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ObukhovSurfaceLayerState</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the model state.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ustar: Friction velocity [m s-1].</span>
+<span class="sd">            z0m: Surface roughness length for momentum [m].</span>
+<span class="sd">            z0h: Surface roughness length for heat [m].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The initial surface layer state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">ObukhovSurfaceLayerState</span><span class="p">(</span>
+            <span class="n">ustar</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ustar</span><span class="p">),</span>
+            <span class="n">z0m</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">z0m</span><span class="p">),</span>
+            <span class="n">z0h</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">z0h</span><span class="p">),</span>
+        <span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="ObukhovSurfaceLayerModel.run">
 <a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerModel.run">[docs]</a>

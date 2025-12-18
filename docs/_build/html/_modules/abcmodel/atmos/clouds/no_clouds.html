@@ -339,9 +339,6 @@ document.write(`
 
 
 
-<span class="n">NoCloudInitConds</span> <span class="o">=</span> <span class="n">NoCloudState</span>
-
-
 <div class="viewcode-block" id="NoCloudModel">
 <a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.clouds.no_clouds.html#abcmodel.atmos.clouds.no_clouds.NoCloudModel">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">NoCloudModel</span><span class="p">(</span><span class="n">AbstractCloudModel</span><span class="p">[</span><span class="n">NoCloudState</span><span class="p">]):</span>
@@ -349,6 +346,17 @@ document.write(`
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span>
+
+<div class="viewcode-block" id="NoCloudModel.init_state">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.clouds.no_clouds.html#abcmodel.atmos.clouds.no_clouds.NoCloudModel.init_state">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">init_state</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoCloudState</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the model state.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The initial cloud state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">NoCloudState</span><span class="p">()</span></div>
+
 
 <div class="viewcode-block" id="NoCloudModel.run">
 <a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.clouds.no_clouds.html#abcmodel.atmos.clouds.no_clouds.NoCloudModel.run">[docs]</a>

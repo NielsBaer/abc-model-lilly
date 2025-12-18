@@ -1,4 +1,3 @@
-import jax.numpy as jnp
 import matplotlib.pyplot as plt
 
 import abcconfigs.class_model as cm
@@ -14,38 +13,30 @@ def main():
     tstart = 6.8
 
     # rad
-    rad_init_conds = abcmodel.rad.StandardRadiationInitConds(
-        **cm.standard_radiation.init_conds_kwargs
-    )
     rad_model = abcmodel.rad.StandardRadiationModel(
         **cm.standard_radiation.model_kwargs,
     )
+    rad_state = rad_model.init_state(**cm.standard_radiation.state_kwargs)
 
     # land surface
-    land_init_conds = abcmodel.land.JarvisStewartInitConds(
-        **cm.jarvis_stewart.init_conds_kwargs,
-    )
     land_model = abcmodel.land.JarvisStewartModel(
         **cm.jarvis_stewart.model_kwargs,
     )
+    land_state = land_model.init_state(**cm.jarvis_stewart.state_kwargs)
 
     # surface layer
-    surface_layer_init_conds = abcmodel.atmos.surface_layer.SimpleSurfaceLayerInitConds(
-        ustar=jnp.array(0.3)
-    )
     surface_layer_model = abcmodel.atmos.surface_layer.SimpleSurfaceLayerModel()
+    surface_layer_init_conds = surface_layer_model.init_state(ustar=0.3)
 
     # mixed layer
-    mixed_layer_init_conds = abcmodel.atmos.mixed_layer.BulkMixedLayerInitConds(
-        **cm.bulk_mixed_layer.init_conds_kwargs,
-    )
     mixed_layer_model = abcmodel.atmos.mixed_layer.BulkMixedLayerModel(
         **cm.bulk_mixed_layer.model_kwargs,
     )
+    mixed_layer_state = mixed_layer_model.init_state(**cm.bulk_mixed_layer.state_kwargs)
 
     # clouds
-    cloud_init_conds = abcmodel.atmos.clouds.CumulusInitConds()
     cloud_model = abcmodel.atmos.clouds.CumulusModel()
+    cloud_state = cloud_model.init_state()
 
     # define atmos model
     atmos_model = abcmodel.atmos.DayOnlyAtmosphereModel(
@@ -53,10 +44,10 @@ def main():
         mixed_layer=mixed_layer_model,
         clouds=cloud_model,
     )
-    atmos_init_conds = abcmodel.atmos.DayOnlyAtmosphereState(
+    atmos_state = atmos_model.init_state(
         surface=surface_layer_init_conds,
-        mixed=mixed_layer_init_conds,
-        clouds=cloud_init_conds,
+        mixed=mixed_layer_state,
+        clouds=cloud_state,
     )
 
     # define coupler and coupled state
@@ -65,7 +56,7 @@ def main():
         land=land_model,
         atmos=atmos_model,
     )
-    state = abcoupler.init_state(rad_init_conds, land_init_conds, atmos_init_conds)
+    state = abcoupler.init_state(rad_state, land_state, atmos_state)
 
     # run run run
     time, trajectory = abcmodel.integrate(state, abcoupler, dt, runtime, tstart)

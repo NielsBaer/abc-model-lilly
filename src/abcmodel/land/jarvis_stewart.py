@@ -15,9 +15,6 @@ class JarvisStewartState(StandardLandState):
     """Jarvis-Stewart model state."""
 
 
-JarvisStewartInitConds = JarvisStewartState
-
-
 class JarvisStewartModel(AbstractStandardLandModel):
     """Jarvis-Stewart land surface model with empirical surface resistance.
 
@@ -27,6 +24,46 @@ class JarvisStewartModel(AbstractStandardLandModel):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+    def init_state(
+        self,
+        alpha: float,
+        wg: float,
+        temp_soil: float,
+        temp2: float,
+        surf_temp: float,
+        wl: float,
+        wq: float,
+        rs: float = 1.0e6,
+        rssoil: float = 1.0e6,
+    ) -> JarvisStewartState:
+        """Initialize the model state.
+
+        Args:
+            alpha: albedo [-].
+            wg: Volumetric soil moisture [m3 m-3].
+            temp_soil: Soil temperature [K].
+            temp2: Deep soil temperature [K].
+            surf_temp: Surface temperature [K].
+            wl: Canopy water content [m].
+            wq: Kinematic moisture flux [kg/kg m/s].
+            rs: Surface resistance [s m-1].
+            rssoil: Soil resistance [s m-1].
+
+        Returns:
+            The initial land state.
+        """
+        return JarvisStewartState(
+            alpha=jnp.array(alpha),
+            wg=jnp.array(wg),
+            temp_soil=jnp.array(temp_soil),
+            temp2=jnp.array(temp2),
+            surf_temp=jnp.array(surf_temp),
+            wl=jnp.array(wl),
+            wq=jnp.array(wq),
+            rs=jnp.array(rs),
+            rssoil=jnp.array(rssoil),
+        )
 
     def update_surface_resistance(
         self,

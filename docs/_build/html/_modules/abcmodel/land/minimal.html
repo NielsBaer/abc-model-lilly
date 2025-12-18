@@ -355,9 +355,6 @@ document.write(`
 
 
 <span class="c1"># alias</span>
-<span class="n">MinimalLandSurfaceInitConds</span> <span class="o">=</span> <span class="n">MinimalLandSurfaceState</span>
-
-
 <div class="viewcode-block" id="MinimalLandSurfaceModel">
 <a class="viewcode-back" href="../../../source/api/abcmodel.land.minimal.html#abcmodel.land.minimal.MinimalLandSurfaceModel">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">MinimalLandSurfaceModel</span><span class="p">(</span><span class="n">AbstractLandModel</span><span class="p">):</span>
@@ -365,6 +362,37 @@ document.write(`
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">d1</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+<div class="viewcode-block" id="MinimalLandSurfaceModel.init_state">
+<a class="viewcode-back" href="../../../source/api/abcmodel.land.minimal.html#abcmodel.land.minimal.MinimalLandSurfaceModel.init_state">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">init_state</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">surf_temp</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">rs</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">wg</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">wl</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MinimalLandSurfaceState</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the model state.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            alpha: surface albedo [-], range 0 to 1.</span>
+<span class="sd">            surf_temp: Surface temperature [K].</span>
+<span class="sd">            rs: Surface resistance [s m-1].</span>
+<span class="sd">            wg: Volumetric soil moisture [m3 m-3].</span>
+<span class="sd">            wl: Canopy water content [m].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The initial land state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">MinimalLandSurfaceState</span><span class="p">(</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">alpha</span><span class="p">),</span>
+            <span class="n">surf_temp</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">surf_temp</span><span class="p">),</span>
+            <span class="n">rs</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rs</span><span class="p">),</span>
+            <span class="n">wg</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">wg</span><span class="p">),</span>
+            <span class="n">wl</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">wl</span><span class="p">),</span>
+        <span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="MinimalLandSurfaceModel.run">
 <a class="viewcode-back" href="../../../source/api/abcmodel.land.minimal.html#abcmodel.land.minimal.MinimalLandSurfaceModel.run">[docs]</a>

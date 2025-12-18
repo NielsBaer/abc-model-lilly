@@ -11,53 +11,39 @@ def run_model(theta0: float) -> Array:
     runtime = 12 * 3600.0
     tstart = 6.8
 
-    rad_init_conds = abcmodel.rad.StandardRadiationInitConds(
-        **cm.standard_radiation.init_conds_kwargs
-    )
     rad_model = abcmodel.rad.StandardRadiationModel(
         **cm.standard_radiation.model_kwargs
     )
+    rad_state = rad_model.init_state(**cm.standard_radiation.state_kwargs)
 
-    land_init_conds = abcmodel.land.JarvisStewartInitConds(
-        **cm.jarvis_stewart.init_conds_kwargs
-    )
     land_model = abcmodel.land.JarvisStewartModel(**cm.jarvis_stewart.model_kwargs)
+    land_state = land_model.init_state(**cm.jarvis_stewart.state_kwargs)
 
-    surface_layer_init_conds = (
-        abcmodel.atmos.surface_layer.ObukhovSurfaceLayerInitConds(
-            **cm.obukhov_surface_layer.init_conds_kwargs
-        )
-    )
     surface_layer_model = abcmodel.atmos.surface_layer.ObukhovSurfaceLayerModel()
-
-    mixed_layer_init_conds = abcmodel.atmos.mixed_layer.BulkMixedLayerInitConds(
-        **cm.bulk_mixed_layer.init_conds_kwargs
-    )
-    mixed_layer_init_conds = mixed_layer_init_conds.replace(
-        theta=jnp.array(theta0)  # <--- perturb initial condition
+    surface_layer_state = surface_layer_model.init_state(
+        **cm.obukhov_surface_layer.state_kwargs
     )
 
     mixed_layer_model = abcmodel.atmos.mixed_layer.BulkMixedLayerModel(
         **cm.bulk_mixed_layer.model_kwargs
     )
+    mixed_layer_state = mixed_layer_model.init_state(**cm.bulk_mixed_layer.state_kwargs)
+    mixed_layer_state = mixed_layer_state.replace(
+        theta=jnp.array(theta0)  # <--- perturb initial condition
+    )
 
-    cloud_init_conds = abcmodel.atmos.clouds.CumulusInitConds()
     cloud_model = abcmodel.atmos.clouds.CumulusModel()
+    cloud_state = cloud_model.init_state()
 
     atmos_model = abcmodel.atmos.DayOnlyAtmosphereModel(
         surface_layer=surface_layer_model,
         mixed_layer=mixed_layer_model,
         clouds=cloud_model,
     )
-    atmos_init_conds = abcmodel.atmos.DayOnlyAtmosphereState(
-        surface=surface_layer_init_conds,
-        mixed=mixed_layer_init_conds,
-        clouds=cloud_init_conds,
-    )
-    atmos_model = abcmodel.atmos.DayOnlyAtmosphereModel(
-        surface_layer=surface_layer_model,
-        mixed_layer=mixed_layer_model,
-        clouds=cloud_model,
+    atmos_state = atmos_model.init_state(
+        surface=surface_layer_state,
+        mixed=mixed_layer_state,
+        clouds=cloud_state,
     )
 
     abcoupler = abcmodel.ABCoupler(
@@ -65,7 +51,7 @@ def run_model(theta0: float) -> Array:
         land=land_model,
         atmos=atmos_model,
     )
-    state = abcoupler.init_state(rad_init_conds, land_init_conds, atmos_init_conds)
+    state = abcoupler.init_state(rad_state, land_state, atmos_state)
 
     _, trajectory = abcmodel.integrate(state, abcoupler, dt, runtime, tstart)
 

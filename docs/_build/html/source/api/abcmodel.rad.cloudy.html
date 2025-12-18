@@ -355,8 +355,8 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.rad.cloudy.CloudyRadiationState"><code class="docutils literal notranslate"><span class="pre">CloudyRadiationState</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.rad.cloudy.CloudyRadiationInitConds"><code class="docutils literal notranslate"><span class="pre">CloudyRadiationInitConds</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.rad.cloudy.CloudyRadiationModel"><code class="docutils literal notranslate"><span class="pre">CloudyRadiationModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.rad.cloudy.CloudyRadiationModel.init_state"><code class="docutils literal notranslate"><span class="pre">CloudyRadiationModel.init_state()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.rad.cloudy.CloudyRadiationModel.run"><code class="docutils literal notranslate"><span class="pre">CloudyRadiationModel.run()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.rad.cloudy.CloudyRadiationModel.compute_atmospheric_transmission_w_clouds"><code class="docutils literal notranslate"><span class="pre">CloudyRadiationModel.compute_atmospheric_transmission_w_clouds()</span></code></a></li>
 </ul>
@@ -381,12 +381,6 @@ document.write(`
 <p>Standard radiation model with clouds state.</p>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="abcmodel.rad.cloudy.CloudyRadiationInitConds">
-<span class="sig-prename descclassname"><span class="pre">abcmodel.rad.cloudy.</span></span><span class="sig-name descname"><span class="pre">CloudyRadiationInitConds</span></span><a class="headerlink" href="#abcmodel.rad.cloudy.CloudyRadiationInitConds" title="Link to this definition">#</a></dt>
-<dd><p>alias of <a class="reference internal" href="#abcmodel.rad.cloudy.CloudyRadiationState" title="abcmodel.rad.cloudy.CloudyRadiationState"><code class="xref py py-class docutils literal notranslate"><span class="pre">CloudyRadiationState</span></code></a></p>
-</dd></dl>
-
 <dl class="py class">
 <dt class="sig sig-object py" id="abcmodel.rad.cloudy.CloudyRadiationModel">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">abcmodel.rad.cloudy.</span></span><span class="sig-name descname"><span class="pre">CloudyRadiationModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doy</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/rad/cloudy.html#CloudyRadiationModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.rad.cloudy.CloudyRadiationModel" title="Link to this definition">#</a></dt>
@@ -398,12 +392,26 @@ rad components.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>lat</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – latitude [degrees], range -90 to +90.</p></li>
-<li><p><strong>lon</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – longitude [degrees], range -180 to +180.</p></li>
-<li><p><strong>doy</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – day of year [-], range 1 to 365.</p></li>
+<li><p><strong>lat</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – latitude [degrees], range -90 to +90.</p></li>
+<li><p><strong>lon</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – longitude [degrees], range -180 to +180.</p></li>
+<li><p><strong>doy</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – day of year [-], range 1 to 365.</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.rad.cloudy.CloudyRadiationModel.init_state">
+<span class="sig-name descname"><span class="pre">init_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">net_rad</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/rad/cloudy.html#CloudyRadiationModel.init_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.rad.cloudy.CloudyRadiationModel.init_state" title="Link to this definition">#</a></dt>
+<dd><p>Initialize the model state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>net_rad</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Net surface radiation [W m-2].</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The initial radiation state.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="abcmodel.rad.cloudy.CloudyRadiationModel.run">
 <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tstart</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/rad/cloudy.html#CloudyRadiationModel.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.rad.cloudy.CloudyRadiationModel.run" title="Link to this definition">#</a></dt>
@@ -506,8 +514,8 @@ is provided directly by the model state (<code class="docutils literal notransla
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.rad.cloudy.CloudyRadiationState"><code class="docutils literal notranslate"><span class="pre">CloudyRadiationState</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.rad.cloudy.CloudyRadiationInitConds"><code class="docutils literal notranslate"><span class="pre">CloudyRadiationInitConds</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.rad.cloudy.CloudyRadiationModel"><code class="docutils literal notranslate"><span class="pre">CloudyRadiationModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.rad.cloudy.CloudyRadiationModel.init_state"><code class="docutils literal notranslate"><span class="pre">CloudyRadiationModel.init_state()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.rad.cloudy.CloudyRadiationModel.run"><code class="docutils literal notranslate"><span class="pre">CloudyRadiationModel.run()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.rad.cloudy.CloudyRadiationModel.compute_atmospheric_transmission_w_clouds"><code class="docutils literal notranslate"><span class="pre">CloudyRadiationModel.compute_atmospheric_transmission_w_clouds()</span></code></a></li>
 </ul>

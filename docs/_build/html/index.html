@@ -408,44 +408,46 @@ loaded through the <code class="docutils literal notranslate"><span class="pre">
 <span class="c1"># 1. Setup models</span>
 <span class="n">rad_model</span> <span class="o">=</span> <span class="n">abcmodel</span><span class="o">.</span><span class="n">rad</span><span class="o">.</span><span class="n">StandardRadiationModel</span><span class="p">(</span><span class="o">**</span><span class="n">cm</span><span class="o">.</span><span class="n">standard_rad</span><span class="o">.</span><span class="n">model_kwargs</span><span class="p">)</span>
 <span class="n">land_model</span> <span class="o">=</span> <span class="n">abcmodel</span><span class="o">.</span><span class="n">land</span><span class="o">.</span><span class="n">JarvisStewartModel</span><span class="p">(</span><span class="o">**</span><span class="n">cm</span><span class="o">.</span><span class="n">jarvis_stewart</span><span class="o">.</span><span class="n">model_kwargs</span><span class="p">)</span>
-<span class="n">surface_layer_model</span> <span class="o">=</span> <span class="n">abcmodel</span><span class="o">.</span><span class="n">surface_layer</span><span class="o">.</span><span class="n">StandardSurfaceLayerModel</span><span class="p">()</span>
-<span class="n">mixed_layer_model</span> <span class="o">=</span> <span class="n">abcmodel</span><span class="o">.</span><span class="n">mixed_layer</span><span class="o">.</span><span class="n">BulkMixedLayerModel</span><span class="p">(</span><span class="o">**</span><span class="n">cm</span><span class="o">.</span><span class="n">bulk_mixed_layer</span><span class="o">.</span><span class="n">model_kwargs</span><span class="p">)</span>
-<span class="n">cloud_model</span> <span class="o">=</span> <span class="n">abcmodel</span><span class="o">.</span><span class="n">clouds</span><span class="o">.</span><span class="n">StandardCumulusModel</span><span class="p">()</span>
+<span class="n">surface_layer_model</span> <span class="o">=</span> <span class="n">abcmodel</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">surface_layer</span><span class="o">.</span><span class="n">ObukhovSurfaceLayerModel</span><span class="p">()</span>
+<span class="n">mixed_layer_model</span> <span class="o">=</span> <span class="n">abcmodel</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">mixed_layer</span><span class="o">.</span><span class="n">BulkMixedLayerModel</span><span class="p">(</span><span class="o">**</span><span class="n">cm</span><span class="o">.</span><span class="n">bulk_mixed_layer</span><span class="o">.</span><span class="n">model_kwargs</span><span class="p">)</span>
+<span class="n">cloud_model</span> <span class="o">=</span> <span class="n">abcmodel</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">clouds</span><span class="o">.</span><span class="n">CumulusModel</span><span class="p">()</span>
 
-<span class="c1"># 2. Setup the coupler with the components</span>
-<span class="n">abcoupler</span> <span class="o">=</span> <span class="n">abcmodel</span><span class="o">.</span><span class="n">ABCoupler</span><span class="p">(</span>
-    <span class="n">rad</span><span class="o">=</span><span class="n">rad_model</span><span class="p">,</span>
-    <span class="n">land</span><span class="o">=</span><span class="n">land_model</span><span class="p">,</span>
+<span class="c1"># 2. Setup atmos model</span>
+<span class="n">atmos_model</span> <span class="o">=</span> <span class="n">abcmodel</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">DayOnlyAtmosphereModel</span><span class="p">(</span>
     <span class="n">surface_layer</span><span class="o">=</span><span class="n">surface_layer_model</span><span class="p">,</span>
     <span class="n">mixed_layer</span><span class="o">=</span><span class="n">mixed_layer_model</span><span class="p">,</span>
     <span class="n">clouds</span><span class="o">=</span><span class="n">cloud_model</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="c1"># 3. Setup initial conditions</span>
-<span class="n">rad_init_conds</span> <span class="o">=</span> <span class="n">abcmodel</span><span class="o">.</span><span class="n">rad</span><span class="o">.</span><span class="n">StandardRadiationInitConds</span><span class="p">(</span>
-    <span class="o">**</span><span class="n">cm</span><span class="o">.</span><span class="n">standard_rad</span><span class="o">.</span><span class="n">init_conds_kwargs</span>
+<span class="c1"># 3. Setup the coupler with the components</span>
+<span class="n">abcoupler</span> <span class="o">=</span> <span class="n">abcmodel</span><span class="o">.</span><span class="n">ABCoupler</span><span class="p">(</span>
+    <span class="n">rad</span><span class="o">=</span><span class="n">rad_model</span><span class="p">,</span>
+    <span class="n">land</span><span class="o">=</span><span class="n">land_model</span><span class="p">,</span>
+    <span class="n">atmos</span><span class="o">=</span><span class="n">atmos_model</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="n">land_init_conds</span> <span class="o">=</span> <span class="n">abcmodel</span><span class="o">.</span><span class="n">land</span><span class="o">.</span><span class="n">JarvisStewartInitConds</span><span class="p">(</span>
-    <span class="o">**</span><span class="n">cm</span><span class="o">.</span><span class="n">jarvis_stewart</span><span class="o">.</span><span class="n">init_conds_kwargs</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="n">surface_layer_init_conds</span> <span class="o">=</span> <span class="n">abcmodel</span><span class="o">.</span><span class="n">surface_layer</span><span class="o">.</span><span class="n">StandardSurfaceLayerInitConds</span><span class="p">(</span>
-    <span class="o">**</span><span class="n">cm</span><span class="o">.</span><span class="n">obukhov_surface_layer</span><span class="o">.</span><span class="n">init_conds_kwargs</span>
-<span class="p">)</span>
-<span class="n">mixed_layer_init_conds</span> <span class="o">=</span> <span class="n">abcmodel</span><span class="o">.</span><span class="n">mixed_layer</span><span class="o">.</span><span class="n">BulkMixedLayerInitConds</span><span class="p">(</span>
-    <span class="o">**</span><span class="n">cm</span><span class="o">.</span><span class="n">bulk_mixed_layer</span><span class="o">.</span><span class="n">init_conds_kwargs</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="n">cloud_init_conds</span> <span class="o">=</span> <span class="n">abcmodel</span><span class="o">.</span><span class="n">clouds</span><span class="o">.</span><span class="n">StandardCumulusInitConds</span><span class="p">()</span>
 
-<span class="c1"># 4. Bind everything into an initial state</span>
+<span class="c1"># 4. Setup initial conditions for each model</span>
+<span class="n">rad_state</span> <span class="o">=</span> <span class="n">rad_model</span><span class="o">.</span><span class="n">init_state</span><span class="p">(</span><span class="o">**</span><span class="n">cm</span><span class="o">.</span><span class="n">standard_rad</span><span class="o">.</span><span class="n">state_kwargs</span><span class="p">)</span>
+<span class="n">land_state</span> <span class="o">=</span> <span class="n">land_model</span><span class="o">.</span><span class="n">init_state</span><span class="p">(</span><span class="o">**</span><span class="n">cm</span><span class="o">.</span><span class="n">jarvis_stewart</span><span class="o">.</span><span class="n">state_kwargs</span><span class="p">)</span>
+<span class="n">surface_layer_state</span> <span class="o">=</span> <span class="n">surface_layer_model</span><span class="o">.</span><span class="n">init_state</span><span class="p">(</span><span class="o">**</span><span class="n">cm</span><span class="o">.</span><span class="n">obukhov_surface_layer</span><span class="o">.</span><span class="n">state_kwargs</span><span class="p">)</span>
+<span class="n">mixed_layer_state</span> <span class="o">=</span> <span class="n">mixed_layer_model</span><span class="o">.</span><span class="n">init_state</span><span class="p">(</span><span class="o">**</span><span class="n">cm</span><span class="o">.</span><span class="n">bulk_mixed_layer</span><span class="o">.</span><span class="n">state_kwargs</span><span class="p">)</span>
+<span class="n">cloud_state</span> <span class="o">=</span> <span class="n">cloud_model</span><span class="o">.</span><span class="n">init_state</span><span class="p">()</span>
+
+<span class="c1"># 5. Setup atmos state</span>
+<span class="n">atmos_state</span> <span class="o">=</span> <span class="n">atmos_model</span><span class="o">.</span><span class="n">init_state</span><span class="p">(</span>
+    <span class="n">surface</span><span class="o">=</span><span class="n">surface_layer_state</span><span class="p">,</span>
+    <span class="n">mixed</span><span class="o">=</span><span class="n">mixed_layer_state</span><span class="p">,</span>
+    <span class="n">clouds</span><span class="o">=</span><span class="n">cloud_state</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># 6. Bind everything into a single initial state</span>
 <span class="n">state</span> <span class="o">=</span> <span class="n">abcoupler</span><span class="o">.</span><span class="n">init_state</span><span class="p">(</span>
-    <span class="n">rad_init_conds</span><span class="p">,</span>
-    <span class="n">land_init_conds</span><span class="p">,</span>
-    <span class="n">surface_layer_init_conds</span><span class="p">,</span>
-    <span class="n">mixed_layer_init_conds</span><span class="p">,</span>
-    <span class="n">cloud_init_conds</span><span class="p">,</span>
+    <span class="n">rad_state</span><span class="p">,</span>
+    <span class="n">land_state</span><span class="p">,</span>
+    <span class="n">atmos_state</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="c1"># 5. Integrate the model</span>
+<span class="c1"># 7. Integrate the model</span>
 <span class="n">time</span><span class="p">,</span> <span class="n">trajectory</span> <span class="o">=</span> <span class="n">abcmodel</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span>
     <span class="n">state</span><span class="p">,</span> <span class="n">abcoupler</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mf">60.0</span><span class="p">,</span> <span class="n">runtime</span><span class="o">=</span><span class="mi">12</span> <span class="o">*</span> <span class="mf">3600.0</span>
 <span class="p">)</span>

@@ -327,9 +327,6 @@ document.write(`
 
 
 
-<span class="n">JarvisStewartInitConds</span> <span class="o">=</span> <span class="n">JarvisStewartState</span>
-
-
 <div class="viewcode-block" id="JarvisStewartModel">
 <a class="viewcode-back" href="../../../source/api/abcmodel.land.jarvis_stewart.html#abcmodel.land.jarvis_stewart.JarvisStewartModel">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">JarvisStewartModel</span><span class="p">(</span><span class="n">AbstractStandardLandModel</span><span class="p">):</span>
@@ -341,6 +338,49 @@ document.write(`
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="JarvisStewartModel.init_state">
+<a class="viewcode-back" href="../../../source/api/abcmodel.land.jarvis_stewart.html#abcmodel.land.jarvis_stewart.JarvisStewartModel.init_state">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">init_state</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">wg</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">temp_soil</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">temp2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">surf_temp</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">wl</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">wq</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">rs</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0e6</span><span class="p">,</span>
+        <span class="n">rssoil</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0e6</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JarvisStewartState</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the model state.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            alpha: albedo [-].</span>
+<span class="sd">            wg: Volumetric soil moisture [m3 m-3].</span>
+<span class="sd">            temp_soil: Soil temperature [K].</span>
+<span class="sd">            temp2: Deep soil temperature [K].</span>
+<span class="sd">            surf_temp: Surface temperature [K].</span>
+<span class="sd">            wl: Canopy water content [m].</span>
+<span class="sd">            wq: Kinematic moisture flux [kg/kg m/s].</span>
+<span class="sd">            rs: Surface resistance [s m-1].</span>
+<span class="sd">            rssoil: Soil resistance [s m-1].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The initial land state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">JarvisStewartState</span><span class="p">(</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">alpha</span><span class="p">),</span>
+            <span class="n">wg</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">wg</span><span class="p">),</span>
+            <span class="n">temp_soil</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">temp_soil</span><span class="p">),</span>
+            <span class="n">temp2</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">temp2</span><span class="p">),</span>
+            <span class="n">surf_temp</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">surf_temp</span><span class="p">),</span>
+            <span class="n">wl</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">wl</span><span class="p">),</span>
+            <span class="n">wq</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">wq</span><span class="p">),</span>
+            <span class="n">rs</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rs</span><span class="p">),</span>
+            <span class="n">rssoil</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rssoil</span><span class="p">),</span>
+        <span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="JarvisStewartModel.update_surface_resistance">
 <a class="viewcode-back" href="../../../source/api/abcmodel.land.jarvis_stewart.html#abcmodel.land.jarvis_stewart.JarvisStewartModel.update_surface_resistance">[docs]</a>

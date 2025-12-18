@@ -78,25 +78,12 @@ class StandardLandState(AbstractLandState):
     """Reference latent heat flux [W m-2]."""
     ra: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Aerodynamic resistance [s m-1]."""
-    esat: Array = field(default_factory=lambda: jnp.array(jnp.nan))
-    """Saturation vapor pressure [Pa]."""
-    qsat: Array = field(default_factory=lambda: jnp.array(jnp.nan))
-    """Saturation specific humidity [kg/kg]."""
-    dqsatdT: Array = field(default_factory=lambda: jnp.array(jnp.nan))
-    """Derivative of saturation specific humidity with respect to temperature [kg/kg/K]."""
-    e: Array = field(default_factory=lambda: jnp.array(jnp.nan))
-    """Vapor pressure [Pa]."""
-    qsatsurf: Array = field(default_factory=lambda: jnp.array(jnp.nan))
-    """Saturation specific humidity at surface temperature [kg/kg]."""
     wtheta: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Kinematic heat flux [K m/s]."""
     wq: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Kinematic moisture flux [kg/kg m/s]."""
     wCO2: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1]."""
-
-
-StandardLandInitConds = StandardLandState
 
 
 class AbstractStandardLandModel(AbstractLandModel):
@@ -163,6 +150,46 @@ class AbstractStandardLandModel(AbstractLandModel):
         self.wmax = wmax
         self.lam = lam
         self.c_beta = 0.0
+
+    def init_state(
+        self,
+        alpha: float,
+        wg: float,
+        temp_soil: float,
+        temp2: float,
+        surf_temp: float,
+        wl: float,
+        wq: float,
+        rs: float = 1.0e6,
+        rssoil: float = 1.0e6,
+    ) -> StandardLandState:
+        """Initialize the model state.
+
+        Args:
+            alpha: albedo [-].
+            wg: Volumetric soil moisture [m3 m-3].
+            temp_soil: Soil temperature [K].
+            temp2: Deep soil temperature [K].
+            surf_temp: Surface temperature [K].
+            wl: Canopy water content [m].
+            wq: Kinematic moisture flux [kg/kg m/s].
+            rs: Surface resistance [s m-1].
+            rssoil: Soil resistance [s m-1].
+
+        Returns:
+            The initial land state.
+        """
+        return StandardLandState(
+            alpha=jnp.array(alpha),
+            wg=jnp.array(wg),
+            temp_soil=jnp.array(temp_soil),
+            temp2=jnp.array(temp2),
+            surf_temp=jnp.array(surf_temp),
+            wl=jnp.array(wl),
+            wq=jnp.array(wq),
+            rs=jnp.array(rs),
+            rssoil=jnp.array(rssoil),
+        )
 
     def integrate(self, state: StandardLandState, dt: float) -> StandardLandState:
         """Integrate model forward in time.

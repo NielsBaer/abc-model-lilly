@@ -104,9 +104,6 @@ class BulkMixedLayerState(AbstractMixedLayerState):
     """Mixed-layer growth due to cloud top radiative divergence [m s-1]."""
 
 
-BulkMixedLayerInitConds = BulkMixedLayerState
-
-
 class BulkMixedLayerModel(
     AbstractStandardStatsModel, AbstractMixedLayerModel[BulkMixedLayerState]
 ):
@@ -172,6 +169,64 @@ class BulkMixedLayerModel(
         self.is_shear_growing = is_shear_growing
         self.is_fix_free_trop = is_fix_free_trop
         self.is_wind_prog = is_wind_prog
+
+    def init_state(
+        self,
+        h_abl: float,
+        theta: float,
+        deltatheta: float,
+        wtheta: float,
+        q: float,
+        dq: float,
+        co2: float,
+        deltaCO2: float,
+        wCO2: float,
+        u: float,
+        du: float,
+        v: float,
+        dv: float,
+        dz_h: float,
+        surf_pressure: float,
+    ) -> BulkMixedLayerState:
+        """Initialize the model state.
+
+        Args:
+            h_abl: Atmospheric boundary layer height [m].
+            theta: Mixed-layer potential temperature [K].
+            deltatheta: Potential temperature jump at h [K].
+            wtheta: Surface kinematic heat flux [K m/s].
+            q: Mixed-layer specific humidity [kg/kg].
+            dq: Specific humidity jump at h [kg/kg].
+            co2: Mixed-layer CO2 [ppm].
+            deltaCO2: CO2 jump at h [ppm].
+            wCO2: Surface kinematic CO2 flux [mgC/m²/s].
+            u: Mixed-layer u-wind speed [m/s].
+            du: u-wind jump at h [m/s].
+            v: Mixed-layer v-wind speed [m/s].
+            dv: v-wind jump at h [m/s].
+            dz_h: Transition layer thickness [m].
+            surf_pressure: Surface pressure [Pa].
+
+        Returns:
+            The initial mixed layer state.
+        """
+        return BulkMixedLayerState(
+            h_abl=jnp.array(h_abl),
+            theta=jnp.array(theta),
+            deltatheta=jnp.array(deltatheta),
+            wtheta=jnp.array(wtheta),
+            q=jnp.array(q),
+            dq=jnp.array(dq),
+            co2=jnp.array(co2),
+            deltaCO2=jnp.array(deltaCO2),
+            wCO2=jnp.array(wCO2),
+            u=jnp.array(u),
+            du=jnp.array(du),
+            v=jnp.array(v),
+            dv=jnp.array(dv),
+            dz_h=jnp.array(dz_h),
+            surf_pressure=jnp.array(surf_pressure),
+        )
 
     def run(self, state: AbstractCoupledState) -> BulkMixedLayerState:
         """Run the model.

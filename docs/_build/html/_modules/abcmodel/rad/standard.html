@@ -341,7 +341,6 @@ document.write(`
 
 
 
-<span class="n">StandardRadiationInitConds</span> <span class="o">=</span> <span class="n">StandardRadiationState</span>
 <span class="n">StateAlias</span> <span class="o">=</span> <span class="n">AbstractCoupledState</span><span class="p">[</span><span class="n">StandardRadiationState</span><span class="p">,</span> <span class="n">LandT</span><span class="p">,</span> <span class="n">AtmosT</span><span class="p">]</span>
 
 
@@ -358,21 +357,36 @@ document.write(`
 <span class="sd">        lat: latitude [degrees], range -90 to +90.</span>
 <span class="sd">        lon: longitude [degrees], range -180 to +180.</span>
 <span class="sd">        doy: day of year [-], range 1 to 365.</span>
-<span class="sd">        tstart: start time of day [hours UTC], range 0 to 24.</span>
 <span class="sd">        cc: cloud cover fraction [-], range 0 to 1.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">lat</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">lon</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">doy</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">cc</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">lat</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">lon</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">doy</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">cc</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lat</span> <span class="o">=</span> <span class="n">lat</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lon</span> <span class="o">=</span> <span class="n">lon</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">doy</span> <span class="o">=</span> <span class="n">doy</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cc</span> <span class="o">=</span> <span class="n">cc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lat</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">lat</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lon</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">lon</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">doy</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">doy</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cc</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+
+<div class="viewcode-block" id="StandardRadiationModel.init_state">
+<a class="viewcode-back" href="../../../source/api/abcmodel.rad.standard.html#abcmodel.rad.standard.StandardRadiationModel.init_state">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">init_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">net_rad</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StandardRadiationState</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the model state.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            net_rad: Net surface radiation [W m-2].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The initial radiation state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">StandardRadiationState</span><span class="p">(</span>
+            <span class="n">net_rad</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">net_rad</span><span class="p">),</span>
+        <span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="StandardRadiationModel.run">
 <a class="viewcode-back" href="../../../source/api/abcmodel.rad.standard.html#abcmodel.rad.standard.StandardRadiationModel.run">[docs]</a>

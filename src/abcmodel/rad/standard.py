@@ -29,7 +29,6 @@ class StandardRadiationState(AbstractRadiationState):
     """Outgoing longwave rad [W m-2]."""
 
 
-StandardRadiationInitConds = StandardRadiationState
 StateAlias = AbstractCoupledState[StandardRadiationState, LandT, AtmosT]
 
 
@@ -44,21 +43,33 @@ class StandardRadiationModel(AbstractRadiationModel[StandardRadiationState]):
         lat: latitude [degrees], range -90 to +90.
         lon: longitude [degrees], range -180 to +180.
         doy: day of year [-], range 1 to 365.
-        tstart: start time of day [hours UTC], range 0 to 24.
         cc: cloud cover fraction [-], range 0 to 1.
     """
 
     def __init__(
         self,
-        lat: Array,
-        lon: Array,
-        doy: Array,
-        cc: Array,
+        lat: float,
+        lon: float,
+        doy: float,
+        cc: float,
     ):
-        self.lat = lat
-        self.lon = lon
-        self.doy = doy
-        self.cc = cc
+        self.lat = jnp.array(lat)
+        self.lon = jnp.array(lon)
+        self.doy = jnp.array(doy)
+        self.cc = jnp.array(cc)
+
+    def init_state(self, net_rad: float) -> StandardRadiationState:
+        """Initialize the model state.
+
+        Args:
+            net_rad: Net surface radiation [W m-2].
+
+        Returns:
+            The initial radiation state.
+        """
+        return StandardRadiationState(
+            net_rad=jnp.array(net_rad),
+        )
 
     def run(
         self,

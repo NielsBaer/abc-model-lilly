@@ -31,9 +31,6 @@ class AgsState(StandardLandState):
     """Total CO2 flux [mol m-2 s-1]."""
 
 
-AgsInitConds = AgsState
-
-
 class AgsModel(AbstractStandardLandModel):
     """Ags land surface model with coupled photosynthesis and stomatal conductance.
 
@@ -72,6 +69,46 @@ class AgsModel(AbstractStandardLandModel):
         self.wmin = 0.005
         self.r10 = 0.23
         self.e0 = 53.3e3
+
+    def init_state(
+        self,
+        alpha: float,
+        wg: float,
+        temp_soil: float,
+        temp2: float,
+        surf_temp: float,
+        wl: float,
+        wq: float,
+        rs: float = 1.0e6,
+        rssoil: float = 1.0e6,
+    ) -> AgsState:
+        """Initialize the model state.
+
+        Args:
+            alpha: albedo [-].
+            wg: Volumetric soil moisture [m3 m-3].
+            temp_soil: Soil temperature [K].
+            temp2: Deep soil temperature [K].
+            surf_temp: Surface temperature [K].
+            wl: Canopy water content [m].
+            wq: Kinematic moisture flux [kg/kg m/s].
+            rs: Surface resistance [s m-1].
+            rssoil: Soil resistance [s m-1].
+
+        Returns:
+            The initial land state.
+        """
+        return AgsState(
+            alpha=jnp.array(alpha),
+            wg=jnp.array(wg),
+            temp_soil=jnp.array(temp_soil),
+            temp2=jnp.array(temp2),
+            surf_temp=jnp.array(surf_temp),
+            wl=jnp.array(wl),
+            wq=jnp.array(wq),
+            rs=jnp.array(rs),
+            rssoil=jnp.array(rssoil),
+        )
 
     def compute_co2comp(
         self,

@@ -416,9 +416,6 @@ document.write(`
 
 
 
-<span class="n">BulkMixedLayerInitConds</span> <span class="o">=</span> <span class="n">BulkMixedLayerState</span>
-
-
 <div class="viewcode-block" id="BulkMixedLayerModel">
 <a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">BulkMixedLayerModel</span><span class="p">(</span>
@@ -486,6 +483,67 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">is_shear_growing</span> <span class="o">=</span> <span class="n">is_shear_growing</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_fix_free_trop</span> <span class="o">=</span> <span class="n">is_fix_free_trop</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_wind_prog</span> <span class="o">=</span> <span class="n">is_wind_prog</span>
+
+<div class="viewcode-block" id="BulkMixedLayerModel.init_state">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.init_state">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">init_state</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">h_abl</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">deltatheta</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">wtheta</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">q</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">dq</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">co2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">deltaCO2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">wCO2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">u</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">du</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">v</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">dv</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">dz_h</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">surf_pressure</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BulkMixedLayerState</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the model state.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            h_abl: Atmospheric boundary layer height [m].</span>
+<span class="sd">            theta: Mixed-layer potential temperature [K].</span>
+<span class="sd">            deltatheta: Potential temperature jump at h [K].</span>
+<span class="sd">            wtheta: Surface kinematic heat flux [K m/s].</span>
+<span class="sd">            q: Mixed-layer specific humidity [kg/kg].</span>
+<span class="sd">            dq: Specific humidity jump at h [kg/kg].</span>
+<span class="sd">            co2: Mixed-layer CO2 [ppm].</span>
+<span class="sd">            deltaCO2: CO2 jump at h [ppm].</span>
+<span class="sd">            wCO2: Surface kinematic CO2 flux [mgC/m²/s].</span>
+<span class="sd">            u: Mixed-layer u-wind speed [m/s].</span>
+<span class="sd">            du: u-wind jump at h [m/s].</span>
+<span class="sd">            v: Mixed-layer v-wind speed [m/s].</span>
+<span class="sd">            dv: v-wind jump at h [m/s].</span>
+<span class="sd">            dz_h: Transition layer thickness [m].</span>
+<span class="sd">            surf_pressure: Surface pressure [Pa].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The initial mixed layer state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">BulkMixedLayerState</span><span class="p">(</span>
+            <span class="n">h_abl</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">h_abl</span><span class="p">),</span>
+            <span class="n">theta</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span>
+            <span class="n">deltatheta</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">deltatheta</span><span class="p">),</span>
+            <span class="n">wtheta</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">wtheta</span><span class="p">),</span>
+            <span class="n">q</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">q</span><span class="p">),</span>
+            <span class="n">dq</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dq</span><span class="p">),</span>
+            <span class="n">co2</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">co2</span><span class="p">),</span>
+            <span class="n">deltaCO2</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">deltaCO2</span><span class="p">),</span>
+            <span class="n">wCO2</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">wCO2</span><span class="p">),</span>
+            <span class="n">u</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">u</span><span class="p">),</span>
+            <span class="n">du</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">du</span><span class="p">),</span>
+            <span class="n">v</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">v</span><span class="p">),</span>
+            <span class="n">dv</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dv</span><span class="p">),</span>
+            <span class="n">dz_h</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dz_h</span><span class="p">),</span>
+            <span class="n">surf_pressure</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">surf_pressure</span><span class="p">),</span>
+        <span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="BulkMixedLayerModel.run">
 <a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.run">[docs]</a>

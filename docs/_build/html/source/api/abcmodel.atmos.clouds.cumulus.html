@@ -364,8 +364,8 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.clouds.cumulus.CumulusState.wCO2M"><code class="docutils literal notranslate"><span class="pre">CumulusState.wCO2M</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.clouds.cumulus.CumulusInitConds"><code class="docutils literal notranslate"><span class="pre">CumulusInitConds</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.clouds.cumulus.CumulusModel"><code class="docutils literal notranslate"><span class="pre">CumulusModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.clouds.cumulus.CumulusModel.init_state"><code class="docutils literal notranslate"><span class="pre">CumulusModel.init_state()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.clouds.cumulus.CumulusModel.run"><code class="docutils literal notranslate"><span class="pre">CumulusModel.run()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.clouds.cumulus.CumulusModel.compute_q2_h"><code class="docutils literal notranslate"><span class="pre">CumulusModel.compute_q2_h()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.clouds.cumulus.CumulusModel.compute_top_CO22"><code class="docutils literal notranslate"><span class="pre">CumulusModel.compute_top_CO22()</span></code></a></li>
@@ -438,12 +438,6 @@ document.write(`
 
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="abcmodel.atmos.clouds.cumulus.CumulusInitConds">
-<span class="sig-prename descclassname"><span class="pre">abcmodel.atmos.clouds.cumulus.</span></span><span class="sig-name descname"><span class="pre">CumulusInitConds</span></span><a class="headerlink" href="#abcmodel.atmos.clouds.cumulus.CumulusInitConds" title="Link to this definition">#</a></dt>
-<dd><p>alias of <a class="reference internal" href="#abcmodel.atmos.clouds.cumulus.CumulusState" title="abcmodel.atmos.clouds.cumulus.CumulusState"><code class="xref py py-class docutils literal notranslate"><span class="pre">CumulusState</span></code></a></p>
-</dd></dl>
-
 <dl class="py class">
 <dt class="sig sig-object py" id="abcmodel.atmos.clouds.cumulus.CumulusModel">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">abcmodel.atmos.clouds.cumulus.</span></span><span class="sig-name descname"><span class="pre">CumulusModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tcc_cc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tcc_trans</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/atmos/clouds/cumulus.html#CumulusModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.atmos.clouds.cumulus.CumulusModel" title="Link to this definition">#</a></dt>
@@ -462,6 +456,17 @@ to determine what fraction reaches saturation.</p>
 </ul>
 </dd>
 </dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.atmos.clouds.cumulus.CumulusModel.init_state">
+<span class="sig-name descname"><span class="pre">init_state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/atmos/clouds/cumulus.html#CumulusModel.init_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.atmos.clouds.cumulus.CumulusModel.init_state" title="Link to this definition">#</a></dt>
+<dd><p>Initialize the model state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The initial cloud state.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="abcmodel.atmos.clouds.cumulus.CumulusModel.run">
 <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/atmos/clouds/cumulus.html#CumulusModel.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.atmos.clouds.cumulus.CumulusModel.run" title="Link to this definition">#</a></dt>
@@ -607,8 +612,8 @@ to determine what fraction reaches saturation.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.clouds.cumulus.CumulusState.wCO2M"><code class="docutils literal notranslate"><span class="pre">CumulusState.wCO2M</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.clouds.cumulus.CumulusInitConds"><code class="docutils literal notranslate"><span class="pre">CumulusInitConds</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.clouds.cumulus.CumulusModel"><code class="docutils literal notranslate"><span class="pre">CumulusModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.clouds.cumulus.CumulusModel.init_state"><code class="docutils literal notranslate"><span class="pre">CumulusModel.init_state()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.clouds.cumulus.CumulusModel.run"><code class="docutils literal notranslate"><span class="pre">CumulusModel.run()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.clouds.cumulus.CumulusModel.compute_q2_h"><code class="docutils literal notranslate"><span class="pre">CumulusModel.compute_q2_h()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.clouds.cumulus.CumulusModel.compute_top_CO22"><code class="docutils literal notranslate"><span class="pre">CumulusModel.compute_top_CO22()</span></code></a></li>

@@ -58,44 +58,46 @@ loaded through the ``abcconfigs`` module.
    # 1. Setup models
    rad_model = abcmodel.rad.StandardRadiationModel(**cm.standard_rad.model_kwargs)
    land_model = abcmodel.land.JarvisStewartModel(**cm.jarvis_stewart.model_kwargs)
-   surface_layer_model = abcmodel.surface_layer.StandardSurfaceLayerModel()
-   mixed_layer_model = abcmodel.mixed_layer.BulkMixedLayerModel(**cm.bulk_mixed_layer.model_kwargs)
-   cloud_model = abcmodel.clouds.StandardCumulusModel()
+   surface_layer_model = abcmodel.atmos.surface_layer.ObukhovSurfaceLayerModel()
+   mixed_layer_model = abcmodel.atmos.mixed_layer.BulkMixedLayerModel(**cm.bulk_mixed_layer.model_kwargs)
+   cloud_model = abcmodel.atmos.clouds.CumulusModel()
 
-   # 2. Setup the coupler with the components
-   abcoupler = abcmodel.ABCoupler(
-       rad=rad_model,
-       land=land_model,
+   # 2. Setup atmos model
+   atmos_model = abcmodel.atmos.DayOnlyAtmosphereModel(
        surface_layer=surface_layer_model,
        mixed_layer=mixed_layer_model,
        clouds=cloud_model,
    )
 
-   # 3. Setup initial conditions
-   rad_init_conds = abcmodel.rad.StandardRadiationInitConds(
-       **cm.standard_rad.init_conds_kwargs
+   # 3. Setup the coupler with the components
+   abcoupler = abcmodel.ABCoupler(
+       rad=rad_model,
+       land=land_model,
+       atmos=atmos_model,
    )
-   land_init_conds = abcmodel.land.JarvisStewartInitConds(
-       **cm.jarvis_stewart.init_conds_kwargs,
-   )
-   surface_layer_init_conds = abcmodel.surface_layer.StandardSurfaceLayerInitConds(
-       **cm.obukhov_surface_layer.init_conds_kwargs
-   )
-   mixed_layer_init_conds = abcmodel.mixed_layer.BulkMixedLayerInitConds(
-       **cm.bulk_mixed_layer.init_conds_kwargs,
-   )
-   cloud_init_conds = abcmodel.clouds.StandardCumulusInitConds()
 
-   # 4. Bind everything into an initial state
+   # 4. Setup initial conditions for each model
+   rad_state = rad_model.init_state(**cm.standard_rad.state_kwargs)
+   land_state = land_model.init_state(**cm.jarvis_stewart.state_kwargs)
+   surface_layer_state = surface_layer_model.init_state(**cm.obukhov_surface_layer.state_kwargs)
+   mixed_layer_state = mixed_layer_model.init_state(**cm.bulk_mixed_layer.state_kwargs)
+   cloud_state = cloud_model.init_state()
+
+   # 5. Setup atmos state
+   atmos_state = atmos_model.init_state(
+       surface=surface_layer_state,
+       mixed=mixed_layer_state,
+       clouds=cloud_state,
+   )
+
+   # 6. Bind everything into a single initial state
    state = abcoupler.init_state(
-       rad_init_conds,
-       land_init_conds,
-       surface_layer_init_conds,
-       mixed_layer_init_conds,
-       cloud_init_conds,
+       rad_state,
+       land_state,
+       atmos_state,
    )
 
-   # 5. Integrate the model
+   # 7. Integrate the model
    time, trajectory = abcmodel.integrate(
        state, abcoupler, dt=60.0, runtime=12 * 3600.0
    )

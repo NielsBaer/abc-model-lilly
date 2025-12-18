@@ -389,16 +389,6 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Reference latent heat flux [W m-2].&quot;&quot;&quot;</span>
     <span class="n">ra</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Aerodynamic resistance [s m-1].&quot;&quot;&quot;</span>
-    <span class="n">esat</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Saturation vapor pressure [Pa].&quot;&quot;&quot;</span>
-    <span class="n">qsat</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Saturation specific humidity [kg/kg].&quot;&quot;&quot;</span>
-    <span class="n">dqsatdT</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Derivative of saturation specific humidity with respect to temperature [kg/kg/K].&quot;&quot;&quot;</span>
-    <span class="n">e</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Vapor pressure [Pa].&quot;&quot;&quot;</span>
-    <span class="n">qsatsurf</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Saturation specific humidity at surface temperature [kg/kg].&quot;&quot;&quot;</span>
     <span class="n">wtheta</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Kinematic heat flux [K m/s].&quot;&quot;&quot;</span>
     <span class="n">wq</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
@@ -406,9 +396,6 @@ document.write(`
     <span class="n">wCO2</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1].&quot;&quot;&quot;</span></div>
 
-
-
-<span class="n">StandardLandInitConds</span> <span class="o">=</span> <span class="n">StandardLandState</span>
 
 
 <div class="viewcode-block" id="AbstractStandardLandModel">
@@ -477,6 +464,49 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">wmax</span> <span class="o">=</span> <span class="n">wmax</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lam</span> <span class="o">=</span> <span class="n">lam</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">c_beta</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+<div class="viewcode-block" id="AbstractStandardLandModel.init_state">
+<a class="viewcode-back" href="../../../source/api/abcmodel.land.standard.html#abcmodel.land.standard.AbstractStandardLandModel.init_state">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">init_state</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">wg</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">temp_soil</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">temp2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">surf_temp</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">wl</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">wq</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">rs</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0e6</span><span class="p">,</span>
+        <span class="n">rssoil</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0e6</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StandardLandState</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the model state.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            alpha: albedo [-].</span>
+<span class="sd">            wg: Volumetric soil moisture [m3 m-3].</span>
+<span class="sd">            temp_soil: Soil temperature [K].</span>
+<span class="sd">            temp2: Deep soil temperature [K].</span>
+<span class="sd">            surf_temp: Surface temperature [K].</span>
+<span class="sd">            wl: Canopy water content [m].</span>
+<span class="sd">            wq: Kinematic moisture flux [kg/kg m/s].</span>
+<span class="sd">            rs: Surface resistance [s m-1].</span>
+<span class="sd">            rssoil: Soil resistance [s m-1].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The initial land state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">StandardLandState</span><span class="p">(</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">alpha</span><span class="p">),</span>
+            <span class="n">wg</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">wg</span><span class="p">),</span>
+            <span class="n">temp_soil</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">temp_soil</span><span class="p">),</span>
+            <span class="n">temp2</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">temp2</span><span class="p">),</span>
+            <span class="n">surf_temp</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">surf_temp</span><span class="p">),</span>
+            <span class="n">wl</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">wl</span><span class="p">),</span>
+            <span class="n">wq</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">wq</span><span class="p">),</span>
+            <span class="n">rs</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rs</span><span class="p">),</span>
+            <span class="n">rssoil</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rssoil</span><span class="p">),</span>
+        <span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="AbstractStandardLandModel.integrate">
 <a class="viewcode-back" href="../../../source/api/abcmodel.land.standard.html#abcmodel.land.standard.AbstractStandardLandModel.integrate">[docs]</a>

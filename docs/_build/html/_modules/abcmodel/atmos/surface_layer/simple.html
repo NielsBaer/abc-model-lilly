@@ -339,7 +339,6 @@ document.write(`
 
 
 
-<span class="n">SimpleSurfaceLayerInitConds</span> <span class="o">=</span> <span class="n">SimpleSurfaceLayerState</span>
 <span class="c1"># limamau: maybe these type variables could be abstracts...</span>
 <span class="n">StateAlias</span> <span class="o">=</span> <span class="n">AbstractCoupledState</span><span class="p">[</span>
     <span class="n">RadT</span><span class="p">,</span>
@@ -359,6 +358,22 @@ document.write(`
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span>
+
+<div class="viewcode-block" id="SimpleSurfaceLayerModel.init_state">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.simple.html#abcmodel.atmos.surface_layer.simple.SimpleSurfaceLayerModel.init_state">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">init_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ustar</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SimpleSurfaceLayerState</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the model state.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ustar: Friction velocity [m/s].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The initial surface layer state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">SimpleSurfaceLayerState</span><span class="p">(</span>
+            <span class="n">ustar</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ustar</span><span class="p">),</span>
+        <span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="SimpleSurfaceLayerModel.run">
 <a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.simple.html#abcmodel.atmos.surface_layer.simple.SimpleSurfaceLayerModel.run">[docs]</a>

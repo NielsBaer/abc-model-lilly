@@ -52,6 +52,21 @@ class DayOnlyAtmosphereModel(AbstractAtmosphereModel[DayOnlyAtmosphereState]):
         self.mixed_layer = mixed_layer
         self.clouds = clouds
 
+    def init_state(
+        self, surface: SurfT, mixed: MixedT, clouds: CloudT
+    ) -> DayOnlyAtmosphereState[SurfT, MixedT, CloudT]:
+        """Initialize the model state.
+
+        Args:
+            surface: The initial surface layer state.
+            mixed: The initial mixed layer state.
+            clouds: The initial cloud state.
+
+        Returns:
+            The initial atmosphere state.
+        """
+        return DayOnlyAtmosphereState(surface=surface, mixed=mixed, clouds=clouds)
+
     def run(
         self,
         state: StateAlias,

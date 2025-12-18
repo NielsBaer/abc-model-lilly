@@ -20,7 +20,6 @@ from ..dayonly import DayOnlyAtmosphereState
 class ObukhovSurfaceLayerState(AbstractSurfaceLayerState):
     """Standard surface layer model state."""
 
-    # the following variables should be initialized by the user
     ustar: Array
     """Surface friction velocity [m/s]."""
     z0m: Array
@@ -67,7 +66,6 @@ class ObukhovSurfaceLayerState(AbstractSurfaceLayerState):
     """Aerodynamic resistance [s/m]."""
 
 
-ObukhovSurfaceLayerInitConds = ObukhovSurfaceLayerState
 StateAlias = AbstractCoupledState[
     RadT,
     LandT,
@@ -88,6 +86,28 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
 
     def __init__(self):
         pass
+
+    def init_state(
+        self,
+        ustar: float,
+        z0m: float,
+        z0h: float,
+    ) -> ObukhovSurfaceLayerState:
+        """Initialize the model state.
+
+        Args:
+            ustar: Friction velocity [m s-1].
+            z0m: Surface roughness length for momentum [m].
+            z0h: Surface roughness length for heat [m].
+
+        Returns:
+            The initial surface layer state.
+        """
+        return ObukhovSurfaceLayerState(
+            ustar=jnp.array(ustar),
+            z0m=jnp.array(z0m),
+            z0h=jnp.array(z0h),
+        )
 
     def run(self, state: StateAlias):
         """Run the model.
