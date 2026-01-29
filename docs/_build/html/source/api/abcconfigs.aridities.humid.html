@@ -165,8 +165,8 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.atmos.html">Atmosphere</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.dayonly.html">Dayonly</a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.atmos.surface_layer.html">Surface Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="abcmodel.atmos.surface_layer.simple.html">Minimal</a></li>
-<li class="toctree-l4"><a class="reference internal" href="abcmodel.atmos.surface_layer.obukhov.html">Standard</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.atmos.surface_layer.simple.html">Simple</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.atmos.surface_layer.obukhov.html">Obukhov</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.atmos.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -200,7 +200,7 @@
 <li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.bulk_mixed_layer.html">Bulk Mixed Layer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.jarvis_stewart.html">Jarvis Stewart</a></li>
 <li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.standard_radiation.html">Standard Radiation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.cloudy_radiation.html">Standard Radiation W Clouds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.cloudy_radiation.html">Cloudy Radiation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.obukhov_surface_layer.html">Standard Surface Layer</a></li>
 </ul>
 </details></li>
@@ -379,7 +379,7 @@ document.write(`
 
 <dl class="py data">
 <dt class="sig sig-object py" id="abcconfigs.aridities.humid.ags_state_kwargs">
-<span class="sig-prename descclassname"><span class="pre">abcconfigs.aridities.humid.</span></span><span class="sig-name descname"><span class="pre">ags_state_kwargs</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'alpha':</span> <span class="pre">0.18,</span> <span class="pre">'surf_temp':</span> <span class="pre">287.0,</span> <span class="pre">'temp2':</span> <span class="pre">285.5,</span> <span class="pre">'temp_soil':</span> <span class="pre">285.0,</span> <span class="pre">'wg':</span> <span class="pre">0.35,</span> <span class="pre">'wl':</span> <span class="pre">0.0001,</span> <span class="pre">'wq':</span> <span class="pre">0.0002}</span></span><a class="headerlink" href="#abcconfigs.aridities.humid.ags_state_kwargs" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">abcconfigs.aridities.humid.</span></span><span class="sig-name descname"><span class="pre">ags_state_kwargs</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'alpha':</span> <span class="pre">0.18,</span> <span class="pre">'surf_temp':</span> <span class="pre">287.0,</span> <span class="pre">'temp2':</span> <span class="pre">285.5,</span> <span class="pre">'temp_soil':</span> <span class="pre">285.0,</span> <span class="pre">'wg':</span> <span class="pre">0.35,</span> <span class="pre">'wl':</span> <span class="pre">0.0001,</span> <span class="pre">'wq':</span> <span class="pre">0.0002,</span> <span class="pre">'wtheta':</span> <span class="pre">0.05}</span></span><a class="headerlink" href="#abcconfigs.aridities.humid.ags_state_kwargs" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py data">
@@ -394,7 +394,7 @@ document.write(`
 
 <dl class="py data">
 <dt class="sig sig-object py" id="abcconfigs.aridities.humid.bulk_ml_state_kwargs">
-<span class="sig-prename descclassname"><span class="pre">abcconfigs.aridities.humid.</span></span><span class="sig-name descname"><span class="pre">bulk_ml_state_kwargs</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'co2':</span> <span class="pre">420.0,</span> <span class="pre">'deltaCO2':</span> <span class="pre">-60.0,</span> <span class="pre">'deltatheta':</span> <span class="pre">0.5,</span> <span class="pre">'dq':</span> <span class="pre">-0.0005,</span> <span class="pre">'du':</span> <span class="pre">2.0,</span> <span class="pre">'dv':</span> <span class="pre">2.0,</span> <span class="pre">'dz_h':</span> <span class="pre">120.0,</span> <span class="pre">'h_abl':</span> <span class="pre">180.0,</span> <span class="pre">'q':</span> <span class="pre">0.01,</span> <span class="pre">'surf_pressure':</span> <span class="pre">101300.0,</span> <span class="pre">'theta':</span> <span class="pre">287.0,</span> <span class="pre">'u':</span> <span class="pre">4.0,</span> <span class="pre">'v':</span> <span class="pre">-3.0,</span> <span class="pre">'wCO2':</span> <span class="pre">0.0,</span> <span class="pre">'wtheta':</span> <span class="pre">0.05}</span></span><a class="headerlink" href="#abcconfigs.aridities.humid.bulk_ml_state_kwargs" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">abcconfigs.aridities.humid.</span></span><span class="sig-name descname"><span class="pre">bulk_ml_state_kwargs</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'co2':</span> <span class="pre">420.0,</span> <span class="pre">'deltaCO2':</span> <span class="pre">-60.0,</span> <span class="pre">'deltatheta':</span> <span class="pre">0.5,</span> <span class="pre">'dq':</span> <span class="pre">-0.0005,</span> <span class="pre">'du':</span> <span class="pre">2.0,</span> <span class="pre">'dv':</span> <span class="pre">2.0,</span> <span class="pre">'dz_h':</span> <span class="pre">120.0,</span> <span class="pre">'h_abl':</span> <span class="pre">180.0,</span> <span class="pre">'q':</span> <span class="pre">0.01,</span> <span class="pre">'surf_pressure':</span> <span class="pre">101300.0,</span> <span class="pre">'theta':</span> <span class="pre">287.0,</span> <span class="pre">'u':</span> <span class="pre">4.0,</span> <span class="pre">'v':</span> <span class="pre">-3.0,</span> <span class="pre">'wCO2':</span> <span class="pre">0.0}</span></span><a class="headerlink" href="#abcconfigs.aridities.humid.bulk_ml_state_kwargs" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py data">

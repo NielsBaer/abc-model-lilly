@@ -164,8 +164,8 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../source/api/abcmodel.atmos.html">Atmosphere</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcmodel.atmos.dayonly.html">Dayonly</a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.atmos.surface_layer.html">Surface Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.atmos.surface_layer.simple.html">Minimal</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.atmos.surface_layer.obukhov.html">Standard</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.atmos.surface_layer.simple.html">Simple</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.atmos.surface_layer.obukhov.html">Obukhov</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.atmos.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -199,7 +199,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcconfigs.class_model.bulk_mixed_layer.html">Bulk Mixed Layer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcconfigs.class_model.jarvis_stewart.html">Jarvis Stewart</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcconfigs.class_model.standard_radiation.html">Standard Radiation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcconfigs.class_model.cloudy_radiation.html">Standard Radiation W Clouds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcconfigs.class_model.cloudy_radiation.html">Cloudy Radiation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcconfigs.class_model.obukhov_surface_layer.html">Standard Surface Layer</a></li>
 </ul>
 </details></li>
@@ -342,6 +342,8 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;No water content in the canopy [m].&quot;&quot;&quot;</span>
     <span class="n">wq</span><span class="p">:</span> <span class="n">Array</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Kinematic moisture flux [kg/kg m/s].&quot;&quot;&quot;</span>
+    <span class="n">wtheta</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Kinematic heat flux [K m/s].&quot;&quot;&quot;</span>
 
     <span class="n">rs</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">1.0e6</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface resistance [m s-1].&quot;&quot;&quot;</span>
@@ -359,8 +361,6 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Vapor pressure [Pa].&quot;&quot;&quot;</span>
     <span class="n">qsatsurf</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Saturation specific humidity at surface temperature [kg/kg].&quot;&quot;&quot;</span>
-    <span class="n">wtheta</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Kinematic heat flux [K m/s].&quot;&quot;&quot;</span>
     <span class="n">wCO2</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1].&quot;&quot;&quot;</span>
     <span class="n">cliq</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
@@ -476,6 +476,7 @@ document.write(`
         <span class="n">surf_temp</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">wl</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">wq</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">wtheta</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">rs</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0e6</span><span class="p">,</span>
         <span class="n">rssoil</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0e6</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StandardLandState</span><span class="p">:</span>
@@ -489,6 +490,7 @@ document.write(`
 <span class="sd">            surf_temp: Surface temperature [K].</span>
 <span class="sd">            wl: Canopy water content [m].</span>
 <span class="sd">            wq: Kinematic moisture flux [kg/kg m/s].</span>
+<span class="sd">            wtheta: Kinematic heat flux [K m/s].</span>
 <span class="sd">            rs: Surface resistance [s m-1].</span>
 <span class="sd">            rssoil: Soil resistance [s m-1].</span>
 
@@ -503,6 +505,7 @@ document.write(`
             <span class="n">surf_temp</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">surf_temp</span><span class="p">),</span>
             <span class="n">wl</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">wl</span><span class="p">),</span>
             <span class="n">wq</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">wq</span><span class="p">),</span>
+            <span class="n">wtheta</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">wtheta</span><span class="p">),</span>
             <span class="n">rs</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rs</span><span class="p">),</span>
             <span class="n">rssoil</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rssoil</span><span class="p">),</span>
         <span class="p">)</span></div>
@@ -542,13 +545,12 @@ document.write(`
 <span class="sd">            The updated land state object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">land_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">land</span>
-        <span class="n">ml_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">mixed</span>
-        <span class="n">sl_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">surface</span>
-        <span class="n">ra</span> <span class="o">=</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">ra</span>
-        <span class="n">esat</span> <span class="o">=</span> <span class="n">compute_esat</span><span class="p">(</span><span class="n">ml_state</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span>
-        <span class="n">qsat</span> <span class="o">=</span> <span class="n">compute_qsat</span><span class="p">(</span><span class="n">ml_state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">)</span>
-        <span class="n">dqsatdT</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_dqsatdT</span><span class="p">(</span><span class="n">esat</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">)</span>
-        <span class="n">e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_e</span><span class="p">(</span><span class="n">ml_state</span><span class="o">.</span><span class="n">q</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">)</span>
+        <span class="n">atmos</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span>
+        <span class="n">ra</span> <span class="o">=</span> <span class="n">atmos</span><span class="o">.</span><span class="n">ra</span>
+        <span class="n">esat</span> <span class="o">=</span> <span class="n">compute_esat</span><span class="p">(</span><span class="n">atmos</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span>
+        <span class="n">qsat</span> <span class="o">=</span> <span class="n">compute_qsat</span><span class="p">(</span><span class="n">atmos</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">)</span>
+        <span class="n">dqsatdT</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_dqsatdT</span><span class="p">(</span><span class="n">esat</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">)</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_e</span><span class="p">(</span><span class="n">atmos</span><span class="o">.</span><span class="n">q</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">)</span>
         <span class="n">land_state</span> <span class="o">=</span> <span class="n">land_state</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">esat</span><span class="o">=</span><span class="n">esat</span><span class="p">,</span> <span class="n">qsat</span><span class="o">=</span><span class="n">qsat</span><span class="p">,</span> <span class="n">dqsatdT</span><span class="o">=</span><span class="n">dqsatdT</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="n">e</span><span class="p">)</span>
         <span class="n">state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">land</span><span class="o">=</span><span class="n">land_state</span><span class="p">)</span>
         <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_surface_resistance</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
@@ -558,8 +560,8 @@ document.write(`
         <span class="n">cliq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_cliq</span><span class="p">(</span><span class="n">land_state</span><span class="o">.</span><span class="n">wl</span><span class="p">)</span>
         <span class="n">surf_temp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_skin_temperature</span><span class="p">(</span>
             <span class="n">state</span><span class="o">.</span><span class="n">net_rad</span><span class="p">,</span>
-            <span class="n">ml_state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
-            <span class="n">ml_state</span><span class="o">.</span><span class="n">q</span><span class="p">,</span>
+            <span class="n">atmos</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
+            <span class="n">atmos</span><span class="o">.</span><span class="n">q</span><span class="p">,</span>
             <span class="n">land_state</span><span class="o">.</span><span class="n">qsat</span><span class="p">,</span>
             <span class="n">land_state</span><span class="o">.</span><span class="n">dqsatdT</span><span class="p">,</span>
             <span class="n">ra</span><span class="p">,</span>
@@ -568,11 +570,11 @@ document.write(`
             <span class="n">cliq</span><span class="p">,</span>
             <span class="n">land_state</span><span class="o">.</span><span class="n">temp_soil</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">qsatsurf</span> <span class="o">=</span> <span class="n">compute_qsat</span><span class="p">(</span><span class="n">surf_temp</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">)</span>
+        <span class="n">qsatsurf</span> <span class="o">=</span> <span class="n">compute_qsat</span><span class="p">(</span><span class="n">surf_temp</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">)</span>
         <span class="n">le_veg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_le_veg</span><span class="p">(</span>
             <span class="n">surf_temp</span><span class="p">,</span>
-            <span class="n">ml_state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
-            <span class="n">ml_state</span><span class="o">.</span><span class="n">q</span><span class="p">,</span>
+            <span class="n">atmos</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
+            <span class="n">atmos</span><span class="o">.</span><span class="n">q</span><span class="p">,</span>
             <span class="n">land_state</span><span class="o">.</span><span class="n">qsat</span><span class="p">,</span>
             <span class="n">land_state</span><span class="o">.</span><span class="n">dqsatdT</span><span class="p">,</span>
             <span class="n">ra</span><span class="p">,</span>
@@ -581,8 +583,8 @@ document.write(`
         <span class="p">)</span>
         <span class="n">le_liq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_le_liq</span><span class="p">(</span>
             <span class="n">surf_temp</span><span class="p">,</span>
-            <span class="n">ml_state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
-            <span class="n">ml_state</span><span class="o">.</span><span class="n">q</span><span class="p">,</span>
+            <span class="n">atmos</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
+            <span class="n">atmos</span><span class="o">.</span><span class="n">q</span><span class="p">,</span>
             <span class="n">land_state</span><span class="o">.</span><span class="n">qsat</span><span class="p">,</span>
             <span class="n">land_state</span><span class="o">.</span><span class="n">dqsatdT</span><span class="p">,</span>
             <span class="n">ra</span><span class="p">,</span>
@@ -590,8 +592,8 @@ document.write(`
         <span class="p">)</span>
         <span class="n">le_soil</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_le_soil</span><span class="p">(</span>
             <span class="n">surf_temp</span><span class="p">,</span>
-            <span class="n">ml_state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
-            <span class="n">ml_state</span><span class="o">.</span><span class="n">q</span><span class="p">,</span>
+            <span class="n">atmos</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
+            <span class="n">atmos</span><span class="o">.</span><span class="n">q</span><span class="p">,</span>
             <span class="n">land_state</span><span class="o">.</span><span class="n">qsat</span><span class="p">,</span>
             <span class="n">land_state</span><span class="o">.</span><span class="n">dqsatdT</span><span class="p">,</span>
             <span class="n">ra</span><span class="p">,</span>
@@ -599,14 +601,14 @@ document.write(`
         <span class="p">)</span>
         <span class="n">wltend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_wltend</span><span class="p">(</span><span class="n">le_liq</span><span class="p">)</span>
         <span class="n">le</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_le</span><span class="p">(</span><span class="n">le_soil</span><span class="p">,</span> <span class="n">le_veg</span><span class="p">,</span> <span class="n">le_liq</span><span class="p">)</span>
-        <span class="n">hf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_hf</span><span class="p">(</span><span class="n">surf_temp</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="n">ra</span><span class="p">)</span>
+        <span class="n">hf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_hf</span><span class="p">(</span><span class="n">surf_temp</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="n">ra</span><span class="p">)</span>
         <span class="n">gf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_gf</span><span class="p">(</span><span class="n">surf_temp</span><span class="p">,</span> <span class="n">land_state</span><span class="o">.</span><span class="n">temp_soil</span><span class="p">)</span>
         <span class="n">le_pot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_le_pot</span><span class="p">(</span>
             <span class="n">state</span><span class="o">.</span><span class="n">net_rad</span><span class="p">,</span>
             <span class="n">gf</span><span class="p">,</span>
             <span class="n">land_state</span><span class="o">.</span><span class="n">dqsatdT</span><span class="p">,</span>
             <span class="n">land_state</span><span class="o">.</span><span class="n">qsat</span><span class="p">,</span>
-            <span class="n">ml_state</span><span class="o">.</span><span class="n">q</span><span class="p">,</span>
+            <span class="n">atmos</span><span class="o">.</span><span class="n">q</span><span class="p">,</span>
             <span class="n">ra</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">le_ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_le_ref</span><span class="p">(</span>
@@ -614,7 +616,7 @@ document.write(`
             <span class="n">gf</span><span class="p">,</span>
             <span class="n">land_state</span><span class="o">.</span><span class="n">dqsatdT</span><span class="p">,</span>
             <span class="n">land_state</span><span class="o">.</span><span class="n">qsat</span><span class="p">,</span>
-            <span class="n">ml_state</span><span class="o">.</span><span class="n">q</span><span class="p">,</span>
+            <span class="n">atmos</span><span class="o">.</span><span class="n">q</span><span class="p">,</span>
             <span class="n">ra</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">temp_soil_tend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_temp_soil_tend</span><span class="p">(</span>

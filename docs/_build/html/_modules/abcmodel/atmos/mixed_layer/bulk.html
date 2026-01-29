@@ -164,8 +164,8 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.html">Atmosphere</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.dayonly.html">Dayonly</a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.surface_layer.html">Surface Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.surface_layer.simple.html">Minimal</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html">Standard</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.surface_layer.simple.html">Simple</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html">Obukhov</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -199,7 +199,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcconfigs.class_model.bulk_mixed_layer.html">Bulk Mixed Layer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcconfigs.class_model.jarvis_stewart.html">Jarvis Stewart</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcconfigs.class_model.standard_radiation.html">Standard Radiation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcconfigs.class_model.cloudy_radiation.html">Standard Radiation W Clouds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcconfigs.class_model.cloudy_radiation.html">Cloudy Radiation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcconfigs.class_model.obukhov_surface_layer.html">Standard Surface Layer</a></li>
 </ul>
 </details></li>
@@ -307,7 +307,7 @@ document.write(`
                 <article class="bd-article">
                   
   <h1>Source code for abcmodel.atmos.mixed_layer.bulk</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">replace</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
 
@@ -331,8 +331,6 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initial mixed-layer potential temperature [K].&quot;&quot;&quot;</span>
     <span class="n">deltatheta</span><span class="p">:</span> <span class="n">Array</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initial temperature jump at the top of the ABL [K].&quot;&quot;&quot;</span>
-    <span class="n">wtheta</span><span class="p">:</span> <span class="n">Array</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface kinematic heat flux [K m/s].&quot;&quot;&quot;</span>
     <span class="n">q</span><span class="p">:</span> <span class="n">Array</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Initial mixed-layer specific humidity [kg/kg].&quot;&quot;&quot;</span>
     <span class="n">dq</span><span class="p">:</span> <span class="n">Array</span>
@@ -491,7 +489,6 @@ document.write(`
         <span class="n">h_abl</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">deltatheta</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-        <span class="n">wtheta</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">q</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">dq</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">co2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
@@ -507,21 +504,20 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the model state.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            h_abl: Atmospheric boundary layer height [m].</span>
-<span class="sd">            theta: Mixed-layer potential temperature [K].</span>
-<span class="sd">            deltatheta: Potential temperature jump at h [K].</span>
-<span class="sd">            wtheta: Surface kinematic heat flux [K m/s].</span>
-<span class="sd">            q: Mixed-layer specific humidity [kg/kg].</span>
-<span class="sd">            dq: Specific humidity jump at h [kg/kg].</span>
-<span class="sd">            co2: Mixed-layer CO2 [ppm].</span>
+<span class="sd">            h_abl: atmospheric boundary layer height [m].</span>
+<span class="sd">            theta: mixed-layer potential temperature [K].</span>
+<span class="sd">            deltatheta: potential temperature jump at h [K].</span>
+<span class="sd">            q: mixed-layer specific humidity [kg/kg].</span>
+<span class="sd">            dq: specific humidity jump at h [kg/kg].</span>
+<span class="sd">            co2: mixed-layer CO2 [ppm].</span>
 <span class="sd">            deltaCO2: CO2 jump at h [ppm].</span>
-<span class="sd">            wCO2: Surface kinematic CO2 flux [mgC/m²/s].</span>
-<span class="sd">            u: Mixed-layer u-wind speed [m/s].</span>
+<span class="sd">            wCO2: surface kinematic CO2 flux [mgC/m²/s].</span>
+<span class="sd">            u: mixed-layer u-wind speed [m/s].</span>
 <span class="sd">            du: u-wind jump at h [m/s].</span>
-<span class="sd">            v: Mixed-layer v-wind speed [m/s].</span>
+<span class="sd">            v: mixed-layer v-wind speed [m/s].</span>
 <span class="sd">            dv: v-wind jump at h [m/s].</span>
-<span class="sd">            dz_h: Transition layer thickness [m].</span>
-<span class="sd">            surf_pressure: Surface pressure [Pa].</span>
+<span class="sd">            dz_h: transition layer thickness [m].</span>
+<span class="sd">            surf_pressure: surface pressure [Pa].</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            The initial mixed layer state.</span>
@@ -530,7 +526,6 @@ document.write(`
             <span class="n">h_abl</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">h_abl</span><span class="p">),</span>
             <span class="n">theta</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span>
             <span class="n">deltatheta</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">deltatheta</span><span class="p">),</span>
-            <span class="n">wtheta</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">wtheta</span><span class="p">),</span>
             <span class="n">q</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">q</span><span class="p">),</span>
             <span class="n">dq</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dq</span><span class="p">),</span>
             <span class="n">co2</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">co2</span><span class="p">),</span>
@@ -558,66 +553,68 @@ document.write(`
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">land_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">land</span>
-        <span class="n">sl_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">surface</span>
-        <span class="n">ml_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">mixed</span>
-        <span class="n">cloud_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">clouds</span>
-        <span class="n">wtheta</span> <span class="o">=</span> <span class="n">land_state</span><span class="o">.</span><span class="n">wtheta</span>
-        <span class="n">wq</span> <span class="o">=</span> <span class="n">land_state</span><span class="o">.</span><span class="n">wq</span>
-        <span class="n">wCO2</span> <span class="o">=</span> <span class="n">land_state</span><span class="o">.</span><span class="n">wCO2</span>
+        <span class="n">atmos</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span>
+        <span class="n">ml_state</span> <span class="o">=</span> <span class="n">atmos</span><span class="o">.</span><span class="n">mixed</span>
 
         <span class="n">ws</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_ws</span><span class="p">(</span><span class="n">ml_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">)</span>
         <span class="n">wf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_wf</span><span class="p">(</span><span class="n">ml_state</span><span class="o">.</span><span class="n">deltatheta</span><span class="p">)</span>
         <span class="n">w_th_ft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_w_th_ft</span><span class="p">(</span><span class="n">ws</span><span class="p">)</span>
         <span class="n">w_q_ft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_w_q_ft</span><span class="p">(</span><span class="n">ws</span><span class="p">)</span>
         <span class="n">w_CO2_ft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_w_CO2_ft</span><span class="p">(</span><span class="n">ws</span><span class="p">)</span>
+
+        <span class="c1"># compute virtual heat flux at surface</span>
+        <span class="n">wthetav</span> <span class="o">=</span> <span class="n">land_state</span><span class="o">.</span><span class="n">wtheta</span> <span class="o">*</span> <span class="p">(</span>
+            <span class="mf">1.0</span> <span class="o">+</span> <span class="mf">0.61</span> <span class="o">*</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">q</span>
+        <span class="p">)</span> <span class="o">+</span> <span class="mf">0.61</span> <span class="o">*</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">theta</span> <span class="o">*</span> <span class="n">land_state</span><span class="o">.</span><span class="n">wq</span>
+
         <span class="n">wstar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_wstar</span><span class="p">(</span>
             <span class="n">ml_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">,</span>
-            <span class="n">ml_state</span><span class="o">.</span><span class="n">wthetav</span><span class="p">,</span>
+            <span class="n">wthetav</span><span class="p">,</span>
             <span class="n">ml_state</span><span class="o">.</span><span class="n">thetav</span><span class="p">,</span>
             <span class="n">cst</span><span class="o">.</span><span class="n">g</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">wthetave</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_wthetave</span><span class="p">(</span><span class="n">ml_state</span><span class="o">.</span><span class="n">wthetav</span><span class="p">)</span>
+        <span class="n">wthetave</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_wthetave</span><span class="p">(</span><span class="n">wthetav</span><span class="p">)</span>
         <span class="n">we</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_we</span><span class="p">(</span>
             <span class="n">ml_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">,</span>
             <span class="n">wthetave</span><span class="p">,</span>
             <span class="n">ml_state</span><span class="o">.</span><span class="n">deltathetav</span><span class="p">,</span>
             <span class="n">ml_state</span><span class="o">.</span><span class="n">thetav</span><span class="p">,</span>
-            <span class="n">sl_state</span><span class="o">.</span><span class="n">ustar</span><span class="p">,</span>
+            <span class="n">atmos</span><span class="o">.</span><span class="n">ustar</span><span class="p">,</span>
             <span class="n">cst</span><span class="o">.</span><span class="n">g</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">wthetae</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_wthetae</span><span class="p">(</span><span class="n">we</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">deltatheta</span><span class="p">)</span>
         <span class="n">wqe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_wqe</span><span class="p">(</span><span class="n">we</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">dq</span><span class="p">)</span>
         <span class="n">wCO2e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_wCO2e</span><span class="p">(</span><span class="n">we</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">deltaCO2</span><span class="p">)</span>
-        <span class="n">h_abl_tend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_h_abl_tend</span><span class="p">(</span><span class="n">we</span><span class="p">,</span> <span class="n">ws</span><span class="p">,</span> <span class="n">wf</span><span class="p">,</span> <span class="n">cloud_state</span><span class="o">.</span><span class="n">cc_mf</span><span class="p">)</span>
-        <span class="n">thetatend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_thetatend</span><span class="p">(</span><span class="n">ml_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">,</span> <span class="n">wtheta</span><span class="p">,</span> <span class="n">wthetae</span><span class="p">)</span>
+        <span class="n">h_abl_tend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_h_abl_tend</span><span class="p">(</span><span class="n">we</span><span class="p">,</span> <span class="n">ws</span><span class="p">,</span> <span class="n">wf</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">cc_mf</span><span class="p">)</span>
+        <span class="n">thetatend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_thetatend</span><span class="p">(</span><span class="n">ml_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">,</span> <span class="n">land_state</span><span class="o">.</span><span class="n">wtheta</span><span class="p">,</span> <span class="n">wthetae</span><span class="p">)</span>
         <span class="n">deltathetatend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_deltathetatend</span><span class="p">(</span>
-            <span class="n">we</span><span class="p">,</span> <span class="n">wf</span><span class="p">,</span> <span class="n">cloud_state</span><span class="o">.</span><span class="n">cc_mf</span><span class="p">,</span> <span class="n">thetatend</span><span class="p">,</span> <span class="n">w_th_ft</span>
+            <span class="n">we</span><span class="p">,</span> <span class="n">wf</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">cc_mf</span><span class="p">,</span> <span class="n">thetatend</span><span class="p">,</span> <span class="n">w_th_ft</span>
         <span class="p">)</span>
-        <span class="n">qtend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_qtend</span><span class="p">(</span><span class="n">ml_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">,</span> <span class="n">wq</span><span class="p">,</span> <span class="n">wqe</span><span class="p">,</span> <span class="n">cloud_state</span><span class="o">.</span><span class="n">cc_qf</span><span class="p">)</span>
-        <span class="n">dqtend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_dqtend</span><span class="p">(</span><span class="n">we</span><span class="p">,</span> <span class="n">wf</span><span class="p">,</span> <span class="n">cloud_state</span><span class="o">.</span><span class="n">cc_mf</span><span class="p">,</span> <span class="n">qtend</span><span class="p">,</span> <span class="n">w_q_ft</span><span class="p">)</span>
-        <span class="n">co2tend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_co2tend</span><span class="p">(</span><span class="n">ml_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">,</span> <span class="n">wCO2</span><span class="p">,</span> <span class="n">wCO2e</span><span class="p">,</span> <span class="n">cloud_state</span><span class="o">.</span><span class="n">wCO2M</span><span class="p">)</span>
-        <span class="n">deltaCO2tend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_deltaCO2tend</span><span class="p">(</span>
-            <span class="n">we</span><span class="p">,</span> <span class="n">wf</span><span class="p">,</span> <span class="n">cloud_state</span><span class="o">.</span><span class="n">cc_mf</span><span class="p">,</span> <span class="n">co2tend</span><span class="p">,</span> <span class="n">w_CO2_ft</span>
+        <span class="n">qtend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_qtend</span><span class="p">(</span><span class="n">ml_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">,</span> <span class="n">land_state</span><span class="o">.</span><span class="n">wq</span><span class="p">,</span> <span class="n">wqe</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">cc_qf</span><span class="p">)</span>
+        <span class="n">dqtend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_dqtend</span><span class="p">(</span><span class="n">we</span><span class="p">,</span> <span class="n">wf</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">cc_mf</span><span class="p">,</span> <span class="n">qtend</span><span class="p">,</span> <span class="n">w_q_ft</span><span class="p">)</span>
+        <span class="n">co2tend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_co2tend</span><span class="p">(</span>
+            <span class="n">ml_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">,</span> <span class="n">land_state</span><span class="o">.</span><span class="n">wCO2</span><span class="p">,</span> <span class="n">wCO2e</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">wCO2M</span>
         <span class="p">)</span>
+        <span class="n">deltaCO2tend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_deltaCO2tend</span><span class="p">(</span><span class="n">we</span><span class="p">,</span> <span class="n">wf</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">cc_mf</span><span class="p">,</span> <span class="n">co2tend</span><span class="p">,</span> <span class="n">w_CO2_ft</span><span class="p">)</span>
         <span class="n">utend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_utend</span><span class="p">(</span>
-            <span class="n">ml_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">,</span> <span class="n">we</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">uw</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">du</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">dv</span>
+            <span class="n">ml_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">,</span> <span class="n">we</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">uw</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">du</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">dv</span>
         <span class="p">)</span>
         <span class="n">vtend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_vtend</span><span class="p">(</span>
-            <span class="n">ml_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">,</span> <span class="n">we</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">vw</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">du</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">dv</span>
+            <span class="n">ml_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">,</span> <span class="n">we</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">vw</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">du</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">dv</span>
         <span class="p">)</span>
-        <span class="n">dutend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_dutend</span><span class="p">(</span><span class="n">we</span><span class="p">,</span> <span class="n">wf</span><span class="p">,</span> <span class="n">cloud_state</span><span class="o">.</span><span class="n">cc_mf</span><span class="p">,</span> <span class="n">utend</span><span class="p">)</span>
-        <span class="n">dvtend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_dvtend</span><span class="p">(</span><span class="n">we</span><span class="p">,</span> <span class="n">wf</span><span class="p">,</span> <span class="n">cloud_state</span><span class="o">.</span><span class="n">cc_mf</span><span class="p">,</span> <span class="n">vtend</span><span class="p">)</span>
+        <span class="n">dutend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_dutend</span><span class="p">(</span><span class="n">we</span><span class="p">,</span> <span class="n">wf</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">cc_mf</span><span class="p">,</span> <span class="n">utend</span><span class="p">)</span>
+        <span class="n">dvtend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_dvtend</span><span class="p">(</span><span class="n">we</span><span class="p">,</span> <span class="n">wf</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">cc_mf</span><span class="p">,</span> <span class="n">vtend</span><span class="p">)</span>
         <span class="n">dztend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_dztend</span><span class="p">(</span>
             <span class="n">ml_state</span><span class="o">.</span><span class="n">lcl</span><span class="p">,</span>
             <span class="n">ml_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">,</span>
-            <span class="n">cloud_state</span><span class="o">.</span><span class="n">cc_frac</span><span class="p">,</span>
+            <span class="n">atmos</span><span class="o">.</span><span class="n">cc_frac</span><span class="p">,</span>
             <span class="n">ml_state</span><span class="o">.</span><span class="n">dz_h</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
-            <span class="n">ml_state</span><span class="p">,</span>
+        <span class="k">return</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
             <span class="n">ws</span><span class="o">=</span><span class="n">ws</span><span class="p">,</span>
             <span class="n">wf</span><span class="o">=</span><span class="n">wf</span><span class="p">,</span>
             <span class="n">wstar</span><span class="o">=</span><span class="n">wstar</span><span class="p">,</span>
+            <span class="n">wthetav</span><span class="o">=</span><span class="n">wthetav</span><span class="p">,</span>
             <span class="n">wthetave</span><span class="o">=</span><span class="n">wthetave</span><span class="p">,</span>
             <span class="n">we</span><span class="o">=</span><span class="n">we</span><span class="p">,</span>
             <span class="n">wthetae</span><span class="o">=</span><span class="n">wthetae</span><span class="p">,</span>
@@ -664,8 +661,7 @@ document.write(`
         <span class="n">v</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_wind_prog</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">vtend</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="p">)</span>
         <span class="n">dv</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_wind_prog</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">dv</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">dvtend</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">dv</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
-            <span class="n">state</span><span class="p">,</span>
+        <span class="k">return</span> <span class="n">state</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
             <span class="n">h_abl</span><span class="o">=</span><span class="n">h_abl</span><span class="p">,</span>
             <span class="n">theta</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span>
             <span class="n">deltatheta</span><span class="o">=</span><span class="n">deltatheta</span><span class="p">,</span>

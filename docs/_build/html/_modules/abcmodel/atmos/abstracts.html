@@ -164,8 +164,8 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../source/api/abcmodel.atmos.html">Atmosphere</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcmodel.atmos.dayonly.html">Dayonly</a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.atmos.surface_layer.html">Surface Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.atmos.surface_layer.simple.html">Minimal</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.atmos.surface_layer.obukhov.html">Standard</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.atmos.surface_layer.simple.html">Simple</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.atmos.surface_layer.obukhov.html">Obukhov</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.atmos.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -199,7 +199,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcconfigs.class_model.bulk_mixed_layer.html">Bulk Mixed Layer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcconfigs.class_model.jarvis_stewart.html">Jarvis Stewart</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcconfigs.class_model.standard_radiation.html">Standard Radiation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcconfigs.class_model.cloudy_radiation.html">Standard Radiation W Clouds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcconfigs.class_model.cloudy_radiation.html">Cloudy Radiation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcconfigs.class_model.obukhov_surface_layer.html">Standard Surface Layer</a></li>
 </ul>
 </details></li>
@@ -322,21 +322,79 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract surface layer state.&quot;&quot;&quot;</span>
 
     <span class="n">ra</span><span class="p">:</span> <span class="n">Array</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Aerodynamic resistance [s/m].&quot;&quot;&quot;</span></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Aerodynamic resistance [s/m].&quot;&quot;&quot;</span>
+    <span class="n">thetasurf</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface potential temperature [K].&quot;&quot;&quot;</span>
+    <span class="n">ustar</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Friction velocity [m/s].&quot;&quot;&quot;</span>
+    <span class="n">uw</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Zonal momentum flux [m²/s²].&quot;&quot;&quot;</span>
+    <span class="n">vw</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Meridional momentum flux [m²/s²].&quot;&quot;&quot;</span></div>
 
 
 
 <div class="viewcode-block" id="AbstractMixedLayerState">
 <a class="viewcode-back" href="../../../source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractMixedLayerState">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">AbstractMixedLayerState</span><span class="p">(</span><span class="n">AbstractState</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract mixed layer state.&quot;&quot;&quot;</span></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract mixed layer state.&quot;&quot;&quot;</span>
+
+    <span class="n">h_abl</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Atmospheric boundary layer (ABL) height [m].&quot;&quot;&quot;</span>
+    <span class="n">theta</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mixed-layer potential temperature [K].&quot;&quot;&quot;</span>
+    <span class="n">q</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mixed-layer specific humidity [kg/kg].&quot;&quot;&quot;</span>
+    <span class="n">co2</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mixed-layer CO2 [ppm].&quot;&quot;&quot;</span>
+    <span class="n">u</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mixed-layer u-wind speed [m/s].&quot;&quot;&quot;</span>
+    <span class="n">v</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mixed-layer v-wind speed [m/s].&quot;&quot;&quot;</span>
+    <span class="n">surf_pressure</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface pressure [Pa].&quot;&quot;&quot;</span>
+    <span class="n">wstar</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convective velocity scale [m/s].&quot;&quot;&quot;</span>
+    <span class="n">thetav</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mixed-layer virtual potential temperature [K].&quot;&quot;&quot;</span>
+    <span class="n">top_T</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Temperature at top of mixed layer [K].&quot;&quot;&quot;</span>
+    <span class="n">top_p</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pressure at top of mixed layer [Pa].&quot;&quot;&quot;</span>
+    <span class="n">wthetav</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Virtual potential temperature flux at surface [K m/s].&quot;&quot;&quot;</span>
+    <span class="n">wqe</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Entrainment moisture flux [kg/kg m/s].&quot;&quot;&quot;</span>
+    <span class="n">dq</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Specific humidity jump at h [kg/kg].&quot;&quot;&quot;</span>
+    <span class="n">dz_h</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transition layer thickness [m].&quot;&quot;&quot;</span>
+    <span class="n">deltaCO2</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;CO2 jump at h [ppm].&quot;&quot;&quot;</span>
+    <span class="n">wCO2e</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Entrainment CO2 flux [mgC/m²/s].&quot;&quot;&quot;</span>
+    <span class="n">wtheta</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface kinematic heat flux [K m/s].&quot;&quot;&quot;</span>
+    <span class="n">wq</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface kinematic moisture flux [kg/kg m/s].&quot;&quot;&quot;</span>
+    <span class="n">wCO2</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1].&quot;&quot;&quot;</span></div>
 
 
 
 <div class="viewcode-block" id="AbstractCloudState">
 <a class="viewcode-back" href="../../../source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractCloudState">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">AbstractCloudState</span><span class="p">(</span><span class="n">AbstractState</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract cloud state.&quot;&quot;&quot;</span></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract cloud state.&quot;&quot;&quot;</span>
+
+    <span class="n">cc_mf</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cloud core mass flux [kg/kg/s].&quot;&quot;&quot;</span>
+    <span class="n">cc_qf</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cloud core moisture flux [kg/kg/s].&quot;&quot;&quot;</span>
+    <span class="n">wCO2M</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cloud core CO2 mass flux [mgC/m²/s].&quot;&quot;&quot;</span>
+    <span class="n">cc_frac</span><span class="p">:</span> <span class="n">Array</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cloud core fraction [-].&quot;&quot;&quot;</span></div>
 
 
 

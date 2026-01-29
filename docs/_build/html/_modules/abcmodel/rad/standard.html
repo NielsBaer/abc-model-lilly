@@ -164,8 +164,8 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../source/api/abcmodel.atmos.html">Atmosphere</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcmodel.atmos.dayonly.html">Dayonly</a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.atmos.surface_layer.html">Surface Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.atmos.surface_layer.simple.html">Minimal</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.atmos.surface_layer.obukhov.html">Standard</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.atmos.surface_layer.simple.html">Simple</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.atmos.surface_layer.obukhov.html">Obukhov</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.atmos.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -199,7 +199,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcconfigs.class_model.bulk_mixed_layer.html">Bulk Mixed Layer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcconfigs.class_model.jarvis_stewart.html">Jarvis Stewart</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcconfigs.class_model.standard_radiation.html">Standard Radiation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcconfigs.class_model.cloudy_radiation.html">Standard Radiation W Clouds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcconfigs.class_model.cloudy_radiation.html">Cloudy Radiation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcconfigs.class_model.obukhov_surface_layer.html">Standard Surface Layer</a></li>
 </ul>
 </details></li>
@@ -410,16 +410,16 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># needed components</span>
         <span class="n">rad_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">rad</span>
-        <span class="n">ml_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">mixed</span>
+        <span class="n">atmos</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span>
         <span class="n">land_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">land</span>
 
         <span class="c1"># computations</span>
         <span class="n">solar_declination</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_solar_declination</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doy</span><span class="p">)</span>
         <span class="n">solar_elevation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_solar_elevation</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">tstart</span><span class="p">,</span> <span class="n">solar_declination</span><span class="p">)</span>
         <span class="n">air_temp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_air_temperature</span><span class="p">(</span>
-            <span class="n">ml_state</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">,</span>
-            <span class="n">ml_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">,</span>
-            <span class="n">ml_state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
+            <span class="n">atmos</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">,</span>
+            <span class="n">atmos</span><span class="o">.</span><span class="n">h_abl</span><span class="p">,</span>
+            <span class="n">atmos</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">atmospheric_transmission</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_atmospheric_transmission</span><span class="p">(</span>
             <span class="n">solar_elevation</span>

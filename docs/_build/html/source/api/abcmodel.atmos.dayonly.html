@@ -165,8 +165,8 @@
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="abcmodel.atmos.html">Atmosphere</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 current active"><a class="current reference internal" href="#">Dayonly</a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.atmos.surface_layer.html">Surface Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="abcmodel.atmos.surface_layer.simple.html">Minimal</a></li>
-<li class="toctree-l4"><a class="reference internal" href="abcmodel.atmos.surface_layer.obukhov.html">Standard</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.atmos.surface_layer.simple.html">Simple</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.atmos.surface_layer.obukhov.html">Obukhov</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.atmos.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -200,7 +200,7 @@
 <li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.bulk_mixed_layer.html">Bulk Mixed Layer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.jarvis_stewart.html">Jarvis Stewart</a></li>
 <li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.standard_radiation.html">Standard Radiation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.cloudy_radiation.html">Standard Radiation W Clouds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.cloudy_radiation.html">Cloudy Radiation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.obukhov_surface_layer.html">Standard Surface Layer</a></li>
 </ul>
 </details></li>
@@ -357,6 +357,32 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.surface"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.surface</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.mixed"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.mixed</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.clouds"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.clouds</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.theta"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.theta</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.q"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.q</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.co2"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.co2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.surf_pressure"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.surf_pressure</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.u"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.u</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.v"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.v</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.ra"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.ra</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.thetasurf"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.thetasurf</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.h_abl"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.h_abl</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.ustar"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.ustar</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.uw"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.uw</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.vw"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.vw</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.wstar"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.wstar</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.thetav"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.thetav</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.top_T"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.top_T</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.top_p"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.top_p</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.cc_mf"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.cc_mf</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.cc_qf"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.cc_qf</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.wCO2M"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.wCO2M</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.cc_frac"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.cc_frac</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.wthetav"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.wthetav</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.wqe"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.wqe</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.dq"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.dq</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.dz_h"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.dz_h</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.deltaCO2"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.deltaCO2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.wCO2e"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.wCO2e</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereModel"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereModel</span></code></a><ul class="nav section-nav flex-column">
@@ -399,6 +425,162 @@ document.write(`
 <dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.clouds">
 <span class="sig-name descname"><span class="pre">clouds</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">CloudT</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.clouds" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.theta">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">theta</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.theta" title="Link to this definition">#</a></dt>
+<dd><p>Potential temperature [K].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.q">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">q</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.q" title="Link to this definition">#</a></dt>
+<dd><p>Specific humidity [kg/kg].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.co2">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">co2</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.co2" title="Link to this definition">#</a></dt>
+<dd><p>CO2 concentration [ppmv].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.surf_pressure">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">surf_pressure</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.surf_pressure" title="Link to this definition">#</a></dt>
+<dd><p>Surface pressure [Pa].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.u">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">u</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.u" title="Link to this definition">#</a></dt>
+<dd><p>Zonal wind speed [m/s].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.v">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">v</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.v" title="Link to this definition">#</a></dt>
+<dd><p>Meridional wind speed [m/s].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.ra">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ra</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.ra" title="Link to this definition">#</a></dt>
+<dd><p>Aerodynamic resistance [s/m].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.thetasurf">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">thetasurf</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.thetasurf" title="Link to this definition">#</a></dt>
+<dd><p>Surface potential temperature [K].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.h_abl">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">h_abl</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.h_abl" title="Link to this definition">#</a></dt>
+<dd><p>Boundary layer height [m].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.ustar">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ustar</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.ustar" title="Link to this definition">#</a></dt>
+<dd><p>Friction velocity [m/s].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.uw">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">uw</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.uw" title="Link to this definition">#</a></dt>
+<dd><p>Zonal momentum flux [m²/s²].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.vw">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">vw</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.vw" title="Link to this definition">#</a></dt>
+<dd><p>Meridional momentum flux [m²/s²].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.wstar">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">wstar</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.wstar" title="Link to this definition">#</a></dt>
+<dd><p>Convective velocity scale [m/s].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.thetav">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">thetav</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.thetav" title="Link to this definition">#</a></dt>
+<dd><p>Mixed-layer virtual potential temperature [K].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.top_T">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">top_T</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.top_T" title="Link to this definition">#</a></dt>
+<dd><p>Temperature at top of mixed layer [K].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.top_p">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">top_p</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.top_p" title="Link to this definition">#</a></dt>
+<dd><p>Pressure at top of mixed layer [Pa].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.cc_mf">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">cc_mf</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.cc_mf" title="Link to this definition">#</a></dt>
+<dd><p>Cloud core mass flux [kg/kg/s].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.cc_qf">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">cc_qf</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.cc_qf" title="Link to this definition">#</a></dt>
+<dd><p>Cloud core moisture flux [kg/kg/s].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.wCO2M">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">wCO2M</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.wCO2M" title="Link to this definition">#</a></dt>
+<dd><p>Cloud core CO2 mass flux [mgC/m²/s].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.cc_frac">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">cc_frac</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.cc_frac" title="Link to this definition">#</a></dt>
+<dd><p>Cloud core fraction [-].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.wthetav">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">wthetav</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.wthetav" title="Link to this definition">#</a></dt>
+<dd><p>Virtual potential temperature flux at surface [K m/s].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.wqe">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">wqe</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.wqe" title="Link to this definition">#</a></dt>
+<dd><p>Entrainment moisture flux [kg/kg m/s].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.dq">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">dq</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.dq" title="Link to this definition">#</a></dt>
+<dd><p>Specific humidity jump at h [kg/kg].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.dz_h">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">dz_h</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.dz_h" title="Link to this definition">#</a></dt>
+<dd><p>Transition layer thickness [m].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.deltaCO2">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">deltaCO2</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.deltaCO2" title="Link to this definition">#</a></dt>
+<dd><p>CO2 jump at h [ppm].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.atmos.dayonly.DayOnlyAtmosphereState.wCO2e">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">wCO2e</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.wCO2e" title="Link to this definition">#</a></dt>
+<dd><p>Entrainment CO2 flux [mgC/m²/s].</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -500,6 +682,32 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.surface"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.surface</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.mixed"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.mixed</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.clouds"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.clouds</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.theta"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.theta</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.q"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.q</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.co2"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.co2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.surf_pressure"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.surf_pressure</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.u"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.u</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.v"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.v</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.ra"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.ra</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.thetasurf"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.thetasurf</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.h_abl"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.h_abl</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.ustar"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.ustar</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.uw"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.uw</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.vw"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.vw</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.wstar"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.wstar</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.thetav"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.thetav</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.top_T"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.top_T</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.top_p"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.top_p</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.cc_mf"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.cc_mf</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.cc_qf"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.cc_qf</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.wCO2M"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.wCO2M</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.cc_frac"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.cc_frac</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.wthetav"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.wthetav</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.wqe"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.wqe</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.dq"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.dq</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.dz_h"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.dz_h</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.deltaCO2"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.deltaCO2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.wCO2e"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereState.wCO2e</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.dayonly.DayOnlyAtmosphereModel"><code class="docutils literal notranslate"><span class="pre">DayOnlyAtmosphereModel</span></code></a><ul class="nav section-nav flex-column">

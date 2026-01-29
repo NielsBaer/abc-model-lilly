@@ -165,8 +165,8 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.atmos.html">Atmosphere</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.dayonly.html">Dayonly</a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.atmos.surface_layer.html">Surface Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="abcmodel.atmos.surface_layer.simple.html">Minimal</a></li>
-<li class="toctree-l4"><a class="reference internal" href="abcmodel.atmos.surface_layer.obukhov.html">Standard</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.atmos.surface_layer.simple.html">Simple</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.atmos.surface_layer.obukhov.html">Obukhov</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.atmos.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -200,7 +200,7 @@
 <li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.bulk_mixed_layer.html">Bulk Mixed Layer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.jarvis_stewart.html">Jarvis Stewart</a></li>
 <li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.standard_radiation.html">Standard Radiation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.cloudy_radiation.html">Standard Radiation W Clouds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.cloudy_radiation.html">Cloudy Radiation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.obukhov_surface_layer.html">Standard Surface Layer</a></li>
 </ul>
 </details></li>
@@ -378,7 +378,35 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractLandState.wCO2"><code class="docutils literal notranslate"><span class="pre">AbstractLandState.wCO2</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.theta"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.theta</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.q"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.q</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.co2"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.co2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.surf_pressure"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.surf_pressure</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.u"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.u</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.v"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.v</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.ra"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.ra</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.thetasurf"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.thetasurf</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.h_abl"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.h_abl</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.ustar"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.ustar</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.uw"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.uw</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.vw"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.vw</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.wstar"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.wstar</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.thetav"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.thetav</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.top_T"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.top_T</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.top_p"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.top_p</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.cc_mf"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.cc_mf</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.cc_qf"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.cc_qf</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.wCO2M"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.wCO2M</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.cc_frac"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.cc_frac</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.wthetav"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.wthetav</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.wqe"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.wqe</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.dq"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.dq</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.dz_h"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.dz_h</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.deltaCO2"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.deltaCO2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.wCO2e"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.wCO2e</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractCoupledState"><code class="docutils literal notranslate"><span class="pre">AbstractCoupledState</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractCoupledState.rad"><code class="docutils literal notranslate"><span class="pre">AbstractCoupledState.rad</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractCoupledState.land"><code class="docutils literal notranslate"><span class="pre">AbstractCoupledState.land</span></code></a></li>
@@ -388,7 +416,10 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractCoupledState.in_srad"><code class="docutils literal notranslate"><span class="pre">AbstractCoupledState.in_srad</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractModel"><code class="docutils literal notranslate"><span class="pre">AbstractModel</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractModel"><code class="docutils literal notranslate"><span class="pre">AbstractModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractModel.init_state"><code class="docutils literal notranslate"><span class="pre">AbstractModel.init_state()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractRadiationModel"><code class="docutils literal notranslate"><span class="pre">AbstractRadiationModel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractRadiationModel.tstart"><code class="docutils literal notranslate"><span class="pre">AbstractRadiationModel.tstart</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractRadiationModel.run"><code class="docutils literal notranslate"><span class="pre">AbstractRadiationModel.run()</span></code></a></li>
@@ -554,6 +585,162 @@ document.write(`
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">abcmodel.abstracts.</span></span><span class="sig-name descname"><span class="pre">AbstractAtmosphereState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/abstracts.html#AbstractAtmosphereState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#abcmodel.abstracts.AbstractState" title="abcmodel.abstracts.AbstractState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractState</span></code></a></p>
 <p>Abstract atmos state.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.theta">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">theta</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.theta" title="Link to this definition">#</a></dt>
+<dd><p>Potential temperature [K].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.q">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">q</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.q" title="Link to this definition">#</a></dt>
+<dd><p>Specific humidity [kg/kg].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.co2">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">co2</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.co2" title="Link to this definition">#</a></dt>
+<dd><p>CO2 concentration [ppmv].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.surf_pressure">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">surf_pressure</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.surf_pressure" title="Link to this definition">#</a></dt>
+<dd><p>Surface pressure [Pa].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.u">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">u</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.u" title="Link to this definition">#</a></dt>
+<dd><p>Zonal wind speed [m/s].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.v">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">v</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.v" title="Link to this definition">#</a></dt>
+<dd><p>Meridional wind speed [m/s].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.ra">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ra</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.ra" title="Link to this definition">#</a></dt>
+<dd><p>Aerodynamic resistance [s/m].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.thetasurf">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">thetasurf</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.thetasurf" title="Link to this definition">#</a></dt>
+<dd><p>Surface potential temperature [K].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.h_abl">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">h_abl</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.h_abl" title="Link to this definition">#</a></dt>
+<dd><p>Boundary layer height [m].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.ustar">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ustar</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.ustar" title="Link to this definition">#</a></dt>
+<dd><p>Friction velocity [m/s].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.uw">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">uw</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.uw" title="Link to this definition">#</a></dt>
+<dd><p>Zonal momentum flux [m²/s²].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.vw">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">vw</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.vw" title="Link to this definition">#</a></dt>
+<dd><p>Meridional momentum flux [m²/s²].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.wstar">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">wstar</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.wstar" title="Link to this definition">#</a></dt>
+<dd><p>Convective velocity scale [m/s].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.thetav">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">thetav</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.thetav" title="Link to this definition">#</a></dt>
+<dd><p>Mixed-layer virtual potential temperature [K].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.top_T">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">top_T</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.top_T" title="Link to this definition">#</a></dt>
+<dd><p>Temperature at top of mixed layer [K].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.top_p">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">top_p</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.top_p" title="Link to this definition">#</a></dt>
+<dd><p>Pressure at top of mixed layer [Pa].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.cc_mf">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">cc_mf</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.cc_mf" title="Link to this definition">#</a></dt>
+<dd><p>Cloud core mass flux [kg/kg/s].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.cc_qf">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">cc_qf</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.cc_qf" title="Link to this definition">#</a></dt>
+<dd><p>Cloud core moisture flux [kg/kg/s].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.wCO2M">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">wCO2M</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.wCO2M" title="Link to this definition">#</a></dt>
+<dd><p>Cloud core CO2 mass flux [mgC/m²/s].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.cc_frac">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">cc_frac</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.cc_frac" title="Link to this definition">#</a></dt>
+<dd><p>Cloud core fraction [-].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.wthetav">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">wthetav</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.wthetav" title="Link to this definition">#</a></dt>
+<dd><p>Virtual potential temperature flux at surface [K m/s].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.wqe">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">wqe</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.wqe" title="Link to this definition">#</a></dt>
+<dd><p>Entrainment moisture flux [kg/kg m/s].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.dq">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">dq</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.dq" title="Link to this definition">#</a></dt>
+<dd><p>Specific humidity jump at h [kg/kg].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.dz_h">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">dz_h</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.dz_h" title="Link to this definition">#</a></dt>
+<dd><p>Transition layer thickness [m].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.deltaCO2">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">deltaCO2</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.deltaCO2" title="Link to this definition">#</a></dt>
+<dd><p>CO2 jump at h [ppm].</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractAtmosphereState.wCO2e">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">wCO2e</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.abstracts.AbstractAtmosphereState.wCO2e" title="Link to this definition">#</a></dt>
+<dd><p>Entrainment CO2 flux [mgC/m²/s].</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -598,8 +785,13 @@ document.write(`
 <dl class="py class">
 <dt class="sig sig-object py" id="abcmodel.abstracts.AbstractModel">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">abcmodel.abstracts.</span></span><span class="sig-name descname"><span class="pre">AbstractModel</span></span><a class="reference internal" href="../../_modules/abcmodel/abstracts.html#AbstractModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.abstracts.AbstractModel" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">StateT</span></code>]</p>
 <p>Abstract model class to define the interface for all models.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.abstracts.AbstractModel.init_state">
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">init_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/abstracts.html#AbstractModel.init_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.abstracts.AbstractModel.init_state" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -736,7 +928,35 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractLandState.wCO2"><code class="docutils literal notranslate"><span class="pre">AbstractLandState.wCO2</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.theta"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.theta</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.q"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.q</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.co2"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.co2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.surf_pressure"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.surf_pressure</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.u"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.u</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.v"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.v</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.ra"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.ra</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.thetasurf"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.thetasurf</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.h_abl"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.h_abl</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.ustar"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.ustar</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.uw"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.uw</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.vw"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.vw</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.wstar"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.wstar</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.thetav"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.thetav</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.top_T"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.top_T</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.top_p"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.top_p</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.cc_mf"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.cc_mf</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.cc_qf"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.cc_qf</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.wCO2M"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.wCO2M</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.cc_frac"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.cc_frac</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.wthetav"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.wthetav</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.wqe"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.wqe</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.dq"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.dq</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.dz_h"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.dz_h</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.deltaCO2"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.deltaCO2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractAtmosphereState.wCO2e"><code class="docutils literal notranslate"><span class="pre">AbstractAtmosphereState.wCO2e</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractCoupledState"><code class="docutils literal notranslate"><span class="pre">AbstractCoupledState</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractCoupledState.rad"><code class="docutils literal notranslate"><span class="pre">AbstractCoupledState.rad</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractCoupledState.land"><code class="docutils literal notranslate"><span class="pre">AbstractCoupledState.land</span></code></a></li>
@@ -746,7 +966,10 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractCoupledState.in_srad"><code class="docutils literal notranslate"><span class="pre">AbstractCoupledState.in_srad</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractModel"><code class="docutils literal notranslate"><span class="pre">AbstractModel</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractModel"><code class="docutils literal notranslate"><span class="pre">AbstractModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractModel.init_state"><code class="docutils literal notranslate"><span class="pre">AbstractModel.init_state()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractRadiationModel"><code class="docutils literal notranslate"><span class="pre">AbstractRadiationModel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractRadiationModel.tstart"><code class="docutils literal notranslate"><span class="pre">AbstractRadiationModel.tstart</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.abstracts.AbstractRadiationModel.run"><code class="docutils literal notranslate"><span class="pre">AbstractRadiationModel.run()</span></code></a></li>

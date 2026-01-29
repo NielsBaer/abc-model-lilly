@@ -164,8 +164,8 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.html">Atmosphere</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.dayonly.html">Dayonly</a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.surface_layer.html">Surface Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.surface_layer.simple.html">Minimal</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html">Standard</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.surface_layer.simple.html">Simple</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html">Obukhov</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -199,7 +199,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcconfigs.class_model.bulk_mixed_layer.html">Bulk Mixed Layer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcconfigs.class_model.jarvis_stewart.html">Jarvis Stewart</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcconfigs.class_model.standard_radiation.html">Standard Radiation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcconfigs.class_model.cloudy_radiation.html">Standard Radiation W Clouds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcconfigs.class_model.cloudy_radiation.html">Cloudy Radiation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcconfigs.class_model.obukhov_surface_layer.html">Standard Surface Layer</a></li>
 </ul>
 </details></li>
@@ -437,38 +437,38 @@ document.write(`
 <span class="sd">        Returns:</span>
 <span class="sd">            The updated state.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">ml_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">mixed</span>
-        <span class="n">sl_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">surface</span>
+        <span class="n">atmos</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span>
+        <span class="n">sl_state</span> <span class="o">=</span> <span class="n">atmos</span><span class="o">.</span><span class="n">surface</span>
 
-        <span class="n">ueff</span> <span class="o">=</span> <span class="n">compute_effective_wind_speed</span><span class="p">(</span><span class="n">ml_state</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">wstar</span><span class="p">)</span>
+        <span class="n">ueff</span> <span class="o">=</span> <span class="n">compute_effective_wind_speed</span><span class="p">(</span><span class="n">atmos</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">wstar</span><span class="p">)</span>
         <span class="n">thetasurf</span> <span class="o">=</span> <span class="n">compute_thetasurf</span><span class="p">(</span>
-            <span class="n">ml_state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
-            <span class="n">ml_state</span><span class="o">.</span><span class="n">wtheta</span><span class="p">,</span>
+            <span class="n">atmos</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">land</span><span class="o">.</span><span class="n">wtheta</span><span class="p">,</span>
             <span class="n">sl_state</span><span class="o">.</span><span class="n">drag_s</span><span class="p">,</span>
             <span class="n">ueff</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">qsurf</span> <span class="o">=</span> <span class="n">compute_qsurf</span><span class="p">(</span>
-            <span class="n">ml_state</span><span class="o">.</span><span class="n">q</span><span class="p">,</span>
+            <span class="n">atmos</span><span class="o">.</span><span class="n">q</span><span class="p">,</span>
             <span class="n">thetasurf</span><span class="p">,</span>
-            <span class="n">ml_state</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">,</span>
+            <span class="n">atmos</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">land</span><span class="o">.</span><span class="n">rs</span><span class="p">,</span>
             <span class="n">sl_state</span><span class="o">.</span><span class="n">drag_s</span><span class="p">,</span>
             <span class="n">ueff</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">thetavsurf</span> <span class="o">=</span> <span class="n">compute_thetavsurf</span><span class="p">(</span><span class="n">thetasurf</span><span class="p">,</span> <span class="n">qsurf</span><span class="p">)</span>
-        <span class="n">zsl</span> <span class="o">=</span> <span class="n">compute_zsl</span><span class="p">(</span><span class="n">ml_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">)</span>
+        <span class="n">zsl</span> <span class="o">=</span> <span class="n">compute_zsl</span><span class="p">(</span><span class="n">atmos</span><span class="o">.</span><span class="n">h_abl</span><span class="p">)</span>
         <span class="n">rib_number</span> <span class="o">=</span> <span class="n">compute_richardson_number</span><span class="p">(</span>
-            <span class="n">ueff</span><span class="p">,</span> <span class="n">zsl</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">thetav</span><span class="p">,</span> <span class="n">thetavsurf</span>
+            <span class="n">ueff</span><span class="p">,</span> <span class="n">zsl</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">thetav</span><span class="p">,</span> <span class="n">thetavsurf</span>
         <span class="p">)</span>
         <span class="n">obukhov_length</span> <span class="o">=</span> <span class="n">ribtol</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">rib_number</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0h</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0m</span><span class="p">)</span>
         <span class="n">drag_m</span> <span class="o">=</span> <span class="n">compute_drag_m</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0m</span><span class="p">)</span>
         <span class="n">drag_s</span> <span class="o">=</span> <span class="n">compute_drag_s</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0h</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0m</span><span class="p">)</span>
         <span class="n">ustar</span> <span class="o">=</span> <span class="n">compute_ustar</span><span class="p">(</span><span class="n">ueff</span><span class="p">,</span> <span class="n">drag_m</span><span class="p">)</span>
-        <span class="n">uw</span> <span class="o">=</span> <span class="n">compute_uw</span><span class="p">(</span><span class="n">ueff</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="n">drag_m</span><span class="p">)</span>
-        <span class="n">vw</span> <span class="o">=</span> <span class="n">compute_vw</span><span class="p">(</span><span class="n">ueff</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">drag_m</span><span class="p">)</span>
+        <span class="n">uw</span> <span class="o">=</span> <span class="n">compute_uw</span><span class="p">(</span><span class="n">ueff</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="n">drag_m</span><span class="p">)</span>
+        <span class="n">vw</span> <span class="o">=</span> <span class="n">compute_vw</span><span class="p">(</span><span class="n">ueff</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">drag_m</span><span class="p">)</span>
         <span class="n">temp_2m</span> <span class="o">=</span> <span class="n">compute_temp_2m</span><span class="p">(</span>
             <span class="n">thetasurf</span><span class="p">,</span>
-            <span class="n">ml_state</span><span class="o">.</span><span class="n">wtheta</span><span class="p">,</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">land</span><span class="o">.</span><span class="n">wtheta</span><span class="p">,</span>
             <span class="n">ustar</span><span class="p">,</span>
             <span class="n">cst</span><span class="o">.</span><span class="n">k</span><span class="p">,</span>
             <span class="n">sl_state</span><span class="o">.</span><span class="n">z0h</span><span class="p">,</span>
@@ -484,9 +484,9 @@ document.write(`
         <span class="p">)</span>
         <span class="n">u2m</span> <span class="o">=</span> <span class="n">compute_u2m</span><span class="p">(</span><span class="n">uw</span><span class="p">,</span> <span class="n">ustar</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0m</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">)</span>
         <span class="n">v2m</span> <span class="o">=</span> <span class="n">compute_v2m</span><span class="p">(</span><span class="n">vw</span><span class="p">,</span> <span class="n">ustar</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0m</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">)</span>
-        <span class="n">e2m</span> <span class="o">=</span> <span class="n">compute_e2m</span><span class="p">(</span><span class="n">q2m</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">)</span>
+        <span class="n">e2m</span> <span class="o">=</span> <span class="n">compute_e2m</span><span class="p">(</span><span class="n">q2m</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">)</span>
         <span class="n">esat2m</span> <span class="o">=</span> <span class="n">compute_esat2m</span><span class="p">(</span><span class="n">temp_2m</span><span class="p">)</span>
-        <span class="n">ra</span> <span class="o">=</span> <span class="n">compute_ra</span><span class="p">(</span><span class="n">ml_state</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">wstar</span><span class="p">,</span> <span class="n">drag_s</span><span class="p">)</span>
+        <span class="n">ra</span> <span class="o">=</span> <span class="n">compute_ra</span><span class="p">(</span><span class="n">atmos</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">wstar</span><span class="p">,</span> <span class="n">drag_s</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
             <span class="n">ustar</span><span class="o">=</span><span class="n">ustar</span><span class="p">,</span>
             <span class="n">drag_m</span><span class="o">=</span><span class="n">drag_m</span><span class="p">,</span>

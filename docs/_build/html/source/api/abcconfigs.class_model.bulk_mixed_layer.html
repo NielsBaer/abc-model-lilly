@@ -165,8 +165,8 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.atmos.html">Atmosphere</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.dayonly.html">Dayonly</a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.atmos.surface_layer.html">Surface Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="abcmodel.atmos.surface_layer.simple.html">Minimal</a></li>
-<li class="toctree-l4"><a class="reference internal" href="abcmodel.atmos.surface_layer.obukhov.html">Standard</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.atmos.surface_layer.simple.html">Simple</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.atmos.surface_layer.obukhov.html">Obukhov</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.atmos.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -200,7 +200,7 @@
 <li class="toctree-l3 current active"><a class="current reference internal" href="#">Bulk Mixed Layer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.jarvis_stewart.html">Jarvis Stewart</a></li>
 <li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.standard_radiation.html">Standard Radiation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.cloudy_radiation.html">Standard Radiation W Clouds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.cloudy_radiation.html">Cloudy Radiation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.obukhov_surface_layer.html">Standard Surface Layer</a></li>
 </ul>
 </details></li>
@@ -370,7 +370,7 @@ document.write(`
 <span id="bulk-mixed-layer"></span><h1>Bulk Mixed Layer<a class="headerlink" href="#module-abcconfigs.class_model.bulk_mixed_layer" title="Link to this heading">#</a></h1>
 <dl class="py data">
 <dt class="sig sig-object py" id="abcconfigs.class_model.bulk_mixed_layer.state_kwargs">
-<span class="sig-prename descclassname"><span class="pre">abcconfigs.class_model.bulk_mixed_layer.</span></span><span class="sig-name descname"><span class="pre">state_kwargs</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'co2':</span> <span class="pre">422.0,</span> <span class="pre">'deltaCO2':</span> <span class="pre">-44.0,</span> <span class="pre">'deltatheta':</span> <span class="pre">1.0,</span> <span class="pre">'dq':</span> <span class="pre">-0.001,</span> <span class="pre">'du':</span> <span class="pre">4.0,</span> <span class="pre">'dv':</span> <span class="pre">4.0,</span> <span class="pre">'dz_h':</span> <span class="pre">150.0,</span> <span class="pre">'h_abl':</span> <span class="pre">200.0,</span> <span class="pre">'q':</span> <span class="pre">0.008,</span> <span class="pre">'surf_pressure':</span> <span class="pre">101300.0,</span> <span class="pre">'theta':</span> <span class="pre">288.0,</span> <span class="pre">'u':</span> <span class="pre">6.0,</span> <span class="pre">'v':</span> <span class="pre">-4.0,</span> <span class="pre">'wCO2':</span> <span class="pre">0.0,</span> <span class="pre">'wtheta':</span> <span class="pre">0.1}</span></span><a class="headerlink" href="#abcconfigs.class_model.bulk_mixed_layer.state_kwargs" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">abcconfigs.class_model.bulk_mixed_layer.</span></span><span class="sig-name descname"><span class="pre">state_kwargs</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'co2':</span> <span class="pre">422.0,</span> <span class="pre">'deltaCO2':</span> <span class="pre">-44.0,</span> <span class="pre">'deltatheta':</span> <span class="pre">1.0,</span> <span class="pre">'dq':</span> <span class="pre">-0.001,</span> <span class="pre">'du':</span> <span class="pre">4.0,</span> <span class="pre">'dv':</span> <span class="pre">4.0,</span> <span class="pre">'dz_h':</span> <span class="pre">150.0,</span> <span class="pre">'h_abl':</span> <span class="pre">200.0,</span> <span class="pre">'q':</span> <span class="pre">0.008,</span> <span class="pre">'surf_pressure':</span> <span class="pre">101300.0,</span> <span class="pre">'theta':</span> <span class="pre">288.0,</span> <span class="pre">'u':</span> <span class="pre">6.0,</span> <span class="pre">'v':</span> <span class="pre">-4.0,</span> <span class="pre">'wCO2':</span> <span class="pre">0.0}</span></span><a class="headerlink" href="#abcconfigs.class_model.bulk_mixed_layer.state_kwargs" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py data">

@@ -1,6 +1,6 @@
 
-Standard
-========
+Obukhov
+=======
 
 .. automodule:: abcmodel.atmos.surface_layer.obukhov
    :members:

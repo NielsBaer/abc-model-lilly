@@ -164,8 +164,8 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="source/api/abcmodel.atmos.html">Atmosphere</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="source/api/abcmodel.atmos.dayonly.html">Dayonly</a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="source/api/abcmodel.atmos.surface_layer.html">Surface Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="source/api/abcmodel.atmos.surface_layer.simple.html">Minimal</a></li>
-<li class="toctree-l4"><a class="reference internal" href="source/api/abcmodel.atmos.surface_layer.obukhov.html">Standard</a></li>
+<li class="toctree-l4"><a class="reference internal" href="source/api/abcmodel.atmos.surface_layer.simple.html">Simple</a></li>
+<li class="toctree-l4"><a class="reference internal" href="source/api/abcmodel.atmos.surface_layer.obukhov.html">Obukhov</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="source/api/abcmodel.atmos.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -199,7 +199,7 @@
 <li class="toctree-l3"><a class="reference internal" href="source/api/abcconfigs.class_model.bulk_mixed_layer.html">Bulk Mixed Layer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="source/api/abcconfigs.class_model.jarvis_stewart.html">Jarvis Stewart</a></li>
 <li class="toctree-l3"><a class="reference internal" href="source/api/abcconfigs.class_model.standard_radiation.html">Standard Radiation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="source/api/abcconfigs.class_model.cloudy_radiation.html">Standard Radiation W Clouds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="source/api/abcconfigs.class_model.cloudy_radiation.html">Cloudy Radiation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="source/api/abcconfigs.class_model.obukhov_surface_layer.html">Standard Surface Layer</a></li>
 </ul>
 </details></li>
@@ -635,22 +635,40 @@ document.write(`
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/api/abcmodel.atmos.clouds.cumulus.html#abcmodel.atmos.clouds.cumulus.CumulusState.cc_frac">cc_frac (abcmodel.atmos.clouds.cumulus.CumulusState attribute)</a>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.cc_frac">cc_frac (abcmodel.abstracts.AbstractAtmosphereState property)</a>
 
       <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractCloudState.cc_frac">(abcmodel.atmos.abstracts.AbstractCloudState attribute)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.clouds.cumulus.html#abcmodel.atmos.clouds.cumulus.CumulusState.cc_frac">(abcmodel.atmos.clouds.cumulus.CumulusState attribute)</a>
+</li>
         <li><a href="source/api/abcmodel.atmos.clouds.no_clouds.html#abcmodel.atmos.clouds.no_clouds.NoCloudState.cc_frac">(abcmodel.atmos.clouds.no_clouds.NoCloudState attribute)</a>
 </li>
-      </ul></li>
-      <li><a href="source/api/abcmodel.atmos.clouds.cumulus.html#abcmodel.atmos.clouds.cumulus.CumulusState.cc_mf">cc_mf (abcmodel.atmos.clouds.cumulus.CumulusState attribute)</a>
-
-      <ul>
-        <li><a href="source/api/abcmodel.atmos.clouds.no_clouds.html#abcmodel.atmos.clouds.no_clouds.NoCloudState.cc_mf">(abcmodel.atmos.clouds.no_clouds.NoCloudState attribute)</a>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.cc_frac">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
 </li>
       </ul></li>
-      <li><a href="source/api/abcmodel.atmos.clouds.cumulus.html#abcmodel.atmos.clouds.cumulus.CumulusState.cc_qf">cc_qf (abcmodel.atmos.clouds.cumulus.CumulusState attribute)</a>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.cc_mf">cc_mf (abcmodel.abstracts.AbstractAtmosphereState property)</a>
 
       <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractCloudState.cc_mf">(abcmodel.atmos.abstracts.AbstractCloudState attribute)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.clouds.cumulus.html#abcmodel.atmos.clouds.cumulus.CumulusState.cc_mf">(abcmodel.atmos.clouds.cumulus.CumulusState attribute)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.clouds.no_clouds.html#abcmodel.atmos.clouds.no_clouds.NoCloudState.cc_mf">(abcmodel.atmos.clouds.no_clouds.NoCloudState attribute)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.cc_mf">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
+</li>
+      </ul></li>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.cc_qf">cc_qf (abcmodel.abstracts.AbstractAtmosphereState property)</a>
+
+      <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractCloudState.cc_qf">(abcmodel.atmos.abstracts.AbstractCloudState attribute)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.clouds.cumulus.html#abcmodel.atmos.clouds.cumulus.CumulusState.cc_qf">(abcmodel.atmos.clouds.cumulus.CumulusState attribute)</a>
+</li>
         <li><a href="source/api/abcmodel.atmos.clouds.no_clouds.html#abcmodel.atmos.clouds.no_clouds.NoCloudState.cc_qf">(abcmodel.atmos.clouds.no_clouds.NoCloudState attribute)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.cc_qf">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
 </li>
       </ul></li>
       <li><a href="source/api/abcmodel.land.ags.html#abcmodel.land.ags.AgsState.ci">ci (abcmodel.land.ags.AgsState attribute)</a>
@@ -669,8 +687,16 @@ document.write(`
 </li>
       <li><a href="source/api/abcmodel.rad.cloudy.html#abcmodel.rad.cloudy.CloudyRadiationState">CloudyRadiationState (class in abcmodel.rad.cloudy)</a>
 </li>
-      <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.co2">co2 (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.co2">co2 (abcmodel.abstracts.AbstractAtmosphereState property)</a>
+
+      <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractMixedLayerState.co2">(abcmodel.atmos.abstracts.AbstractMixedLayerState attribute)</a>
 </li>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.co2">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.co2">(abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+</li>
+      </ul></li>
       <li><a href="source/api/abcmodel.land.ags.html#abcmodel.land.ags.AgsState.co2abs">co2abs (abcmodel.land.ags.AgsState attribute)</a>
 </li>
       <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.co2tend">co2tend (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
@@ -769,6 +795,8 @@ document.write(`
 </li>
       <li><a href="source/api/abcmodel.atmos.mixed_layer.stats.html#abcmodel.atmos.mixed_layer.stats.AbstractStandardStatsModel.compute_lcl">compute_lcl() (abcmodel.atmos.mixed_layer.stats.AbstractStandardStatsModel method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/api/abcmodel.land.standard.html#abcmodel.land.standard.AbstractStandardLandModel.compute_le">compute_le() (abcmodel.land.standard.AbstractStandardLandModel method)</a>
 </li>
       <li><a href="source/api/abcmodel.land.standard.html#abcmodel.land.standard.AbstractStandardLandModel.compute_le_liq">compute_le_liq() (abcmodel.land.standard.AbstractStandardLandModel method)</a>
@@ -781,8 +809,6 @@ document.write(`
 </li>
       <li><a href="source/api/abcmodel.land.standard.html#abcmodel.land.standard.AbstractStandardLandModel.compute_le_veg">compute_le_veg() (abcmodel.land.standard.AbstractStandardLandModel method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/api/abcmodel.land.ags.html#abcmodel.land.ags.AgsModel.compute_light_use_efficiency">compute_light_use_efficiency() (abcmodel.land.ags.AgsModel method)</a>
 </li>
       <li><a href="source/api/abcmodel.land.ags.html#abcmodel.land.ags.AgsModel.compute_max_gross_primary_production">compute_max_gross_primary_production() (abcmodel.land.ags.AgsModel method)</a>
@@ -933,8 +959,16 @@ document.write(`
 </li>
       <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState">DayOnlyAtmosphereState (class in abcmodel.atmos.dayonly)</a>
 </li>
-      <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.deltaCO2">deltaCO2 (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.deltaCO2">deltaCO2 (abcmodel.abstracts.AbstractAtmosphereState property)</a>
+
+      <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractMixedLayerState.deltaCO2">(abcmodel.atmos.abstracts.AbstractMixedLayerState attribute)</a>
 </li>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.deltaCO2">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.deltaCO2">(abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+</li>
+      </ul></li>
       <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.deltaCO2tend">deltaCO2tend (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
 </li>
       <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.deltatheta">deltatheta (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
@@ -943,8 +977,18 @@ document.write(`
 </li>
       <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.deltathetav">deltathetav (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
 </li>
-      <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.dq">dq (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.dq">dq (abcmodel.abstracts.AbstractAtmosphereState property)</a>
+
+      <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractMixedLayerState.dq">(abcmodel.atmos.abstracts.AbstractMixedLayerState attribute)</a>
 </li>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.dq">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.dq">(abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractLandState.dqsatdT">dqsatdT (abcmodel.abstracts.AbstractLandState attribute)</a>
 
       <ul>
@@ -953,8 +997,6 @@ document.write(`
         <li><a href="source/api/abcmodel.land.standard.html#abcmodel.land.standard.StandardLandState.dqsatdT">(abcmodel.land.standard.StandardLandState attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.dqtend">dqtend (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
 </li>
       <li><a href="source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState.drag_m">drag_m (abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState attribute)</a>
@@ -969,8 +1011,16 @@ document.write(`
 </li>
       <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.dvtend">dvtend (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
 </li>
-      <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.dz_h">dz_h (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.dz_h">dz_h (abcmodel.abstracts.AbstractAtmosphereState property)</a>
+
+      <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractMixedLayerState.dz_h">(abcmodel.atmos.abstracts.AbstractMixedLayerState attribute)</a>
 </li>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.dz_h">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.dz_h">(abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+</li>
+      </ul></li>
       <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.dztend">dztend (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
 </li>
   </ul></td>
@@ -1021,8 +1071,16 @@ document.write(`
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.h_abl">h_abl (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.h_abl">h_abl (abcmodel.abstracts.AbstractAtmosphereState property)</a>
+
+      <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractMixedLayerState.h_abl">(abcmodel.atmos.abstracts.AbstractMixedLayerState attribute)</a>
 </li>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.h_abl">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.h_abl">(abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.h_abl_tend">h_abl_tend (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
@@ -1049,9 +1107,11 @@ document.write(`
         <li><a href="source/api/abcmodel.rad.standard.html#abcmodel.rad.standard.StandardRadiationState.in_srad">(abcmodel.rad.standard.StandardRadiationState attribute)</a>
 </li>
       </ul></li>
-      <li><a href="source/api/abcmodel.atmos.clouds.cumulus.html#abcmodel.atmos.clouds.cumulus.CumulusModel.init_state">init_state() (abcmodel.atmos.clouds.cumulus.CumulusModel method)</a>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractModel.init_state">init_state() (abcmodel.abstracts.AbstractModel method)</a>
 
       <ul>
+        <li><a href="source/api/abcmodel.atmos.clouds.cumulus.html#abcmodel.atmos.clouds.cumulus.CumulusModel.init_state">(abcmodel.atmos.clouds.cumulus.CumulusModel method)</a>
+</li>
         <li><a href="source/api/abcmodel.atmos.clouds.no_clouds.html#abcmodel.atmos.clouds.no_clouds.NoCloudModel.init_state">(abcmodel.atmos.clouds.no_clouds.NoCloudModel method)</a>
 </li>
         <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereModel.init_state">(abcmodel.atmos.dayonly.DayOnlyAtmosphereModel method)</a>
@@ -1304,8 +1364,16 @@ document.write(`
 <h2 id="Q">Q</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.q">q (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.q">q (abcmodel.abstracts.AbstractAtmosphereState property)</a>
+
+      <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractMixedLayerState.q">(abcmodel.atmos.abstracts.AbstractMixedLayerState attribute)</a>
 </li>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.q">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.q">(abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+</li>
+      </ul></li>
       <li><a href="source/api/abcmodel.atmos.clouds.cumulus.html#abcmodel.atmos.clouds.cumulus.CumulusState.q2_h">q2_h (abcmodel.atmos.clouds.cumulus.CumulusState attribute)</a>
 
       <ul>
@@ -1314,6 +1382,8 @@ document.write(`
       </ul></li>
       <li><a href="source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState.q2m">q2m (abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractLandState.qsat">qsat (abcmodel.abstracts.AbstractLandState attribute)</a>
 
       <ul>
@@ -1322,8 +1392,6 @@ document.write(`
         <li><a href="source/api/abcmodel.land.standard.html#abcmodel.land.standard.StandardLandState.qsat">(abcmodel.land.standard.StandardLandState attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractLandState.qsatsurf">qsatsurf (abcmodel.abstracts.AbstractLandState attribute)</a>
 
       <ul>
@@ -1342,9 +1410,13 @@ document.write(`
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractSurfaceLayerState.ra">ra (abcmodel.atmos.abstracts.AbstractSurfaceLayerState attribute)</a>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.ra">ra (abcmodel.abstracts.AbstractAtmosphereState property)</a>
 
       <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractSurfaceLayerState.ra">(abcmodel.atmos.abstracts.AbstractSurfaceLayerState attribute)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.ra">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
+</li>
         <li><a href="source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState.ra">(abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState attribute)</a>
 </li>
         <li><a href="source/api/abcmodel.atmos.surface_layer.simple.html#abcmodel.atmos.surface_layer.simple.SimpleSurfaceLayerState.ra">(abcmodel.atmos.surface_layer.simple.SimpleSurfaceLayerState attribute)</a>
@@ -1378,10 +1450,10 @@ document.write(`
       </ul></li>
       <li><a href="source/api/abcmodel.land.ags.html#abcmodel.land.ags.AgsState.rsCO2">rsCO2 (abcmodel.land.ags.AgsState attribute)</a>
 </li>
-      <li><a href="source/api/abcmodel.land.standard.html#abcmodel.land.standard.StandardLandState.rssoil">rssoil (abcmodel.land.standard.StandardLandState attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/api/abcmodel.land.standard.html#abcmodel.land.standard.StandardLandState.rssoil">rssoil (abcmodel.land.standard.StandardLandState attribute)</a>
+</li>
       <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereModel.run">run() (abcmodel.abstracts.AbstractAtmosphereModel method)</a>
 
       <ul>
@@ -1452,8 +1524,6 @@ document.write(`
         <li><a href="source/api/abcconfigs.class_model.standard_radiation.html#abcconfigs.class_model.standard_radiation.state_kwargs">(in module abcconfigs.class_model.standard_radiation)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereModel.statistics">statistics() (abcmodel.abstracts.AbstractAtmosphereModel method)</a>
 
       <ul>
@@ -1464,6 +1534,8 @@ document.write(`
         <li><a href="source/api/abcmodel.atmos.mixed_layer.stats.html#abcmodel.atmos.mixed_layer.stats.AbstractStandardStatsModel.statistics">(abcmodel.atmos.mixed_layer.stats.AbstractStandardStatsModel method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/api/abcconfigs.aridities.arid.html#abcconfigs.aridities.arid.std_rad_model_kwargs">std_rad_model_kwargs (in module abcconfigs.aridities.arid)</a>
 
       <ul>
@@ -1476,8 +1548,16 @@ document.write(`
         <li><a href="source/api/abcconfigs.aridities.standard.html#abcconfigs.aridities.standard.std_rad_state_kwargs">(in module abcconfigs.aridities.standard)</a>
 </li>
       </ul></li>
-      <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.surf_pressure">surf_pressure (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.surf_pressure">surf_pressure (abcmodel.abstracts.AbstractAtmosphereState property)</a>
+
+      <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractMixedLayerState.surf_pressure">(abcmodel.atmos.abstracts.AbstractMixedLayerState attribute)</a>
 </li>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.surf_pressure">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.surf_pressure">(abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+</li>
+      </ul></li>
       <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractLandState.surf_temp">surf_temp (abcmodel.abstracts.AbstractLandState attribute)</a>
 
       <ul>
@@ -1502,18 +1582,42 @@ document.write(`
 </li>
       <li><a href="source/api/abcmodel.land.standard.html#abcmodel.land.standard.StandardLandState.temp_soil_tend">temp_soil_tend (abcmodel.land.standard.StandardLandState attribute)</a>
 </li>
-      <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.theta">theta (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.theta">theta (abcmodel.abstracts.AbstractAtmosphereState property)</a>
+
+      <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractMixedLayerState.theta">(abcmodel.atmos.abstracts.AbstractMixedLayerState attribute)</a>
 </li>
-      <li><a href="source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState.thetasurf">thetasurf (abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState attribute)</a>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.theta">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
 </li>
+        <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.theta">(abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.thetasurf">thetasurf (abcmodel.abstracts.AbstractAtmosphereState property)</a>
+
+      <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractSurfaceLayerState.thetasurf">(abcmodel.atmos.abstracts.AbstractSurfaceLayerState attribute)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.thetasurf">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState.thetasurf">(abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState attribute)</a>
+</li>
+      </ul></li>
       <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.thetatend">thetatend (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
 </li>
-      <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.thetav">thetav (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.thetav">thetav (abcmodel.abstracts.AbstractAtmosphereState property)</a>
+
+      <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractMixedLayerState.thetav">(abcmodel.atmos.abstracts.AbstractMixedLayerState attribute)</a>
 </li>
-      <li><a href="source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState.thetavsurf">thetavsurf (abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState attribute)</a>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.thetav">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
 </li>
+        <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.thetav">(abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState.thetavsurf">thetavsurf (abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState attribute)</a>
+</li>
       <li><a href="source/api/abcmodel.integration.html#abcmodel.integration.timestep">timestep() (in module abcmodel.integration)</a>
 </li>
       <li><a href="source/api/abcmodel.atmos.clouds.cumulus.html#abcmodel.atmos.clouds.cumulus.CumulusState.top_CO22">top_CO22 (abcmodel.atmos.clouds.cumulus.CumulusState attribute)</a>
@@ -1522,12 +1626,28 @@ document.write(`
         <li><a href="source/api/abcmodel.atmos.clouds.no_clouds.html#abcmodel.atmos.clouds.no_clouds.NoCloudState.top_CO22">(abcmodel.atmos.clouds.no_clouds.NoCloudState attribute)</a>
 </li>
       </ul></li>
-      <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.top_p">top_p (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.top_p">top_p (abcmodel.abstracts.AbstractAtmosphereState property)</a>
+
+      <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractMixedLayerState.top_p">(abcmodel.atmos.abstracts.AbstractMixedLayerState attribute)</a>
 </li>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.top_p">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.top_p">(abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+</li>
+      </ul></li>
       <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.top_rh">top_rh (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
 </li>
-      <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.top_T">top_T (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.top_T">top_T (abcmodel.abstracts.AbstractAtmosphereState property)</a>
+
+      <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractMixedLayerState.top_T">(abcmodel.atmos.abstracts.AbstractMixedLayerState attribute)</a>
 </li>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.top_T">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.top_T">(abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+</li>
+      </ul></li>
       <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractCoupledState.total_water_mass">total_water_mass (abcmodel.abstracts.AbstractCoupledState attribute)</a>
 
       <ul>
@@ -1542,8 +1662,16 @@ document.write(`
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.u">u (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.u">u (abcmodel.abstracts.AbstractAtmosphereState property)</a>
+
+      <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractMixedLayerState.u">(abcmodel.atmos.abstracts.AbstractMixedLayerState attribute)</a>
 </li>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.u">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.u">(abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+</li>
+      </ul></li>
       <li><a href="source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState.u2m">u2m (abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState attribute)</a>
 </li>
       <li><a href="source/api/abcmodel.land.ags.html#abcmodel.land.ags.AgsModel.update_co2_flux">update_co2_flux() (abcmodel.land.ags.AgsModel method)</a>
@@ -1564,17 +1692,29 @@ document.write(`
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState.ustar">ustar (abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState attribute)</a>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.ustar">ustar (abcmodel.abstracts.AbstractAtmosphereState property)</a>
 
       <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractSurfaceLayerState.ustar">(abcmodel.atmos.abstracts.AbstractSurfaceLayerState attribute)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.ustar">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState.ustar">(abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState attribute)</a>
+</li>
         <li><a href="source/api/abcmodel.atmos.surface_layer.simple.html#abcmodel.atmos.surface_layer.simple.SimpleSurfaceLayerState.ustar">(abcmodel.atmos.surface_layer.simple.SimpleSurfaceLayerState attribute)</a>
 </li>
       </ul></li>
       <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.utend">utend (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
 </li>
-      <li><a href="source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState.uw">uw (abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState attribute)</a>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.uw">uw (abcmodel.abstracts.AbstractAtmosphereState property)</a>
 
       <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractSurfaceLayerState.uw">(abcmodel.atmos.abstracts.AbstractSurfaceLayerState attribute)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.uw">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState.uw">(abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState attribute)</a>
+</li>
         <li><a href="source/api/abcmodel.atmos.surface_layer.simple.html#abcmodel.atmos.surface_layer.simple.SimpleSurfaceLayerState.uw">(abcmodel.atmos.surface_layer.simple.SimpleSurfaceLayerState attribute)</a>
 </li>
       </ul></li>
@@ -1584,17 +1724,31 @@ document.write(`
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.v">v (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.v">v (abcmodel.abstracts.AbstractAtmosphereState property)</a>
+
+      <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractMixedLayerState.v">(abcmodel.atmos.abstracts.AbstractMixedLayerState attribute)</a>
 </li>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.v">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.v">(abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+</li>
+      </ul></li>
       <li><a href="source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState.v2m">v2m (abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.vtend">vtend (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
 </li>
-      <li><a href="source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState.vw">vw (abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState attribute)</a>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.vw">vw (abcmodel.abstracts.AbstractAtmosphereState property)</a>
 
       <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractSurfaceLayerState.vw">(abcmodel.atmos.abstracts.AbstractSurfaceLayerState attribute)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.vw">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState.vw">(abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState attribute)</a>
+</li>
         <li><a href="source/api/abcmodel.atmos.surface_layer.simple.html#abcmodel.atmos.surface_layer.simple.SimpleSurfaceLayerState.vw">(abcmodel.atmos.surface_layer.simple.SimpleSurfaceLayerState attribute)</a>
 </li>
       </ul></li>
@@ -1615,6 +1769,8 @@ document.write(`
       <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractLandState.wCO2">wCO2 (abcmodel.abstracts.AbstractLandState attribute)</a>
 
       <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractMixedLayerState.wCO2">(abcmodel.atmos.abstracts.AbstractMixedLayerState attribute)</a>
+</li>
         <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.wCO2">(abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
 </li>
         <li><a href="source/api/abcmodel.land.ags.html#abcmodel.land.ags.AgsState.wCO2">(abcmodel.land.ags.AgsState attribute)</a>
@@ -1626,12 +1782,26 @@ document.write(`
       </ul></li>
       <li><a href="source/api/abcmodel.land.ags.html#abcmodel.land.ags.AgsState.wCO2A">wCO2A (abcmodel.land.ags.AgsState attribute)</a>
 </li>
-      <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.wCO2e">wCO2e (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
-</li>
-      <li><a href="source/api/abcmodel.atmos.clouds.cumulus.html#abcmodel.atmos.clouds.cumulus.CumulusState.wCO2M">wCO2M (abcmodel.atmos.clouds.cumulus.CumulusState attribute)</a>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.wCO2e">wCO2e (abcmodel.abstracts.AbstractAtmosphereState property)</a>
 
       <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractMixedLayerState.wCO2e">(abcmodel.atmos.abstracts.AbstractMixedLayerState attribute)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.wCO2e">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.wCO2e">(abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.wCO2M">wCO2M (abcmodel.abstracts.AbstractAtmosphereState property)</a>
+
+      <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractCloudState.wCO2M">(abcmodel.atmos.abstracts.AbstractCloudState attribute)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.clouds.cumulus.html#abcmodel.atmos.clouds.cumulus.CumulusState.wCO2M">(abcmodel.atmos.clouds.cumulus.CumulusState attribute)</a>
+</li>
         <li><a href="source/api/abcmodel.atmos.clouds.no_clouds.html#abcmodel.atmos.clouds.no_clouds.NoCloudState.wCO2M">(abcmodel.atmos.clouds.no_clouds.NoCloudState attribute)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.wCO2M">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
 </li>
       </ul></li>
       <li><a href="source/api/abcmodel.land.ags.html#abcmodel.land.ags.AgsState.wCO2R">wCO2R (abcmodel.land.ags.AgsState attribute)</a>
@@ -1648,10 +1818,10 @@ document.write(`
         <li><a href="source/api/abcmodel.land.standard.html#abcmodel.land.standard.StandardLandState.wg">(abcmodel.land.standard.StandardLandState attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/api/abcmodel.land.standard.html#abcmodel.land.standard.StandardLandState.wgtend">wgtend (abcmodel.land.standard.StandardLandState attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractLandState.wl">wl (abcmodel.abstracts.AbstractLandState attribute)</a>
 
       <ul>
@@ -1665,21 +1835,39 @@ document.write(`
       <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractLandState.wq">wq (abcmodel.abstracts.AbstractLandState attribute)</a>
 
       <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractMixedLayerState.wq">(abcmodel.atmos.abstracts.AbstractMixedLayerState attribute)</a>
+</li>
         <li><a href="source/api/abcmodel.land.minimal.html#abcmodel.land.minimal.MinimalLandSurfaceState.wq">(abcmodel.land.minimal.MinimalLandSurfaceState attribute)</a>
 </li>
         <li><a href="source/api/abcmodel.land.standard.html#abcmodel.land.standard.StandardLandState.wq">(abcmodel.land.standard.StandardLandState attribute)</a>
 </li>
       </ul></li>
-      <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.wqe">wqe (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.wqe">wqe (abcmodel.abstracts.AbstractAtmosphereState property)</a>
+
+      <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractMixedLayerState.wqe">(abcmodel.atmos.abstracts.AbstractMixedLayerState attribute)</a>
 </li>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.wqe">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.wqe">(abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+</li>
+      </ul></li>
       <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.ws">ws (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
 </li>
-      <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.wstar">wstar (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.wstar">wstar (abcmodel.abstracts.AbstractAtmosphereState property)</a>
+
+      <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractMixedLayerState.wstar">(abcmodel.atmos.abstracts.AbstractMixedLayerState attribute)</a>
 </li>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.wstar">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.wstar">(abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+</li>
+      </ul></li>
       <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractLandState.wtheta">wtheta (abcmodel.abstracts.AbstractLandState attribute)</a>
 
       <ul>
-        <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.wtheta">(abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractMixedLayerState.wtheta">(abcmodel.atmos.abstracts.AbstractMixedLayerState attribute)</a>
 </li>
         <li><a href="source/api/abcmodel.land.minimal.html#abcmodel.land.minimal.MinimalLandSurfaceState.wtheta">(abcmodel.land.minimal.MinimalLandSurfaceState attribute)</a>
 </li>
@@ -1688,8 +1876,16 @@ document.write(`
       </ul></li>
       <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.wthetae">wthetae (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
 </li>
-      <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.wthetav">wthetav (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+      <li><a href="source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState.wthetav">wthetav (abcmodel.abstracts.AbstractAtmosphereState property)</a>
+
+      <ul>
+        <li><a href="source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractMixedLayerState.wthetav">(abcmodel.atmos.abstracts.AbstractMixedLayerState attribute)</a>
 </li>
+        <li><a href="source/api/abcmodel.atmos.dayonly.html#abcmodel.atmos.dayonly.DayOnlyAtmosphereState.wthetav">(abcmodel.atmos.dayonly.DayOnlyAtmosphereState property)</a>
+</li>
+        <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.wthetav">(abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
+</li>
+      </ul></li>
       <li><a href="source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState.wthetave">wthetave (abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState attribute)</a>
 </li>
   </ul></td>

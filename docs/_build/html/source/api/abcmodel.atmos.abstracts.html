@@ -165,8 +165,8 @@
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="abcmodel.atmos.html">Atmosphere</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.dayonly.html">Dayonly</a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.atmos.surface_layer.html">Surface Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="abcmodel.atmos.surface_layer.simple.html">Minimal</a></li>
-<li class="toctree-l4"><a class="reference internal" href="abcmodel.atmos.surface_layer.obukhov.html">Standard</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.atmos.surface_layer.simple.html">Simple</a></li>
+<li class="toctree-l4"><a class="reference internal" href="abcmodel.atmos.surface_layer.obukhov.html">Obukhov</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.atmos.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -200,7 +200,7 @@
 <li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.bulk_mixed_layer.html">Bulk Mixed Layer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.jarvis_stewart.html">Jarvis Stewart</a></li>
 <li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.standard_radiation.html">Standard Radiation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.cloudy_radiation.html">Standard Radiation W Clouds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.cloudy_radiation.html">Cloudy Radiation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.obukhov_surface_layer.html">Standard Surface Layer</a></li>
 </ul>
 </details></li>
@@ -355,10 +355,42 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractSurfaceLayerState"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceLayerState</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractSurfaceLayerState.ra"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceLayerState.ra</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractSurfaceLayerState.thetasurf"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceLayerState.thetasurf</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractSurfaceLayerState.ustar"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceLayerState.ustar</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractSurfaceLayerState.uw"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceLayerState.uw</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractSurfaceLayerState.vw"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceLayerState.vw</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractCloudState"><code class="docutils literal notranslate"><span class="pre">AbstractCloudState</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.h_abl"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.h_abl</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.theta"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.theta</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.q"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.q</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.co2"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.co2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.u"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.u</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.v"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.v</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.surf_pressure"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.surf_pressure</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.wstar"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.wstar</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.thetav"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.thetav</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.top_T"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.top_T</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.top_p"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.top_p</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.wthetav"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.wthetav</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.wqe"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.wqe</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.dq"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.dq</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.dz_h"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.dz_h</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.deltaCO2"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.deltaCO2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.wCO2e"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.wCO2e</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.wtheta"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.wtheta</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.wq"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.wq</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.wCO2"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.wCO2</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractCloudState"><code class="docutils literal notranslate"><span class="pre">AbstractCloudState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractCloudState.cc_mf"><code class="docutils literal notranslate"><span class="pre">AbstractCloudState.cc_mf</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractCloudState.cc_qf"><code class="docutils literal notranslate"><span class="pre">AbstractCloudState.cc_qf</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractCloudState.wCO2M"><code class="docutils literal notranslate"><span class="pre">AbstractCloudState.wCO2M</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractCloudState.cc_frac"><code class="docutils literal notranslate"><span class="pre">AbstractCloudState.cc_frac</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractSurfaceLayerModel"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceLayerModel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractSurfaceLayerModel.run"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceLayerModel.run()</span></code></a></li>
 </ul>
@@ -398,6 +430,30 @@ document.write(`
 <dd><p>Aerodynamic resistance [s/m].</p>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractSurfaceLayerState.thetasurf">
+<span class="sig-name descname"><span class="pre">thetasurf</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractSurfaceLayerState.thetasurf" title="Link to this definition">#</a></dt>
+<dd><p>Surface potential temperature [K].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractSurfaceLayerState.ustar">
+<span class="sig-name descname"><span class="pre">ustar</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractSurfaceLayerState.ustar" title="Link to this definition">#</a></dt>
+<dd><p>Friction velocity [m/s].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractSurfaceLayerState.uw">
+<span class="sig-name descname"><span class="pre">uw</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractSurfaceLayerState.uw" title="Link to this definition">#</a></dt>
+<dd><p>Zonal momentum flux [m²/s²].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractSurfaceLayerState.vw">
+<span class="sig-name descname"><span class="pre">vw</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractSurfaceLayerState.vw" title="Link to this definition">#</a></dt>
+<dd><p>Meridional momentum flux [m²/s²].</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -405,6 +461,126 @@ document.write(`
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">abcmodel.atmos.abstracts.</span></span><span class="sig-name descname"><span class="pre">AbstractMixedLayerState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/atmos/abstracts.html#AbstractMixedLayerState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="abcmodel.abstracts.html#abcmodel.abstracts.AbstractState" title="abcmodel.abstracts.AbstractState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractState</span></code></a></p>
 <p>Abstract mixed layer state.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractMixedLayerState.h_abl">
+<span class="sig-name descname"><span class="pre">h_abl</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.h_abl" title="Link to this definition">#</a></dt>
+<dd><p>Atmospheric boundary layer (ABL) height [m].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractMixedLayerState.theta">
+<span class="sig-name descname"><span class="pre">theta</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.theta" title="Link to this definition">#</a></dt>
+<dd><p>Mixed-layer potential temperature [K].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractMixedLayerState.q">
+<span class="sig-name descname"><span class="pre">q</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.q" title="Link to this definition">#</a></dt>
+<dd><p>Mixed-layer specific humidity [kg/kg].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractMixedLayerState.co2">
+<span class="sig-name descname"><span class="pre">co2</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.co2" title="Link to this definition">#</a></dt>
+<dd><p>Mixed-layer CO2 [ppm].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractMixedLayerState.u">
+<span class="sig-name descname"><span class="pre">u</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.u" title="Link to this definition">#</a></dt>
+<dd><p>Mixed-layer u-wind speed [m/s].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractMixedLayerState.v">
+<span class="sig-name descname"><span class="pre">v</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.v" title="Link to this definition">#</a></dt>
+<dd><p>Mixed-layer v-wind speed [m/s].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractMixedLayerState.surf_pressure">
+<span class="sig-name descname"><span class="pre">surf_pressure</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.surf_pressure" title="Link to this definition">#</a></dt>
+<dd><p>Surface pressure [Pa].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractMixedLayerState.wstar">
+<span class="sig-name descname"><span class="pre">wstar</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.wstar" title="Link to this definition">#</a></dt>
+<dd><p>Convective velocity scale [m/s].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractMixedLayerState.thetav">
+<span class="sig-name descname"><span class="pre">thetav</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.thetav" title="Link to this definition">#</a></dt>
+<dd><p>Mixed-layer virtual potential temperature [K].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractMixedLayerState.top_T">
+<span class="sig-name descname"><span class="pre">top_T</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.top_T" title="Link to this definition">#</a></dt>
+<dd><p>Temperature at top of mixed layer [K].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractMixedLayerState.top_p">
+<span class="sig-name descname"><span class="pre">top_p</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.top_p" title="Link to this definition">#</a></dt>
+<dd><p>Pressure at top of mixed layer [Pa].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractMixedLayerState.wthetav">
+<span class="sig-name descname"><span class="pre">wthetav</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.wthetav" title="Link to this definition">#</a></dt>
+<dd><p>Virtual potential temperature flux at surface [K m/s].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractMixedLayerState.wqe">
+<span class="sig-name descname"><span class="pre">wqe</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.wqe" title="Link to this definition">#</a></dt>
+<dd><p>Entrainment moisture flux [kg/kg m/s].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractMixedLayerState.dq">
+<span class="sig-name descname"><span class="pre">dq</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.dq" title="Link to this definition">#</a></dt>
+<dd><p>Specific humidity jump at h [kg/kg].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractMixedLayerState.dz_h">
+<span class="sig-name descname"><span class="pre">dz_h</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.dz_h" title="Link to this definition">#</a></dt>
+<dd><p>Transition layer thickness [m].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractMixedLayerState.deltaCO2">
+<span class="sig-name descname"><span class="pre">deltaCO2</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.deltaCO2" title="Link to this definition">#</a></dt>
+<dd><p>CO2 jump at h [ppm].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractMixedLayerState.wCO2e">
+<span class="sig-name descname"><span class="pre">wCO2e</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.wCO2e" title="Link to this definition">#</a></dt>
+<dd><p>Entrainment CO2 flux [mgC/m²/s].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractMixedLayerState.wtheta">
+<span class="sig-name descname"><span class="pre">wtheta</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.wtheta" title="Link to this definition">#</a></dt>
+<dd><p>Surface kinematic heat flux [K m/s].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractMixedLayerState.wq">
+<span class="sig-name descname"><span class="pre">wq</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.wq" title="Link to this definition">#</a></dt>
+<dd><p>Surface kinematic moisture flux [kg/kg m/s].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractMixedLayerState.wCO2">
+<span class="sig-name descname"><span class="pre">wCO2</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.wCO2" title="Link to this definition">#</a></dt>
+<dd><p>Surface kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1].</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -412,6 +588,30 @@ document.write(`
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">abcmodel.atmos.abstracts.</span></span><span class="sig-name descname"><span class="pre">AbstractCloudState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/atmos/abstracts.html#AbstractCloudState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractCloudState" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="abcmodel.abstracts.html#abcmodel.abstracts.AbstractState" title="abcmodel.abstracts.AbstractState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractState</span></code></a></p>
 <p>Abstract cloud state.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractCloudState.cc_mf">
+<span class="sig-name descname"><span class="pre">cc_mf</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractCloudState.cc_mf" title="Link to this definition">#</a></dt>
+<dd><p>Cloud core mass flux [kg/kg/s].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractCloudState.cc_qf">
+<span class="sig-name descname"><span class="pre">cc_qf</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractCloudState.cc_qf" title="Link to this definition">#</a></dt>
+<dd><p>Cloud core moisture flux [kg/kg/s].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractCloudState.wCO2M">
+<span class="sig-name descname"><span class="pre">wCO2M</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractCloudState.wCO2M" title="Link to this definition">#</a></dt>
+<dd><p>Cloud core CO2 mass flux [mgC/m²/s].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.abstracts.AbstractCloudState.cc_frac">
+<span class="sig-name descname"><span class="pre">cc_frac</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.abstracts.AbstractCloudState.cc_frac" title="Link to this definition">#</a></dt>
+<dd><p>Cloud core fraction [-].</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -509,10 +709,42 @@ document.write(`
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractSurfaceLayerState"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceLayerState</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractSurfaceLayerState.ra"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceLayerState.ra</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractSurfaceLayerState.thetasurf"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceLayerState.thetasurf</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractSurfaceLayerState.ustar"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceLayerState.ustar</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractSurfaceLayerState.uw"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceLayerState.uw</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractSurfaceLayerState.vw"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceLayerState.vw</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractCloudState"><code class="docutils literal notranslate"><span class="pre">AbstractCloudState</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.h_abl"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.h_abl</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.theta"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.theta</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.q"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.q</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.co2"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.co2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.u"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.u</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.v"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.v</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.surf_pressure"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.surf_pressure</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.wstar"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.wstar</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.thetav"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.thetav</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.top_T"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.top_T</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.top_p"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.top_p</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.wthetav"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.wthetav</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.wqe"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.wqe</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.dq"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.dq</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.dz_h"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.dz_h</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.deltaCO2"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.deltaCO2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.wCO2e"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.wCO2e</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.wtheta"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.wtheta</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.wq"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.wq</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractMixedLayerState.wCO2"><code class="docutils literal notranslate"><span class="pre">AbstractMixedLayerState.wCO2</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractCloudState"><code class="docutils literal notranslate"><span class="pre">AbstractCloudState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractCloudState.cc_mf"><code class="docutils literal notranslate"><span class="pre">AbstractCloudState.cc_mf</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractCloudState.cc_qf"><code class="docutils literal notranslate"><span class="pre">AbstractCloudState.cc_qf</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractCloudState.wCO2M"><code class="docutils literal notranslate"><span class="pre">AbstractCloudState.wCO2M</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractCloudState.cc_frac"><code class="docutils literal notranslate"><span class="pre">AbstractCloudState.cc_frac</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractSurfaceLayerModel"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceLayerModel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.abstracts.AbstractSurfaceLayerModel.run"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceLayerModel.run()</span></code></a></li>
 </ul>
