@@ -406,17 +406,8 @@ def ribtol(zsl: Array, rib_number: Array, z0h: Array, z0m: Array):
     perturbation = 0.001
     max_oblen = 1e4
 
-    def cond_fun(carry):
+    def body_fun_scan(carry, _):
         oblen, oblen0 = carry
-        res = jnp.logical_and(
-            jnp.abs(oblen - oblen0) > convergence_threshold,
-            jnp.abs(oblen) < max_oblen,
-        ).squeeze()
-        return res
-
-    def body_fun(carry):
-        oblen, _ = carry
-        oblen0 = oblen
 
         # calculate function value at current estimate
         fx = compute_rib_function(zsl, oblen, rib_number, z0h, z0m)
@@ -431,12 +422,26 @@ def ribtol(zsl: Array, rib_number: Array, z0h: Array, z0m: Array):
         fxdif = (fx_start - fx_end) / (oblen_start - oblen_end)
 
         # Newton–Raphson update
-        oblen_new = oblen - fx / fxdif
+        # clamp update to avoid exploding values
+        update = fx / fxdif
+        # simple clamping logic if needed, but bounded iterations help safety
+        oblen_new = oblen - update
+        
+        # limit range
+        oblen_new = jnp.clip(oblen_new, -max_oblen, max_oblen)
+        
+        # also avoid zero oblen to prevent division by zero in next step
+        # though compute_rib_function uses zsl/oblen so oblen=0 is bad.
+        # usually oblen is large (neutral) or small (stable/unstable)
+        # we can just accept the new value, potentially check convergence if we want to stop early (but scan runs all)
 
-        return oblen_new, oblen0
+        return (oblen_new, oblen), None
 
-    oblen, _ = jax.lax.while_loop(cond_fun, body_fun, (oblen, oblen0))
-
+    # Fixed number of iterations
+    n_iter = 20
+    
+    (oblen, _), _ = jax.lax.scan(body_fun_scan, (oblen, oblen0), None, length=n_iter)
+    
     return oblen
 
 

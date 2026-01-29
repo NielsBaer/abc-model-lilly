@@ -127,30 +127,30 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
         initial_lcl = jnp.where(t == 0, h_abl, lcl)
         initial_rhlcl = jnp.where(t == 0, 0.5, 0.9998)
 
-        def lcl_iteration_body(carry):
-            lcl, rhlcl, iteration = carry
+        def lcl_iteration_body(carry, _):
+            lcl, rhlcl = carry
 
             # update lcl based on current relative humidity
             lcl_adjustment = (1.0 - rhlcl) * 1000.0
+            
+            # convergence check could be done here but scan runs all steps
+            # we damp the adjustment if already converged to avoid jitter, though simple replacement is fine
+            
             new_lcl = lcl + lcl_adjustment
 
-            # calculate new relative humidity at updated lcl
             # calculate new relative humidity at updated lcl
             p_lcl = surf_pressure - cst.rho * cst.g * new_lcl
             temp_lcl = theta - cst.g / cst.cp * new_lcl
             new_rhlcl = q / compute_qsat(temp_lcl, p_lcl)
 
-            return new_lcl, new_rhlcl, iteration + 1
+            return (new_lcl, new_rhlcl), None
 
-        def lcl_iteration_cond(carry):
-            lcl, rhlcl, iteration = carry
-            # continue if not converged and under max iterations
-            not_converged = (rhlcl <= 0.9999) | (rhlcl >= 1.0001)
-            under_max_iter = iteration < 30  # itmax = 30
-            return not_converged & under_max_iter
-
-        final_lcl, final_rhlcl, final_iter = jax.lax.while_loop(
-            lcl_iteration_cond, lcl_iteration_body, (initial_lcl, initial_rhlcl, 0)
+        # Fixed number of iterations
+        n_iter = 30
+        
+        # Scan over dummy array
+        (final_lcl, final_rhlcl), _ = jax.lax.scan(
+            lcl_iteration_body, (initial_lcl, initial_rhlcl), None, length=n_iter
         )
 
         return final_lcl
