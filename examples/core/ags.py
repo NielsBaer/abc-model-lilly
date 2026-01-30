@@ -98,14 +98,14 @@ def main():
     plt.ylabel("cloud fraction [-]")
 
     plt.subplot(233)
-    plt.plot(time, trajectory.land.gf)
+    plt.plot(time, trajectory.land.le)
     plt.xlabel("time [h]")
-    plt.ylabel("ground heat flux [W m-2]")
+    plt.ylabel("LE [W m-2]")
 
     plt.subplot(236)
-    plt.plot(time, trajectory.land.le_veg)
+    plt.plot(time, trajectory.atmos.co2)
     plt.xlabel("time [h]")
-    plt.ylabel("latent heat flux from vegetation [W m-2]")
+    plt.ylabel("CO2 [ppmv]")
 
     plt.tight_layout()
     plt.show()
