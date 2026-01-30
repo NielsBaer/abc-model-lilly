@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "A simple differentiable model coupling biosphere and atmosphere."
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = ["jax", "matplotlib", "simple-pytree", "h5py]
+dependencies = ["jax", "matplotlib", "simple-pytree", "h5py", "tqdm"]
 
 [docs]
 dependencies = ["sphinx", "sphinx-book-theme", "sphinx-autodoc-typehints"]
