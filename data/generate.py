@@ -101,6 +101,8 @@ def run_simulation(h_abl, theta, q, deltatheta, u, v, wg, d1, cc, temp_soil):
         "cc_mf": trajectory.atmos.clouds.cc_mf,
         "cc_qf": trajectory.atmos.clouds.cc_qf,
         "cl_trans": trajectory.atmos.clouds.cl_trans,
+        "u": trajectory.atmos.mixed.u,
+        "v": trajectory.atmos.mixed.v,
         "h_abl": trajectory.atmos.mixed.h_abl,
         "theta": trajectory.atmos.mixed.theta,
         "q": trajectory.atmos.mixed.q,

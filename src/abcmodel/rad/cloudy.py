@@ -112,9 +112,8 @@ class CloudyRadiationModel(StandardRadiationModel):
             out_lrad=out_lrad,
         )
 
-    @staticmethod
     def compute_atmospheric_transmission_w_clouds(
-        solar_elevation: Array, cl_trans: Array
+        self, solar_elevation: Array, cl_trans: Array
     ) -> Array:
         """Calculate atmospheric transmission coefficient for solar rad.
 
