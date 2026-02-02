@@ -158,11 +158,14 @@ def create_dataloader(x_state, y, batch_size, key):
         yield get_batch(x_state, batch_idx), y[batch_idx]
 
 
-def train(model, template_state):
+def train(
+    model,
+    template_state,
+    inner_dt: float,
+    outter_dt: float,
+    tstart: float,
+):
     # config
-    inner_dt = 60.0
-    outter_dt = 60.0 * 30
-    tstart = 6.5
     inner_tsteps = int(outter_dt / inner_dt)
     lr = 1e-5
     batch_size = 4
@@ -235,12 +238,13 @@ def train(model, template_state):
     return model
 
 
-def benchmark_plot(hybrid_coupler):
-    inner_dt = 60.0
-    outter_dt = 60.0 * 30
-    runtime = 12 * 3600.0
-    tstart = 6.5
-
+def benchmark_plot(
+    hybrid_coupler,
+    inner_dt,
+    outter_dt,
+    runtime,
+    tstart,
+):
     # rad with clouds
     rad_model = abcmodel.rad.CloudyRadiationModel(
         **cm.cloudy_radiation.model_kwargs,
@@ -350,10 +354,20 @@ def benchmark_plot(hybrid_coupler):
 
 
 def main():
+    inner_dt = 60.0
+    outter_dt = 60.0 * 30
+    runtime = 12 * 3600.0
+    tstart = 6.5
     key = jax.random.PRNGKey(42)
     hybrid_model, template_state = load_model_and_template_state(key)
-    hybrid_model = train(hybrid_model, template_state)
-    benchmark_plot(hybrid_model)
+    hybrid_model = train(hybrid_model, template_state, inner_dt, outter_dt, tstart)
+    benchmark_plot(
+        hybrid_model,
+        inner_dt=inner_dt,
+        outter_dt=outter_dt,
+        runtime=runtime,
+        tstart=tstart,
+    )
 
 
 if __name__ == "__main__":
