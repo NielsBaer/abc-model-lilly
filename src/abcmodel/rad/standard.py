@@ -53,10 +53,10 @@ class StandardRadiationModel(AbstractRadiationModel[StandardRadiationState]):
         doy: float,
         cc: float,
     ):
-        self.lat = jnp.array(lat)
-        self.lon = jnp.array(lon)
-        self.doy = jnp.array(doy)
-        self.cc = jnp.array(cc)
+        self.lat = lat
+        self.lon = lon
+        self.doy = doy
+        self.cc = cc
 
     def init_state(self, net_rad: float) -> StandardRadiationState:
         """Initialize the model state.

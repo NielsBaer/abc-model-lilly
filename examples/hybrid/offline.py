@@ -1,14 +1,9 @@
-# use u and v to code the emulator and make a loss function based on LE in the next time step?
-# probably more natural to use xarray instead of h5py in order (at least) to read the data...
-# should be nice to extract inner + outter step functions into one so that it can be used here
-# and then there is maybe going to be some forcing
-# in the online step one would call the entire run_simulation function...
-
 import os
 
 import h5py
 import jax
 import jax.numpy as jnp
+import jax.tree_util as jtu
 import optax
 from flax import nnx
 from jax import Array
@@ -16,159 +11,266 @@ from utils import HybridObukhovModel, NeuralNetwork
 
 import abcconfigs.class_model as cm
 import abcmodel
+from abcmodel.integration import outter_step
 
 
-def load_data(key: Array, ratio: float = 0.8) -> tuple[Array, ...]:
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    file_path = os.path.join(script_dir, "../../data/dataset.h5")
+def load_model_and_template_state(key: Array):
+    psim_key, psih_key = jax.random.split(key)
+    psim_net = NeuralNetwork(rngs=nnx.Rngs(psim_key))
+    psih_net = NeuralNetwork(rngs=nnx.Rngs(psih_key))
 
-    # 1. READ ALL VARIABLES (ENTIRE STATE)
-    features = []
-    target = None
-    target_key_suffix = "le"  # We look for the variable ending in 'le' (Latent Energy)
+    # radiation
+    rad_model_kwargs = cm.standard_radiation.model_kwargs
+    rad_model = abcmodel.rad.StandardRadiationModel(**rad_model_kwargs)
+    rad_state = rad_model.init_state(**cm.standard_radiation.state_kwargs)
 
-    def collector(name, node):
-        # We only care about Datasets (arrays), not Groups (folders)
-        if isinstance(node, h5py.Dataset):
-            if name == "time":
-                return
+    # land
+    ags_model_kwargs = cm.ags.model_kwargs
+    land_model = abcmodel.land.AgsModel(**ags_model_kwargs)
 
-            # Read data: Shape (Num_Ensembles, Time)
-            data = jnp.array(node)
+    ags_state_kwargs = cm.ags.state_kwargs
+    land_state = land_model.init_state(**ags_state_kwargs)
 
-            # Ensure it is (N, 1, T) so we can stack features on axis 1
-            if data.ndim == 2:
-                data = jnp.expand_dims(data, axis=1)
-
-            features.append(data)
-
-            # Identify target variable if it matches our suffix (e.g., 'land/le')
-            nonlocal target
-            if name.endswith(target_key_suffix):
-                target = data
-
-    with h5py.File(file_path, "r") as f:
-        # Recursively visit every node in the file
-        f.visititems(collector)
-
-    if target is None:
-        raise ValueError(
-            f"Target variable ending in '{target_key_suffix}' not found in H5 file."
-        )
-
-    # Stack all features to form X: (N, Num_Features, T)
-    # Target Y is just the specific variable we want to predict
-    x_full = jnp.concatenate(features, axis=1)
-    y_full = target
-
-    # 2. TIME SHIFTING
-    # We use state at `t` (x) to predict target at `t+1` (y)
-    x = x_full[..., :-1]  # Drop last timestep
-    y = y_full[..., 1:]  # Drop first timestep
-
-    # 3. SPLIT TRAIN/TEST
-    num_ensembles = x.shape[0]
-    perm_idxs = jax.random.permutation(key, num_ensembles)
-    split_idx = int(ratio * num_ensembles)
-
-    train_idxs = perm_idxs[:split_idx]
-    test_idxs = perm_idxs[split_idx:]
-
-    x_train, x_test = x[train_idxs], x[test_idxs]
-    y_train, y_test = y[train_idxs], y[test_idxs]
-
-    # 4. NORMALIZATION (Standard Score)
-    # Crucial: Calculate stats ONLY on training data to avoid information leakage
-
-    # Normalize X (Entire State)
-    # We average over samples (axis 0) and time (axis 2) to get one mean/std per feature
-    x_mean = jnp.mean(x_train, axis=(0, 2), keepdims=True)
-    x_std = jnp.std(x_train, axis=(0, 2), keepdims=True)
-    # Prevent division by zero for constant variables
-    x_std = jnp.where(x_std < 1e-6, 1.0, x_std)
-
-    x_train = (x_train - x_mean) / x_std
-    x_test = (x_test - x_mean) / x_std
-
-    # Normalize Y (Target)
-    y_mean = jnp.mean(y_train)
-    y_std = jnp.std(y_train)
-
-    y_train = (y_train - y_mean) / y_std
-    y_test = (y_test - y_mean) / y_std
-
-    # Return data + the stats needed to un-normalize predictions later
-    return x_train, x_test, y_train, y_test, y_mean, y_std
-
-
-def load_model(key: Array):
-    rad_model = abcmodel.rad.StandardRadiationModel(
-        **cm.standard_radiation.model_kwargs
+    # surface layer (the one we build with the neural nets!)
+    surface_layer_model = HybridObukhovModel(psim_net, psih_net)
+    surface_layer_state = surface_layer_model.init_state(
+        **cm.obukhov_surface_layer.state_kwargs
     )
-    land_model = abcmodel.land.JarvisStewartModel(**cm.jarvis_stewart.model_kwargs)
 
-    # definition od the hybrid model
-    mkey, hkey = jax.random.split(key)
-    psim_net = NeuralNetwork(rngs=nnx.Rngs(mkey))
-    psih_net = NeuralNetwork(rngs=nnx.Rngs(hkey))
-    hybrid_surface = HybridObukhovModel(psim_net, psih_net)
-
+    # mixed layer
+    mixed_state_kwargs = cm.bulk_mixed_layer.state_kwargs
     mixed_layer_model = abcmodel.atmos.mixed_layer.BulkMixedLayerModel(
-        **cm.bulk_mixed_layer.model_kwargs
+        **cm.bulk_mixed_layer.model_kwargs,
     )
+    mixed_layer_state = mixed_layer_model.init_state(
+        **mixed_state_kwargs,
+    )
+
+    # clouds
     cloud_model = abcmodel.atmos.clouds.CumulusModel()
+    cloud_state = cloud_model.init_state()
+
+    # atmosphere
     atmos_model = abcmodel.atmos.DayOnlyAtmosphereModel(
-        surface_layer=hybrid_surface,
+        surface_layer=surface_layer_model,
         mixed_layer=mixed_layer_model,
         clouds=cloud_model,
     )
+    atmos_state = atmos_model.init_state(
+        surface=surface_layer_state,
+        mixed=mixed_layer_state,
+        clouds=cloud_state,
+    )
 
-    return abcmodel.ABCoupler(rad=rad_model, land=land_model, atmos=atmos_model)
+    # coupler
+    abcoupler = abcmodel.ABCoupler(
+        rad=rad_model,
+        land=land_model,
+        atmos=atmos_model,
+    )
+    state = abcoupler.init_state(
+        rad_state,
+        land_state,
+        atmos_state,
+    )
+
+    return abcoupler, state
 
 
-def train(model, x: Array, y: Array, y_mean: Array, y_std: Array):
-    # time settings: should be the same as the
-    # ones that were used to generate the dataset
+def load_batched_data(key, template_state, ratio=0.8):
+    """Loads data into the State structure."""
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(script_dir, "../../data/dataset.h5")
+
+    # --- A. Helper to map PyTree paths to HDF5 keys ---
+    def get_path_string(path):
+        """
+        Converts a JAX KeyPath tuple into a string path like 'land/le'.
+        Handles Classes (GetAttrKey), Dicts (DictKey), and Lists (SequenceKey).
+        """
+        parts = []
+        for p in path:
+            # 1. Custom Classes (like your CoupledState) use .name
+            if hasattr(p, "name"):
+                parts.append(str(p.name))
+            # 2. Dictionaries use .key
+            elif hasattr(p, "key"):
+                parts.append(str(p.key))
+            # 3. Lists/Tuples use .idx
+            elif hasattr(p, "idx"):
+                parts.append(str(p.idx))
+            # 4. Fallback
+            else:
+                parts.append(str(p))
+
+        return "/".join(parts)
+
+    # --- B. Recursive Loader ---
+    def load_leaf(path, leaf_template):
+        path_str = get_path_string(path)
+
+        with h5py.File(file_path, "r") as f:
+            # Handle special cases or missing keys
+            if path_str not in f:
+                # If 't' isn't in the file, initialize it to 0
+                if path_str.endswith("t"):
+                    # Assuming shape (N_ensembles, Time)
+                    # We grab the shape from a known variable (e.g. land/le) if possible
+                    # or just infer it. Here we assume generic shape handling.
+                    # For safety, we skip loading 't' here and set it later or
+                    # rely on the user to ensure 't' is in the H5 file.
+                    return jnp.zeros_like(
+                        leaf_template, shape=(100, 100)
+                    )  # Placeholder
+
+                print(f"Warning: {path_str} not found in H5.")
+                return leaf_template  # Fallback to template value
+
+            data = jnp.array(f[path_str])
+
+            # Ensure shape is (N_ensembles, Time)
+            # If your H5 is already (N, T), this is fine.
+            return data
+
+    print("Loading data structure...")
+    # This magic function walks the template state and loads the matching H5 data for every variable
+    full_history = jtu.tree_map_with_path(load_leaf, template_state)
+
+    # --- C. Time Shifting & Shaping ---
+    # We want: Input = State[t], Target = LE[t+1]
+
+    # 1. Flatten Ensembles and Time into one "Batch" dimension
+    # Current leaves: (N_ensembles, Time_steps)
+    # We slice first, then flatten.
+
+    def prep_input(arr):
+        # Take all times except the last one (0 to T-1)
+        sliced = arr[:, :-1]
+        # Flatten (N, T-1) -> (N * (T-1))
+        return sliced.reshape(-1)
+
+    def prep_target(arr):
+        # Take all times starting from 1 (1 to T)
+        sliced = arr[:, 1:]
+        return sliced.reshape(-1)
+
+    # Apply to the whole state tree to get x (Input State)
+    x_full = jtu.tree_map(prep_input, full_history)
+
+    # Extract just LE for y (Target)
+    y_full = prep_target(full_history.land.le)
+
+    # --- D. Train/Test Split ---
+    num_samples = y_full.shape[0]
+    split_idx = int(ratio * num_samples)
+
+    # Shuffle indices
+    idxs = jax.random.permutation(key, num_samples)
+    train_idxs = idxs[:split_idx]
+    test_idxs = idxs[split_idx:]
+
+    # Helper to slice a PyTree by index
+    def subset(tree, indices):
+        return jtu.tree_map(lambda x: x[indices], tree)
+
+    x_train = subset(x_full, train_idxs)
+    x_test = subset(x_full, test_idxs)
+    y_train = y_full[train_idxs]
+    y_test = y_full[test_idxs]
+
+    return x_train, x_test, y_train, y_test
+
+
+def normalize_tree(tree, mean_tree, std_tree):
+    return jtu.tree_map(lambda x, m, s: (x - m) / s, tree, mean_tree, std_tree)
+
+
+def unnormalize_tree(tree, mean_tree, std_tree):
+    return jtu.tree_map(lambda x, m, s: x * s + m, tree, mean_tree, std_tree)
+
+
+def create_dataloader(x_state, y, batch_size, key):
+    """Yields batches: x_state is a PyTree, y is an array."""
+    num_samples = y.shape[0]
+    indices = jax.random.permutation(key, num_samples)
+    num_batches = num_samples // batch_size
+
+    def get_batch(tree, idxs):
+        return jtu.tree_map(lambda x: x[idxs], tree)
+
+    for i in range(num_batches):
+        batch_idx = indices[i * batch_size : (i + 1) * batch_size]
+        yield get_batch(x_state, batch_idx), y[batch_idx]
+
+
+def train(model, template_state):
+    # config
     inner_dt = 60.0
     outter_dt = 60.0 * 30
     tstart = 6.5
     inner_tsteps = int(outter_dt / inner_dt)
+    lr = 1e-3
+    batch_size = 32
+    epochs = 100
 
-    print("training...")
-    optimizer = nnx.Optimizer(model, optax.adam(1e-3), wrt=nnx.Param)
+    # data setup
+    key = jax.random.PRNGKey(42)
+    data_key, train_key = jax.random.split(key)
+    x_train, x_test, y_train, y_test = load_batched_data(data_key, template_state)
 
-    def loss_fn(model, x, y):
-        pred = abcmodel.integration.outter_step(
-            x,
-            x.t,
-            coupler=model,
-            inner_dt=inner_dt,
-            inner_tsteps=inner_tsteps,
-            tstart=tstart,
-        )
-        pred_le = (pred.land.le - y_mean) / y_std  # type: ignore
-        return jnp.mean((pred_le - y) ** 2)
+    y_mean, y_std = jnp.mean(y_train), jnp.std(y_train)
+    print(f"training on {y_train.shape[0]} samples...")
 
-    @jax.jit
-    def update(model, optimizer, x, y):
+    # optimizer
+    optimizer = nnx.Optimizer(model, optax.adam(lr), wrt=nnx.Param)
+
+    def loss_fn(model, x_batch_state, y_batch):
+        # here, x_batch_state is a CoupledState object with physical values
+        def run_single(state):
+            final_state, _ = outter_step(
+                state,
+                None,
+                coupler=model,
+                inner_dt=inner_dt,
+                inner_tsteps=inner_tsteps,
+                tstart=tstart,
+            )
+            return final_state
+
+        pred_state = jax.vmap(run_single)(x_batch_state)
+        pred_le = pred_state.land.le
+        pred_le_norm = (pred_le - y_mean) / y_std
+        y_batch_norm = (y_batch - y_mean) / y_std
+        return jnp.mean((pred_le_norm - y_batch_norm) ** 2)
+
+    @nnx.jit
+    def update_step(model, optimizer, x, y):
         loss, grads = nnx.value_and_grad(loss_fn)(model, x, y)
         optimizer.update(grads)
         return loss
 
-    for step in range(2000):
-        loss = update(model, optimizer, x, y)
-        if step % 500 == 0:
-            print(f"  step {step}, loss: {loss:.6f}")
+    # training loop
+    for epoch in range(epochs):
+        train_key, subkey = jax.random.split(train_key)
+        loader = create_dataloader(x_train, y_train, batch_size, subkey)
+
+        total_loss = 0.0
+        count = 0
+
+        for x_batch, y_batch in loader:
+            loss = update_step(model, optimizer, x_batch, y_batch)
+            total_loss += loss
+            count += 1
+
+        print(f"epoch {epoch + 1} | loss: {total_loss / count:.6f}")
 
     return model
 
 
 def main():
     key = jax.random.PRNGKey(42)
-    data_key, model_key = jax.random.split(key)
-    x_train, x_test, y_train, y_test, y_mean, y_std = load_data(data_key)
-    model = load_model(model_key)
-    model = train(model, x_train, y_train, y_mean, y_std)
+    model, template_state = load_model_and_template_state(key)
+    train(model, template_state)
 
 
 if __name__ == "__main__":
