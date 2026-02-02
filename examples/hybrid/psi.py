@@ -17,6 +17,7 @@ from abcmodel.utils import get_path_string
 
 
 def load_model_and_template_state(key: Array):
+    """Loads the standard model and it's template state."""
     psim_key, psih_key = jax.random.split(key)
     psim_net = NeuralNetwork(rngs=nnx.Rngs(psim_key))
     psih_net = NeuralNetwork(rngs=nnx.Rngs(psih_key))
@@ -91,43 +92,39 @@ def load_batched_data(key, template_state, ratio=0.8):
             return data
 
     print("loading data structure...")
-    # This magic function walks the template state and loads the matching H5 data for every variable
-    full_history = jtu.tree_map_with_path(load_leaf, template_state)
+    # here we walk through the template state and
+    # load the matching .h5 data for every variable
+    traj_ensembles = jtu.tree_map_with_path(load_leaf, template_state)
 
-    # --- C. Time Shifting & Shaping ---
-    # We want: Input = State[t], Target = LE[t+1]
-
-    # 1. Flatten Ensembles and Time into one "Batch" dimension
-    # Current leaves: (N_ensembles, Time_steps)
-    # We slice first, then flatten.
-
+    # the two prep functions follow:
+    # 1) x = state[t], y = LE[t+1]
+    # 2) shapes: (num_ens, num_times) -> (num_ens * num_times)
     def prep_input(arr):
-        # Take all times except the last one (0 to T-1)
+        # take all times except the last one (0 to T-1)
         sliced = arr[:, :-1]
         # Flatten (N, T-1) -> (N * (T-1))
         return sliced.reshape(-1)
 
     def prep_target(arr):
-        # Take all times starting from 1 (1 to T)
+        # take all times starting from 1 (1 to T)
         sliced = arr[:, 1:]
         return sliced.reshape(-1)
 
-    # Apply to the whole state tree to get x (Input State)
-    x_full = jtu.tree_map(prep_input, full_history)
+    # apply prep functions
+    x_full = jtu.tree_map(prep_input, traj_ensembles)
+    # our target is latent heat
+    y_full = prep_target(traj_ensembles.land.le)
 
-    # Extract just LE for y (Target)
-    y_full = prep_target(full_history.land.le)
-
-    # --- D. Train/Test Split ---
+    # train/test split
     num_samples = y_full.shape[0]
     split_idx = int(ratio * num_samples)
 
-    # Shuffle indices
+    # shuffle indices
     idxs = jax.random.permutation(key, num_samples)
     train_idxs = idxs[:split_idx]
     test_idxs = idxs[split_idx:]
 
-    # Helper to slice a PyTree by index
+    # helper to slice a PyTree by index
     def subset(tree, indices):
         return jtu.tree_map(lambda x: x[indices], tree)
 
@@ -187,7 +184,6 @@ def train(model, template_state):
     )
 
     def loss_fn(model, x_batch_state, y_batch):
-        # here, x_batch_state is a CoupledState object with physical values
         def run_single(state):
             final_state, _ = outter_step(
                 state,
@@ -217,6 +213,8 @@ def train(model, template_state):
 
         optimizer.update(grads)
 
+        jax.debug.print("loss: {x}", x=loss)
+
         return loss
 
     # training loop
@@ -238,12 +236,9 @@ def train(model, template_state):
 
 
 def benchmark_plot(hybrid_coupler):
-    # time step [s]
     inner_dt = 60.0
     outter_dt = 60.0 * 30
-    # total run time [s]
     runtime = 12 * 3600.0
-    # start time of the day [h]
     tstart = 6.5
 
     # rad with clouds

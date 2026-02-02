@@ -1,5 +1,5 @@
-import jax
-import jax.numpy as jnp
+# import jax
+# import jax.numpy as jnp
 from flax import nnx
 from jax import Array
 
@@ -39,14 +39,10 @@ class HybridObukhovModel(ObukhovSurfaceLayerModel):
 
     def compute_psim(self, zeta: Array) -> Array:
         original_shape = zeta.shape
-        zeta_safe = jnp.clip(zeta, -5.0, 5.0)
-        zeta_input = jax.lax.stop_gradient(zeta_safe)
-        res = self.psim_emulator(zeta_input.reshape(-1, 1))
+        res = self.psim_emulator(zeta.reshape(-1, 1))
         return res.reshape(original_shape)
 
     def compute_psih(self, zeta: Array) -> Array:
         original_shape = zeta.shape
-        zeta_safe = jnp.clip(zeta, -5.0, 5.0)
-        zeta_input = jax.lax.stop_gradient(zeta_safe)
-        res = self.psih_emulator(zeta_input.reshape(-1, 1))
+        res = self.psih_emulator(zeta.reshape(-1, 1))
         return res.reshape(original_shape)
