@@ -40,47 +40,47 @@ class StandardLandState(AbstractLandState):
     """Soil resistance [m s-1]."""
 
     # the following variables should be initialized to nan
-    esat: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    esat: Array = field(default_factory=lambda: jnp.array(0.0))
     """Saturation vapor pressure [Pa]."""
-    qsat: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    qsat: Array = field(default_factory=lambda: jnp.array(0.0))
     """Saturation specific humidity [kg/kg]."""
-    dqsatdT: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    dqsatdT: Array = field(default_factory=lambda: jnp.array(0.0))
     """Derivative of saturation specific humidity with respect to temperature [kg/kg/K]."""
-    e: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    e: Array = field(default_factory=lambda: jnp.array(0.0))
     """Vapor pressure [Pa]."""
-    qsatsurf: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    qsatsurf: Array = field(default_factory=lambda: jnp.array(0.0))
     """Saturation specific humidity at surface temperature [kg/kg]."""
-    wCO2: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    wCO2: Array = field(default_factory=lambda: jnp.array(0.0))
     """Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1]."""
-    cliq: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    cliq: Array = field(default_factory=lambda: jnp.array(0.0))
     """Wet fraction of the canopy [-]."""
-    temp_soil_tend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    temp_soil_tend: Array = field(default_factory=lambda: jnp.array(0.0))
     """Soil temperature tendency [K s-1]."""
-    wgtend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    wgtend: Array = field(default_factory=lambda: jnp.array(0.0))
     """Soil moisture tendency [m3 m-3 s-1]."""
-    wltend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    wltend: Array = field(default_factory=lambda: jnp.array(0.0))
     """Canopy water storage tendency [m s-1]."""
-    le_veg: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    le_veg: Array = field(default_factory=lambda: jnp.array(0.0))
     """Latent heat flux from vegetation [W m-2]."""
-    le_liq: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    le_liq: Array = field(default_factory=lambda: jnp.array(0.0))
     """Latent heat flux from liquid water [W m-2]."""
-    le_soil: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    le_soil: Array = field(default_factory=lambda: jnp.array(0.0))
     """Latent heat flux from soil [W m-2]."""
-    le: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    le: Array = field(default_factory=lambda: jnp.array(0.0))
     """Total latent heat flux [W m-2]."""
-    hf: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    hf: Array = field(default_factory=lambda: jnp.array(0.0))
     """Sensible heat flux [W m-2]."""
-    gf: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    gf: Array = field(default_factory=lambda: jnp.array(0.0))
     """Ground heat flux [W m-2]."""
-    le_pot: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    le_pot: Array = field(default_factory=lambda: jnp.array(0.0))
     """Potential latent heat flux [W m-2]."""
-    le_ref: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    le_ref: Array = field(default_factory=lambda: jnp.array(0.0))
     """Reference latent heat flux [W m-2]."""
-    wtheta: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    wtheta: Array = field(default_factory=lambda: jnp.array(0.0))
     """Kinematic heat flux [K m/s]."""
-    wq: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    wq: Array = field(default_factory=lambda: jnp.array(0.0))
     """Kinematic moisture flux [kg/kg m/s]."""
-    wCO2: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    wCO2: Array = field(default_factory=lambda: jnp.array(0.0))
     """Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1]."""
 
 

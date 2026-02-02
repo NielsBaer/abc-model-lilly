@@ -15,19 +15,19 @@ from .standard import AbstractStandardLandModel, StandardLandState
 class AgsState(StandardLandState):
     """A-gs model state."""
 
-    rsCO2: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    rsCO2: Array = field(default_factory=lambda: jnp.array(0.0))
     """Stomatal resistance to CO2."""
-    gcco2: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    gcco2: Array = field(default_factory=lambda: jnp.array(0.0))
     """Conductance to CO2."""
-    ci: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    ci: Array = field(default_factory=lambda: jnp.array(0.0))
     """Intercellular CO2 concentration."""
-    co2abs: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    co2abs: Array = field(default_factory=lambda: jnp.array(0.0))
     """CO2 assimilation rate."""
-    wCO2A: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    wCO2A: Array = field(default_factory=lambda: jnp.array(0.0))
     """Net assimilation flux [mol m-2 s-1]."""
-    wCO2R: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    wCO2R: Array = field(default_factory=lambda: jnp.array(0.0))
     """Respiration flux [mol m-2 s-1]."""
-    wCO2: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    wCO2: Array = field(default_factory=lambda: jnp.array(0.0))
     """Total CO2 flux [mol m-2 s-1]."""
 
 

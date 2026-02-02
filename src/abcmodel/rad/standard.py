@@ -19,13 +19,13 @@ class StandardRadiationState(AbstractRadiationState):
 
     net_rad: Array
     """Net surface rad [W m-2]."""
-    in_srad: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    in_srad: Array = field(default_factory=lambda: jnp.array(0.0))
     """Incoming solar rad [W m-2]."""
-    out_srad: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    out_srad: Array = field(default_factory=lambda: jnp.array(0.0))
     """Outgoing solar rad [W m-2]."""
-    in_lrad: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    in_lrad: Array = field(default_factory=lambda: jnp.array(0.0))
     """Incoming longwave rad [W m-2]."""
-    out_lrad: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    out_lrad: Array = field(default_factory=lambda: jnp.array(0.0))
     """Outgoing longwave rad [W m-2]."""
 
 

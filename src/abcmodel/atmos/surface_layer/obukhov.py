@@ -36,33 +36,33 @@ class ObukhovSurfaceLayerState(AbstractSurfaceLayerState):
 
     # the following variables are initialized as NaNs and should
     # and are expected to be assigned during warmup
-    uw: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    uw: Array = field(default_factory=lambda: jnp.array(0.0))
     """Surface momentum flux u [m2 s-2]."""
-    vw: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    vw: Array = field(default_factory=lambda: jnp.array(0.0))
     """Surface momentum flux v [m2 s-2]."""
-    temp_2m: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    temp_2m: Array = field(default_factory=lambda: jnp.array(0.0))
     """2m temperature [K]."""
-    q2m: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    q2m: Array = field(default_factory=lambda: jnp.array(0.0))
     """2m specific humidity [kg kg-1]."""
-    u2m: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    u2m: Array = field(default_factory=lambda: jnp.array(0.0))
     """2m u-wind [m s-1]."""
-    v2m: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    v2m: Array = field(default_factory=lambda: jnp.array(0.0))
     """2m v-wind [m s-1]."""
-    e2m: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    e2m: Array = field(default_factory=lambda: jnp.array(0.0))
     """2m vapor pressure [Pa]."""
-    esat2m: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    esat2m: Array = field(default_factory=lambda: jnp.array(0.0))
     """2m saturated vapor pressure [Pa]."""
-    thetasurf: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    thetasurf: Array = field(default_factory=lambda: jnp.array(0.0))
     """Surface potential temperature [K]."""
-    thetavsurf: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    thetavsurf: Array = field(default_factory=lambda: jnp.array(0.0))
     """Surface virtual potential temperature [K]."""
-    qsurf: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    qsurf: Array = field(default_factory=lambda: jnp.array(0.0))
     """Surface specific humidity [kg kg-1]."""
-    obukhov_length: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    obukhov_length: Array = field(default_factory=lambda: jnp.array(0.0))
     """Obukhov length [m]."""
-    rib_number: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    rib_number: Array = field(default_factory=lambda: jnp.array(0.0))
     """Bulk Richardson number [-]."""
-    ra: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    ra: Array = field(default_factory=lambda: jnp.array(0.0))
     """Aerodynamic resistance [s/m]."""
 
 

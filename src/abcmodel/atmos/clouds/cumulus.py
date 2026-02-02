@@ -19,9 +19,9 @@ class CumulusState(AbstractCloudState):
     """Cloud core moisture flux [kg/kg/s]."""
     cl_trans: Array = field(default_factory=lambda: jnp.array(1.0))
     """Cloud layer transmittance [-], range 0 to 1."""
-    q2_h: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    q2_h: Array = field(default_factory=lambda: jnp.array(0.0))
     """Humidity variance at mixed-layer top [kg²/kg²]."""
-    top_CO22: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    top_CO22: Array = field(default_factory=lambda: jnp.array(0.0))
     """CO2 variance at mixed-layer top [ppm²]."""
     wCO2M: Array = field(default_factory=lambda: jnp.array(0.0))
     """CO2 mass flux [mgC/m²/s]."""

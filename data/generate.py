@@ -100,18 +100,28 @@ def run_simulation(h_abl, theta, q, deltatheta, u, v, wg, d1, cc, temp_soil):
 
 
 def sample_params(key):
-    keys = random.split(key, 10)
-    h_abl = random.uniform(keys[0], minval=50.0, maxval=400.0)
-    theta = random.uniform(keys[1], minval=280.0, maxval=295.0)
-    temp_noise = random.uniform(keys[2], minval=-2.0, maxval=2.0)
-    temp_soil = theta + temp_noise
-    q = random.uniform(keys[3], minval=0.004, maxval=0.012)
-    deltatheta = random.uniform(keys[4], minval=0.5, maxval=2.0)
-    u = random.uniform(keys[5], minval=2.0, maxval=12.0)
-    v = random.uniform(keys[6], minval=-5.0, maxval=5.0)
-    wg = random.uniform(keys[7], minval=0.171, maxval=0.35)
-    d1 = random.uniform(keys[8], minval=0.1, maxval=1.0)
-    cc = random.uniform(keys[9], minval=0.0, maxval=0.5)
+    # keys = random.split(key, 10)
+    # h_abl = random.uniform(keys[0], minval=50.0, maxval=400.0)
+    h_abl = 200.0
+    # theta = random.uniform(keys[1], minval=280.0, maxval=295.0)
+    theta = 288.0
+    # temp_noise = random.uniform(keys[2], minval=-2.0, maxval=2.0)
+    # temp_soil = theta + temp_noise
+    temp_soil = 285.0
+    # q = random.uniform(keys[3], minval=0.004, maxval=0.012)
+    q = 0.008
+    # deltatheta = random.uniform(keys[4], minval=0.5, maxval=2.0)
+    deltatheta = 1.0
+    # u = random.uniform(keys[5], minval=2.0, maxval=12.0)
+    u = 6.0
+    # v = random.uniform(keys[6], minval=-5.0, maxval=5.0)
+    v = -4.0
+    # wg = random.uniform(keys[7], minval=0.171, maxval=0.35)
+    wg = 0.21
+    # d1 = random.uniform(keys[8], minval=0.1, maxval=1.0)
+    d1 = 0.1
+    # cc = random.uniform(keys[9], minval=0.0, maxval=0.5)
+    cc = 0.0
     return h_abl, theta, q, deltatheta, u, v, wg, d1, cc, temp_soil
 
 

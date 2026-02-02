@@ -19,11 +19,11 @@ class SimpleSurfaceLayerState(AbstractSurfaceLayerState):
 
     ustar: Array
     """Surface friction velocity [m/s]."""
-    uw: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    uw: Array = field(default_factory=lambda: jnp.array(0.0))
     """Zonal surface momentum flux [m2 s-2]."""
-    vw: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    vw: Array = field(default_factory=lambda: jnp.array(0.0))
     """Meridional surface momentum flux [m2 s-2]."""
-    ra: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    ra: Array = field(default_factory=lambda: jnp.array(0.0))
     """Aerodynamic resistance [s/m]."""
 
 

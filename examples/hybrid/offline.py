@@ -14,6 +14,9 @@ import abcmodel
 from abcmodel.integration import outter_step
 from abcmodel.utils import get_path_string
 
+# to maybe debug NaNs
+jax.config.update("jax_debug_nans", True)
+
 
 def load_model_and_template_state(key: Array):
     psim_key, psih_key = jax.random.split(key)
@@ -179,7 +182,11 @@ def train(model, template_state):
     print(f"training on {y_train.shape[0]} samples...")
 
     # optimizer
-    optimizer = nnx.Optimizer(model, optax.radam(lr), wrt=nnx.Param)
+    optimizer = nnx.Optimizer(
+        model,
+        optax.chain(optax.clip_by_global_norm(1.0), optax.adam(lr)),
+        wrt=nnx.Param,
+    )
 
     def loss_fn(model, x_batch_state, y_batch):
         # here, x_batch_state is a CoupledState object with physical values
@@ -203,6 +210,8 @@ def train(model, template_state):
     @nnx.jit
     def update_step(model, optimizer, x, y):
         loss, grads = nnx.value_and_grad(loss_fn)(model, x, y)
+        grad_norm = optax.global_norm(grads)
+        jax.debug.print("Loss: {}, Grad Norm: {}", loss, grad_norm)
         optimizer.update(grads)
         return loss
 
@@ -216,6 +225,7 @@ def train(model, template_state):
 
         for x_batch, y_batch in loader:
             loss = update_step(model, optimizer, x_batch, y_batch)
+            print("loss:", loss)
             total_loss += loss
             count += 1
 
