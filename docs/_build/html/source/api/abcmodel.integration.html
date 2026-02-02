@@ -171,7 +171,6 @@
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.atmos.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="abcmodel.atmos.mixed_layer.bulk.html">Bulk</a></li>
-<li class="toctree-l4"><a class="reference internal" href="abcmodel.atmos.mixed_layer.stats.html">Stats</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.atmos.clouds.html">Clouds</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -354,7 +353,8 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.integration.warmup"><code class="docutils literal notranslate"><span class="pre">warmup()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.integration.timestep"><code class="docutils literal notranslate"><span class="pre">timestep()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.integration.inner_step"><code class="docutils literal notranslate"><span class="pre">inner_step()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.integration.outter_step"><code class="docutils literal notranslate"><span class="pre">outter_step()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.integration.integrate"><code class="docutils literal notranslate"><span class="pre">integrate()</span></code></a></li>
 </ul>
             </nav>
@@ -371,37 +371,26 @@ document.write(`
 <span id="integration"></span><h1>Integration<a class="headerlink" href="#module-abcmodel.integration" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="abcmodel.integration.warmup">
-<span class="sig-prename descclassname"><span class="pre">abcmodel.integration.</span></span><span class="sig-name descname"><span class="pre">warmup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tstart</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/integration.html#warmup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.integration.warmup" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">abcmodel.integration.</span></span><span class="sig-name descname"><span class="pre">warmup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tstart</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/integration.html#warmup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.integration.warmup" title="Link to this definition">#</a></dt>
 <dd><p>Warmup the model by running it for a few timesteps.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="abcmodel.integration.timestep">
-<span class="sig-prename descclassname"><span class="pre">abcmodel.integration.</span></span><span class="sig-name descname"><span class="pre">timestep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tstart</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/integration.html#timestep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.integration.timestep" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="abcmodel.integration.inner_step">
+<span class="sig-prename descclassname"><span class="pre">abcmodel.integration.</span></span><span class="sig-name descname"><span class="pre">inner_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tstart</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/integration.html#inner_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.integration.inner_step" title="Link to this definition">#</a></dt>
 <dd><p>Run a single timestep of the model.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="abcmodel.integration.outter_step">
+<span class="sig-prename descclassname"><span class="pre">abcmodel.integration.</span></span><span class="sig-name descname"><span class="pre">outter_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inner_dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inner_tsteps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tstart</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/integration.html#outter_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.integration.outter_step" title="Link to this definition">#</a></dt>
+<dd><p>A block of inner steps averaging the result.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="abcmodel.integration.integrate">
-<span class="sig-prename descclassname"><span class="pre">abcmodel.integration.</span></span><span class="sig-name descname"><span class="pre">integrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runtime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tstart</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/integration.html#integrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.integration.integrate" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">abcmodel.integration.</span></span><span class="sig-name descname"><span class="pre">integrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inner_dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outter_dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runtime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tstart</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/integration.html#integrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.integration.integrate" title="Link to this definition">#</a></dt>
 <dd><p>Integrate the coupler forward in time.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>state</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="abcmodel.abstracts.html#abcmodel.abstracts.AbstractCoupledState" title="abcmodel.abstracts.AbstractCoupledState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractCoupledState</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">RadT</span></code>, bound= <a class="reference internal" href="abcmodel.abstracts.html#abcmodel.abstracts.AbstractRadiationState" title="abcmodel.abstracts.AbstractRadiationState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractRadiationState</span></code></a>), <code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">LandT</span></code>, bound= <a class="reference internal" href="abcmodel.abstracts.html#abcmodel.abstracts.AbstractLandState" title="abcmodel.abstracts.AbstractLandState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractLandState</span></code></a>), <code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">AtmosT</span></code>, bound= <a class="reference internal" href="abcmodel.abstracts.html#abcmodel.abstracts.AbstractAtmosphereState" title="abcmodel.abstracts.AbstractAtmosphereState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractAtmosphereState</span></code></a>)]</span>) – Initial coupled state.</p></li>
-<li><p><strong>coupler</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="abcmodel.coupling.html#abcmodel.coupling.ABCoupler" title="abcmodel.coupling.ABCoupler"><code class="xref py py-class docutils literal notranslate"><span class="pre">ABCoupler</span></code></a></span>) – ABCoupler instance.</p></li>
-<li><p><strong>dt</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Time step [s].</p></li>
-<li><p><strong>runtime</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Total runtime [s].</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Array of time values [h].
-trajectory: CoupledState containing the full state trajectory.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>times</p>
-</dd>
-</dl>
 </dd></dl>
 
 </section>
@@ -452,7 +441,8 @@ trajectory: CoupledState containing the full state trajectory.</p>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.integration.warmup"><code class="docutils literal notranslate"><span class="pre">warmup()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.integration.timestep"><code class="docutils literal notranslate"><span class="pre">timestep()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.integration.inner_step"><code class="docutils literal notranslate"><span class="pre">inner_step()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.integration.outter_step"><code class="docutils literal notranslate"><span class="pre">outter_step()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.integration.integrate"><code class="docutils literal notranslate"><span class="pre">integrate()</span></code></a></li>
 </ul>
   </nav></div>

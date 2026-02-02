@@ -1,16 +1,20 @@
 from dataclasses import dataclass, field
 
+import jax
 import jax.numpy as jnp
+from jax import Array
 
 from ...abstracts import AbstractCoupledState
-from ...utils import Array
 from ...utils import PhysicalConstants as cst
-from ..abstracts import AbstractMixedLayerModel, AbstractMixedLayerState
-from .stats import AbstractStandardStatsModel
+from ...utils import compute_qsat
+from ..abstracts import (
+    AbstractMixedLayerModel,
+    AbstractMixedLayerState,
+)
 
 
 @dataclass
-class BulkMixedLayerState(AbstractMixedLayerState):
+class BulkState(AbstractMixedLayerState):
     """Data class for bulk mixed layer model state."""
 
     # initialized by the user
@@ -50,61 +54,59 @@ class BulkMixedLayerState(AbstractMixedLayerState):
     """Entrainment velocity [m s-1]."""
 
     # should be initialized during warmup
-    thetav: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    thetav: Array = field(default_factory=lambda: jnp.array(0.0))
     """Mixed-layer potential temperature [K]."""
-    deltathetav: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    deltathetav: Array = field(default_factory=lambda: jnp.array(0.0))
     """Virtual temperature jump at the top of the ABL [K]."""
-    wthetav: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    wthetav: Array = field(default_factory=lambda: jnp.array(0.0))
     """Surface kinematic virtual heat flux [K m s-1]."""
-    wqe: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    wqe: Array = field(default_factory=lambda: jnp.array(0.0))
     """Entrainment moisture flux [kg kg-1 m s-1]."""
-    wCO2e: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    wCO2e: Array = field(default_factory=lambda: jnp.array(0.0))
     """Entrainment CO2 flux [mgC/m²/s]."""
-    wthetae: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    wthetae: Array = field(default_factory=lambda: jnp.array(0.0))
     """Entrainment potential temperature flux [K m s-1]."""
-    wthetave: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    wthetave: Array = field(default_factory=lambda: jnp.array(0.0))
     """Entrainment virtual heat flux [K m s-1]."""
-    lcl: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    lcl: Array = field(default_factory=lambda: jnp.array(0.0))
     """Lifting condensation level [m]."""
-    top_rh: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    top_rh: Array = field(default_factory=lambda: jnp.array(0.0))
     """Top of mixed layer relative humidity [%]."""
-    top_p: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    top_p: Array = field(default_factory=lambda: jnp.array(0.0))
     """Pressure at top of mixed layer [Pa]."""
-    top_T: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    top_T: Array = field(default_factory=lambda: jnp.array(0.0))
     """Temperature at top of mixed layer [K]."""
-    utend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    utend: Array = field(default_factory=lambda: jnp.array(0.0))
     """Zonal wind velocity tendency [m s-2]."""
-    dutend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    dutend: Array = field(default_factory=lambda: jnp.array(0.0))
     """Zonal wind velocity tendency at the ABL height [m s-2]."""
-    vtend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    vtend: Array = field(default_factory=lambda: jnp.array(0.0))
     """Meridional wind velocity tendency [m s-2]."""
-    dvtend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    dvtend: Array = field(default_factory=lambda: jnp.array(0.0))
     """Meridional wind velocity tendency at the ABL height [m/s²]."""
-    h_abl_tend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    h_abl_tend: Array = field(default_factory=lambda: jnp.array(0.0))
     """Tendency of CBL [m s-1]."""
-    thetatend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    thetatend: Array = field(default_factory=lambda: jnp.array(0.0))
     """Tendency of mixed-layer potential temperature [K s-1]."""
-    deltathetatend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    deltathetatend: Array = field(default_factory=lambda: jnp.array(0.0))
     """Tendency of mixed-layer potential temperature at the ABL height [K s-1]."""
-    qtend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    qtend: Array = field(default_factory=lambda: jnp.array(0.0))
     """Tendency of mixed-layer specific humidity [kg/kg s-1]."""
-    dqtend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    dqtend: Array = field(default_factory=lambda: jnp.array(0.0))
     """Tendency of mixed-layer specific humidity at the ABL height [kg/kg s-1]."""
-    co2tend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    co2tend: Array = field(default_factory=lambda: jnp.array(0.0))
     """Tendency of CO2 concentration [ppm s-1]."""
-    deltaCO2tend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    deltaCO2tend: Array = field(default_factory=lambda: jnp.array(0.0))
     """Tendency of CO2 concentration at the ABL height [ppm s-1]."""
-    dztend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    dztend: Array = field(default_factory=lambda: jnp.array(0.0))
     """Tendency of transition layer thickness [m s-1]."""
-    ws: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    ws: Array = field(default_factory=lambda: jnp.array(0.0))
     """Large-scale vertical velocity (subsidence) [m s-1]."""
-    wf: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    wf: Array = field(default_factory=lambda: jnp.array(0.0))
     """Mixed-layer growth due to cloud top radiative divergence [m s-1]."""
 
 
-class BulkMixedLayerModel(
-    AbstractStandardStatsModel, AbstractMixedLayerModel[BulkMixedLayerState]
-):
+class BulkModel(AbstractMixedLayerModel[BulkState]):
     """Bulk mixed layer model with full atmospheric boundary layer dynamics.
 
     Complete mixed layer model that simulates atmospheric boundary layer evolution
@@ -184,7 +186,7 @@ class BulkMixedLayerModel(
         dv: float,
         dz_h: float,
         surf_pressure: float,
-    ) -> BulkMixedLayerState:
+    ) -> BulkState:
         """Initialize the model state.
 
         Args:
@@ -206,7 +208,7 @@ class BulkMixedLayerModel(
         Returns:
             The initial mixed layer state.
         """
-        return BulkMixedLayerState(
+        return BulkState(
             h_abl=jnp.array(h_abl),
             theta=jnp.array(theta),
             deltatheta=jnp.array(deltatheta),
@@ -223,7 +225,7 @@ class BulkMixedLayerModel(
             surf_pressure=jnp.array(surf_pressure),
         )
 
-    def run(self, state: AbstractCoupledState) -> BulkMixedLayerState:
+    def run(self, state: AbstractCoupledState) -> BulkState:
         """Run the model.
 
         Args:
@@ -244,9 +246,10 @@ class BulkMixedLayerModel(
         w_CO2_ft = self.compute_w_CO2_ft(ws)
 
         # compute virtual heat flux at surface
-        wthetav = land_state.wtheta * (
-            1.0 + 0.61 * ml_state.q
-        ) + 0.61 * ml_state.theta * land_state.wq
+        wthetav = (
+            land_state.wtheta * (1.0 + 0.61 * ml_state.q)
+            + 0.61 * ml_state.theta * land_state.wq
+        )
 
         wstar = self.compute_wstar(
             ml_state.h_abl,
@@ -315,7 +318,7 @@ class BulkMixedLayerModel(
             dztend=dztend,
         )
 
-    def integrate(self, state: BulkMixedLayerState, dt: float) -> BulkMixedLayerState:
+    def integrate(self, state: BulkState, dt: float) -> BulkState:
         """Integrate mixed layer forward in time.
 
         Args:
@@ -725,3 +728,142 @@ class BulkMixedLayerModel(
         dztend = jnp.where(condition, dztend_active, 0.0)
 
         return dztend
+
+    def statistics(self, state: AbstractCoupledState, t: int):
+        """Compute standard meteorological statistics and diagnostics."""
+        mixed_state = state.atmos.mixed
+        land_state = state.land
+        thetav = self.compute_thetav(mixed_state.theta, mixed_state.q)
+        wthetav = self.compute_wthetav(
+            land_state.wtheta, mixed_state.theta, land_state.wq
+        )
+        deltathetav = self.compute_deltathetav(
+            mixed_state.theta,
+            mixed_state.deltatheta,
+            mixed_state.q,
+            mixed_state.dq,
+        )
+        top_p = self.compute_top_p(
+            mixed_state.surf_pressure, cst.rho, cst.g, mixed_state.h_abl
+        )
+        top_T = self.compute_top_T(mixed_state.theta, cst.g, cst.cp, mixed_state.h_abl)
+        top_rh = self.compute_top_rh(mixed_state.q, top_T, top_p)
+        lcl = self.compute_lcl(
+            mixed_state.h_abl,
+            mixed_state.lcl,
+            mixed_state.surf_pressure,
+            mixed_state.theta,
+            mixed_state.q,
+            t,
+        )
+        ml_state = state.atmos.mixed.replace(
+            thetav=thetav,
+            wthetav=wthetav,
+            deltathetav=deltathetav,
+            top_p=top_p,
+            top_T=top_T,
+            top_rh=top_rh,
+            lcl=lcl,
+        )
+        return ml_state
+
+    def compute_thetav(self, theta: Array, q: Array) -> Array:
+        """Computes the virtual potential temperature as
+
+        .. math::
+            \\theta_v = \\theta \\left(1 + 0.61\\, q\\right).
+        """
+        return theta * (1.0 + 0.61 * q)
+
+    def compute_wthetav(self, wtheta: Array, theta: Array, wq: Array) -> Array:
+        """Computes the virtual potential temperature flux as
+
+        .. math::
+            \\overline{w'\\theta_v'} = \\overline{w'\\theta'} + 0.61\\,\\theta\\,\\overline{w'q'}.
+        """
+        return wtheta + 0.61 * theta * wq
+
+    def compute_deltathetav(
+        self,
+        theta: Array,
+        deltatheta: Array,
+        q: Array,
+        dq: Array,
+    ) -> Array:
+        """Computes the virtual potential temperature jump as
+
+        .. math::
+            \\Delta\\theta_v = (\\theta + \\Delta\\theta)\\left(1 + 0.61\\,(q + \\Delta q)\\right)
+            - \\theta\\left(1 + 0.61\\,q\\right)
+        """
+        return (theta + deltatheta) * (1.0 + 0.61 * (q + dq)) - theta * (1.0 + 0.61 * q)
+
+    def compute_top_p(
+        self, surf_pressure: Array, rho: float, g: float, h_abl: Array
+    ) -> Array:
+        """Computes the pressure at the top of the mixed layer as
+
+        .. math::
+            p_{top} = p_{surf} - \\rho\\, g\\, h.
+        """
+        return surf_pressure - rho * g * h_abl
+
+    def compute_top_T(self, theta: Array, g: float, cp: float, h_abl: Array) -> Array:
+        """Computes the temperature at the top of the mixed layer as
+
+        .. math::
+            T_{top} = \\theta - \\frac{g}{c_p}\\, h.
+        """
+        return theta - (g / cp) * h_abl
+
+    def compute_top_rh(self, q: Array, top_T: Array, top_p: Array) -> Array:
+        """Computes the relative humidity at the mixed-layer top as
+
+        .. math::
+            \\mathrm{RH}_{top} = \\frac{q}{q_{sat}(T_{top},\\,p_{top})}.
+        """
+        return q / compute_qsat(top_T, top_p)
+
+    def compute_lcl(
+        self,
+        h_abl: Array,
+        lcl: Array,
+        surf_pressure: Array,
+        theta: Array,
+        q: Array,
+        t: int,
+    ) -> Array:
+        """Compute the lifting condensation level (LCL).
+
+        The LCL is found iteratively by finding the height where the relative humidity is 100%.
+        """
+        # find lifting condensation level iteratively using JAX
+        # initialize lcl and rhlcl based on timestep
+        initial_lcl = jnp.where(t == 0, h_abl, lcl)
+        initial_rhlcl = jnp.where(t == 0, 0.5, 0.9998)
+
+        def lcl_iteration_body(carry, _):
+            lcl, rhlcl = carry
+
+            # update lcl based on current relative humidity
+            lcl_adjustment = (1.0 - rhlcl) * 1000.0
+
+            # convergence check could be done here but scan runs all steps
+            # we damp the adjustment if already converged to avoid jitter, though simple replacement is fine
+
+            new_lcl = lcl + lcl_adjustment
+
+            # calculate new relative humidity at updated lcl
+            p_lcl = surf_pressure - cst.rho * cst.g * new_lcl
+            temp_lcl = theta - cst.g / cst.cp * new_lcl
+            new_rhlcl = q / compute_qsat(temp_lcl, p_lcl)
+
+            return (new_lcl, new_rhlcl), None
+
+        # now we have a fixed number of iterations
+        n_iter = 30
+        (final_lcl, final_rhlcl), _ = jax.lax.scan(
+            lcl_iteration_body, (initial_lcl, initial_rhlcl), None, length=n_iter
+        )
+
+        return final_lcl

@@ -3,6 +3,7 @@
 from abc import abstractmethod
 from typing import Generic, TypeVar
 
+from flax import nnx
 from jax import Array
 from simple_pytree import Pytree
 
@@ -231,6 +232,7 @@ class AbstractCoupledState(AbstractState, Generic[RadT, LandT, AtmosT]):
     rad: RadT
     land: LandT
     atmos: AtmosT
+    t: Array
     total_water_mass: Array
 
     @property
@@ -244,9 +246,7 @@ class AbstractCoupledState(AbstractState, Generic[RadT, LandT, AtmosT]):
         return self.rad.in_srad
 
 
-# limamau: for now this is not needed,
-# but in the future we might say that this is an eqx.Module or something
-class AbstractModel(Generic[StateT]):
+class AbstractModel(nnx.Module, Generic[StateT]):
     """Abstract model class to define the interface for all models."""
 
     @abstractmethod

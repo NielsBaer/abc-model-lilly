@@ -1,3 +1,5 @@
+from functools import partial
+
 import jax
 import jax.numpy as jnp
 import numpy as np
@@ -6,11 +8,13 @@ from jax import Array
 from .abstracts import AbstractCoupledState, AtmosT, LandT, RadT
 from .coupling import ABCoupler
 
+StateT = AbstractCoupledState[RadT, LandT, AtmosT]
+
 
 def warmup(
     state: AbstractCoupledState[RadT, LandT, AtmosT],
-    coupler: ABCoupler,
     t: int,
+    coupler: ABCoupler,
     dt: float,
     tstart: float,
 ) -> AbstractCoupledState[RadT, LandT, AtmosT]:
@@ -19,14 +23,18 @@ def warmup(
     return state
 
 
-def timestep(
+def inner_step(
     state: AbstractCoupledState[RadT, LandT, AtmosT],
+    _: None,  # this is here because the function signature requires it for a scan
     coupler: ABCoupler,
-    t: int,
     dt: float,
     tstart: float,
-) -> AbstractCoupledState[RadT, LandT, AtmosT]:
+) -> tuple[
+    AbstractCoupledState[RadT, LandT, AtmosT],
+    AbstractCoupledState[RadT, LandT, AtmosT],
+]:
     """Run a single timestep of the model."""
+    t = state.t
     atmos = coupler.atmos.statistics(state, t)
     state = state.replace(atmos=atmos)
     rad = coupler.rad.run(state, t, dt, tstart)
@@ -40,7 +48,33 @@ def timestep(
     atmos = coupler.atmos.integrate(state.atmos, dt)
     state = state.replace(atmos=atmos)
     state = coupler.compute_diagnostics(state)
-    return state
+    state = state.replace(t=t + 1)
+    return state, state
+
+
+def outter_step(
+    state: AbstractCoupledState[RadT, LandT, AtmosT],
+    _: None,  # this is here because the function signature requires it for a scan
+    coupler: ABCoupler,
+    inner_dt: float,
+    inner_tsteps: int,
+    tstart: float,
+) -> tuple[
+    AbstractCoupledState[RadT, LandT, AtmosT],
+    AbstractCoupledState[RadT, LandT, AtmosT],
+]:
+    """A block of inner steps averaging the result."""
+    initial_t = state.t
+    step_fn_configured = partial(
+        inner_step, coupler=coupler, dt=inner_dt, tstart=tstart
+    )
+    state, inner_traj = jax.lax.scan(
+        step_fn_configured, state, None, length=inner_tsteps
+    )
+    avg_traj = jax.tree.map(lambda x: jnp.mean(x, axis=0), inner_traj)
+    # this average block is tagged with the initial time
+    avg_traj = avg_traj.replace(t=initial_t)
+    return state, avg_traj
 
 
 def integrate(
@@ -51,42 +85,28 @@ def integrate(
     runtime: float,
     tstart: float,
 ) -> tuple[Array, AbstractCoupledState[RadT, LandT, AtmosT]]:
-    """Integrate the coupler forward in time.
+    """Integrate the coupler forward in time."""
 
-    Args:
-        state: Initial coupled state.
-        coupler: ABCoupler instance.
-        inner_dt: Inner time step (the one used to run the model) [s].
-        outter_dt: Outer time step (the one used to save diagnostics) [s].
-        runtime: Total runtime [s].
-
-    Returns:
-        times: Array of time values [h].
-        trajectory: CoupledState containing the full state trajectory.
-    """
     inner_tsteps = int(np.floor(outter_dt / inner_dt))
     outter_tsteps = int(np.floor(runtime / outter_dt))
 
-    state = warmup(state, coupler, 0, inner_dt, tstart)
+    # warmup and initial diagnostics (t=0)
+    state = warmup(state, 0, coupler, inner_dt, tstart)
     state = coupler.compute_diagnostics(state)
 
-    def inner_step_fn(state, t):
-        state = timestep(state, coupler, t, inner_dt, tstart)
-        return state, state
-
-    def outter_step_fn(state, t):
-        timesteps = t + jnp.arange(inner_tsteps)
-        state, inner_traj = jax.lax.scan(
-            inner_step_fn, state, timesteps, length=inner_tsteps
-        )
-        avg_traj = jax.tree.map(lambda x: jnp.mean(x, axis=0), inner_traj)
-        return state, avg_traj
-
-    timesteps = jnp.arange(outter_tsteps) * inner_tsteps
-    state, trajectory = jax.lax.scan(
-        outter_step_fn, state, timesteps, length=outter_tsteps
+    # configure outter step function
+    step_fn = partial(
+        outter_step,
+        coupler=coupler,
+        inner_dt=inner_dt,
+        inner_tsteps=inner_tsteps,
+        tstart=tstart,
     )
 
+    # this is effectively the integration
+    state, trajectory = jax.lax.scan(step_fn, state, length=outter_tsteps)
+
+    # real time as separate output
     times = jnp.arange(outter_tsteps) * outter_dt / 3600.0 + tstart
 
     return times, trajectory

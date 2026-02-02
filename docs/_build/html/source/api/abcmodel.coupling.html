@@ -171,7 +171,6 @@
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.atmos.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="abcmodel.atmos.mixed_layer.bulk.html">Bulk</a></li>
-<li class="toctree-l4"><a class="reference internal" href="abcmodel.atmos.mixed_layer.stats.html">Stats</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="abcmodel.atmos.clouds.html">Clouds</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -357,6 +356,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.CoupledState.rad"><code class="docutils literal notranslate"><span class="pre">CoupledState.rad</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.CoupledState.land"><code class="docutils literal notranslate"><span class="pre">CoupledState.land</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.CoupledState.atmos"><code class="docutils literal notranslate"><span class="pre">CoupledState.atmos</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.CoupledState.t"><code class="docutils literal notranslate"><span class="pre">CoupledState.t</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.CoupledState.total_water_mass"><code class="docutils literal notranslate"><span class="pre">CoupledState.total_water_mass</span></code></a></li>
 </ul>
 </li>
@@ -380,7 +380,7 @@ document.write(`
 <span id="coupling"></span><h1>Coupling<a class="headerlink" href="#module-abcmodel.coupling" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="abcmodel.coupling.CoupledState">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">abcmodel.coupling.</span></span><span class="sig-name descname"><span class="pre">CoupledState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">land</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atmos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_water_mass</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/coupling.html#CoupledState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.coupling.CoupledState" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">abcmodel.coupling.</span></span><span class="sig-name descname"><span class="pre">CoupledState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">land</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atmos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_water_mass</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/coupling.html#CoupledState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.coupling.CoupledState" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="abcmodel.abstracts.html#abcmodel.abstracts.AbstractCoupledState" title="abcmodel.abstracts.AbstractCoupledState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractCoupledState</span></code></a>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">RadT</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">LandT</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">AtmosT</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">RadT</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">LandT</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">AtmosT</span></code>]</p>
 <p>Hierarchical coupled state, generic over component types.</p>
 <dl class="py attribute">
@@ -399,6 +399,11 @@ document.write(`
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.coupling.CoupledState.t">
+<span class="sig-name descname"><span class="pre">t</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.coupling.CoupledState.t" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="abcmodel.coupling.CoupledState.total_water_mass">
 <span class="sig-name descname"><span class="pre">total_water_mass</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.coupling.CoupledState.total_water_mass" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
@@ -408,7 +413,7 @@ document.write(`
 <dl class="py class">
 <dt class="sig sig-object py" id="abcmodel.coupling.ABCoupler">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">abcmodel.coupling.</span></span><span class="sig-name descname"><span class="pre">ABCoupler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">land</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atmos</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/coupling.html#ABCoupler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.coupling.ABCoupler" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
 <p>Coupling class to bound all the components.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="abcmodel.coupling.ABCoupler.init_state">
@@ -474,6 +479,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.CoupledState.rad"><code class="docutils literal notranslate"><span class="pre">CoupledState.rad</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.CoupledState.land"><code class="docutils literal notranslate"><span class="pre">CoupledState.land</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.CoupledState.atmos"><code class="docutils literal notranslate"><span class="pre">CoupledState.atmos</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.CoupledState.t"><code class="docutils literal notranslate"><span class="pre">CoupledState.t</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.CoupledState.total_water_mass"><code class="docutils literal notranslate"><span class="pre">CoupledState.total_water_mass</span></code></a></li>
 </ul>
 </li>

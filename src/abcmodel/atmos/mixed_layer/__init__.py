@@ -1,3 +1,3 @@
-from .bulk import BulkMixedLayerModel
+from .bulk import BulkModel
 
-__all__ = ["BulkMixedLayerModel"]
+__all__ = ["BulkModel"]

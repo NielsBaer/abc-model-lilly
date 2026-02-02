@@ -100,3 +100,15 @@ class PhysicalConstants:
     """Molecular weight air [g mol-1]."""
     nuco2q = 1.6
     """Ratio molecular viscosity water to carbon dioxide."""
+
+
+def get_path_string(path):
+    """Converts a JAX KeyPath tuple into a string path like, e.g., land.le becomes 'land/le'."""
+    parts = []
+    for p in path:
+        if hasattr(p, "name"):
+            parts.append(str(p.name))
+        else:
+            raise ValueError(f"Unsupported path element: {p}")
+
+    return "/".join(parts)

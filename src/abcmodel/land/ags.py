@@ -15,19 +15,19 @@ from .standard import AbstractStandardLandModel, StandardLandState
 class AgsState(StandardLandState):
     """A-gs model state."""
 
-    rsCO2: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    rsCO2: Array = field(default_factory=lambda: jnp.array(0.0))
     """Stomatal resistance to CO2."""
-    gcco2: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    gcco2: Array = field(default_factory=lambda: jnp.array(0.0))
     """Conductance to CO2."""
-    ci: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    ci: Array = field(default_factory=lambda: jnp.array(0.0))
     """Intercellular CO2 concentration."""
-    co2abs: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    co2abs: Array = field(default_factory=lambda: jnp.array(0.0))
     """CO2 assimilation rate."""
-    wCO2A: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    wCO2A: Array = field(default_factory=lambda: jnp.array(0.0))
     """Net assimilation flux [mol m-2 s-1]."""
-    wCO2R: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    wCO2R: Array = field(default_factory=lambda: jnp.array(0.0))
     """Respiration flux [mol m-2 s-1]."""
-    wCO2: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    wCO2: Array = field(default_factory=lambda: jnp.array(0.0))
     """Total CO2 flux [mol m-2 s-1]."""
 
 
@@ -48,21 +48,21 @@ class AgsModel(AbstractStandardLandModel):
         else:
             raise ValueError(f'''Invalid option "{c3c4}" for "c3c4".''')
 
-        self.co2comp298 = jnp.array([68.5, 4.3])
-        self.net_rad10CO2 = jnp.array([1.5, 1.5])
-        self.gm298 = jnp.array([7.0, 17.5])
-        self.ammax298 = jnp.array([2.2, 1.7])
-        self.net_rad10gm = jnp.array([2.0, 2.0])
-        self.temp1gm = jnp.array([278.0, 286.0])
-        self.temp2gm = jnp.array([301.0, 309.0])
-        self.net_rad10Am = jnp.array([2.0, 2.0])
-        self.temp1Am = jnp.array([281.0, 286.0])
-        self.temp2Am = jnp.array([311.0, 311.0])
-        self.f0 = jnp.array([0.89, 0.85])
-        self.ad = jnp.array([0.07, 0.15])
-        self.alpha0 = jnp.array([0.017, 0.014])
-        self.kx = jnp.array([0.7, 0.7])
-        self.gmin = jnp.array([0.25e-3, 0.25e-3])
+        self.co2comp298 = 68.5 if c3c4 == "c3" else 4.3
+        self.net_rad10CO2 = 1.5 if c3c4 == "c3" else 1.5
+        self.gm298 = 7.0 if c3c4 == "c3" else 17.5
+        self.ammax298 = 2.2 if c3c4 == "c3" else 1.7
+        self.net_rad10gm = 2.0 if c3c4 == "c3" else 2.0
+        self.temp1gm = 278.0 if c3c4 == "c3" else 286.0
+        self.temp2gm = 301.0 if c3c4 == "c3" else 309.0
+        self.net_rad10Am = 2.0 if c3c4 == "c3" else 2.0
+        self.temp1Am = 281.0 if c3c4 == "c3" else 286.0
+        self.temp2Am = 311.0 if c3c4 == "c3" else 311.0
+        self.f0 = 0.89 if c3c4 == "c3" else 0.85
+        self.ad = 0.07 if c3c4 == "c3" else 0.15
+        self.alpha0 = 0.017 if c3c4 == "c3" else 0.014
+        self.kx = 0.7 if c3c4 == "c3" else 0.7
+        self.gmin = 0.25e-3 if c3c4 == "c3" else 0.25e-3
         self.nuco2q = 1.6
         self.cw = 0.0016
         self.wmax = 0.55
@@ -142,8 +142,8 @@ class AgsModel(AbstractStandardLandModel):
         # limamau: why are we using thetasurf here instead of surf_temp?
         # where is this rho coming from?
         temp_diff = 0.1 * (thetasurf - 298.0)
-        exp_term = jnp.pow(self.net_rad10CO2[self.c3c4], temp_diff)
-        return self.co2comp298[self.c3c4] * cst.rho * exp_term
+        exp_term = jnp.pow(self.net_rad10CO2, temp_diff)
+        return self.co2comp298 * cst.rho * exp_term
 
     def compute_gm(self, thetasurf: Array) -> Array:
         """Compute the mesophyll conductance.
@@ -170,10 +170,10 @@ class AgsModel(AbstractStandardLandModel):
 
         """
         temp_diff = 0.1 * (thetasurf - 298.0)
-        exp_term = jnp.pow(self.net_rad10gm[self.c3c4], temp_diff)
-        temp_factor1 = 1.0 + jnp.exp(0.3 * (self.temp1gm[self.c3c4] - thetasurf))
-        temp_factor2 = 1.0 + jnp.exp(0.3 * (thetasurf - self.temp2gm[self.c3c4]))
-        gm = self.gm298[self.c3c4] * exp_term / (temp_factor1 * temp_factor2)
+        exp_term = jnp.pow(self.net_rad10gm, temp_diff)
+        temp_factor1 = 1.0 + jnp.exp(0.3 * (self.temp1gm - thetasurf))
+        temp_factor2 = 1.0 + jnp.exp(0.3 * (thetasurf - self.temp2gm))
+        gm = self.gm298 * exp_term / (temp_factor1 * temp_factor2)
         return gm / 1000.0
 
     def compute_fmin(
@@ -195,10 +195,8 @@ class AgsModel(AbstractStandardLandModel):
 
             where :math:`f_{min,0} = \\frac{g_{min}}{\\nu_{CO2}} - \\frac{1}{9} g_m`.
         """
-        fmin0 = self.gmin[self.c3c4] / self.nuco2q - 1.0 / 9.0 * gm
-        fmin_sq_term = (
-            jnp.power(fmin0, 2.0) + 4 * self.gmin[self.c3c4] / self.nuco2q * gm
-        )
+        fmin0 = self.gmin / self.nuco2q - 1.0 / 9.0 * gm
+        fmin_sq_term = jnp.power(fmin0, 2.0) + 4 * self.gmin / self.nuco2q * gm
         fmin = -fmin0 + jnp.power(fmin_sq_term, 0.5) / (2.0 * gm)
         return fmin
 
@@ -235,7 +233,7 @@ class AgsModel(AbstractStandardLandModel):
 
             where :math:`f_0` and :math:`a_d` are empirical parameters.
         """
-        d0 = (self.f0[self.c3c4] - fmin) / self.ad[self.c3c4]
+        d0 = (self.f0 - fmin) / self.ad
         return d0
 
     def compute_internal_co2(
@@ -266,7 +264,7 @@ class AgsModel(AbstractStandardLandModel):
 
             where :math:`\\gamma` is the CO2 compensation point.
         """
-        cfrac = self.f0[self.c3c4] * (1.0 - (ds / d0)) + fmin * (ds / d0)
+        cfrac = self.f0 * (1.0 - (ds / d0)) + fmin * (ds / d0)
         co2abs = co2 * (cst.mco2 / cst.mair) * cst.rho
         ci = cfrac * (co2abs - co2comp) + co2comp
         return ci, co2abs
@@ -290,10 +288,10 @@ class AgsModel(AbstractStandardLandModel):
             Equation E.3 from the CLASS book.
         """
         temp_diff = 0.1 * (thetasurf - 298.0)
-        exp_term = jnp.power(self.net_rad10Am[self.c3c4], temp_diff)
-        temp_factor1 = 1.0 + jnp.exp(0.3 * (self.temp1Am[self.c3c4] - thetasurf))
-        temp_factor2 = 1.0 + jnp.exp(0.3 * (thetasurf - self.temp2Am[self.c3c4]))
-        ammax = self.ammax298[self.c3c4] * exp_term / (temp_factor1 * temp_factor2)
+        exp_term = jnp.power(self.net_rad10Am, temp_diff)
+        temp_factor1 = 1.0 + jnp.exp(0.3 * (self.temp1Am - thetasurf))
+        temp_factor2 = 1.0 + jnp.exp(0.3 * (thetasurf - self.temp2Am))
+        ammax = self.ammax298 * exp_term / (temp_factor1 * temp_factor2)
         return ammax
 
     def compute_soil_moisture_stress_factor(self, w2: float) -> Array:
@@ -415,7 +413,7 @@ class AgsModel(AbstractStandardLandModel):
                 \\alpha_c = \\alpha_0 \\frac{C_a - \\gamma}{C_a + 2\\gamma}
         """
         co2_ratio = (co2abs - co2comp) / (co2abs + 2.0 * co2comp)
-        alphac = self.alpha0[self.c3c4] * co2_ratio
+        alphac = self.alpha0 * co2_ratio
         return alphac
 
     def compute_canopy_co2_conductance(
@@ -440,15 +438,16 @@ class AgsModel(AbstractStandardLandModel):
         References:
             Equations E.13, E.14, E.15 from the CLASS book.
         """
-        y = alphac * self.kx[self.c3c4] * par / (am + rdark)
-        exp1_arg1 = y * jnp.exp(-self.kx[self.c3c4] * self.lai)
-        exp1_arg2 = y
+        y = alphac * self.kx * par / (am + rdark)
+        exp1_arg1 = jnp.array([y * jnp.exp(-self.kx * self.lai)])
+        exp1_arg2 = jnp.array([y])
         exp1_term = exp1(exp1_arg1) - exp1(exp1_arg2)
-        an = (am + rdark) * (1.0 - (1.0 / (self.kx[self.c3c4] * self.lai)) * exp1_term)
-        a1 = 1.0 / (1.0 - self.f0[self.c3c4])
-        dstar = d0 / (a1 * (self.f0[self.c3c4] - fmin))
+        exp1_term = jnp.squeeze(exp1_term)
+        an = (am + rdark) * (1.0 - (1.0 / (self.kx * self.lai)) * exp1_term)
+        a1 = 1.0 / (1.0 - self.f0)
+        dstar = d0 / (a1 * (self.f0 - fmin))
         conductance_factor = a1 * fstr * an / ((co2abs - co2comp) * (1.0 + ds / dstar))
-        gcco2 = self.lai * (self.gmin[self.c3c4] / self.nuco2q + conductance_factor)
+        gcco2 = self.lai * (self.gmin / self.nuco2q + conductance_factor)
         return gcco2
 
     def compute_rs(self, gcco2: Array):

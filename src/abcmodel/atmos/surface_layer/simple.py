@@ -14,16 +14,16 @@ from ..dayonly import DayOnlyAtmosphereState
 
 
 @dataclass
-class SimpleSurfaceLayerState(AbstractSurfaceLayerState):
+class SimpleState(AbstractSurfaceLayerState):
     """Minimal surface layer model initial state."""
 
     ustar: Array
     """Surface friction velocity [m/s]."""
-    uw: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    uw: Array = field(default_factory=lambda: jnp.array(0.0))
     """Zonal surface momentum flux [m2 s-2]."""
-    vw: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    vw: Array = field(default_factory=lambda: jnp.array(0.0))
     """Meridional surface momentum flux [m2 s-2]."""
-    ra: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    ra: Array = field(default_factory=lambda: jnp.array(0.0))
     """Aerodynamic resistance [s/m]."""
 
 
@@ -32,20 +32,20 @@ StateAlias = AbstractCoupledState[
     RadT,
     LandT,
     DayOnlyAtmosphereState[
-        SimpleSurfaceLayerState,
+        SimpleState,
         MixedT,
         CloudT,
     ],
 ]
 
 
-class SimpleSurfaceLayerModel(AbstractSurfaceLayerModel[SimpleSurfaceLayerState]):
+class SimpleModel(AbstractSurfaceLayerModel[SimpleState]):
     """Simple surface layer model with constant friction velocity."""
 
     def __init__(self):
         pass
 
-    def init_state(self, ustar: float) -> SimpleSurfaceLayerState:
+    def init_state(self, ustar: float) -> SimpleState:
         """Initialize the model state.
 
         Args:
@@ -54,7 +54,7 @@ class SimpleSurfaceLayerModel(AbstractSurfaceLayerModel[SimpleSurfaceLayerState]
         Returns:
             The initial surface layer state.
         """
-        return SimpleSurfaceLayerState(
+        return SimpleState(
             ustar=jnp.array(ustar),
         )
 

@@ -26,11 +26,11 @@ def main():
     land_state = land_model.init_state(**cm.jarvis_stewart.state_kwargs)
 
     # surface layer
-    surface_layer_model = abcmodel.atmos.surface_layer.SimpleSurfaceLayerModel()
+    surface_layer_model = abcmodel.atmos.surface_layer.SimpleModel()
     surface_layer_init_conds = surface_layer_model.init_state(ustar=0.3)
 
     # mixed layer
-    mixed_layer_model = abcmodel.atmos.mixed_layer.BulkMixedLayerModel(
+    mixed_layer_model = abcmodel.atmos.mixed_layer.BulkModel(
         **cm.bulk_mixed_layer.model_kwargs,
     )
     mixed_layer_state = mixed_layer_model.init_state(**cm.bulk_mixed_layer.state_kwargs)

@@ -19,9 +19,9 @@ class CumulusState(AbstractCloudState):
     """Cloud core moisture flux [kg/kg/s]."""
     cl_trans: Array = field(default_factory=lambda: jnp.array(1.0))
     """Cloud layer transmittance [-], range 0 to 1."""
-    q2_h: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    q2_h: Array = field(default_factory=lambda: jnp.array(0.0))
     """Humidity variance at mixed-layer top [kg²/kg²]."""
-    top_CO22: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    top_CO22: Array = field(default_factory=lambda: jnp.array(0.0))
     """CO2 variance at mixed-layer top [ppm²]."""
     wCO2M: Array = field(default_factory=lambda: jnp.array(0.0))
     """CO2 mass flux [mgC/m²/s]."""
@@ -101,8 +101,8 @@ class CumulusModel(AbstractCloudModel[CumulusState]):
             cl_trans=cl_trans,
         )
 
-    @staticmethod
     def compute_q2_h(
+        self,
         cc_qf: Array,
         wthetav: Array,
         wqe: Array,
@@ -123,8 +123,8 @@ class CumulusModel(AbstractCloudModel[CumulusState]):
             wthetav > 0.0, -(wqe + cc_qf) * dq * h_abl / (dz_h * wstar), 0.0
         )
 
-    @staticmethod
     def compute_top_CO22(
+        self,
         wthetav: Array,
         h_abl: Array,
         dz_h: Array,
@@ -145,8 +145,9 @@ class CumulusModel(AbstractCloudModel[CumulusState]):
             wthetav > 0.0, -(wCO2e + wCO2M) * deltaCO2 * h_abl / (dz_h * wstar), 0.0
         )
 
-    @staticmethod
-    def compute_cc_frac(q: Array, top_T: Array, top_p: Array, q2_h: Array) -> Array:
+    def compute_cc_frac(
+        self, q: Array, top_T: Array, top_p: Array, q2_h: Array
+    ) -> Array:
         """Compute cloud core fraction using the arctangent formulation.
 
         Notes:
@@ -167,8 +168,7 @@ class CumulusModel(AbstractCloudModel[CumulusState]):
         )
         return cc_frac
 
-    @staticmethod
-    def compute_cc_mf(cc_frac: Array, wstar: Array) -> Array:
+    def compute_cc_mf(self, cc_frac: Array, wstar: Array) -> Array:
         """Compute cloud core mass flux.
 
         Notes:
@@ -179,8 +179,7 @@ class CumulusModel(AbstractCloudModel[CumulusState]):
         """
         return cc_frac * wstar
 
-    @staticmethod
-    def compute_cc_qf(cc_mf: Array, q2_h: Array) -> Array:
+    def compute_cc_qf(self, cc_mf: Array, q2_h: Array) -> Array:
         """Compute cloud core moisture flux.
 
         Notes:
@@ -191,8 +190,7 @@ class CumulusModel(AbstractCloudModel[CumulusState]):
         """
         return jnp.where(q2_h > 0.0, cc_mf * (q2_h**0.5), 0.0)
 
-    @staticmethod
-    def compute_wCO2M(cc_mf: Array, top_CO22: Array, deltaCO2: Array) -> Array:
+    def compute_wCO2M(self, cc_mf: Array, top_CO22: Array, deltaCO2: Array) -> Array:
         """Compute CO2 mass flux.
 
         Notes:

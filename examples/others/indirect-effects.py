@@ -28,7 +28,7 @@ def run_wrapper(wg: float, q: float, config):
     land_state = land_model.init_state(**ags_kwargs)
 
     # surface layer
-    surface_layer_model = abcmodel.atmos.surface_layer.ObukhovSurfaceLayerModel()
+    surface_layer_model = abcmodel.atmos.surface_layer.ObukhovModel()
     surface_layer_state = surface_layer_model.init_state(
         **config.obukhov_sl_state_kwargs
     )
@@ -36,7 +36,7 @@ def run_wrapper(wg: float, q: float, config):
     # mixed layer
     ml_kwargs = config.bulk_ml_state_kwargs
     ml_kwargs["q"] = q
-    mixed_layer_model = abcmodel.atmos.mixed_layer.BulkMixedLayerModel(
+    mixed_layer_model = abcmodel.atmos.mixed_layer.BulkModel(
         **config.bulk_ml_model_kwargs,
     )
     mixed_layer_state = mixed_layer_model.init_state(**ml_kwargs)

@@ -19,13 +19,13 @@ class StandardRadiationState(AbstractRadiationState):
 
     net_rad: Array
     """Net surface rad [W m-2]."""
-    in_srad: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    in_srad: Array = field(default_factory=lambda: jnp.array(0.0))
     """Incoming solar rad [W m-2]."""
-    out_srad: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    out_srad: Array = field(default_factory=lambda: jnp.array(0.0))
     """Outgoing solar rad [W m-2]."""
-    in_lrad: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    in_lrad: Array = field(default_factory=lambda: jnp.array(0.0))
     """Incoming longwave rad [W m-2]."""
-    out_lrad: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    out_lrad: Array = field(default_factory=lambda: jnp.array(0.0))
     """Outgoing longwave rad [W m-2]."""
 
 
@@ -53,10 +53,10 @@ class StandardRadiationModel(AbstractRadiationModel[StandardRadiationState]):
         doy: float,
         cc: float,
     ):
-        self.lat = jnp.array(lat)
-        self.lon = jnp.array(lon)
-        self.doy = jnp.array(doy)
-        self.cc = jnp.array(cc)
+        self.lat = lat
+        self.lon = lon
+        self.doy = doy
+        self.cc = cc
 
     def init_state(self, net_rad: float) -> StandardRadiationState:
         """Initialize the model state.
@@ -127,7 +127,7 @@ class StandardRadiationModel(AbstractRadiationModel[StandardRadiationState]):
             out_lrad=out_lrad,
         )
 
-    def compute_solar_declination(self, doy: Array) -> Array:
+    def compute_solar_declination(self, doy: float) -> Array:
         """Compute solar declination angle based on day of year.
 
         Args:

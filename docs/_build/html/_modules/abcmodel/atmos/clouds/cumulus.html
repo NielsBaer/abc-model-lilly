@@ -170,7 +170,6 @@
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html">Bulk</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.mixed_layer.stats.html">Stats</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.clouds.html">Clouds</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -330,9 +329,9 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Cloud core moisture flux [kg/kg/s].&quot;&quot;&quot;</span>
     <span class="n">cl_trans</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">1.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Cloud layer transmittance [-], range 0 to 1.&quot;&quot;&quot;</span>
-    <span class="n">q2_h</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">q2_h</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Humidity variance at mixed-layer top [kg²/kg²].&quot;&quot;&quot;</span>
-    <span class="n">top_CO22</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">top_CO22</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;CO2 variance at mixed-layer top [ppm²].&quot;&quot;&quot;</span>
     <span class="n">wCO2M</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;CO2 mass flux [mgC/m²/s].&quot;&quot;&quot;</span></div>
@@ -423,8 +422,8 @@ document.write(`
 
 <div class="viewcode-block" id="CumulusModel.compute_q2_h">
 <a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.clouds.cumulus.html#abcmodel.atmos.clouds.cumulus.CumulusModel.compute_q2_h">[docs]</a>
-    <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_q2_h</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
         <span class="n">cc_qf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">wthetav</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">wqe</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -448,8 +447,8 @@ document.write(`
 
 <div class="viewcode-block" id="CumulusModel.compute_top_CO22">
 <a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.clouds.cumulus.html#abcmodel.atmos.clouds.cumulus.CumulusModel.compute_top_CO22">[docs]</a>
-    <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_top_CO22</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
         <span class="n">wthetav</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">h_abl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">dz_h</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -473,8 +472,9 @@ document.write(`
 
 <div class="viewcode-block" id="CumulusModel.compute_cc_frac">
 <a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.clouds.cumulus.html#abcmodel.atmos.clouds.cumulus.CumulusModel.compute_cc_frac">[docs]</a>
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">compute_cc_frac</span><span class="p">(</span><span class="n">q</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">top_T</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">top_p</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">q2_h</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_cc_frac</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">top_T</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">top_p</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">q2_h</span><span class="p">:</span> <span class="n">Array</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute cloud core fraction using the arctangent formulation.</span>
 
 <span class="sd">        Notes:</span>
@@ -498,8 +498,7 @@ document.write(`
 
 <div class="viewcode-block" id="CumulusModel.compute_cc_mf">
 <a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.clouds.cumulus.html#abcmodel.atmos.clouds.cumulus.CumulusModel.compute_cc_mf">[docs]</a>
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">compute_cc_mf</span><span class="p">(</span><span class="n">cc_frac</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">wstar</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_cc_mf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cc_frac</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">wstar</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute cloud core mass flux.</span>
 
 <span class="sd">        Notes:</span>
@@ -513,8 +512,7 @@ document.write(`
 
 <div class="viewcode-block" id="CumulusModel.compute_cc_qf">
 <a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.clouds.cumulus.html#abcmodel.atmos.clouds.cumulus.CumulusModel.compute_cc_qf">[docs]</a>
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">compute_cc_qf</span><span class="p">(</span><span class="n">cc_mf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">q2_h</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_cc_qf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cc_mf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">q2_h</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute cloud core moisture flux.</span>
 
 <span class="sd">        Notes:</span>
@@ -528,8 +526,7 @@ document.write(`
 
 <div class="viewcode-block" id="CumulusModel.compute_wCO2M">
 <a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.clouds.cumulus.html#abcmodel.atmos.clouds.cumulus.CumulusModel.compute_wCO2M">[docs]</a>
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">compute_wCO2M</span><span class="p">(</span><span class="n">cc_mf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">top_CO22</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">deltaCO2</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_wCO2M</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cc_mf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">top_CO22</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">deltaCO2</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute CO2 mass flux.</span>
 
 <span class="sd">        Notes:</span>

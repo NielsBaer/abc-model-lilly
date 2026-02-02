@@ -170,7 +170,6 @@
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html">Bulk</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.mixed_layer.stats.html">Stats</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.clouds.html">Clouds</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -309,19 +308,23 @@ document.write(`
   <h1>Source code for abcmodel.atmos.mixed_layer.bulk</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jax</span><span class="w"> </span><span class="kn">import</span> <span class="n">Array</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">...abstracts</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractCoupledState</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">...utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">Array</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">...utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhysicalConstants</span> <span class="k">as</span> <span class="n">cst</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..abstracts</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractMixedLayerModel</span><span class="p">,</span> <span class="n">AbstractMixedLayerState</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractStandardStatsModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">...utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_qsat</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..abstracts</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AbstractMixedLayerModel</span><span class="p">,</span>
+    <span class="n">AbstractMixedLayerState</span><span class="p">,</span>
+<span class="p">)</span>
 
 
-<div class="viewcode-block" id="BulkMixedLayerState">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerState">[docs]</a>
+<div class="viewcode-block" id="BulkState">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkState">[docs]</a>
 <span class="nd">@dataclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">BulkMixedLayerState</span><span class="p">(</span><span class="n">AbstractMixedLayerState</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BulkState</span><span class="p">(</span><span class="n">AbstractMixedLayerState</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Data class for bulk mixed layer model state.&quot;&quot;&quot;</span>
 
     <span class="c1"># initialized by the user</span>
@@ -361,64 +364,62 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Entrainment velocity [m s-1].&quot;&quot;&quot;</span>
 
     <span class="c1"># should be initialized during warmup</span>
-    <span class="n">thetav</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">thetav</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Mixed-layer potential temperature [K].&quot;&quot;&quot;</span>
-    <span class="n">deltathetav</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">deltathetav</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Virtual temperature jump at the top of the ABL [K].&quot;&quot;&quot;</span>
-    <span class="n">wthetav</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">wthetav</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface kinematic virtual heat flux [K m s-1].&quot;&quot;&quot;</span>
-    <span class="n">wqe</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">wqe</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Entrainment moisture flux [kg kg-1 m s-1].&quot;&quot;&quot;</span>
-    <span class="n">wCO2e</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">wCO2e</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Entrainment CO2 flux [mgC/m²/s].&quot;&quot;&quot;</span>
-    <span class="n">wthetae</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">wthetae</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Entrainment potential temperature flux [K m s-1].&quot;&quot;&quot;</span>
-    <span class="n">wthetave</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">wthetave</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Entrainment virtual heat flux [K m s-1].&quot;&quot;&quot;</span>
-    <span class="n">lcl</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">lcl</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Lifting condensation level [m].&quot;&quot;&quot;</span>
-    <span class="n">top_rh</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">top_rh</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Top of mixed layer relative humidity [%].&quot;&quot;&quot;</span>
-    <span class="n">top_p</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">top_p</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Pressure at top of mixed layer [Pa].&quot;&quot;&quot;</span>
-    <span class="n">top_T</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">top_T</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Temperature at top of mixed layer [K].&quot;&quot;&quot;</span>
-    <span class="n">utend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">utend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Zonal wind velocity tendency [m s-2].&quot;&quot;&quot;</span>
-    <span class="n">dutend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">dutend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Zonal wind velocity tendency at the ABL height [m s-2].&quot;&quot;&quot;</span>
-    <span class="n">vtend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">vtend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Meridional wind velocity tendency [m s-2].&quot;&quot;&quot;</span>
-    <span class="n">dvtend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">dvtend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Meridional wind velocity tendency at the ABL height [m/s²].&quot;&quot;&quot;</span>
-    <span class="n">h_abl_tend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">h_abl_tend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Tendency of CBL [m s-1].&quot;&quot;&quot;</span>
-    <span class="n">thetatend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">thetatend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Tendency of mixed-layer potential temperature [K s-1].&quot;&quot;&quot;</span>
-    <span class="n">deltathetatend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">deltathetatend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Tendency of mixed-layer potential temperature at the ABL height [K s-1].&quot;&quot;&quot;</span>
-    <span class="n">qtend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">qtend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Tendency of mixed-layer specific humidity [kg/kg s-1].&quot;&quot;&quot;</span>
-    <span class="n">dqtend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">dqtend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Tendency of mixed-layer specific humidity at the ABL height [kg/kg s-1].&quot;&quot;&quot;</span>
-    <span class="n">co2tend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">co2tend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Tendency of CO2 concentration [ppm s-1].&quot;&quot;&quot;</span>
-    <span class="n">deltaCO2tend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">deltaCO2tend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Tendency of CO2 concentration at the ABL height [ppm s-1].&quot;&quot;&quot;</span>
-    <span class="n">dztend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">dztend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Tendency of transition layer thickness [m s-1].&quot;&quot;&quot;</span>
-    <span class="n">ws</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">ws</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Large-scale vertical velocity (subsidence) [m s-1].&quot;&quot;&quot;</span>
-    <span class="n">wf</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">wf</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Mixed-layer growth due to cloud top radiative divergence [m s-1].&quot;&quot;&quot;</span></div>
 
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">BulkMixedLayerModel</span><span class="p">(</span>
-    <span class="n">AbstractStandardStatsModel</span><span class="p">,</span> <span class="n">AbstractMixedLayerModel</span><span class="p">[</span><span class="n">BulkMixedLayerState</span><span class="p">]</span>
-<span class="p">):</span>
+<div class="viewcode-block" id="BulkModel">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BulkModel</span><span class="p">(</span><span class="n">AbstractMixedLayerModel</span><span class="p">[</span><span class="n">BulkState</span><span class="p">]):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Bulk mixed layer model with full atmospheric boundary layer dynamics.</span>
 
 <span class="sd">    Complete mixed layer model that simulates atmospheric boundary layer evolution</span>
@@ -482,8 +483,8 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">is_fix_free_trop</span> <span class="o">=</span> <span class="n">is_fix_free_trop</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_wind_prog</span> <span class="o">=</span> <span class="n">is_wind_prog</span>
 
-<div class="viewcode-block" id="BulkMixedLayerModel.init_state">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.init_state">[docs]</a>
+<div class="viewcode-block" id="BulkModel.init_state">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.init_state">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">init_state</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">h_abl</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
@@ -500,7 +501,7 @@ document.write(`
         <span class="n">dv</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">dz_h</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">surf_pressure</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BulkMixedLayerState</span><span class="p">:</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BulkState</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the model state.</span>
 
 <span class="sd">        Args:</span>
@@ -522,7 +523,7 @@ document.write(`
 <span class="sd">        Returns:</span>
 <span class="sd">            The initial mixed layer state.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">BulkMixedLayerState</span><span class="p">(</span>
+        <span class="k">return</span> <span class="n">BulkState</span><span class="p">(</span>
             <span class="n">h_abl</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">h_abl</span><span class="p">),</span>
             <span class="n">theta</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span>
             <span class="n">deltatheta</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">deltatheta</span><span class="p">),</span>
@@ -540,9 +541,9 @@ document.write(`
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.run">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.run">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BulkMixedLayerState</span><span class="p">:</span>
+<div class="viewcode-block" id="BulkModel.run">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.run">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BulkState</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the model.</span>
 
 <span class="sd">        Args:</span>
@@ -563,9 +564,10 @@ document.write(`
         <span class="n">w_CO2_ft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_w_CO2_ft</span><span class="p">(</span><span class="n">ws</span><span class="p">)</span>
 
         <span class="c1"># compute virtual heat flux at surface</span>
-        <span class="n">wthetav</span> <span class="o">=</span> <span class="n">land_state</span><span class="o">.</span><span class="n">wtheta</span> <span class="o">*</span> <span class="p">(</span>
-            <span class="mf">1.0</span> <span class="o">+</span> <span class="mf">0.61</span> <span class="o">*</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">q</span>
-        <span class="p">)</span> <span class="o">+</span> <span class="mf">0.61</span> <span class="o">*</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">theta</span> <span class="o">*</span> <span class="n">land_state</span><span class="o">.</span><span class="n">wq</span>
+        <span class="n">wthetav</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">land_state</span><span class="o">.</span><span class="n">wtheta</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="mf">0.61</span> <span class="o">*</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">q</span><span class="p">)</span>
+            <span class="o">+</span> <span class="mf">0.61</span> <span class="o">*</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">theta</span> <span class="o">*</span> <span class="n">land_state</span><span class="o">.</span><span class="n">wq</span>
+        <span class="p">)</span>
 
         <span class="n">wstar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_wstar</span><span class="p">(</span>
             <span class="n">ml_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">,</span>
@@ -635,9 +637,9 @@ document.write(`
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.integrate">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.integrate">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">integrate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">BulkMixedLayerState</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BulkMixedLayerState</span><span class="p">:</span>
+<div class="viewcode-block" id="BulkModel.integrate">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.integrate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">integrate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">BulkState</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BulkState</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Integrate mixed layer forward in time.</span>
 
 <span class="sd">        Args:</span>
@@ -677,8 +679,8 @@ document.write(`
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.compute_ws">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_ws">[docs]</a>
+<div class="viewcode-block" id="BulkModel.compute_ws">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_ws">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_ws</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h_abl</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the large-scale subsidence velocity as</span>
 
@@ -690,8 +692,8 @@ document.write(`
         <span class="k">return</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">divU</span> <span class="o">*</span> <span class="n">h_abl</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.compute_wf">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_wf">[docs]</a>
+<div class="viewcode-block" id="BulkModel.compute_wf">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_wf">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_wf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deltatheta</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the mixed-layer growth due to cloud top radiative divergence as</span>
 
@@ -705,8 +707,8 @@ document.write(`
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">deltaFz</span> <span class="o">/</span> <span class="n">radiative_denominator</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.compute_w_th_ft">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_w_th_ft">[docs]</a>
+<div class="viewcode-block" id="BulkModel.compute_w_th_ft">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_w_th_ft">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_w_th_ft</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ws</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the potential temperature compensation term to fix free troposphere values as</span>
 
@@ -720,8 +722,8 @@ document.write(`
         <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_fix_free_trop</span><span class="p">,</span> <span class="n">w_th_ft_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.compute_w_q_ft">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_w_q_ft">[docs]</a>
+<div class="viewcode-block" id="BulkModel.compute_w_q_ft">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_w_q_ft">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_w_q_ft</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ws</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute humidity compensation term to fix free troposphere values as</span>
 
@@ -735,8 +737,8 @@ document.write(`
         <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_fix_free_trop</span><span class="p">,</span> <span class="n">w_q_ft_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.compute_w_CO2_ft">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_w_CO2_ft">[docs]</a>
+<div class="viewcode-block" id="BulkModel.compute_w_CO2_ft">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_w_CO2_ft">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_w_CO2_ft</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ws</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute CO2 compensation term to fix free troposphere values as</span>
 
@@ -750,8 +752,8 @@ document.write(`
         <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_fix_free_trop</span><span class="p">,</span> <span class="n">w_CO2_ft_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.compute_wstar">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_wstar">[docs]</a>
+<div class="viewcode-block" id="BulkModel.compute_wstar">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_wstar">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_wstar</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">h_abl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -774,8 +776,8 @@ document.write(`
         <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">wthetav</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">wstar_positive</span><span class="p">,</span> <span class="mf">1e-6</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.compute_wthetave">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_wthetave">[docs]</a>
+<div class="viewcode-block" id="BulkModel.compute_wthetave">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_wthetave">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_wthetave</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wthetav</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the entrainment virtual heat flux as</span>
 
@@ -788,8 +790,8 @@ document.write(`
         <span class="k">return</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="o">*</span> <span class="n">wthetav</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.compute_we">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_we">[docs]</a>
+<div class="viewcode-block" id="BulkModel.compute_we">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_we">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_we</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">h_abl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -833,8 +835,8 @@ document.write(`
         <span class="k">return</span> <span class="n">we_final</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.compute_wthetae">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_wthetae">[docs]</a>
+<div class="viewcode-block" id="BulkModel.compute_wthetae">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_wthetae">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_wthetae</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">deltatheta</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the entrainment heat flux as</span>
 
@@ -847,8 +849,8 @@ document.write(`
         <span class="k">return</span> <span class="o">-</span><span class="n">we</span> <span class="o">*</span> <span class="n">deltatheta</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.compute_wqe">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_wqe">[docs]</a>
+<div class="viewcode-block" id="BulkModel.compute_wqe">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_wqe">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_wqe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">dq</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the entrainment moisture flux as</span>
 
@@ -861,8 +863,8 @@ document.write(`
         <span class="k">return</span> <span class="o">-</span><span class="n">we</span> <span class="o">*</span> <span class="n">dq</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.compute_wCO2e">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_wCO2e">[docs]</a>
+<div class="viewcode-block" id="BulkModel.compute_wCO2e">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_wCO2e">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_wCO2e</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">deltaCO2</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the entrainment CO2 flux as</span>
 
@@ -875,8 +877,8 @@ document.write(`
         <span class="k">return</span> <span class="o">-</span><span class="n">we</span> <span class="o">*</span> <span class="n">deltaCO2</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.compute_h_abl_tend">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_h_abl_tend">[docs]</a>
+<div class="viewcode-block" id="BulkModel.compute_h_abl_tend">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_h_abl_tend">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_h_abl_tend</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">ws</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">wf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">cc_mf</span><span class="p">:</span> <span class="n">Array</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
@@ -898,8 +900,8 @@ document.write(`
         <span class="k">return</span> <span class="n">we</span> <span class="o">+</span> <span class="n">ws</span> <span class="o">+</span> <span class="n">wf</span> <span class="o">-</span> <span class="n">cc_mf</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.compute_thetatend">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_thetatend">[docs]</a>
+<div class="viewcode-block" id="BulkModel.compute_thetatend">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_thetatend">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_thetatend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h_abl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">wtheta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">wthetae</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the mixed-layer potential temperature tendency as</span>
 
@@ -915,8 +917,8 @@ document.write(`
         <span class="k">return</span> <span class="n">surface_heat_flux</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">advtheta</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.compute_deltathetatend">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_deltathetatend">[docs]</a>
+<div class="viewcode-block" id="BulkModel.compute_deltathetatend">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_deltathetatend">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_deltathetatend</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -938,8 +940,8 @@ document.write(`
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma_theta</span> <span class="o">*</span> <span class="n">egrowth</span> <span class="o">-</span> <span class="n">thetatend</span> <span class="o">+</span> <span class="n">w_th_ft</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.compute_qtend">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_qtend">[docs]</a>
+<div class="viewcode-block" id="BulkModel.compute_qtend">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_qtend">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_qtend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h_abl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">wq</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">wqe</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">cc_qf</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the mixed-layer specific humidity tendency as</span>
 
@@ -950,8 +952,8 @@ document.write(`
         <span class="k">return</span> <span class="n">surface_moisture_flux</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">advq</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.compute_dqtend">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_dqtend">[docs]</a>
+<div class="viewcode-block" id="BulkModel.compute_dqtend">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_dqtend">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_dqtend</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -969,8 +971,8 @@ document.write(`
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma_q</span> <span class="o">*</span> <span class="n">egrowth</span> <span class="o">-</span> <span class="n">qtend</span> <span class="o">+</span> <span class="n">w_q_ft</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.compute_co2tend">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_co2tend">[docs]</a>
+<div class="viewcode-block" id="BulkModel.compute_co2tend">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_co2tend">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_co2tend</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">h_abl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -988,8 +990,8 @@ document.write(`
         <span class="k">return</span> <span class="n">surface_co2_flux_term</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">advCO2</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.compute_deltaCO2tend">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_deltaCO2tend">[docs]</a>
+<div class="viewcode-block" id="BulkModel.compute_deltaCO2tend">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_deltaCO2tend">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_deltaCO2tend</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -1008,8 +1010,8 @@ document.write(`
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gammaCO2</span> <span class="o">*</span> <span class="n">egrowth</span> <span class="o">-</span> <span class="n">co2tend</span> <span class="o">+</span> <span class="n">w_CO2_ft</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.compute_utend">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_utend">[docs]</a>
+<div class="viewcode-block" id="BulkModel.compute_utend">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_utend">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_utend</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">h_abl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -1030,8 +1032,8 @@ document.write(`
         <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_wind_prog</span><span class="p">,</span> <span class="n">utend_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.compute_vtend">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_vtend">[docs]</a>
+<div class="viewcode-block" id="BulkModel.compute_vtend">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_vtend">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_vtend</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">h_abl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -1051,8 +1053,8 @@ document.write(`
         <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_wind_prog</span><span class="p">,</span> <span class="n">vtend_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.compute_dutend">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_dutend">[docs]</a>
+<div class="viewcode-block" id="BulkModel.compute_dutend">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_dutend">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_dutend</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -1070,8 +1072,8 @@ document.write(`
         <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_wind_prog</span><span class="p">,</span> <span class="n">dutend_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.compute_dvtend">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_dvtend">[docs]</a>
+<div class="viewcode-block" id="BulkModel.compute_dvtend">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_dvtend">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_dvtend</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -1091,8 +1093,8 @@ document.write(`
         <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_wind_prog</span><span class="p">,</span> <span class="n">dvtend_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.compute_dztend">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_dztend">[docs]</a>
+<div class="viewcode-block" id="BulkModel.compute_dztend">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_dztend">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_dztend</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">lcl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -1116,6 +1118,169 @@ document.write(`
         <span class="n">dztend</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">dztend_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">dztend</span></div>
+
+
+<div class="viewcode-block" id="BulkModel.statistics">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.statistics">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">statistics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute standard meteorological statistics and diagnostics.&quot;&quot;&quot;</span>
+        <span class="n">mixed_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">mixed</span>
+        <span class="n">land_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">land</span>
+        <span class="n">thetav</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_thetav</span><span class="p">(</span><span class="n">mixed_state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="n">mixed_state</span><span class="o">.</span><span class="n">q</span><span class="p">)</span>
+        <span class="n">wthetav</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_wthetav</span><span class="p">(</span>
+            <span class="n">land_state</span><span class="o">.</span><span class="n">wtheta</span><span class="p">,</span> <span class="n">mixed_state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="n">land_state</span><span class="o">.</span><span class="n">wq</span>
+        <span class="p">)</span>
+        <span class="n">deltathetav</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_deltathetav</span><span class="p">(</span>
+            <span class="n">mixed_state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
+            <span class="n">mixed_state</span><span class="o">.</span><span class="n">deltatheta</span><span class="p">,</span>
+            <span class="n">mixed_state</span><span class="o">.</span><span class="n">q</span><span class="p">,</span>
+            <span class="n">mixed_state</span><span class="o">.</span><span class="n">dq</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">top_p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_top_p</span><span class="p">(</span>
+            <span class="n">mixed_state</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">rho</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="n">mixed_state</span><span class="o">.</span><span class="n">h_abl</span>
+        <span class="p">)</span>
+        <span class="n">top_T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_top_T</span><span class="p">(</span><span class="n">mixed_state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">cp</span><span class="p">,</span> <span class="n">mixed_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">)</span>
+        <span class="n">top_rh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_top_rh</span><span class="p">(</span><span class="n">mixed_state</span><span class="o">.</span><span class="n">q</span><span class="p">,</span> <span class="n">top_T</span><span class="p">,</span> <span class="n">top_p</span><span class="p">)</span>
+        <span class="n">lcl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_lcl</span><span class="p">(</span>
+            <span class="n">mixed_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">,</span>
+            <span class="n">mixed_state</span><span class="o">.</span><span class="n">lcl</span><span class="p">,</span>
+            <span class="n">mixed_state</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">,</span>
+            <span class="n">mixed_state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
+            <span class="n">mixed_state</span><span class="o">.</span><span class="n">q</span><span class="p">,</span>
+            <span class="n">t</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">ml_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+            <span class="n">thetav</span><span class="o">=</span><span class="n">thetav</span><span class="p">,</span>
+            <span class="n">wthetav</span><span class="o">=</span><span class="n">wthetav</span><span class="p">,</span>
+            <span class="n">deltathetav</span><span class="o">=</span><span class="n">deltathetav</span><span class="p">,</span>
+            <span class="n">top_p</span><span class="o">=</span><span class="n">top_p</span><span class="p">,</span>
+            <span class="n">top_T</span><span class="o">=</span><span class="n">top_T</span><span class="p">,</span>
+            <span class="n">top_rh</span><span class="o">=</span><span class="n">top_rh</span><span class="p">,</span>
+            <span class="n">lcl</span><span class="o">=</span><span class="n">lcl</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">ml_state</span></div>
+
+
+<div class="viewcode-block" id="BulkModel.compute_thetav">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_thetav">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_thetav</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes the virtual potential temperature as</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\theta_v = \\theta \\left(1 + 0.61\\, q\\right).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">theta</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="mf">0.61</span> <span class="o">*</span> <span class="n">q</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BulkModel.compute_wthetav">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_wthetav">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_wthetav</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wtheta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">wq</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes the virtual potential temperature flux as</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\overline{w&#39;\\theta_v&#39;} = \\overline{w&#39;\\theta&#39;} + 0.61\\,\\theta\\,\\overline{w&#39;q&#39;}.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">wtheta</span> <span class="o">+</span> <span class="mf">0.61</span> <span class="o">*</span> <span class="n">theta</span> <span class="o">*</span> <span class="n">wq</span></div>
+
+
+<div class="viewcode-block" id="BulkModel.compute_deltathetav">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_deltathetav">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_deltathetav</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">theta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">deltatheta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">q</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">dq</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes the virtual potential temperature jump as</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\Delta\\theta_v = (\\theta + \\Delta\\theta)\\left(1 + 0.61\\,(q + \\Delta q)\\right)</span>
+<span class="sd">            - \\theta\\left(1 + 0.61\\,q\\right)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">theta</span> <span class="o">+</span> <span class="n">deltatheta</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="mf">0.61</span> <span class="o">*</span> <span class="p">(</span><span class="n">q</span> <span class="o">+</span> <span class="n">dq</span><span class="p">))</span> <span class="o">-</span> <span class="n">theta</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="mf">0.61</span> <span class="o">*</span> <span class="n">q</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BulkModel.compute_top_p">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_top_p">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_top_p</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">surf_pressure</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">rho</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">h_abl</span><span class="p">:</span> <span class="n">Array</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes the pressure at the top of the mixed layer as</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            p_{top} = p_{surf} - \\rho\\, g\\, h.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">surf_pressure</span> <span class="o">-</span> <span class="n">rho</span> <span class="o">*</span> <span class="n">g</span> <span class="o">*</span> <span class="n">h_abl</span></div>
+
+
+<div class="viewcode-block" id="BulkModel.compute_top_T">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_top_T">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_top_T</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">cp</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">h_abl</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes the temperature at the top of the mixed layer as</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            T_{top} = \\theta - \\frac{g}{c_p}\\, h.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">theta</span> <span class="o">-</span> <span class="p">(</span><span class="n">g</span> <span class="o">/</span> <span class="n">cp</span><span class="p">)</span> <span class="o">*</span> <span class="n">h_abl</span></div>
+
+
+<div class="viewcode-block" id="BulkModel.compute_top_rh">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_top_rh">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_top_rh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">top_T</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">top_p</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes the relative humidity at the mixed-layer top as</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\mathrm{RH}_{top} = \\frac{q}{q_{sat}(T_{top},\\,p_{top})}.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">q</span> <span class="o">/</span> <span class="n">compute_qsat</span><span class="p">(</span><span class="n">top_T</span><span class="p">,</span> <span class="n">top_p</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BulkModel.compute_lcl">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkModel.compute_lcl">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_lcl</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">h_abl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">lcl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">surf_pressure</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">theta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">q</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">t</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the lifting condensation level (LCL).</span>
+
+<span class="sd">        The LCL is found iteratively by finding the height where the relative humidity is 100%.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># find lifting condensation level iteratively using JAX</span>
+        <span class="c1"># initialize lcl and rhlcl based on timestep</span>
+        <span class="n">initial_lcl</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="n">h_abl</span><span class="p">,</span> <span class="n">lcl</span><span class="p">)</span>
+        <span class="n">initial_rhlcl</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9998</span><span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">lcl_iteration_body</span><span class="p">(</span><span class="n">carry</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+            <span class="n">lcl</span><span class="p">,</span> <span class="n">rhlcl</span> <span class="o">=</span> <span class="n">carry</span>
+
+            <span class="c1"># update lcl based on current relative humidity</span>
+            <span class="n">lcl_adjustment</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">rhlcl</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1000.0</span>
+
+            <span class="c1"># convergence check could be done here but scan runs all steps</span>
+            <span class="c1"># we damp the adjustment if already converged to avoid jitter, though simple replacement is fine</span>
+
+            <span class="n">new_lcl</span> <span class="o">=</span> <span class="n">lcl</span> <span class="o">+</span> <span class="n">lcl_adjustment</span>
+
+            <span class="c1"># calculate new relative humidity at updated lcl</span>
+            <span class="n">p_lcl</span> <span class="o">=</span> <span class="n">surf_pressure</span> <span class="o">-</span> <span class="n">cst</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">g</span> <span class="o">*</span> <span class="n">new_lcl</span>
+            <span class="n">temp_lcl</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">-</span> <span class="n">cst</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">cst</span><span class="o">.</span><span class="n">cp</span> <span class="o">*</span> <span class="n">new_lcl</span>
+            <span class="n">new_rhlcl</span> <span class="o">=</span> <span class="n">q</span> <span class="o">/</span> <span class="n">compute_qsat</span><span class="p">(</span><span class="n">temp_lcl</span><span class="p">,</span> <span class="n">p_lcl</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="p">(</span><span class="n">new_lcl</span><span class="p">,</span> <span class="n">new_rhlcl</span><span class="p">),</span> <span class="kc">None</span>
+
+        <span class="c1"># now we have a fixed number of iterations</span>
+        <span class="n">n_iter</span> <span class="o">=</span> <span class="mi">30</span>
+        <span class="p">(</span><span class="n">final_lcl</span><span class="p">,</span> <span class="n">final_rhlcl</span><span class="p">),</span> <span class="n">_</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">lax</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span>
+            <span class="n">lcl_iteration_body</span><span class="p">,</span> <span class="p">(</span><span class="n">initial_lcl</span><span class="p">,</span> <span class="n">initial_rhlcl</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="n">n_iter</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">final_lcl</span></div>
 </div>
 
 </pre></div>

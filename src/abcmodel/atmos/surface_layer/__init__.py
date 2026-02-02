@@ -1,11 +1,11 @@
 from .obukhov import (
-    ObukhovSurfaceLayerModel,
+    ObukhovModel,
 )
 from .simple import (
-    SimpleSurfaceLayerModel,
+    SimpleModel,
 )
 
 __all__ = [
-    "SimpleSurfaceLayerModel",
-    "ObukhovSurfaceLayerModel",
+    "SimpleModel",
+    "ObukhovModel",
 ]
