@@ -3,15 +3,18 @@ from functools import partial
 import jax
 import jax.numpy as jnp
 import numpy as np
+from jax import Array
 
 from .abstracts import AbstractCoupledState, AtmosT, LandT, RadT
 from .coupling import ABCoupler
 
+StateT = AbstractCoupledState[RadT, LandT, AtmosT]
+
 
 def warmup(
     state: AbstractCoupledState[RadT, LandT, AtmosT],
-    coupler: ABCoupler,
     t: int,
+    coupler: ABCoupler,
     dt: float,
     tstart: float,
 ) -> AbstractCoupledState[RadT, LandT, AtmosT]:
@@ -26,7 +29,9 @@ def inner_step(
     coupler: ABCoupler,
     dt: float,
     tstart: float,
-) -> AbstractCoupledState[RadT, LandT, AtmosT]:
+) -> tuple[
+    AbstractCoupledState[RadT, LandT, AtmosT], AbstractCoupledState[RadT, LandT, AtmosT]
+]:
     """Run a single timestep of the model."""
     atmos = coupler.atmos.statistics(state, t)
     state = state.replace(atmos=atmos)
@@ -51,7 +56,9 @@ def outter_step(
     inner_dt: float,
     inner_tsteps: int,
     tstart: float,
-) -> AbstractCoupledState[RadT, LandT, AtmosT]:
+) -> tuple[
+    AbstractCoupledState[RadT, LandT, AtmosT], AbstractCoupledState[RadT, LandT, AtmosT]
+]:
     """A block of inner steps averaging the result."""
     timesteps = t + jnp.arange(inner_tsteps)
     step_fn_configured = partial(
@@ -72,14 +79,14 @@ def integrate(
     outter_dt: float,
     runtime: float,
     tstart: float,
-) -> AbstractCoupledState[RadT, LandT, AtmosT]:
+) -> tuple[Array, AbstractCoupledState[RadT, LandT, AtmosT]]:
     """Integrate the coupler forward in time."""
 
     inner_tsteps = int(np.floor(outter_dt / inner_dt))
     outter_tsteps = int(np.floor(runtime / outter_dt))
 
     # warmup and initial diagnostics
-    state = warmup(state, coupler, 0, inner_dt, tstart)
+    state = warmup(state, 0, coupler, inner_dt, tstart)
     state = coupler.compute_diagnostics(state)
 
     # configure outter step function
