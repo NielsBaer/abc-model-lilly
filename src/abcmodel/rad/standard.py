@@ -127,7 +127,7 @@ class StandardRadiationModel(AbstractRadiationModel[StandardRadiationState]):
             out_lrad=out_lrad,
         )
 
-    def compute_solar_declination(self, doy: Array) -> Array:
+    def compute_solar_declination(self, doy: float) -> Array:
         """Compute solar declination angle based on day of year.
 
         Args:
