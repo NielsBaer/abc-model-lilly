@@ -170,7 +170,6 @@
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html">Bulk</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.mixed_layer.stats.html">Stats</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.clouds.html">Clouds</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -325,10 +324,10 @@ document.write(`
 <span class="kn">from</span><span class="w"> </span><span class="nn">..dayonly</span><span class="w"> </span><span class="kn">import</span> <span class="n">DayOnlyAtmosphereState</span>
 
 
-<div class="viewcode-block" id="ObukhovSurfaceLayerState">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerState">[docs]</a>
+<div class="viewcode-block" id="ObukhovState">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovState">[docs]</a>
 <span class="nd">@dataclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">ObukhovSurfaceLayerState</span><span class="p">(</span><span class="n">AbstractSurfaceLayerState</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ObukhovState</span><span class="p">(</span><span class="n">AbstractSurfaceLayerState</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Standard surface layer model state.&quot;&quot;&quot;</span>
 
     <span class="n">ustar</span><span class="p">:</span> <span class="n">Array</span>
@@ -347,33 +346,33 @@ document.write(`
 
     <span class="c1"># the following variables are initialized as NaNs and should</span>
     <span class="c1"># and are expected to be assigned during warmup</span>
-    <span class="n">uw</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">uw</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface momentum flux u [m2 s-2].&quot;&quot;&quot;</span>
-    <span class="n">vw</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">vw</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface momentum flux v [m2 s-2].&quot;&quot;&quot;</span>
-    <span class="n">temp_2m</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">temp_2m</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;2m temperature [K].&quot;&quot;&quot;</span>
-    <span class="n">q2m</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">q2m</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;2m specific humidity [kg kg-1].&quot;&quot;&quot;</span>
-    <span class="n">u2m</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">u2m</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;2m u-wind [m s-1].&quot;&quot;&quot;</span>
-    <span class="n">v2m</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">v2m</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;2m v-wind [m s-1].&quot;&quot;&quot;</span>
-    <span class="n">e2m</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">e2m</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;2m vapor pressure [Pa].&quot;&quot;&quot;</span>
-    <span class="n">esat2m</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">esat2m</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;2m saturated vapor pressure [Pa].&quot;&quot;&quot;</span>
-    <span class="n">thetasurf</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">thetasurf</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface potential temperature [K].&quot;&quot;&quot;</span>
-    <span class="n">thetavsurf</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">thetavsurf</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface virtual potential temperature [K].&quot;&quot;&quot;</span>
-    <span class="n">qsurf</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">qsurf</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface specific humidity [kg kg-1].&quot;&quot;&quot;</span>
-    <span class="n">obukhov_length</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">obukhov_length</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Obukhov length [m].&quot;&quot;&quot;</span>
-    <span class="n">rib_number</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">rib_number</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Bulk Richardson number [-].&quot;&quot;&quot;</span>
-    <span class="n">ra</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">ra</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Aerodynamic resistance [s/m].&quot;&quot;&quot;</span></div>
 
 
@@ -382,16 +381,16 @@ document.write(`
     <span class="n">RadT</span><span class="p">,</span>
     <span class="n">LandT</span><span class="p">,</span>
     <span class="n">DayOnlyAtmosphereState</span><span class="p">[</span>
-        <span class="n">ObukhovSurfaceLayerState</span><span class="p">,</span>
+        <span class="n">ObukhovState</span><span class="p">,</span>
         <span class="n">MixedT</span><span class="p">,</span>
         <span class="n">CloudT</span><span class="p">,</span>
     <span class="p">],</span>
 <span class="p">]</span>
 
 
-<div class="viewcode-block" id="ObukhovSurfaceLayerModel">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerModel">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">ObukhovSurfaceLayerModel</span><span class="p">(</span><span class="n">AbstractSurfaceLayerModel</span><span class="p">):</span>
+<div class="viewcode-block" id="ObukhovModel">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ObukhovModel</span><span class="p">(</span><span class="n">AbstractSurfaceLayerModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Standard surface layer model with atmospheric stability corrections.</span>
 
 <span class="sd">    Calculates surface-atmosphere exchange using Monin-Obukhov similarity theory</span>
@@ -401,14 +400,14 @@ document.write(`
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span>
 
-<div class="viewcode-block" id="ObukhovSurfaceLayerModel.init_state">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerModel.init_state">[docs]</a>
+<div class="viewcode-block" id="ObukhovModel.init_state">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.init_state">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">init_state</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">ustar</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">z0m</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">z0h</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ObukhovSurfaceLayerState</span><span class="p">:</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ObukhovState</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the model state.</span>
 
 <span class="sd">        Args:</span>
@@ -419,15 +418,15 @@ document.write(`
 <span class="sd">        Returns:</span>
 <span class="sd">            The initial surface layer state.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">ObukhovSurfaceLayerState</span><span class="p">(</span>
+        <span class="k">return</span> <span class="n">ObukhovState</span><span class="p">(</span>
             <span class="n">ustar</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ustar</span><span class="p">),</span>
             <span class="n">z0m</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">z0m</span><span class="p">),</span>
             <span class="n">z0h</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">z0h</span><span class="p">),</span>
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ObukhovSurfaceLayerModel.run">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerModel.run">[docs]</a>
+<div class="viewcode-block" id="ObukhovModel.run">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.run">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">StateAlias</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the model.</span>
 
@@ -440,14 +439,14 @@ document.write(`
         <span class="n">atmos</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span>
         <span class="n">sl_state</span> <span class="o">=</span> <span class="n">atmos</span><span class="o">.</span><span class="n">surface</span>
 
-        <span class="n">ueff</span> <span class="o">=</span> <span class="n">compute_effective_wind_speed</span><span class="p">(</span><span class="n">atmos</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">wstar</span><span class="p">)</span>
-        <span class="n">thetasurf</span> <span class="o">=</span> <span class="n">compute_thetasurf</span><span class="p">(</span>
+        <span class="n">ueff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_effective_wind_speed</span><span class="p">(</span><span class="n">atmos</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">wstar</span><span class="p">)</span>
+        <span class="n">thetasurf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_thetasurf</span><span class="p">(</span>
             <span class="n">atmos</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">land</span><span class="o">.</span><span class="n">wtheta</span><span class="p">,</span>
             <span class="n">sl_state</span><span class="o">.</span><span class="n">drag_s</span><span class="p">,</span>
             <span class="n">ueff</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">qsurf</span> <span class="o">=</span> <span class="n">compute_qsurf</span><span class="p">(</span>
+        <span class="n">qsurf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_qsurf</span><span class="p">(</span>
             <span class="n">atmos</span><span class="o">.</span><span class="n">q</span><span class="p">,</span>
             <span class="n">thetasurf</span><span class="p">,</span>
             <span class="n">atmos</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">,</span>
@@ -455,18 +454,20 @@ document.write(`
             <span class="n">sl_state</span><span class="o">.</span><span class="n">drag_s</span><span class="p">,</span>
             <span class="n">ueff</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">thetavsurf</span> <span class="o">=</span> <span class="n">compute_thetavsurf</span><span class="p">(</span><span class="n">thetasurf</span><span class="p">,</span> <span class="n">qsurf</span><span class="p">)</span>
-        <span class="n">zsl</span> <span class="o">=</span> <span class="n">compute_zsl</span><span class="p">(</span><span class="n">atmos</span><span class="o">.</span><span class="n">h_abl</span><span class="p">)</span>
-        <span class="n">rib_number</span> <span class="o">=</span> <span class="n">compute_richardson_number</span><span class="p">(</span>
+        <span class="n">thetavsurf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_thetavsurf</span><span class="p">(</span><span class="n">thetasurf</span><span class="p">,</span> <span class="n">qsurf</span><span class="p">)</span>
+        <span class="n">zsl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_zsl</span><span class="p">(</span><span class="n">atmos</span><span class="o">.</span><span class="n">h_abl</span><span class="p">)</span>
+        <span class="n">rib_number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_richardson_number</span><span class="p">(</span>
             <span class="n">ueff</span><span class="p">,</span> <span class="n">zsl</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">thetav</span><span class="p">,</span> <span class="n">thetavsurf</span>
         <span class="p">)</span>
-        <span class="n">obukhov_length</span> <span class="o">=</span> <span class="n">ribtol</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">rib_number</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0h</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0m</span><span class="p">)</span>
-        <span class="n">drag_m</span> <span class="o">=</span> <span class="n">compute_drag_m</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0m</span><span class="p">)</span>
-        <span class="n">drag_s</span> <span class="o">=</span> <span class="n">compute_drag_s</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0h</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0m</span><span class="p">)</span>
-        <span class="n">ustar</span> <span class="o">=</span> <span class="n">compute_ustar</span><span class="p">(</span><span class="n">ueff</span><span class="p">,</span> <span class="n">drag_m</span><span class="p">)</span>
-        <span class="n">uw</span> <span class="o">=</span> <span class="n">compute_uw</span><span class="p">(</span><span class="n">ueff</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="n">drag_m</span><span class="p">)</span>
-        <span class="n">vw</span> <span class="o">=</span> <span class="n">compute_vw</span><span class="p">(</span><span class="n">ueff</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">drag_m</span><span class="p">)</span>
-        <span class="n">temp_2m</span> <span class="o">=</span> <span class="n">compute_temp_2m</span><span class="p">(</span>
+        <span class="n">obukhov_length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ribtol</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">rib_number</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0h</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0m</span><span class="p">)</span>
+        <span class="n">drag_m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_drag_m</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0m</span><span class="p">)</span>
+        <span class="n">drag_s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_drag_s</span><span class="p">(</span>
+            <span class="n">zsl</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0h</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0m</span>
+        <span class="p">)</span>
+        <span class="n">ustar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_ustar</span><span class="p">(</span><span class="n">ueff</span><span class="p">,</span> <span class="n">drag_m</span><span class="p">)</span>
+        <span class="n">uw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_uw</span><span class="p">(</span><span class="n">ueff</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="n">drag_m</span><span class="p">)</span>
+        <span class="n">vw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_vw</span><span class="p">(</span><span class="n">ueff</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">drag_m</span><span class="p">)</span>
+        <span class="n">temp_2m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_temp_2m</span><span class="p">(</span>
             <span class="n">thetasurf</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">land</span><span class="o">.</span><span class="n">wtheta</span><span class="p">,</span>
             <span class="n">ustar</span><span class="p">,</span>
@@ -474,7 +475,7 @@ document.write(`
             <span class="n">sl_state</span><span class="o">.</span><span class="n">z0h</span><span class="p">,</span>
             <span class="n">obukhov_length</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">q2m</span> <span class="o">=</span> <span class="n">compute_q2m</span><span class="p">(</span>
+        <span class="n">q2m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_q2m</span><span class="p">(</span>
             <span class="n">qsurf</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">land</span><span class="o">.</span><span class="n">wq</span><span class="p">,</span>
             <span class="n">ustar</span><span class="p">,</span>
@@ -482,11 +483,11 @@ document.write(`
             <span class="n">sl_state</span><span class="o">.</span><span class="n">z0h</span><span class="p">,</span>
             <span class="n">obukhov_length</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">u2m</span> <span class="o">=</span> <span class="n">compute_u2m</span><span class="p">(</span><span class="n">uw</span><span class="p">,</span> <span class="n">ustar</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0m</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">)</span>
-        <span class="n">v2m</span> <span class="o">=</span> <span class="n">compute_v2m</span><span class="p">(</span><span class="n">vw</span><span class="p">,</span> <span class="n">ustar</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0m</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">)</span>
-        <span class="n">e2m</span> <span class="o">=</span> <span class="n">compute_e2m</span><span class="p">(</span><span class="n">q2m</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">)</span>
-        <span class="n">esat2m</span> <span class="o">=</span> <span class="n">compute_esat2m</span><span class="p">(</span><span class="n">temp_2m</span><span class="p">)</span>
-        <span class="n">ra</span> <span class="o">=</span> <span class="n">compute_ra</span><span class="p">(</span><span class="n">atmos</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">wstar</span><span class="p">,</span> <span class="n">drag_s</span><span class="p">)</span>
+        <span class="n">u2m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_u2m</span><span class="p">(</span><span class="n">uw</span><span class="p">,</span> <span class="n">ustar</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0m</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">)</span>
+        <span class="n">v2m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_v2m</span><span class="p">(</span><span class="n">vw</span><span class="p">,</span> <span class="n">ustar</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0m</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">)</span>
+        <span class="n">e2m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_e2m</span><span class="p">(</span><span class="n">q2m</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">)</span>
+        <span class="n">esat2m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_esat2m</span><span class="p">(</span><span class="n">temp_2m</span><span class="p">)</span>
+        <span class="n">ra</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_ra</span><span class="p">(</span><span class="n">atmos</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">atmos</span><span class="o">.</span><span class="n">wstar</span><span class="p">,</span> <span class="n">drag_s</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
             <span class="n">ustar</span><span class="o">=</span><span class="n">ustar</span><span class="p">,</span>
             <span class="n">drag_m</span><span class="o">=</span><span class="n">drag_m</span><span class="p">,</span>
@@ -506,796 +507,797 @@ document.write(`
             <span class="n">rib_number</span><span class="o">=</span><span class="n">rib_number</span><span class="p">,</span>
             <span class="n">ra</span><span class="o">=</span><span class="n">ra</span><span class="p">,</span>
         <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ObukhovModel.compute_ra">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.compute_ra">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_ra</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">wstar</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">drag_s</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate aerodynamic resistance from wind speed and drag coefficient.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            u: zonal wind speed [m s-1].</span>
+<span class="sd">            v: meridional wind speed [m s-1].</span>
+<span class="sd">            wstar: convective velocity scale [m s-1].</span>
+<span class="sd">            drag_s: drag coefficient for scalars [-].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Aerodynamic resistance [s m-1].</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The aerodynamic resistance is given by</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                r_a = \\frac{1}{C_s u_{\\text{eff}}}</span>
+
+<span class="sd">            where :math:`C_s` is the drag coefficient for scalars and :math:`u_{\\text{eff}}` is the effective wind speed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ueff</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">v</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">wstar</span><span class="o">**</span><span class="mf">2.0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">drag_s</span> <span class="o">*</span> <span class="n">ueff</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ObukhovModel.compute_effective_wind_speed">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.compute_effective_wind_speed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_effective_wind_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">wstar</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute effective wind speed ``ueff``.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            u: zonal wind speed :math:`u`.</span>
+<span class="sd">            v: meridional wind speed :math:`v`.</span>
+<span class="sd">            wstar: convective velocity scale :math:`w_*`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Effective wind speed :math:`u_{\\text{eff}}`.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The effective wind speed is given by</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                u_{\\text{eff}} = \\sqrt{u^2 + v^2 + w_*^2}.</span>
+
+<span class="sd">            A minimum value of 0.01 m/s is enforced to avoid division by zero afterwards.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">v</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">wstar</span><span class="o">**</span><span class="mf">2.0</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="ObukhovModel.compute_zsl">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.compute_zsl">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_zsl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h_abl</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute surface layer height.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            h_abl: Atmospheric boundary layer height [m].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Surface layer height [m], defined as 10% of ABL height.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The surface layer height is conventionally taken as 10% of</span>
+<span class="sd">            the atmospheric boundary layer height.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">h_abl</span></div>
+
+
+<div class="viewcode-block" id="ObukhovModel.compute_thetasurf">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.compute_thetasurf">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_thetasurf</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">theta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">wtheta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">drag_s</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">ueff</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute surface potential temperature.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            theta: mixed layer potential temperature :math:`\\theta`.</span>
+<span class="sd">            wtheta: surface kinematic heat flux :math:`w&#39;\\theta&#39;`.</span>
+<span class="sd">            drag_s: surface drag coefficient :math:`C_s`.</span>
+<span class="sd">            ueff: effective wind speed :math:`u_{\\text{eff}}`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Surface potential temperature :math:`\\theta_s`.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The surface potential temperature is given by</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                \\theta_s = \\theta + \\frac{w&#39;\\theta&#39;}{C_s u_{\\text{eff}}}.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">theta</span> <span class="o">+</span> <span class="n">wtheta</span> <span class="o">/</span> <span class="p">(</span><span class="n">drag_s</span> <span class="o">*</span> <span class="n">ueff</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ObukhovModel.compute_qsurf">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.compute_qsurf">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_qsurf</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">q</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">thetasurf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">surf_pressure</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">rs</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">drag_s</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">ueff</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute surface specific humidity.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            q: mixed layer specific humidity :math:`q`.</span>
+<span class="sd">            thetasurf: surface potential temperature :math:`\\theta_s`.</span>
+<span class="sd">            surf_pressure: surface pressure :math:`p`.</span>
+<span class="sd">            rs: surface resistance :math:`r_s`.</span>
+<span class="sd">            drag_s: surface drag coefficient :math:`C_s`.</span>
+<span class="sd">            ueff: effective wind speed :math:`u_{\\text{eff}}`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Surface specific humidity :math:`q_s`.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The surface specific humidity is a weighted average between the air and the saturated value at the surface</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                q_s = (1 - c_q) q + c_q q_{sat}(\\theta_s, p),</span>
+
+<span class="sd">            where :math:`c_q = [1 + C_s u_{\\text{eff}} r_s]^{-1}` and :math:`q_{sat}` is the saturation specific humidity.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">qsatsurf</span> <span class="o">=</span> <span class="n">compute_qsat</span><span class="p">(</span><span class="n">thetasurf</span><span class="p">,</span> <span class="n">surf_pressure</span><span class="p">)</span>
+        <span class="n">cq</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">drag_s</span> <span class="o">*</span> <span class="n">ueff</span> <span class="o">*</span> <span class="n">rs</span><span class="p">)</span> <span class="o">**</span> <span class="o">-</span><span class="mf">1.0</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">cq</span><span class="p">)</span> <span class="o">*</span> <span class="n">q</span> <span class="o">+</span> <span class="n">cq</span> <span class="o">*</span> <span class="n">qsatsurf</span></div>
+
+
+<div class="viewcode-block" id="ObukhovModel.compute_thetavsurf">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.compute_thetavsurf">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_thetavsurf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">thetasurf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">qsurf</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute surface virtual potential temperature.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            thetasurf: surface potential temperature :math:`\\theta_s`.</span>
+<span class="sd">            qsurf: surface specific humidity :math:`q_s`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Surface virtual potential temperature :math:`\\theta_{v,s}`.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The surface virtual potential temperature is</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                \\theta_{v,s} = \\theta_s (1 + 0.61 q_s)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">thetasurf</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="mf">0.61</span> <span class="o">*</span> <span class="n">qsurf</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ObukhovModel.compute_richardson_number">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.compute_richardson_number">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_richardson_number</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">ueff</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">zsl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">thetav</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">thetavsurf</span><span class="p">:</span> <span class="n">Array</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute bulk Richardson number.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ueff: effective wind speed :math:`u_{\\text{eff}}`.</span>
+<span class="sd">            zsl: surface layer height :math:`z_{sl}`.</span>
+<span class="sd">            g: gravity :math:`g`.</span>
+<span class="sd">            thetav: virtual potential temperature at reference height :math:`\\theta_v`.</span>
+<span class="sd">            thetavsurf: Surface virtual potential temperature :math:`\\theta_{v,s}`.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The bulk Richardson number is given by</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                Ri_b = \\frac{g}{\\theta_v} \\frac{z_{sl} (\\theta_v - \\theta_{v,s})}{u_{\\text{eff}}^2}.</span>
+
+<span class="sd">            The value is capped at 0.2 for numerical stability.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rib_number</span> <span class="o">=</span> <span class="n">g</span> <span class="o">/</span> <span class="n">thetav</span> <span class="o">*</span> <span class="n">zsl</span> <span class="o">*</span> <span class="p">(</span><span class="n">thetav</span> <span class="o">-</span> <span class="n">thetavsurf</span><span class="p">)</span> <span class="o">/</span> <span class="n">ueff</span><span class="o">**</span><span class="mf">2.0</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">rib_number</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ObukhovModel.compute_rib_function">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.compute_rib_function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_rib_function</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">zsl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">oblen</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">rib_number</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">z0h</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">z0m</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the Richardson number function for iterative solution of Obukhov length.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            This function computes the difference between the bulk Richardson number and its</span>
+<span class="sd">            Monin-Obukhov similarity theory estimate, used in the Newton-Raphson iteration</span>
+<span class="sd">            for finding the Obukhov length.</span>
+
+<span class="sd">            The function is:</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                f(L) = Ri_b</span>
+<span class="sd">                - \\frac{z_{sl}}{L} \\frac{\\psi_h(z_{sl}/L)</span>
+<span class="sd">                - \\psi_h(z_{0h}/L)</span>
+<span class="sd">                + \\ln(z_{sl}/z_{0h})}{[\\psi_m(z_{sl}/L)</span>
+<span class="sd">                - \\psi_m(z_{0m}/L)</span>
+<span class="sd">                + \\ln(z_{sl}/z_{0m})]^2}</span>
+
+<span class="sd">            where :math:`Ri_b` is the bulk Richardson number, :math:`z_{sl}` is the surface layer height,</span>
+<span class="sd">            :math:`L` is the Obukhov length, :math:`z_{0h}` and :math:`z_{0m}` are roughness lengths for scalars and momentum,</span>
+<span class="sd">            and :math:`\\psi_h`, :math:`\\psi_m` are stability correction functions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">scalar_term</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_scalar_correction_term</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">oblen</span><span class="p">,</span> <span class="n">z0h</span><span class="p">)</span>
+        <span class="n">momentum_term</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_momentum_correction_term</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">oblen</span><span class="p">,</span> <span class="n">z0m</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">rib_number</span> <span class="o">-</span> <span class="n">zsl</span> <span class="o">/</span> <span class="n">oblen</span> <span class="o">*</span> <span class="n">scalar_term</span> <span class="o">/</span> <span class="n">momentum_term</span><span class="o">**</span><span class="mf">2.0</span></div>
+
+
+<div class="viewcode-block" id="ObukhovModel.ribtol">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.ribtol">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ribtol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zsl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">rib_number</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">z0h</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">z0m</span><span class="p">:</span> <span class="n">Array</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Iteratively solve for the Obukhov length given the Richardson number.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            Uses a Newton-Raphson method to find the Obukhov length :math:`L` such that the Monin-Obukhov</span>
+<span class="sd">            similarity theory estimate matches the bulk Richardson number.</span>
+
+<span class="sd">            The iteration continues until the change in :math:`L` is below a threshold or a maximum value is reached.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># initial guess based on stability</span>
+        <span class="n">oblen</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">rib_number</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">oblen0</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">rib_number</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">)</span>
+
+        <span class="n">perturbation</span> <span class="o">=</span> <span class="mf">0.001</span>
+        <span class="n">max_oblen</span> <span class="o">=</span> <span class="mf">1e4</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">body_fun_scan</span><span class="p">(</span><span class="n">carry</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+            <span class="n">oblen</span><span class="p">,</span> <span class="n">oblen0</span> <span class="o">=</span> <span class="n">carry</span>
+
+            <span class="c1"># calculate function value at current estimate</span>
+            <span class="n">fx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_rib_function</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">oblen</span><span class="p">,</span> <span class="n">rib_number</span><span class="p">,</span> <span class="n">z0h</span><span class="p">,</span> <span class="n">z0m</span><span class="p">)</span>
+
+            <span class="c1"># finite difference derivative</span>
+            <span class="n">oblen_start</span> <span class="o">=</span> <span class="n">oblen</span> <span class="o">-</span> <span class="n">perturbation</span> <span class="o">*</span> <span class="n">oblen</span>
+            <span class="n">oblen_end</span> <span class="o">=</span> <span class="n">oblen</span> <span class="o">+</span> <span class="n">perturbation</span> <span class="o">*</span> <span class="n">oblen</span>
+
+            <span class="n">fx_start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_rib_function</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">oblen_start</span><span class="p">,</span> <span class="n">rib_number</span><span class="p">,</span> <span class="n">z0h</span><span class="p">,</span> <span class="n">z0m</span><span class="p">)</span>
+            <span class="n">fx_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_rib_function</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">oblen_end</span><span class="p">,</span> <span class="n">rib_number</span><span class="p">,</span> <span class="n">z0h</span><span class="p">,</span> <span class="n">z0m</span><span class="p">)</span>
+
+            <span class="n">fxdif</span> <span class="o">=</span> <span class="p">(</span><span class="n">fx_start</span> <span class="o">-</span> <span class="n">fx_end</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">oblen_start</span> <span class="o">-</span> <span class="n">oblen_end</span><span class="p">)</span>
+
+            <span class="c1"># Newton–Raphson update</span>
+            <span class="c1"># clamp update to avoid exploding values</span>
+            <span class="n">update</span> <span class="o">=</span> <span class="n">fx</span> <span class="o">/</span> <span class="n">fxdif</span>
+            <span class="c1"># simple clamping logic if needed, but bounded iterations help safety</span>
+            <span class="n">oblen_new</span> <span class="o">=</span> <span class="n">oblen</span> <span class="o">-</span> <span class="n">update</span>
+
+            <span class="c1"># limit range</span>
+            <span class="n">oblen_new</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">oblen_new</span><span class="p">,</span> <span class="o">-</span><span class="n">max_oblen</span><span class="p">,</span> <span class="n">max_oblen</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="p">(</span><span class="n">oblen_new</span><span class="p">,</span> <span class="n">oblen</span><span class="p">),</span> <span class="kc">None</span>
+
+        <span class="c1"># now we have a fixed number of iterations!</span>
+        <span class="n">n_iter</span> <span class="o">=</span> <span class="mi">20</span>
+        <span class="p">(</span><span class="n">oblen</span><span class="p">,</span> <span class="n">_</span><span class="p">),</span> <span class="n">_</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">lax</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span>
+            <span class="n">body_fun_scan</span><span class="p">,</span> <span class="p">(</span><span class="n">oblen</span><span class="p">,</span> <span class="n">oblen0</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="n">n_iter</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">oblen</span></div>
+
+
+<div class="viewcode-block" id="ObukhovModel.compute_drag_m">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.compute_drag_m">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_drag_m</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">zsl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">k</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">obukhov_length</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">z0m</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute drag coefficient for momentum with stability corrections.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            zsl: surface layer height :math:`z_{sl}`.</span>
+<span class="sd">            k: Von Kármán constant :math:`k`.</span>
+<span class="sd">            obukhov_length: Obukhov length :math:`L`.</span>
+<span class="sd">            z0m: roughness length for momentum :math:`z_{0m}`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Drag coefficient for momentum :math:`C_m`.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The drag coefficient for momentum is given by</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                C_m = \\frac{k^2}{[\\psi_m(z_{sl}/L)</span>
+<span class="sd">                - \\psi_m(z_{0m}/L)</span>
+<span class="sd">                + \\ln(z_{sl}/z_{0m})]^2}</span>
+
+<span class="sd">            where :math:`\\psi_m` (see :meth:`compute_momentum_correction_term`)</span>
+<span class="sd">            is the stability correction function for momentum.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">momentum_correction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_momentum_correction_term</span><span class="p">(</span>
+            <span class="n">zsl</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">,</span> <span class="n">z0m</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">k</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">/</span> <span class="n">momentum_correction</span><span class="o">**</span><span class="mf">2.0</span></div>
+
+
+<div class="viewcode-block" id="ObukhovModel.compute_drag_s">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.compute_drag_s">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_drag_s</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">zsl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">k</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">obukhov_length</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">z0h</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">z0m</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute drag coefficient for scalars with stability corrections.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            zsl: surface layer height :math:`z_{sl}`.</span>
+<span class="sd">            k: Von Kármán constant :math:`k`.</span>
+<span class="sd">            obukhov_length: Obukhov length :math:`L`.</span>
+<span class="sd">            z0h: roughness length for scalars :math:`z_{0h}`.</span>
+<span class="sd">            z0m: roughness length for momentum :math:`z_{0m}`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Drag coefficient for scalars :math:`C_s`.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The drag coefficient for scalars is given by</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                C_s = \\frac{k^2}{[\\psi_m(z_{sl}/L)</span>
+<span class="sd">                - \\psi_m(z_{0m}/L)</span>
+<span class="sd">                + \\ln(z_{sl}/z_{0m})] [\\psi_h(z_{sl}/L)</span>
+<span class="sd">                - \\psi_h(z_{0h}/L)</span>
+<span class="sd">                + \\ln(z_{sl}/z_{0h})]}</span>
+
+<span class="sd">            where :math:`\\psi_m` (see :meth:`compute_momentum_correction_term`) and</span>
+<span class="sd">            :math:`\\psi_h` (see :meth:`compute_scalar_correction_term`)</span>
+<span class="sd">            are stability correction functions for momentum and scalars.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">momentum_correction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_momentum_correction_term</span><span class="p">(</span>
+            <span class="n">zsl</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">,</span> <span class="n">z0m</span>
+        <span class="p">)</span>
+        <span class="n">scalar_correction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_scalar_correction_term</span><span class="p">(</span>
+            <span class="n">zsl</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">,</span> <span class="n">z0h</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">k</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">momentum_correction</span> <span class="o">*</span> <span class="n">scalar_correction</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ObukhovModel.compute_ustar">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.compute_ustar">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_ustar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ueff</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">drag_m</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute surface friction velocity.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ueff: effective wind speed :math:`u_{\\text{eff}}`.</span>
+<span class="sd">            drag_m: drag coefficient for momentum :math:`C_m`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Friction velocity :math:`u_*`.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The friction velocity :math:`u_*` is given by</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                u_* = \\sqrt{C_m} u_{\\text{eff}}.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">drag_m</span><span class="p">)</span> <span class="o">*</span> <span class="n">ueff</span></div>
+
+
+<div class="viewcode-block" id="ObukhovModel.compute_uw">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.compute_uw">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_uw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ueff</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">u</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">drag_m</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute zonal momentum flux.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ueff: effective wind speed :math:`u_{\\text{eff}}`.</span>
+<span class="sd">            u: zonal wind speed :math:`u`.</span>
+<span class="sd">            drag_m: drag coefficient for momentum :math:`C_m`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Zonal momentum flux :math:`\\overline{u&#39;w&#39;}`.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The zonal momentum flux is given by</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                \\overline{u&#39;w&#39;} = -C_m u_{\\text{eff}} u.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">drag_m</span> <span class="o">*</span> <span class="n">ueff</span> <span class="o">*</span> <span class="n">u</span></div>
+
+
+<div class="viewcode-block" id="ObukhovModel.compute_vw">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.compute_vw">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_vw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ueff</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">drag_m</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute meridional momentum flux.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ueff: effective wind speed :math:`u_{\\text{eff}}`.</span>
+<span class="sd">            v: meridional wind speed :math:`v`.</span>
+<span class="sd">            drag_m: drag coefficient for momentum :math:`C_m`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Meridional momentum flux :math:`\\overline{v&#39;w&#39;}`.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The meridional momentum flux is given by</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                \\overline{v&#39;w&#39;} = -C_m u_{\\text{eff}} v.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">drag_m</span> <span class="o">*</span> <span class="n">ueff</span> <span class="o">*</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="ObukhovModel.compute_temp_2m">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.compute_temp_2m">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_temp_2m</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">thetasurf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">wtheta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">ustar</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">k</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">z0h</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">obukhov_length</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute 2m temperature diagnostic.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            thetasurf: surface potential temperature :math:`\\theta_s`.</span>
+<span class="sd">            wtheta: surface kinematic heat flux :math:`w&#39;\\theta&#39;`.</span>
+<span class="sd">            ustar: friction velocity :math:`u_*`.</span>
+<span class="sd">            k: Von Kármán constant :math:`k`.</span>
+<span class="sd">            z0h: roughness length for scalars :math:`z_{0h}`.</span>
+<span class="sd">            obukhov_length: Obukhov length :math:`L`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Temperature at 2 meters above surface [K].</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            Uses Monin-Obukhov similarity theory with stability corrections to extrapolate</span>
+<span class="sd">            surface temperature to 2m height.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">scalar_correction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_scalar_correction_term</span><span class="p">(</span>
+            <span class="mf">2.0</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">,</span> <span class="n">z0h</span>
+        <span class="p">)</span>
+        <span class="n">scalar_scale</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">ustar</span> <span class="o">*</span> <span class="n">k</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">thetasurf</span> <span class="o">-</span> <span class="n">wtheta</span> <span class="o">*</span> <span class="n">scalar_scale</span> <span class="o">*</span> <span class="n">scalar_correction</span></div>
+
+
+<div class="viewcode-block" id="ObukhovModel.compute_q2m">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.compute_q2m">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_q2m</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">qsurf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">wq</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">ustar</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">k</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">z0h</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">obukhov_length</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute 2m specific humidity diagnostic.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            qsurf: surface specific humidity :math:`q_s`.</span>
+<span class="sd">            wq: surface kinematic moisture flux :math:`w&#39;q&#39;`.</span>
+<span class="sd">            ustar: friction velocity :math:`u_*`.</span>
+<span class="sd">            k: Von Kármán constant :math:`k`.</span>
+<span class="sd">            z0h: roughness length for scalars :math:`z_{0h}`.</span>
+<span class="sd">            obukhov_length: Obukhov length :math:`L`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Specific humidity at 2 meters above surface [kg kg-1].</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            Uses Monin-Obukhov similarity theory with stability corrections to extrapolate</span>
+<span class="sd">            surface specific humidity to 2m height.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">scalar_correction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_scalar_correction_term</span><span class="p">(</span>
+            <span class="mf">2.0</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">,</span> <span class="n">z0h</span>
+        <span class="p">)</span>
+        <span class="n">scalar_scale</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">ustar</span> <span class="o">*</span> <span class="n">k</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">qsurf</span> <span class="o">-</span> <span class="n">wq</span> <span class="o">*</span> <span class="n">scalar_scale</span> <span class="o">*</span> <span class="n">scalar_correction</span></div>
+
+
+<div class="viewcode-block" id="ObukhovModel.compute_u2m">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.compute_u2m">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_u2m</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">uw</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">ustar</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">k</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">z0m</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">obukhov_length</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute 2m zonal wind diagnostic.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            uw: zonal momentum flux :math:`\\overline{u&#39;w&#39;}`.</span>
+<span class="sd">            ustar: friction velocity :math:`u_*`.</span>
+<span class="sd">            k: Von Kármán constant :math:`k`.</span>
+<span class="sd">            z0m: roughness length for momentum :math:`z_{0m}`.</span>
+<span class="sd">            obukhov_length: Obukhov length :math:`L`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Zonal wind at 2 meters above surface [m s-1].</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            Uses Monin-Obukhov similarity theory with stability corrections to extrapolate</span>
+<span class="sd">            surface momentum flux to 2m wind speed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">momentum_correction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_momentum_correction_term</span><span class="p">(</span>
+            <span class="mf">2.0</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">,</span> <span class="n">z0m</span>
+        <span class="p">)</span>
+        <span class="n">momentum_scale</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">ustar</span> <span class="o">*</span> <span class="n">k</span><span class="p">)</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">uw</span> <span class="o">*</span> <span class="n">momentum_scale</span> <span class="o">*</span> <span class="n">momentum_correction</span></div>
+
+
+<div class="viewcode-block" id="ObukhovModel.compute_v2m">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.compute_v2m">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_v2m</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">vw</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">ustar</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">k</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">z0m</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">obukhov_length</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute 2m meridional wind diagnostic.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            vw: meridional momentum flux :math:`\\overline{v&#39;w&#39;}`.</span>
+<span class="sd">            ustar: friction velocity :math:`u_*`.</span>
+<span class="sd">            k: Von Kármán constant :math:`k`.</span>
+<span class="sd">            z0m: roughness length for momentum :math:`z_{0m}`.</span>
+<span class="sd">            obukhov_length: Obukhov length :math:`L`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Meridional wind at 2 meters above surface [m s-1].</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            Uses Monin-Obukhov similarity theory with stability corrections to extrapolate</span>
+<span class="sd">            surface momentum flux to 2m wind speed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">momentum_correction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_momentum_correction_term</span><span class="p">(</span>
+            <span class="mf">2.0</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">,</span> <span class="n">z0m</span>
+        <span class="p">)</span>
+        <span class="n">momentum_scale</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">ustar</span> <span class="o">*</span> <span class="n">k</span><span class="p">)</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">vw</span> <span class="o">*</span> <span class="n">momentum_scale</span> <span class="o">*</span> <span class="n">momentum_correction</span></div>
+
+
+<div class="viewcode-block" id="ObukhovModel.compute_e2m">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.compute_e2m">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_e2m</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">q2m</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">surf_pressure</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute 2m vapor pressure.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            q2m: specific humidity at 2m :math:`q_{2m}`.</span>
+<span class="sd">            surf_pressure: surface pressure :math:`p`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Vapor pressure at 2 meters above surface [Pa].</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            Converts specific humidity to vapor pressure using:</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                e_{2m} = \\frac{q_{2m} \\cdot p}{0.622}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">q2m</span> <span class="o">*</span> <span class="n">surf_pressure</span> <span class="o">/</span> <span class="mf">0.622</span></div>
+
+
+<div class="viewcode-block" id="ObukhovModel.compute_esat2m">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.compute_esat2m">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_esat2m</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">temp_2m</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute 2m saturated vapor pressure.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            temp_2m: temperature at 2m [K].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Saturated vapor pressure at 2 meters above surface [Pa].</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            Uses the Tetens formula:</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                e_{sat,2m} = 611 \\exp\\left(\\frac{17.2694(T_{2m} - 273.16)}{T_{2m} - 35.86}\\right)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mf">0.611e3</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">17.2694</span> <span class="o">*</span> <span class="p">(</span><span class="n">temp_2m</span> <span class="o">-</span> <span class="mf">273.16</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">temp_2m</span> <span class="o">-</span> <span class="mf">35.86</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="ObukhovModel.compute_scalar_correction_term">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.compute_scalar_correction_term">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_scalar_correction_term</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">Array</span> <span class="o">|</span> <span class="nb">float</span><span class="p">,</span> <span class="n">oblen</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">z0h</span><span class="p">:</span> <span class="n">Array</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute scalar stability correction term.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            z: height above ground level :math:`z`.</span>
+<span class="sd">            oblen: Obukhov length :math:`L`.</span>
+<span class="sd">            z0h: roughness length for heat :math:`z_{0h}`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The scalar stability correction.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            This term is used in Monin-Obukhov similarity theory for scalars, and is given by</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                \\ln\\left(\\frac{z}{z_{0h}}\\right)</span>
+<span class="sd">                - \\psi_h\\left(\\frac{z}{L}\\right)</span>
+<span class="sd">                + \\psi_h\\left(\\frac{z_{0h}}{L}\\right)</span>
+
+<span class="sd">            where :math:`\\psi_h` is the stability correction function for scalars (see :func:`compute_psih`).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log_term</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">z</span> <span class="o">/</span> <span class="n">z0h</span><span class="p">)</span>
+        <span class="n">upper_stability</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_psih</span><span class="p">(</span><span class="n">z</span> <span class="o">/</span> <span class="n">oblen</span><span class="p">)</span>
+        <span class="n">surface_stability</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_psih</span><span class="p">(</span><span class="n">z0h</span> <span class="o">/</span> <span class="n">oblen</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">log_term</span> <span class="o">-</span> <span class="n">upper_stability</span> <span class="o">+</span> <span class="n">surface_stability</span></div>
+
+
+<div class="viewcode-block" id="ObukhovModel.compute_momentum_correction_term">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.compute_momentum_correction_term">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_momentum_correction_term</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">Array</span> <span class="o">|</span> <span class="nb">float</span><span class="p">,</span> <span class="n">oblen</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">z0m</span><span class="p">:</span> <span class="n">Array</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute momentum stability correction term.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            z: height above ground level :math:`z`.</span>
+<span class="sd">            oblen: Obukhov length :math:`L`.</span>
+<span class="sd">            z0m: roughness length for momentum :math:`z_{0m}`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The momentum stability correction.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            This term is used in Monin-Obukhov similarity theory for momentum, and is given by</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                \\ln\\left(\\frac{z}{z_{0m}}\\right)</span>
+<span class="sd">                - \\psi_m\\left(\\frac{z}{L}\\right)</span>
+<span class="sd">                + \\psi_m\\left(\\frac{z_{0m}}{L}\\right)</span>
+
+<span class="sd">            where :math:`\\psi_m` is the stability correction function for momentum (see :func:`compute_psim`).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log_term</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">z</span> <span class="o">/</span> <span class="n">z0m</span><span class="p">)</span>
+        <span class="n">upper_stability</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_psim</span><span class="p">(</span><span class="n">z</span> <span class="o">/</span> <span class="n">oblen</span><span class="p">)</span>
+        <span class="n">surface_stability</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_psim</span><span class="p">(</span><span class="n">z0m</span> <span class="o">/</span> <span class="n">oblen</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">log_term</span> <span class="o">-</span> <span class="n">upper_stability</span> <span class="o">+</span> <span class="n">surface_stability</span></div>
+
+
+<div class="viewcode-block" id="ObukhovModel.compute_psim">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.compute_psim">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_psim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zeta</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute momentum stability function from Monin-Obukhov similarity theory.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            zeta: stability parameter z/L :math:`\\zeta`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Momentum stability correction [-].</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            This function calculates the integrated stability correction function for</span>
+<span class="sd">            momentum :math:`\\Psi_m`, which is used to adjust wind profiles based</span>
+<span class="sd">            on atmospheric stability.</span>
+
+<span class="sd">            The function is piecewise, depending on the stability parameter</span>
+<span class="sd">            :math:`\\zeta = z/L`.</span>
+
+<span class="sd">            **1. Unstable conditions (ζ ≤ 0):**</span>
+
+<span class="sd">            Based on Businger-Dyer relations, an intermediate variable</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                x = (1 - 16\\zeta)^{1/4}</span>
+
+<span class="sd">            is used to write the stability function as</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                \\Psi_m(\\zeta) = \\ln\\left( \\frac{(1+x)^2 (1+x^2)}{8} \\right)</span>
+<span class="sd">                                 - 2 \\arctan(x) + \\frac{\\pi}{2}.</span>
+
+<span class="sd">            **2. Stable conditions (ζ &gt; 0):**</span>
+
+<span class="sd">            This uses an empirical formula (e.g., Holtslag and De Bruin, 1988)</span>
+<span class="sd">            with constants:</span>
+
+<span class="sd">            - :math:`\\alpha = 0.35`,</span>
+<span class="sd">            - :math:`\\beta = 5.0 / \\alpha`,</span>
+<span class="sd">            - :math:`\\gamma = (10.0 / 3.0) / \\alpha`.</span>
+
+<span class="sd">            The stability function is then  given by</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                \\Psi_m(\\zeta) = -\\frac{2}{3}(\\zeta - \\beta)e^{-\\alpha \\zeta}</span>
+<span class="sd">                                 - \\zeta - \\gamma.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># constants for stable conditions</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.35</span>
+        <span class="n">beta</span> <span class="o">=</span> <span class="mf">5.0</span> <span class="o">/</span> <span class="n">alpha</span>
+        <span class="n">gamma</span> <span class="o">=</span> <span class="p">(</span><span class="mf">10.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">alpha</span>
+        <span class="n">pi_half</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span>
+
+        <span class="c1"># unstable conditions (zeta &lt;= 0)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">16.0</span> <span class="o">*</span> <span class="n">zeta</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.25</span>
+        <span class="n">arctan_term</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">log_numerator</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">x</span><span class="p">)</span> <span class="o">**</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">x</span><span class="o">**</span><span class="mf">2.0</span><span class="p">)</span>
+        <span class="n">log_term</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">log_numerator</span> <span class="o">/</span> <span class="mf">8.0</span><span class="p">)</span>
+        <span class="n">psim_unstable</span> <span class="o">=</span> <span class="n">pi_half</span> <span class="o">-</span> <span class="n">arctan_term</span> <span class="o">+</span> <span class="n">log_term</span>
+
+        <span class="c1"># stable conditions (zeta &gt; 0)</span>
+        <span class="n">exponential_term</span> <span class="o">=</span> <span class="p">(</span><span class="n">zeta</span> <span class="o">-</span> <span class="n">beta</span><span class="p">)</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">zeta</span><span class="p">)</span>
+        <span class="n">psim_stable</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">exponential_term</span> <span class="o">-</span> <span class="n">zeta</span> <span class="o">-</span> <span class="n">gamma</span>
+
+        <span class="c1"># select based on stability condition</span>
+        <span class="n">psim</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">zeta</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">psim_unstable</span><span class="p">,</span> <span class="n">psim_stable</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">psim</span></div>
+
+
+<div class="viewcode-block" id="ObukhovModel.compute_psih">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovModel.compute_psih">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_psih</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zeta</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute scalar stability function from Monin-Obukhov similarity theory.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            zeta: stability parameter z/L :math:`\\zeta`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The scalar stability correction.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            This function calculates the integrated stability correction function for</span>
+<span class="sd">            scalars :math:`\\Psi_h`, like heat and humidity, which is used to</span>
+<span class="sd">            adjust temperature and humidity profiles based on atmospheric stability.</span>
+
+<span class="sd">            The function is piecewise, depending on the stability parameter</span>
+<span class="sd">            :math:`\\zeta = z/L`.</span>
+
+<span class="sd">            **1. Unstable conditions (ζ ≤ 0):**</span>
+
+<span class="sd">            Based on Businger-Dyer relations, an intermediate variable (same as above)</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                x = (1 - 16\\zeta)^{1/4}</span>
+
+<span class="sd">            is used to write the integrated stability function</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                \\Psi_h(\\zeta) = 2 \\ln\\left( \\frac{1+x^2}{2} \\right).</span>
+
+<span class="sd">            **2. Stable conditions (ζ &gt; 0):**</span>
+
+<span class="sd">            This uses a corresponding empirical formula with the same constants</span>
+<span class="sd">            (:math:`\\alpha`, :math:`\\beta`, :math:`\\gamma`) as above to write</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                \\Psi_h(\\zeta) = -\\frac{2}{3}(\\zeta - \\beta)e^{-\\alpha \\zeta}</span>
+<span class="sd">                                - \\left(1 + \\frac{2}{3}\\zeta\\right)^{3/2}</span>
+<span class="sd">                                - \\gamma + 1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># constants for stable conditions</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.35</span>
+        <span class="n">beta</span> <span class="o">=</span> <span class="mf">5.0</span> <span class="o">/</span> <span class="n">alpha</span>
+        <span class="n">gamma</span> <span class="o">=</span> <span class="p">(</span><span class="mf">10.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">alpha</span>
+
+        <span class="c1"># unstable conditions (zeta &lt;= 0)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">16.0</span> <span class="o">*</span> <span class="n">zeta</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.25</span>
+        <span class="n">log_argument</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
+        <span class="n">psih_unstable</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">log_argument</span><span class="p">)</span>
+
+        <span class="c1"># stable conditions (zeta &gt; 0)</span>
+        <span class="n">exponential_term</span> <span class="o">=</span> <span class="p">(</span><span class="n">zeta</span> <span class="o">-</span> <span class="n">beta</span><span class="p">)</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">zeta</span><span class="p">)</span>
+        <span class="n">power_term</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">zeta</span><span class="p">)</span> <span class="o">**</span> <span class="mf">1.5</span>
+        <span class="n">psih_stable</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">exponential_term</span> <span class="o">-</span> <span class="n">power_term</span> <span class="o">-</span> <span class="n">gamma</span> <span class="o">+</span> <span class="mf">1.0</span>
+
+        <span class="c1"># select based on stability condition</span>
+        <span class="n">psih</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">zeta</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">psih_unstable</span><span class="p">,</span> <span class="n">psih_stable</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">psih</span></div>
 </div>
-
-
-
-<div class="viewcode-block" id="compute_ra">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.compute_ra">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_ra</span><span class="p">(</span><span class="n">u</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">wstar</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">drag_s</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate aerodynamic resistance from wind speed and drag coefficient.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        u: zonal wind speed [m s-1].</span>
-<span class="sd">        v: meridional wind speed [m s-1].</span>
-<span class="sd">        wstar: convective velocity scale [m s-1].</span>
-<span class="sd">        drag_s: drag coefficient for scalars [-].</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Aerodynamic resistance [s m-1].</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        The aerodynamic resistance is given by</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            r_a = \\frac{1}{C_s u_{\\text{eff}}}</span>
-
-<span class="sd">        where :math:`C_s` is the drag coefficient for scalars and :math:`u_{\\text{eff}}` is the effective wind speed.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">ueff</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">v</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">wstar</span><span class="o">**</span><span class="mf">2.0</span><span class="p">)</span>
-    <span class="k">return</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">drag_s</span> <span class="o">*</span> <span class="n">ueff</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="compute_effective_wind_speed">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.compute_effective_wind_speed">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_effective_wind_speed</span><span class="p">(</span><span class="n">u</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">wstar</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute effective wind speed ``ueff``.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        u: zonal wind speed :math:`u`.</span>
-<span class="sd">        v: meridional wind speed :math:`v`.</span>
-<span class="sd">        wstar: convective velocity scale :math:`w_*`.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Effective wind speed :math:`u_{\\text{eff}}`.</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        The effective wind speed is given by</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            u_{\\text{eff}} = \\sqrt{u^2 + v^2 + w_*^2}.</span>
-
-<span class="sd">        A minimum value of 0.01 m/s is enforced to avoid division by zero afterwards.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">v</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">wstar</span><span class="o">**</span><span class="mf">2.0</span><span class="p">))</span></div>
-
-
-
-<div class="viewcode-block" id="compute_zsl">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.compute_zsl">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_zsl</span><span class="p">(</span><span class="n">h_abl</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute surface layer height.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        h_abl: Atmospheric boundary layer height [m].</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Surface layer height [m], defined as 10% of ABL height.</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        The surface layer height is conventionally taken as 10% of</span>
-<span class="sd">        the atmospheric boundary layer height.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">h_abl</span></div>
-
-
-
-<div class="viewcode-block" id="compute_thetasurf">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.compute_thetasurf">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_thetasurf</span><span class="p">(</span>
-    <span class="n">theta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">wtheta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">drag_s</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">ueff</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute surface potential temperature.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        theta: mixed layer potential temperature :math:`\\theta`.</span>
-<span class="sd">        wtheta: surface kinematic heat flux :math:`w&#39;\\theta&#39;`.</span>
-<span class="sd">        drag_s: surface drag coefficient :math:`C_s`.</span>
-<span class="sd">        ueff: effective wind speed :math:`u_{\\text{eff}}`.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Surface potential temperature :math:`\\theta_s`.</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        The surface potential temperature is given by</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            \\theta_s = \\theta + \\frac{w&#39;\\theta&#39;}{C_s u_{\\text{eff}}}.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">theta</span> <span class="o">+</span> <span class="n">wtheta</span> <span class="o">/</span> <span class="p">(</span><span class="n">drag_s</span> <span class="o">*</span> <span class="n">ueff</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="compute_qsurf">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.compute_qsurf">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_qsurf</span><span class="p">(</span>
-    <span class="n">q</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">thetasurf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">surf_pressure</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">rs</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">drag_s</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">ueff</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute surface specific humidity.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        q: mixed layer specific humidity :math:`q`.</span>
-<span class="sd">        thetasurf: surface potential temperature :math:`\\theta_s`.</span>
-<span class="sd">        surf_pressure: surface pressure :math:`p`.</span>
-<span class="sd">        rs: surface resistance :math:`r_s`.</span>
-<span class="sd">        drag_s: surface drag coefficient :math:`C_s`.</span>
-<span class="sd">        ueff: effective wind speed :math:`u_{\\text{eff}}`.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Surface specific humidity :math:`q_s`.</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        The surface specific humidity is a weighted average between the air and the saturated value at the surface</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            q_s = (1 - c_q) q + c_q q_{sat}(\\theta_s, p),</span>
-
-<span class="sd">        where :math:`c_q = [1 + C_s u_{\\text{eff}} r_s]^{-1}` and :math:`q_{sat}` is the saturation specific humidity.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">qsatsurf</span> <span class="o">=</span> <span class="n">compute_qsat</span><span class="p">(</span><span class="n">thetasurf</span><span class="p">,</span> <span class="n">surf_pressure</span><span class="p">)</span>
-    <span class="n">cq</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">drag_s</span> <span class="o">*</span> <span class="n">ueff</span> <span class="o">*</span> <span class="n">rs</span><span class="p">)</span> <span class="o">**</span> <span class="o">-</span><span class="mf">1.0</span>
-    <span class="k">return</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">cq</span><span class="p">)</span> <span class="o">*</span> <span class="n">q</span> <span class="o">+</span> <span class="n">cq</span> <span class="o">*</span> <span class="n">qsatsurf</span></div>
-
-
-
-<div class="viewcode-block" id="compute_thetavsurf">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.compute_thetavsurf">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_thetavsurf</span><span class="p">(</span><span class="n">thetasurf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">qsurf</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute surface virtual potential temperature.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        thetasurf: surface potential temperature :math:`\\theta_s`.</span>
-<span class="sd">        qsurf: surface specific humidity :math:`q_s`.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Surface virtual potential temperature :math:`\\theta_{v,s}`.</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        The surface virtual potential temperature is</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            \\theta_{v,s} = \\theta_s (1 + 0.61 q_s)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">thetasurf</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="mf">0.61</span> <span class="o">*</span> <span class="n">qsurf</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="compute_richardson_number">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.compute_richardson_number">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_richardson_number</span><span class="p">(</span>
-    <span class="n">ueff</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">zsl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">thetav</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">thetavsurf</span><span class="p">:</span> <span class="n">Array</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute bulk Richardson number.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        ueff: effective wind speed :math:`u_{\\text{eff}}`.</span>
-<span class="sd">        zsl: surface layer height :math:`z_{sl}`.</span>
-<span class="sd">        g: gravity :math:`g`.</span>
-<span class="sd">        thetav: virtual potential temperature at reference height :math:`\\theta_v`.</span>
-<span class="sd">        thetavsurf: Surface virtual potential temperature :math:`\\theta_{v,s}`.</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        The bulk Richardson number is given by</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            Ri_b = \\frac{g}{\\theta_v} \\frac{z_{sl} (\\theta_v - \\theta_{v,s})}{u_{\\text{eff}}^2}.</span>
-
-<span class="sd">        The value is capped at 0.2 for numerical stability.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">rib_number</span> <span class="o">=</span> <span class="n">g</span> <span class="o">/</span> <span class="n">thetav</span> <span class="o">*</span> <span class="n">zsl</span> <span class="o">*</span> <span class="p">(</span><span class="n">thetav</span> <span class="o">-</span> <span class="n">thetavsurf</span><span class="p">)</span> <span class="o">/</span> <span class="n">ueff</span><span class="o">**</span><span class="mf">2.0</span>
-    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">rib_number</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="compute_rib_function">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.compute_rib_function">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_rib_function</span><span class="p">(</span>
-    <span class="n">zsl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">oblen</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">rib_number</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">z0h</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">z0m</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the Richardson number function for iterative solution of Obukhov length.</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        This function computes the difference between the bulk Richardson number and its</span>
-<span class="sd">        Monin-Obukhov similarity theory estimate, used in the Newton-Raphson iteration</span>
-<span class="sd">        for finding the Obukhov length.</span>
-
-<span class="sd">        The function is:</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            f(L) = Ri_b</span>
-<span class="sd">            - \\frac{z_{sl}}{L} \\frac{\\psi_h(z_{sl}/L)</span>
-<span class="sd">            - \\psi_h(z_{0h}/L)</span>
-<span class="sd">            + \\ln(z_{sl}/z_{0h})}{[\\psi_m(z_{sl}/L)</span>
-<span class="sd">            - \\psi_m(z_{0m}/L)</span>
-<span class="sd">            + \\ln(z_{sl}/z_{0m})]^2}</span>
-
-<span class="sd">        where :math:`Ri_b` is the bulk Richardson number, :math:`z_{sl}` is the surface layer height,</span>
-<span class="sd">        :math:`L` is the Obukhov length, :math:`z_{0h}` and :math:`z_{0m}` are roughness lengths for scalars and momentum,</span>
-<span class="sd">        and :math:`\\psi_h`, :math:`\\psi_m` are stability correction functions.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">scalar_term</span> <span class="o">=</span> <span class="n">compute_scalar_correction_term</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">oblen</span><span class="p">,</span> <span class="n">z0h</span><span class="p">)</span>
-    <span class="n">momentum_term</span> <span class="o">=</span> <span class="n">compute_momentum_correction_term</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">oblen</span><span class="p">,</span> <span class="n">z0m</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">rib_number</span> <span class="o">-</span> <span class="n">zsl</span> <span class="o">/</span> <span class="n">oblen</span> <span class="o">*</span> <span class="n">scalar_term</span> <span class="o">/</span> <span class="n">momentum_term</span><span class="o">**</span><span class="mf">2.0</span></div>
-
-
-
-<div class="viewcode-block" id="ribtol">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ribtol">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">ribtol</span><span class="p">(</span><span class="n">zsl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">rib_number</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">z0h</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">z0m</span><span class="p">:</span> <span class="n">Array</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Iteratively solve for the Obukhov length given the Richardson number.</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        Uses a Newton-Raphson method to find the Obukhov length :math:`L` such that the Monin-Obukhov</span>
-<span class="sd">        similarity theory estimate matches the bulk Richardson number.</span>
-
-<span class="sd">        The iteration continues until the change in :math:`L` is below a threshold or a maximum value is reached.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># initial guess based on stability</span>
-    <span class="n">oblen</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">rib_number</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span>
-    <span class="n">oblen0</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">rib_number</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">)</span>
-
-    <span class="n">convergence_threshold</span> <span class="o">=</span> <span class="mf">0.001</span>
-    <span class="n">perturbation</span> <span class="o">=</span> <span class="mf">0.001</span>
-    <span class="n">max_oblen</span> <span class="o">=</span> <span class="mf">1e4</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">cond_fun</span><span class="p">(</span><span class="n">carry</span><span class="p">):</span>
-        <span class="n">oblen</span><span class="p">,</span> <span class="n">oblen0</span> <span class="o">=</span> <span class="n">carry</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
-            <span class="n">jnp</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">oblen</span> <span class="o">-</span> <span class="n">oblen0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">convergence_threshold</span><span class="p">,</span>
-            <span class="n">jnp</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">oblen</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">max_oblen</span><span class="p">,</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">res</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">body_fun</span><span class="p">(</span><span class="n">carry</span><span class="p">):</span>
-        <span class="n">oblen</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">carry</span>
-        <span class="n">oblen0</span> <span class="o">=</span> <span class="n">oblen</span>
-
-        <span class="c1"># calculate function value at current estimate</span>
-        <span class="n">fx</span> <span class="o">=</span> <span class="n">compute_rib_function</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">oblen</span><span class="p">,</span> <span class="n">rib_number</span><span class="p">,</span> <span class="n">z0h</span><span class="p">,</span> <span class="n">z0m</span><span class="p">)</span>
-
-        <span class="c1"># finite difference derivative</span>
-        <span class="n">oblen_start</span> <span class="o">=</span> <span class="n">oblen</span> <span class="o">-</span> <span class="n">perturbation</span> <span class="o">*</span> <span class="n">oblen</span>
-        <span class="n">oblen_end</span> <span class="o">=</span> <span class="n">oblen</span> <span class="o">+</span> <span class="n">perturbation</span> <span class="o">*</span> <span class="n">oblen</span>
-
-        <span class="n">fx_start</span> <span class="o">=</span> <span class="n">compute_rib_function</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">oblen_start</span><span class="p">,</span> <span class="n">rib_number</span><span class="p">,</span> <span class="n">z0h</span><span class="p">,</span> <span class="n">z0m</span><span class="p">)</span>
-        <span class="n">fx_end</span> <span class="o">=</span> <span class="n">compute_rib_function</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">oblen_end</span><span class="p">,</span> <span class="n">rib_number</span><span class="p">,</span> <span class="n">z0h</span><span class="p">,</span> <span class="n">z0m</span><span class="p">)</span>
-
-        <span class="n">fxdif</span> <span class="o">=</span> <span class="p">(</span><span class="n">fx_start</span> <span class="o">-</span> <span class="n">fx_end</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">oblen_start</span> <span class="o">-</span> <span class="n">oblen_end</span><span class="p">)</span>
-
-        <span class="c1"># Newton–Raphson update</span>
-        <span class="n">oblen_new</span> <span class="o">=</span> <span class="n">oblen</span> <span class="o">-</span> <span class="n">fx</span> <span class="o">/</span> <span class="n">fxdif</span>
-
-        <span class="k">return</span> <span class="n">oblen_new</span><span class="p">,</span> <span class="n">oblen0</span>
-
-    <span class="n">oblen</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">lax</span><span class="o">.</span><span class="n">while_loop</span><span class="p">(</span><span class="n">cond_fun</span><span class="p">,</span> <span class="n">body_fun</span><span class="p">,</span> <span class="p">(</span><span class="n">oblen</span><span class="p">,</span> <span class="n">oblen0</span><span class="p">))</span>
-
-    <span class="k">return</span> <span class="n">oblen</span></div>
-
-
-
-<div class="viewcode-block" id="compute_drag_m">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.compute_drag_m">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_drag_m</span><span class="p">(</span>
-    <span class="n">zsl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">k</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">obukhov_length</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">z0m</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute drag coefficient for momentum with stability corrections.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        zsl: surface layer height :math:`z_{sl}`.</span>
-<span class="sd">        k: Von Kármán constant :math:`k`.</span>
-<span class="sd">        obukhov_length: Obukhov length :math:`L`.</span>
-<span class="sd">        z0m: roughness length for momentum :math:`z_{0m}`.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Drag coefficient for momentum :math:`C_m`.</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        The drag coefficient for momentum is given by</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            C_m = \\frac{k^2}{[\\psi_m(z_{sl}/L)</span>
-<span class="sd">            - \\psi_m(z_{0m}/L)</span>
-<span class="sd">            + \\ln(z_{sl}/z_{0m})]^2}</span>
-
-<span class="sd">        where :math:`\\psi_m` (see :meth:`compute_momentum_correction_term`)</span>
-<span class="sd">        is the stability correction function for momentum.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">momentum_correction</span> <span class="o">=</span> <span class="n">compute_momentum_correction_term</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">,</span> <span class="n">z0m</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">k</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">/</span> <span class="n">momentum_correction</span><span class="o">**</span><span class="mf">2.0</span></div>
-
-
-
-<div class="viewcode-block" id="compute_drag_s">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.compute_drag_s">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_drag_s</span><span class="p">(</span>
-    <span class="n">zsl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">k</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">obukhov_length</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">z0h</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">z0m</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute drag coefficient for scalars with stability corrections.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        zsl: surface layer height :math:`z_{sl}`.</span>
-<span class="sd">        k: Von Kármán constant :math:`k`.</span>
-<span class="sd">        obukhov_length: Obukhov length :math:`L`.</span>
-<span class="sd">        z0h: roughness length for scalars :math:`z_{0h}`.</span>
-<span class="sd">        z0m: roughness length for momentum :math:`z_{0m}`.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Drag coefficient for scalars :math:`C_s`.</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        The drag coefficient for scalars is given by</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            C_s = \\frac{k^2}{[\\psi_m(z_{sl}/L)</span>
-<span class="sd">            - \\psi_m(z_{0m}/L)</span>
-<span class="sd">            + \\ln(z_{sl}/z_{0m})] [\\psi_h(z_{sl}/L)</span>
-<span class="sd">            - \\psi_h(z_{0h}/L)</span>
-<span class="sd">            + \\ln(z_{sl}/z_{0h})]}</span>
-
-<span class="sd">        where :math:`\\psi_m` (see :meth:`compute_momentum_correction_term`) and</span>
-<span class="sd">        :math:`\\psi_h` (see :meth:`compute_scalar_correction_term`)</span>
-<span class="sd">        are stability correction functions for momentum and scalars.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">momentum_correction</span> <span class="o">=</span> <span class="n">compute_momentum_correction_term</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">,</span> <span class="n">z0m</span><span class="p">)</span>
-    <span class="n">scalar_correction</span> <span class="o">=</span> <span class="n">compute_scalar_correction_term</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">,</span> <span class="n">z0h</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">k</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">momentum_correction</span> <span class="o">*</span> <span class="n">scalar_correction</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="compute_ustar">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.compute_ustar">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_ustar</span><span class="p">(</span><span class="n">ueff</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">drag_m</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute surface friction velocity.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        ueff: effective wind speed :math:`u_{\\text{eff}}`.</span>
-<span class="sd">        drag_m: drag coefficient for momentum :math:`C_m`.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Friction velocity :math:`u_*`.</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        The friction velocity :math:`u_*` is given by</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            u_* = \\sqrt{C_m} u_{\\text{eff}}.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">drag_m</span><span class="p">)</span> <span class="o">*</span> <span class="n">ueff</span></div>
-
-
-
-<div class="viewcode-block" id="compute_uw">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.compute_uw">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_uw</span><span class="p">(</span><span class="n">ueff</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">u</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">drag_m</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute zonal momentum flux.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        ueff: effective wind speed :math:`u_{\\text{eff}}`.</span>
-<span class="sd">        u: zonal wind speed :math:`u`.</span>
-<span class="sd">        drag_m: drag coefficient for momentum :math:`C_m`.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Zonal momentum flux :math:`\\overline{u&#39;w&#39;}`.</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        The zonal momentum flux is given by</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            \\overline{u&#39;w&#39;} = -C_m u_{\\text{eff}} u.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="o">-</span><span class="n">drag_m</span> <span class="o">*</span> <span class="n">ueff</span> <span class="o">*</span> <span class="n">u</span></div>
-
-
-
-<div class="viewcode-block" id="compute_vw">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.compute_vw">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_vw</span><span class="p">(</span><span class="n">ueff</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">drag_m</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute meridional momentum flux.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        ueff: effective wind speed :math:`u_{\\text{eff}}`.</span>
-<span class="sd">        v: meridional wind speed :math:`v`.</span>
-<span class="sd">        drag_m: drag coefficient for momentum :math:`C_m`.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Meridional momentum flux :math:`\\overline{v&#39;w&#39;}`.</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        The meridional momentum flux is given by</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            \\overline{v&#39;w&#39;} = -C_m u_{\\text{eff}} v.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="o">-</span><span class="n">drag_m</span> <span class="o">*</span> <span class="n">ueff</span> <span class="o">*</span> <span class="n">v</span></div>
-
-
-
-<div class="viewcode-block" id="compute_temp_2m">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.compute_temp_2m">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_temp_2m</span><span class="p">(</span>
-    <span class="n">thetasurf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">wtheta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">ustar</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">k</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">z0h</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">obukhov_length</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute 2m temperature diagnostic.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        thetasurf: surface potential temperature :math:`\\theta_s`.</span>
-<span class="sd">        wtheta: surface kinematic heat flux :math:`w&#39;\\theta&#39;`.</span>
-<span class="sd">        ustar: friction velocity :math:`u_*`.</span>
-<span class="sd">        k: Von Kármán constant :math:`k`.</span>
-<span class="sd">        z0h: roughness length for scalars :math:`z_{0h}`.</span>
-<span class="sd">        obukhov_length: Obukhov length :math:`L`.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Temperature at 2 meters above surface [K].</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        Uses Monin-Obukhov similarity theory with stability corrections to extrapolate</span>
-<span class="sd">        surface temperature to 2m height.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">scalar_correction</span> <span class="o">=</span> <span class="n">compute_scalar_correction_term</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">,</span> <span class="n">z0h</span><span class="p">)</span>
-    <span class="n">scalar_scale</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">ustar</span> <span class="o">*</span> <span class="n">k</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">thetasurf</span> <span class="o">-</span> <span class="n">wtheta</span> <span class="o">*</span> <span class="n">scalar_scale</span> <span class="o">*</span> <span class="n">scalar_correction</span></div>
-
-
-
-<div class="viewcode-block" id="compute_q2m">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.compute_q2m">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_q2m</span><span class="p">(</span>
-    <span class="n">qsurf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">wq</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">ustar</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">k</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">z0h</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">obukhov_length</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute 2m specific humidity diagnostic.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        qsurf: surface specific humidity :math:`q_s`.</span>
-<span class="sd">        wq: surface kinematic moisture flux :math:`w&#39;q&#39;`.</span>
-<span class="sd">        ustar: friction velocity :math:`u_*`.</span>
-<span class="sd">        k: Von Kármán constant :math:`k`.</span>
-<span class="sd">        z0h: roughness length for scalars :math:`z_{0h}`.</span>
-<span class="sd">        obukhov_length: Obukhov length :math:`L`.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Specific humidity at 2 meters above surface [kg kg-1].</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        Uses Monin-Obukhov similarity theory with stability corrections to extrapolate</span>
-<span class="sd">        surface specific humidity to 2m height.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">scalar_correction</span> <span class="o">=</span> <span class="n">compute_scalar_correction_term</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">,</span> <span class="n">z0h</span><span class="p">)</span>
-    <span class="n">scalar_scale</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">ustar</span> <span class="o">*</span> <span class="n">k</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">qsurf</span> <span class="o">-</span> <span class="n">wq</span> <span class="o">*</span> <span class="n">scalar_scale</span> <span class="o">*</span> <span class="n">scalar_correction</span></div>
-
-
-
-<div class="viewcode-block" id="compute_u2m">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.compute_u2m">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_u2m</span><span class="p">(</span>
-    <span class="n">uw</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">ustar</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">k</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">z0m</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">obukhov_length</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute 2m zonal wind diagnostic.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        uw: zonal momentum flux :math:`\\overline{u&#39;w&#39;}`.</span>
-<span class="sd">        ustar: friction velocity :math:`u_*`.</span>
-<span class="sd">        k: Von Kármán constant :math:`k`.</span>
-<span class="sd">        z0m: roughness length for momentum :math:`z_{0m}`.</span>
-<span class="sd">        obukhov_length: Obukhov length :math:`L`.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Zonal wind at 2 meters above surface [m s-1].</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        Uses Monin-Obukhov similarity theory with stability corrections to extrapolate</span>
-<span class="sd">        surface momentum flux to 2m wind speed.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">momentum_correction</span> <span class="o">=</span> <span class="n">compute_momentum_correction_term</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">,</span> <span class="n">z0m</span><span class="p">)</span>
-    <span class="n">momentum_scale</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">ustar</span> <span class="o">*</span> <span class="n">k</span><span class="p">)</span>
-    <span class="k">return</span> <span class="o">-</span><span class="n">uw</span> <span class="o">*</span> <span class="n">momentum_scale</span> <span class="o">*</span> <span class="n">momentum_correction</span></div>
-
-
-
-<div class="viewcode-block" id="compute_v2m">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.compute_v2m">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_v2m</span><span class="p">(</span>
-    <span class="n">vw</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">ustar</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">k</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">z0m</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="n">obukhov_length</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute 2m meridional wind diagnostic.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        vw: meridional momentum flux :math:`\\overline{v&#39;w&#39;}`.</span>
-<span class="sd">        ustar: friction velocity :math:`u_*`.</span>
-<span class="sd">        k: Von Kármán constant :math:`k`.</span>
-<span class="sd">        z0m: roughness length for momentum :math:`z_{0m}`.</span>
-<span class="sd">        obukhov_length: Obukhov length :math:`L`.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Meridional wind at 2 meters above surface [m s-1].</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        Uses Monin-Obukhov similarity theory with stability corrections to extrapolate</span>
-<span class="sd">        surface momentum flux to 2m wind speed.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">momentum_correction</span> <span class="o">=</span> <span class="n">compute_momentum_correction_term</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">,</span> <span class="n">z0m</span><span class="p">)</span>
-    <span class="n">momentum_scale</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">ustar</span> <span class="o">*</span> <span class="n">k</span><span class="p">)</span>
-    <span class="k">return</span> <span class="o">-</span><span class="n">vw</span> <span class="o">*</span> <span class="n">momentum_scale</span> <span class="o">*</span> <span class="n">momentum_correction</span></div>
-
-
-
-<div class="viewcode-block" id="compute_e2m">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.compute_e2m">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_e2m</span><span class="p">(</span><span class="n">q2m</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">surf_pressure</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute 2m vapor pressure.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        q2m: specific humidity at 2m :math:`q_{2m}`.</span>
-<span class="sd">        surf_pressure: surface pressure :math:`p`.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Vapor pressure at 2 meters above surface [Pa].</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        Converts specific humidity to vapor pressure using:</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            e_{2m} = \\frac{q_{2m} \\cdot p}{0.622}</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">q2m</span> <span class="o">*</span> <span class="n">surf_pressure</span> <span class="o">/</span> <span class="mf">0.622</span></div>
-
-
-
-<div class="viewcode-block" id="compute_esat2m">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.compute_esat2m">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_esat2m</span><span class="p">(</span><span class="n">temp_2m</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute 2m saturated vapor pressure.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        temp_2m: temperature at 2m [K].</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Saturated vapor pressure at 2 meters above surface [Pa].</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        Uses the Tetens formula:</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            e_{sat,2m} = 611 \\exp\\left(\\frac{17.2694(T_{2m} - 273.16)}{T_{2m} - 35.86}\\right)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="mf">0.611e3</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">17.2694</span> <span class="o">*</span> <span class="p">(</span><span class="n">temp_2m</span> <span class="o">-</span> <span class="mf">273.16</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">temp_2m</span> <span class="o">-</span> <span class="mf">35.86</span><span class="p">))</span></div>
-
-
-
-<div class="viewcode-block" id="compute_scalar_correction_term">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.compute_scalar_correction_term">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_scalar_correction_term</span><span class="p">(</span><span class="n">z</span><span class="p">:</span> <span class="n">Array</span> <span class="o">|</span> <span class="nb">float</span><span class="p">,</span> <span class="n">oblen</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">z0h</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute scalar stability correction term.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        z: height above ground level :math:`z`.</span>
-<span class="sd">        oblen: Obukhov length :math:`L`.</span>
-<span class="sd">        z0h: roughness length for heat :math:`z_{0h}`.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        The scalar stability correction.</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        This term is used in Monin-Obukhov similarity theory for scalars, and is given by</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            \\ln\\left(\\frac{z}{z_{0h}}\\right)</span>
-<span class="sd">            - \\psi_h\\left(\\frac{z}{L}\\right)</span>
-<span class="sd">            + \\psi_h\\left(\\frac{z_{0h}}{L}\\right)</span>
-
-<span class="sd">        where :math:`\\psi_h` is the stability correction function for scalars (see :func:`compute_psih`).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">log_term</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">z</span> <span class="o">/</span> <span class="n">z0h</span><span class="p">)</span>
-    <span class="n">upper_stability</span> <span class="o">=</span> <span class="n">compute_psih</span><span class="p">(</span><span class="n">z</span> <span class="o">/</span> <span class="n">oblen</span><span class="p">)</span>
-    <span class="n">surface_stability</span> <span class="o">=</span> <span class="n">compute_psih</span><span class="p">(</span><span class="n">z0h</span> <span class="o">/</span> <span class="n">oblen</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">log_term</span> <span class="o">-</span> <span class="n">upper_stability</span> <span class="o">+</span> <span class="n">surface_stability</span></div>
-
-
-
-<div class="viewcode-block" id="compute_momentum_correction_term">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.compute_momentum_correction_term">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_momentum_correction_term</span><span class="p">(</span>
-    <span class="n">z</span><span class="p">:</span> <span class="n">Array</span> <span class="o">|</span> <span class="nb">float</span><span class="p">,</span> <span class="n">oblen</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">z0m</span><span class="p">:</span> <span class="n">Array</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute momentum stability correction term.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        z: height above ground level :math:`z`.</span>
-<span class="sd">        oblen: Obukhov length :math:`L`.</span>
-<span class="sd">        z0m: roughness length for momentum :math:`z_{0m}`.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        The momentum stability correction.</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        This term is used in Monin-Obukhov similarity theory for momentum, and is given by</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            \\ln\\left(\\frac{z}{z_{0m}}\\right)</span>
-<span class="sd">            - \\psi_m\\left(\\frac{z}{L}\\right)</span>
-<span class="sd">            + \\psi_m\\left(\\frac{z_{0m}}{L}\\right)</span>
-
-<span class="sd">        where :math:`\\psi_m` is the stability correction function for momentum (see :func:`compute_psim`).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">log_term</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">z</span> <span class="o">/</span> <span class="n">z0m</span><span class="p">)</span>
-    <span class="n">upper_stability</span> <span class="o">=</span> <span class="n">compute_psim</span><span class="p">(</span><span class="n">z</span> <span class="o">/</span> <span class="n">oblen</span><span class="p">)</span>
-    <span class="n">surface_stability</span> <span class="o">=</span> <span class="n">compute_psim</span><span class="p">(</span><span class="n">z0m</span> <span class="o">/</span> <span class="n">oblen</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">log_term</span> <span class="o">-</span> <span class="n">upper_stability</span> <span class="o">+</span> <span class="n">surface_stability</span></div>
-
-
-
-<div class="viewcode-block" id="compute_psim">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.compute_psim">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_psim</span><span class="p">(</span><span class="n">zeta</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute momentum stability function from Monin-Obukhov similarity theory.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        zeta: stability parameter z/L :math:`\\zeta`.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Momentum stability correction [-].</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        This function calculates the integrated stability correction function for</span>
-<span class="sd">        momentum :math:`\\Psi_m`, which is used to adjust wind profiles based</span>
-<span class="sd">        on atmospheric stability.</span>
-
-<span class="sd">        The function is piecewise, depending on the stability parameter</span>
-<span class="sd">        :math:`\\zeta = z/L`.</span>
-
-<span class="sd">        **1. Unstable conditions (ζ ≤ 0):**</span>
-
-<span class="sd">        Based on Businger-Dyer relations, an intermediate variable</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            x = (1 - 16\\zeta)^{1/4}</span>
-
-<span class="sd">        is used to write the stability function as</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            \\Psi_m(\\zeta) = \\ln\\left( \\frac{(1+x)^2 (1+x^2)}{8} \\right)</span>
-<span class="sd">                             - 2 \\arctan(x) + \\frac{\\pi}{2}.</span>
-
-<span class="sd">        **2. Stable conditions (ζ &gt; 0):**</span>
-
-<span class="sd">        This uses an empirical formula (e.g., Holtslag and De Bruin, 1988)</span>
-<span class="sd">        with constants:</span>
-
-<span class="sd">        - :math:`\\alpha = 0.35`,</span>
-<span class="sd">        - :math:`\\beta = 5.0 / \\alpha`,</span>
-<span class="sd">        - :math:`\\gamma = (10.0 / 3.0) / \\alpha`.</span>
-
-<span class="sd">        The stability function is then  given by</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            \\Psi_m(\\zeta) = -\\frac{2}{3}(\\zeta - \\beta)e^{-\\alpha \\zeta}</span>
-<span class="sd">                             - \\zeta - \\gamma.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># constants for stable conditions</span>
-    <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.35</span>
-    <span class="n">beta</span> <span class="o">=</span> <span class="mf">5.0</span> <span class="o">/</span> <span class="n">alpha</span>
-    <span class="n">gamma</span> <span class="o">=</span> <span class="p">(</span><span class="mf">10.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">alpha</span>
-    <span class="n">pi_half</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span>
-
-    <span class="c1"># unstable conditions (zeta &lt;= 0)</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">16.0</span> <span class="o">*</span> <span class="n">zeta</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.25</span>
-    <span class="n">arctan_term</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-    <span class="n">log_numerator</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">x</span><span class="p">)</span> <span class="o">**</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">x</span><span class="o">**</span><span class="mf">2.0</span><span class="p">)</span>
-    <span class="n">log_term</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">log_numerator</span> <span class="o">/</span> <span class="mf">8.0</span><span class="p">)</span>
-    <span class="n">psim_unstable</span> <span class="o">=</span> <span class="n">pi_half</span> <span class="o">-</span> <span class="n">arctan_term</span> <span class="o">+</span> <span class="n">log_term</span>
-
-    <span class="c1"># stable conditions (zeta &gt; 0)</span>
-    <span class="n">exponential_term</span> <span class="o">=</span> <span class="p">(</span><span class="n">zeta</span> <span class="o">-</span> <span class="n">beta</span><span class="p">)</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">zeta</span><span class="p">)</span>
-    <span class="n">psim_stable</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">exponential_term</span> <span class="o">-</span> <span class="n">zeta</span> <span class="o">-</span> <span class="n">gamma</span>
-
-    <span class="c1"># select based on stability condition</span>
-    <span class="n">psim</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">zeta</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">psim_unstable</span><span class="p">,</span> <span class="n">psim_stable</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">psim</span></div>
-
-
-
-<div class="viewcode-block" id="compute_psih">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.compute_psih">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">compute_psih</span><span class="p">(</span><span class="n">zeta</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute scalar stability function from Monin-Obukhov similarity theory.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        zeta: stability parameter z/L :math:`\\zeta`.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        The scalar stability correction.</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        This function calculates the integrated stability correction function for</span>
-<span class="sd">        scalars :math:`\\Psi_h`, like heat and humidity, which is used to</span>
-<span class="sd">        adjust temperature and humidity profiles based on atmospheric stability.</span>
-
-<span class="sd">        The function is piecewise, depending on the stability parameter</span>
-<span class="sd">        :math:`\\zeta = z/L`.</span>
-
-<span class="sd">        **1. Unstable conditions (ζ ≤ 0):**</span>
-
-<span class="sd">        Based on Businger-Dyer relations, an intermediate variable (same as above)</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            x = (1 - 16\\zeta)^{1/4}</span>
-
-<span class="sd">        is used to write the integrated stability function</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            \\Psi_h(\\zeta) = 2 \\ln\\left( \\frac{1+x^2}{2} \\right).</span>
-
-<span class="sd">        **2. Stable conditions (ζ &gt; 0):**</span>
-
-<span class="sd">        This uses a corresponding empirical formula with the same constants</span>
-<span class="sd">        (:math:`\\alpha`, :math:`\\beta`, :math:`\\gamma`) as above to write</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            \\Psi_h(\\zeta) = -\\frac{2}{3}(\\zeta - \\beta)e^{-\\alpha \\zeta}</span>
-<span class="sd">                            - \\left(1 + \\frac{2}{3}\\zeta\\right)^{3/2}</span>
-<span class="sd">                            - \\gamma + 1.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># constants for stable conditions</span>
-    <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.35</span>
-    <span class="n">beta</span> <span class="o">=</span> <span class="mf">5.0</span> <span class="o">/</span> <span class="n">alpha</span>
-    <span class="n">gamma</span> <span class="o">=</span> <span class="p">(</span><span class="mf">10.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">alpha</span>
-
-    <span class="c1"># unstable conditions (zeta &lt;= 0)</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">16.0</span> <span class="o">*</span> <span class="n">zeta</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.25</span>
-    <span class="n">log_argument</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
-    <span class="n">psih_unstable</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">log_argument</span><span class="p">)</span>
-
-    <span class="c1"># stable conditions (zeta &gt; 0)</span>
-    <span class="n">exponential_term</span> <span class="o">=</span> <span class="p">(</span><span class="n">zeta</span> <span class="o">-</span> <span class="n">beta</span><span class="p">)</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">zeta</span><span class="p">)</span>
-    <span class="n">power_term</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">zeta</span><span class="p">)</span> <span class="o">**</span> <span class="mf">1.5</span>
-    <span class="n">psih_stable</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">exponential_term</span> <span class="o">-</span> <span class="n">power_term</span> <span class="o">-</span> <span class="n">gamma</span> <span class="o">+</span> <span class="mf">1.0</span>
-
-    <span class="c1"># select based on stability condition</span>
-    <span class="n">psih</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">zeta</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">psih_unstable</span><span class="p">,</span> <span class="n">psih_stable</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">psih</span></div>
 
 </pre></div>
 

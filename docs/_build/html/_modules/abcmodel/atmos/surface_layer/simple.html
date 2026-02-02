@@ -170,7 +170,6 @@
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html">Bulk</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.mixed_layer.stats.html">Stats</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.clouds.html">Clouds</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -322,19 +321,19 @@ document.write(`
 <span class="kn">from</span><span class="w"> </span><span class="nn">..dayonly</span><span class="w"> </span><span class="kn">import</span> <span class="n">DayOnlyAtmosphereState</span>
 
 
-<div class="viewcode-block" id="SimpleSurfaceLayerState">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.simple.html#abcmodel.atmos.surface_layer.simple.SimpleSurfaceLayerState">[docs]</a>
+<div class="viewcode-block" id="SimpleState">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.simple.html#abcmodel.atmos.surface_layer.simple.SimpleState">[docs]</a>
 <span class="nd">@dataclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">SimpleSurfaceLayerState</span><span class="p">(</span><span class="n">AbstractSurfaceLayerState</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SimpleState</span><span class="p">(</span><span class="n">AbstractSurfaceLayerState</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Minimal surface layer model initial state.&quot;&quot;&quot;</span>
 
     <span class="n">ustar</span><span class="p">:</span> <span class="n">Array</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Surface friction velocity [m/s].&quot;&quot;&quot;</span>
-    <span class="n">uw</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">uw</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Zonal surface momentum flux [m2 s-2].&quot;&quot;&quot;</span>
-    <span class="n">vw</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">vw</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Meridional surface momentum flux [m2 s-2].&quot;&quot;&quot;</span>
-    <span class="n">ra</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+    <span class="n">ra</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Aerodynamic resistance [s/m].&quot;&quot;&quot;</span></div>
 
 
@@ -344,24 +343,24 @@ document.write(`
     <span class="n">RadT</span><span class="p">,</span>
     <span class="n">LandT</span><span class="p">,</span>
     <span class="n">DayOnlyAtmosphereState</span><span class="p">[</span>
-        <span class="n">SimpleSurfaceLayerState</span><span class="p">,</span>
+        <span class="n">SimpleState</span><span class="p">,</span>
         <span class="n">MixedT</span><span class="p">,</span>
         <span class="n">CloudT</span><span class="p">,</span>
     <span class="p">],</span>
 <span class="p">]</span>
 
 
-<div class="viewcode-block" id="SimpleSurfaceLayerModel">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.simple.html#abcmodel.atmos.surface_layer.simple.SimpleSurfaceLayerModel">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SimpleSurfaceLayerModel</span><span class="p">(</span><span class="n">AbstractSurfaceLayerModel</span><span class="p">[</span><span class="n">SimpleSurfaceLayerState</span><span class="p">]):</span>
+<div class="viewcode-block" id="SimpleModel">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.simple.html#abcmodel.atmos.surface_layer.simple.SimpleModel">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SimpleModel</span><span class="p">(</span><span class="n">AbstractSurfaceLayerModel</span><span class="p">[</span><span class="n">SimpleState</span><span class="p">]):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Simple surface layer model with constant friction velocity.&quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span>
 
-<div class="viewcode-block" id="SimpleSurfaceLayerModel.init_state">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.simple.html#abcmodel.atmos.surface_layer.simple.SimpleSurfaceLayerModel.init_state">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">init_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ustar</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SimpleSurfaceLayerState</span><span class="p">:</span>
+<div class="viewcode-block" id="SimpleModel.init_state">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.simple.html#abcmodel.atmos.surface_layer.simple.SimpleModel.init_state">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">init_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ustar</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SimpleState</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the model state.</span>
 
 <span class="sd">        Args:</span>
@@ -370,13 +369,13 @@ document.write(`
 <span class="sd">        Returns:</span>
 <span class="sd">            The initial surface layer state.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">SimpleSurfaceLayerState</span><span class="p">(</span>
+        <span class="k">return</span> <span class="n">SimpleState</span><span class="p">(</span>
             <span class="n">ustar</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ustar</span><span class="p">),</span>
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="SimpleSurfaceLayerModel.run">
-<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.simple.html#abcmodel.atmos.surface_layer.simple.SimpleSurfaceLayerModel.run">[docs]</a>
+<div class="viewcode-block" id="SimpleModel.run">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.simple.html#abcmodel.atmos.surface_layer.simple.SimpleModel.run">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">StateAlias</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the model.</span>
 
