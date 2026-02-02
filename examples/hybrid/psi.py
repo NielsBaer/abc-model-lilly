@@ -164,20 +164,19 @@ def train(
     inner_dt: float,
     outter_dt: float,
     tstart: float,
+    lr: float = 1e-5,
+    batch_size: int = 4,
+    epochs: int = 1,
+    print_every: int = 100,
 ):
     # config
     inner_tsteps = int(outter_dt / inner_dt)
-    lr = 1e-5
-    batch_size = 4
-    epochs = 1
 
     # data setup
     key = jax.random.PRNGKey(42)
     data_key, train_key = jax.random.split(key)
     x_train, x_test, y_train, y_test = load_batched_data(data_key, template_state)
-
     y_mean, y_std = jnp.mean(y_train), jnp.std(y_train)
-    print(f"training on {y_train.shape[0]} samples...")
 
     # optimizer
     optimizer = nnx.Optimizer(
@@ -216,24 +215,25 @@ def train(
 
         optimizer.update(grads)
 
-        jax.debug.print("loss: {x}", x=loss)
-
         return loss
 
+    print(f"training on {y_train.shape[0]} samples")
+    print(f"training for {epochs} epochs with batch size {batch_size}")
+    print(f"printing avg loss every {print_every} steps...")
+
     # training loop
-    for epoch in range(epochs):
+    total_loss = 0.0
+    step = 0
+    for _ in range(epochs):
         train_key, subkey = jax.random.split(train_key)
         loader = create_dataloader(x_train, y_train, batch_size, subkey)
-
-        total_loss = 0.0
-        count = 0
-
         for x_batch, y_batch in loader:
             loss = update_step(model, optimizer, x_batch, y_batch)
             total_loss += loss
-            count += 1
-
-        print(f"epoch {epoch + 1} | loss: {total_loss / count:.6f}")
+            if step % print_every == 0:
+                print(f"step {step} | loss: {total_loss / print_every:.6f}")
+                total_loss = 0.0
+            step += 1
 
     return model
 
