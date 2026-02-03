@@ -2,3 +2,4 @@ src/abcmodel.egg-info/
 __pycache__/
 .venv
 *.h5
+.DS_Store
