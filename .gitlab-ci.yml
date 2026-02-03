@@ -3,6 +3,7 @@ default:
 pages:
   script:
     - mv docs/_build/html public
+  stage: deploy
   artifacts:
     paths:
       - public
