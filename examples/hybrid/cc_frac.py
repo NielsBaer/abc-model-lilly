@@ -34,6 +34,11 @@ class HybridCumulusModel(CumulusModel):
     def __init__(self, net: NeuralNetwork):
         super().__init__()
         self.net = net
+        # this will be modified one we know the exact values for normalization
+        self.x_in_mean = nnx.BatchStat(jnp.array([0.0, 0.0, 0.0, 0.0]))
+        self.x_in_std = nnx.BatchStat(jnp.array([1.0, 1.0, 1.0, 1.0]))
+        self.x_out_mean = nnx.BatchStat(jnp.array(0.0))
+        self.x_out_std = nnx.BatchStat(jnp.array(1.0))
 
     def compute_cc_frac(
         self,
@@ -42,11 +47,10 @@ class HybridCumulusModel(CumulusModel):
         top_p: Array,
         q2_h: Array,
     ) -> Array:
-        x_mean = jnp.array([7.8847557e-03, 2.8486316e02, 9.3047734e04, 4.9546819e-05])
-        x_std = jnp.array([[2.7700034e-03, 5.7857847e00, 5.2033379e03, 2.0475304e-03]])
-        x = (jnp.array([q, top_T, top_p, q2_h]) - x_mean) / x_std
+        x = jnp.array([q, top_T, top_p, q2_h])
+        x = (x - self.x_in_mean.value) / self.x_in_std.value
         x = jnp.squeeze(self.net(x))
-        x = x * 0.13319749 + 0.052067384
+        x = x * self.x_out_std.value + self.x_out_mean.value
         return x
 
 
@@ -138,7 +142,6 @@ def load_batched_data(key: Array, template_state, ratio: float = 0.8):
 
     # apply prep functions
     x_full = jax.tree.map(prep_input, traj_ensembles)
-    # our target is latent heat
     y_full = prep_target(traj_ensembles.atmos.clouds.cc_frac)
 
     # train/test split
@@ -209,10 +212,11 @@ def train(
     x_in_mean, x_in_std, x_out_mean, x_out_std, y_mean, y_std = get_norms(
         x_train, y_train
     )
-    print("x in mean:", x_in_mean)
-    print("x in std:", x_in_std)
-    print("x out mean:", x_out_mean)
-    print("x out std:", x_out_std)
+    # this is a hacky trick :P
+    model.atmos.clouds.x_in_mean.value = x_in_mean
+    model.atmos.clouds.x_in_std.value = x_in_std
+    model.atmos.clouds.x_out_mean.value = x_out_mean
+    model.atmos.clouds.x_out_std.value = x_out_std
 
     # optimizer
     optimizer = nnx.Optimizer(
@@ -269,10 +273,11 @@ def train(
             loss = update_step(model, optimizer, x_batch, y_batch)
             total_loss += loss
             if (step % print_every == 0) & (step > 0):
-                print(f"step {step} | loss: {total_loss / print_every:.6f}", flush=True)
+                avg_loss = total_loss / print_every
+                print(f"step {step} | loss: {avg_loss:.6f}", flush=True)
                 total_loss = 0.0
-                if (total_loss / print_every) < last_printed_loss:
-                    last_printed_loss = total_loss / print_every
+                if avg_loss < last_printed_loss:
+                    last_printed_loss = avg_loss
                 else:
                     early_stop = True
                     break
