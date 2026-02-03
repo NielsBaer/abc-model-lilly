@@ -1,21 +1,15 @@
 create-pages:
-  pages:  # specifies that this is a Pages job
-    publish: docs/_build/html
+  image: python:3.11
 
-image: python:3.11
-
-pages:
-  stage: deploy
-  script:
-    - pip install sphinx sphinx-book-theme sphinx-autodoc-typehints
-
-    - cd docs
-    - make html
-
-    - cd ..
-    - mv docs/_build/html public
-
-  artifacts:
-    paths:
-      - public
+  pages:
+    stage: deploy
+    script:
+      - pip install sphinx sphinx-book-theme sphinx-autodoc-typehints
+      - cd docs
+      - make html
+      - cd ..
+      - mv docs/_build/html public
+    artifacts:
+      paths:
+        - public
 
