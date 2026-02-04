@@ -32,11 +32,12 @@ class NeuralNetwork(nnx.Module):
 
 class HybridCumulusModel(CumulusModel):
     def __init__(self, net: NeuralNetwork):
-        # the model does not have any parameters,
+        # the original CumulusModel does not have any parameters,
         # but otherwise we would need to pass them to init the parent class
         super().__init__()
         self.net = net
-        # this will be modified one we know the exact values for normalization
+        # this means/stds will be modified one we know the exact values for normalization
+        # which we will get once we separate the dataset into train and test
         self.x_in_mean = nnx.BatchStat(jnp.array([0.0, 0.0, 0.0, 0.0]))
         self.x_in_std = nnx.BatchStat(jnp.array([1.0, 1.0, 1.0, 1.0]))
         self.x_out_mean = nnx.BatchStat(jnp.array(0.0))
@@ -49,14 +50,24 @@ class HybridCumulusModel(CumulusModel):
         top_p: Array,
         q2_h: Array,
     ) -> Array:
+        # this is effectively our only replacement from the original class
+        # instead of inheriting this method, we are now using the neural network
+        # defined above to calculate cc_frac as a function of the same variables
+        # that the original function used: q, top_T, top_p and q2_h
         x = jnp.array([q, top_T, top_p, q2_h])
+        # note that, before using the neural network, we normalize these variables
         x = (x - self.x_in_mean.value) / self.x_in_std.value
+        # we squeeze the output to maintain the same shape through the ABC-Model
         x = jnp.squeeze(self.net(x))
+        # and we re-normalize the output too
         x = x * self.x_out_std.value + self.x_out_mean.value
         return x
 
 
 def load_model_and_template_state(key: Array):
+    # here we are going to build the model in the standard way like we always do,
+    # but the cloud model will now be replaced with out hybrid version!
+
     # radiation
     rad_model_kwargs = cm.standard_radiation.model_kwargs
     rad_model = abcmodel.rad.StandardRadiationModel(**rad_model_kwargs)
@@ -69,7 +80,7 @@ def load_model_and_template_state(key: Array):
     ags_state_kwargs = cm.ags.state_kwargs
     land_state = land_model.init_state(**ags_state_kwargs)
 
-    # surface layer (the one we build with the neural nets!)
+    # surface layer
     surface_layer_model = abcmodel.atmos.surface_layer.ObukhovModel()
     surface_layer_state = surface_layer_model.init_state(
         **cm.obukhov_surface_layer.state_kwargs
@@ -105,6 +116,8 @@ def load_model_and_template_state(key: Array):
 
 
 def load_batched_data(key: Array, template_state, ratio: float = 0.8):
+    # here we read the dataset that we generated using
+    # the perturbed initial conditions in data/generate.py
     script_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(script_dir, "../../data/dataset.h5")
 
@@ -131,19 +144,22 @@ def load_batched_data(key: Array, template_state, ratio: float = 0.8):
         return sliced.reshape(-1)
 
     # apply prep functions
+    # we need to use jax.tree.map for x, because it is not an array,
+    # but the CoupledState of the model: a PyTree with arrays in the leaves
+    # the jax.tree.map function wil then apply the prep_input function to all
+    # the leaves (variables within each component of the model)
     x_full = jax.tree.map(prep_input, traj_ensembles)
     y_full = prep_target(traj_ensembles.atmos.clouds.cc_frac)
 
     # train/test split
     num_samples = y_full.shape[0]
     split_idx = int(ratio * num_samples)
-
-    # shuffle indices
     idxs = jax.random.permutation(key, num_samples)
     train_idxs = idxs[:split_idx]
     test_idxs = idxs[split_idx:]
 
-    # helper to slice a PyTree by index
+    # helper to slice a PyTree by index once again using
+    # jax.tree.map to reach the leaves of the PyTree
     def subset(tree, indices):
         return jax.tree.map(lambda x: x[indices], tree)
 
@@ -156,7 +172,8 @@ def load_batched_data(key: Array, template_state, ratio: float = 0.8):
 
 
 def get_norms(x, y):
-    # take norms
+    # this is pretty standard, but we don't take the norm of the entire state
+    # only of the variables that we will need for the neural net
     x_in_mean = jnp.array(
         [
             jnp.mean(x.atmos.mixed.q),
@@ -192,7 +209,6 @@ def train(
     epochs: int = 3,
     print_every: int = 100,
 ):
-    # config
     inner_tsteps = int(outter_dt / inner_dt)
 
     # data setup
@@ -202,7 +218,9 @@ def train(
     x_in_mean, x_in_std, x_out_mean, x_out_std, y_mean, y_std = get_norms(
         x_train, y_train
     )
-    # this is a hacky trick :P
+    # we re-populate the dummy array we allocated in the neural net above
+    # with the true stats for the mean and standard deviation
+    # this is a hacky trick :P (and maybe there is a cleaner way to do this)
     model.atmos.clouds.x_in_mean.value = x_in_mean
     model.atmos.clouds.x_in_std.value = x_in_std
     model.atmos.clouds.x_out_mean.value = x_out_mean
@@ -210,14 +228,17 @@ def train(
 
     # optimizer
     optimizer = nnx.Optimizer(
+        # this is the entire model with the mechanistic and neural network parts
         model,
         optax.chain(optax.clip_by_global_norm(1.0), optax.radam(lr)),
+        # but the optimizer needs takes gradient only w.r.t. nnx.Params
         wrt=nnx.Param,
     )
 
     def loss_fn(model, x_batch_state, y_batch):
         def run_single(state):
-            final_state, _ = outter_step(
+            # limamau: are we supposed to use the last step of our avg traj here?
+            final_state, avg_traj = outter_step(
                 state,
                 None,
                 coupler=model,
@@ -225,14 +246,22 @@ def train(
                 inner_tsteps=inner_tsteps,
                 tstart=tstart,
             )
-            return final_state
+            return avg_traj
 
+        # here jax.vmap is applying the run_single function
+        # over each one of the dimensions of x_batch_state
+        # over axis=0, which is the batch axis, so we are
+        # essentially parallelizing the model over the batches
         pred_state = jax.vmap(run_single)(x_batch_state)
+        # we select only what chose to be our "observation"
         pred_le = pred_state.atmos.clouds.cc_frac
+        # quick normalization for the loss
         pred_le_norm = (pred_le - y_mean) / y_std
         y_batch_norm = (y_batch - y_mean) / y_std
+        # and this is the standard mean squared error (MSE)
         return jnp.mean((pred_le_norm - y_batch_norm) ** 2)
 
+    # it is important to jit the update_step during training loops
     @nnx.jit
     def update_step(model, optimizer, x, y):
         loss, grads = nnx.value_and_grad(loss_fn)(model, x, y)
@@ -240,8 +269,8 @@ def train(
         # replace any NaN in the gradients with 0.0
         grads = jax.tree.map(lambda g: jnp.nan_to_num(g), grads)
 
-        # clip gradients
-        grads = jax.tree.map(lambda g: jnp.clip(g, -1.0, 1.0), grads)
+        # clip gradients - legacy
+        # grads = jax.tree.map(lambda g: jnp.clip(g, -1.0, 1.0), grads)
 
         optimizer.update(grads)
 
