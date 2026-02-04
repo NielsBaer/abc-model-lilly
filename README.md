@@ -169,8 +169,6 @@ land_model = abcmodel.land.AgsModel(**ags_model_kwargs)
 
 Then you can redefine the coupler, create a new state and integrate it to see different outcomes. You can do something similar to change initial conditions, or even recreate your own!
 
-It is also possible to jit the model, but please remember to filter functions, which can be easily done with `equinox.filter_jit(integrate)`. Jitting a run for analysis does not bring any benefit right now, but it becomes important to accelerate eventual training loops for calibration of parameters.
-
 ## Windows installation
 On Windows we need some more utilities for jax to work properly, also installing python is not as straigforward. For jax to run, you first need the Microsoft Visual C++ redistributable found [here](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#visual-studio-2015-2017-2019-and-2022), which will require a system restart to function. Note that you might want to install uv before the restart, as the PATH update might require a restart as well (see below).
 
