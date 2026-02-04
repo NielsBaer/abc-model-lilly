@@ -269,10 +269,10 @@ def train(
         # replace any NaN in the gradients with 0.0
         grads = jax.tree.map(lambda g: jnp.nan_to_num(g), grads)
 
-        # clip gradients - legacy
-        # grads = jax.tree.map(lambda g: jnp.clip(g, -1.0, 1.0), grads)
-
-        optimizer.update(grads)
+        # !!!! important !!!!
+        # for old jax versions (e.g., 0.4.38)
+        # take out the model fmor the update
+        optimizer.update(model, grads)
 
         return loss
 
@@ -284,7 +284,7 @@ def train(
     total_loss = 0.0
     step = 0
     last_printed_loss = jnp.inf
-    early_stop = False
+    is_early_stopping = False
     for _ in range(epochs):
         train_key, subkey = jax.random.split(train_key)
         loader = create_dataloader(x_train, y_train, batch_size, subkey)
@@ -298,10 +298,10 @@ def train(
                 if avg_loss < last_printed_loss:
                     last_printed_loss = avg_loss
                 else:
-                    early_stop = True
+                    is_early_stopping = True
                     break
             step += 1
-        if early_stop:
+        if is_early_stopping:
             break
 
     return model
