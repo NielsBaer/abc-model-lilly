@@ -5,6 +5,7 @@ from . import (
     jarvis_stewart,
     obukhov_surface_layer,
     standard_radiation,
+    sea_surf,
 )
 
 __all__ = [
@@ -14,4 +15,5 @@ __all__ = [
     "standard_radiation",
     "cloudy_radiation",
     "obukhov_surface_layer",
+    "sea_surf",
 ]
