@@ -3,10 +3,12 @@ from .jarvis_stewart import (
     JarvisStewartModel,
     JarvisStewartState,
 )
+
 from .minimal import (
     MinimalLandSurfaceModel,
     MinimalLandSurfaceState,
 )
+from .sea_surf import SeaSurfaceModel, SeaSurfaceState
 
 __all__ = [
     "AgsModel",
@@ -15,4 +17,6 @@ __all__ = [
     "JarvisStewartState",
     "MinimalLandSurfaceModel",
     "MinimalLandSurfaceState",
+    "SeaSurfaceModel",
+    "SeaSurfaceState",
 ]
